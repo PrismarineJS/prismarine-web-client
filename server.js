@@ -5,6 +5,7 @@ const netApi = require('net-browserify')
 const bodyParser = require('body-parser')
 const request = require('request')
 const compression = require('compression')
+const path = require('path')
 
 // Create our app
 const app = express()
@@ -27,7 +28,7 @@ app.use(function (req, res, next) {
 
 app.use(compression())
 app.use(netApi())
-app.use(express.static('./public'))
+app.use(express.static(path.join(__dirname, './public')))
 
 app.use(bodyParser.json({ limit: '100kb' }))
 

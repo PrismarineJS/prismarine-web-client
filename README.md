@@ -9,6 +9,10 @@ A minecraft client running in a web page.
 It runs mineflayer in the browser which connects to a websocket minecraft server.
 It provides a simple websocket to tcp proxy as a backend to make it possible to connect to any minecraft server.
 
+## Usage
+
+`npm install -g prismarine-web-client` then run `prismarine-web-client` then open `http://localhost:8080` in your browser
+
 ## Features
 
 * display blocks
@@ -20,7 +24,7 @@ It provides a simple websocket to tcp proxy as a backend to make it possible to 
 * chat
 * block placing and breaking
 
-## Run
+## Development
 
 ```js
 npm install
