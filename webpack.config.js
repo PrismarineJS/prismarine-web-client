@@ -57,11 +57,11 @@ const config = {
     ),
     new CopyPlugin({
       patterns: [
-        { from: 'index.html', to: './index.html' },
-        { from: 'node_modules/prismarine-viewer/public/blocksStates/', to: './blocksStates/' },
-        { from: 'node_modules/prismarine-viewer/public/textures/', to: './textures/' },
-        { from: 'node_modules/prismarine-viewer/public/worker.js', to: './' },
-        { from: 'node_modules/prismarine-viewer/public/supportedVersions.json', to: './' }
+        { from: path.join(__dirname, '/index.html'), to: './index.html' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' }
       ]
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),

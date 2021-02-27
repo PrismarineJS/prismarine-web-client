@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const express = require('express')
 const netApi = require('net-browserify')
 const bodyParser = require('body-parser')
