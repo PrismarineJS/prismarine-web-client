@@ -1,7 +1,7 @@
-/* eslint-env jest */
+/* eslint-env mocha */
 
 describe('basic', () => {
-  test('test', () => {
+  it('test', () => {
 
   })
 })
