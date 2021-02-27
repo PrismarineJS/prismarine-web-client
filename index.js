@@ -5,6 +5,7 @@ process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
+const Vec3 = require('vec3').Vec3
 global.THREE = require('three')
 
 async function main () {
@@ -119,6 +120,25 @@ async function main () {
       } else if (e.code === 'ControlLeft') {
         bot.setControlState('sprint', false)
       }
+    }, false)
+    document.addEventListener('mousedown', (e) => {
+      const BlockDistance = (bot.gamemode === 1) ? 8 : 5
+      const ButtonBlock = bot.blockAtCursor(BlockDistance)
+      if (!ButtonBlock) return
+      if (e.button === 0) {
+        if (bot.canDigBlock(ButtonBlock)) {
+          bot.dig(ButtonBlock)
+        }
+      } else if (e.button === 2) {
+        const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
+        const vec = vecArray[ButtonBlock.face]
+
+        bot.placeBlock(ButtonBlock, vec)
+      }
+    }, false)
+
+    document.addEventListener('mouseup', (e) => {
+      bot.stopDigging()
     }, false)
 
     // Browser animation loop
