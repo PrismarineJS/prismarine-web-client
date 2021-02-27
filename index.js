@@ -6,6 +6,7 @@ process.versions.node = '14.0.0'
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 global.THREE = require('three')
+const chat = require('./lib/chat')
 
 async function main () {
   const viewDistance = 6
@@ -41,6 +42,8 @@ async function main () {
     renderer.setPixelRatio(window.devicePixelRatio || 1)
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
+
+    chat.init(undefined, bot._client, renderer)
 
     // Create viewer
     const viewer = new Viewer(renderer)

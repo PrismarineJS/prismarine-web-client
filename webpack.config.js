@@ -38,8 +38,8 @@ const config = {
       timers: require.resolve('timers-browserify'),
       // fs: require.resolve("fs-memory/singleton"),
       child_process: false,
-      perf_hooks: path.resolve(__dirname, 'perf_hooks_replacement.js'),
-      dns: path.resolve(__dirname, 'dns.js')
+      perf_hooks: path.resolve(__dirname, 'lib/perf_hooks_replacement.js'),
+      dns: path.resolve(__dirname, 'lib/dns.js')
     }
   },
   plugins: [
