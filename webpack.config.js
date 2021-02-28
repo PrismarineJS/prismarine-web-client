@@ -62,7 +62,8 @@ const config = {
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
-        { from: path.join(__dirname, 'assets/minecraftia.woff'), to: './' }
+        { from: path.join(__dirname, 'assets/minecraftia.woff'), to: './' },
+        { from: path.join(__dirname, 'assets/mojangles.ttf'), to: './' }
       ]
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
