@@ -22,9 +22,13 @@
         "client"
     ],
     "author": "Romain Beaumont",
-    "contributors" : [
-        {"name":"AwesomestCode"},
-        {"name":"circuit10"}
+    "contributors": [
+        {
+            "name": "AwesomestCode"
+        },
+        {
+            "name": "circuit10"
+        }
     ],
     "license": "MIT",
     "bin": {

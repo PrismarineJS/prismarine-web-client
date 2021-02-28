@@ -8,6 +8,9 @@ const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 global.THREE = require('three')
 const chat = require('./lib/chat')
 
+const maxPitch = 0.5 * Math.PI
+const minPitch = -0.5 * Math.PI
+
 async function main () {
   const viewDistance = 6
   const host = prompt('Host', '95.111.249.143')
@@ -65,7 +68,9 @@ async function main () {
 
     function moveCallback (e) {
       bot.entity.pitch -= e.movementY * 0.01
+      bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
       bot.entity.yaw -= e.movementX * 0.01
+
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
     }
     function changeCallback () {
