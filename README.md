@@ -31,6 +31,7 @@ It provides a simple websocket to tcp proxy as a backend to make it possible to 
 
 ```js
 npm install
+npm i -g webpack
 npm run build-start
 ```
 
