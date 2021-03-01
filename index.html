@@ -17,7 +17,6 @@
 
       html, body {
         height: 100%;
-
         margin: 0;
         padding: 0;
       }
@@ -67,10 +66,21 @@
       li {
         display: block;
       }
+      #crosshair {
+        image-rendering: pixelated;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        height: calc(256px * 4);
+        width: calc(256px * 4);
+        transform: translate(calc(-50% + 120px * 4), calc(-50% + 120px * 4));
+        clip-path: inset(0px calc(240px * 4) calc(240px * 4) 0px);
+      }
     </style>
   </head>
-  <body>
-       <div class="chat-wrapper chat-display-wrapper">
+  <body onclick="this.requestFullscreen()">
+      <img id="crosshair" src="textures/icons.png">
+      <div class="chat-wrapper chat-display-wrapper">
       <div class="chat" id="chat">
         <p>Welcome to prismarine-web-client! Chat appears here.</p>
       </div>
