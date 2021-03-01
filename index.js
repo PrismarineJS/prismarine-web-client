@@ -7,7 +7,8 @@ const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const Vec3 = require('vec3').Vec3
 global.THREE = require('three')
-const Chat = require('./lib/chat')
+const chat = require('./lib/chat')
+let status = 'Waiting for user'
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -21,6 +22,10 @@ async function main () {
   password = password === '' ? undefined : password
   console.log(`connecting to ${host} ${port} with ${username}`)
 
+  status = 'Logging in'
+
+  document.getElementById('loading-text').requestFullscreen()
+
   const bot = mineflayer.createBot({
     host,
     port,
@@ -31,8 +36,13 @@ async function main () {
   bot.on('end', () => {
     console.log('disconnected')
   })
+  bot.once('login', () => {
+    status = 'Loading world...'
+  })
 
   bot.once('spawn', () => {
+    status = 'Placing blocks (starting viewer)...'
+
     console.log('bot spawned - starting viewer')
 
     const version = bot.version
@@ -66,6 +76,8 @@ async function main () {
     // Link WorldView and Viewer
     viewer.listen(worldView)
     viewer.camera.position.set(center.x, center.y, center.z)
+
+    status = 'Setting callbacks...'
 
     function moveCallback (e) {
       bot.entity.pitch -= e.movementY * 0.01
@@ -140,6 +152,16 @@ async function main () {
     document.addEventListener('mouseup', (e) => {
       bot.stopDigging()
     }, false)
+
+    status = 'Done!'
+    console.log(status) // only do that because it's read in index.html and npm run fix complains.
+
+    setTimeout(function () {
+      // remove loading screen, wait a second to make sure a frame has properly rendered
+      document.querySelectorAll('.loader').forEach((item) => {
+        item.style = 'display: none;'
+      })
+    }, 2500)
 
     // Browser animation loop
     const animate = () => {
