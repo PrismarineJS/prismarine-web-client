@@ -17,7 +17,7 @@ async function main () {
   const host = prompt('Host', '95.111.249.143')
   const port = parseInt(prompt('Port', '10000'))
   const username = prompt('Username', 'pviewer_person ' + (Math.floor(Math.random() * 1000)))
-  let password = prompt('Password (blank for offline)')
+  let password = prompt('Password (blank for offline)', '')
   password = password === '' ? undefined : password
   console.log(`connecting to ${host} ${port} with ${username}`)
 
