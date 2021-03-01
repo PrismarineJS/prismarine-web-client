@@ -72,8 +72,9 @@ async function main () {
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
       bot.entity.yaw -= e.movementX * 0.01
 
-      viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
+      viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
     }
+    
     function changeCallback () {
       if (document.pointerLockElement === renderer.domElement ||
         document.mozPointerLockElement === renderer.domElement ||
@@ -83,9 +84,11 @@ async function main () {
         document.removeEventListener('mousemove', moveCallback, false)
       }
     }
+
     document.addEventListener('pointerlockchange', changeCallback, false)
     document.addEventListener('mozpointerlockchange', changeCallback, false)
     document.addEventListener('webkitpointerlockchange', changeCallback, false)
+
     renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
@@ -118,6 +121,7 @@ async function main () {
         bot.setControlState(codes[e.code], false)
       }
     }, false)
+
     document.addEventListener('mousedown', (e) => {
       const ButtonBlock = bot.blockAtCursor()
       if (!ButtonBlock) return
@@ -140,6 +144,7 @@ async function main () {
     // Browser animation loop
     const animate = () => {
       window.requestAnimationFrame(animate)
+      viewer.update()
       renderer.render(viewer.scene, viewer.camera)
     }
     animate()
