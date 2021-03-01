@@ -102,7 +102,7 @@ async function main () {
       Space: 'jump',
       ShiftLeft: 'sneak',
       ControlLeft: 'sprint'
-    };
+    }
 
     document.addEventListener('keydown', (e) => {
       console.log(e.code)
