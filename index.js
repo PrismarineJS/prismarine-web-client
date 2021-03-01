@@ -13,7 +13,23 @@ let status = 'Waiting for user'
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
+async function statusRunner () {
+  const array = ['.', '..', '...', '']
+  // eslint-disable-next-line promise/param-names
+  const timer = ms => new Promise(res => setTimeout(res, ms))
+
+  async function load () {
+    for (let i = 0; true; i = ((i + 1) % array.length)) {
+      document.getElementById('loading-text').innerText = status + array[i]
+      await timer(500)
+    }
+  }
+
+  load()
+}
+
 async function main () {
+  statusRunner()
   const viewDistance = 6
   const host = prompt('Host', '95.111.249.143')
   const port = parseInt(prompt('Port', '10000'))
@@ -31,6 +47,11 @@ async function main () {
     port,
     username,
     password
+  })
+
+  bot.once('error', () => {
+    console.log('Encountered error!')
+    status = 'Error encountered. Please reload the page'
   })
 
   bot.on('end', () => {

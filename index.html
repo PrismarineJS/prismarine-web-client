@@ -133,25 +133,7 @@
         <h1 class="middle" id="loading-text">Waiting for user...</h1>
       </div>
     </div>
-    <script>
-      let status = "Waiting for user"
-      var array = ['.', '..', '...', ''];
-      const timer = ms => new Promise(res => setTimeout(res, ms))
 
-      async function load () { 
-        for (var i = 0; true; i = ((i + 1) % array.length)) {
-          document.getElementById("loading-text").innerText = status + array[i]
-          await timer(500);
-        }
-      }
-
-      load();
-
-      promise.then(function () {
-        console.log('Loop finished.');
-      });
-
-    </script>
     <script type="text/javascript" src="index.js"></script>
   </body>
 </html>
