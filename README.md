@@ -10,7 +10,7 @@ It runs mineflayer in the browser which connects to a websocket minecraft server
 It provides a simple websocket to tcp proxy as a backend to make it possible to connect to any minecraft server.
 
 ## Screenshot
-![Screenshot of MineWeb in action](https://cdn.discordapp.com/attachments/815363216947150879/815760229689589780/Screenshot_2021-02-28_at_20.39.05.png)
+![Screenshot of MineWeb in action](screenshot.png)
 
 ## Usage
 
