@@ -67,7 +67,12 @@
         display: block;
       }
       #crosshair {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -o-crisp-edges;
         image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
         position: absolute;
         top: 50%;
         left: 50%;
