@@ -119,11 +119,12 @@ async function main () {
       }
     }, false)
     document.addEventListener('mousedown', (e) => {
-      let ButtonBlock
-      if (bot.canDigBlock(bot.blockAtCursor())) ButtonBlock = bot.blockAtCursor()
+      const ButtonBlock = bot.blockAtCursor()
       if (!ButtonBlock) return
       if (e.button === 0) {
-        bot.dig(ButtonBlock)
+        if (bot.canDigBlock(ButtonBlock)) {
+          bot.dig(ButtonBlock)
+        }
       } else if (e.button === 2) {
         const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
         const vec = vecArray[ButtonBlock.face]
