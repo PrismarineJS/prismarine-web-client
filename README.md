@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-A minecraft client running in a web page.
+A minecraft client running in a web page. Demo at https://prismarine-web-client.js.org
 
 It runs mineflayer in the browser which connects to a websocket minecraft server.
 It provides a simple websocket to tcp proxy as a backend to make it possible to connect to any minecraft server.
