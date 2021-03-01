@@ -1,76 +1,75 @@
 {
-    "name": "prismarine-web-client",
-    "version": "1.1.0",
-    "description": "A minecraft client running in a browser",
-    "main": "index.js",
-    "scripts": {
-        "prepare": "webpack",
-        "start": "webpack serve",
-        "prod-start": "node server.js",
-        "build-start": "npm run prepare && npm run prod-start",
-        "lint": "standard",
-        "fix": "standard --fix",
-        "test": "npm run lint && mocha"
+  "name": "prismarine-web-client",
+  "version": "1.1.0",
+  "description": "A minecraft client running in a browser",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "webpack",
+    "start": "webpack serve",
+    "prod-start": "node server.js",
+    "build-start": "npm run prepare && npm run prod-start",
+    "lint": "standard",
+    "fix": "standard --fix",
+    "test": "npm run lint && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrismarineJS/prismarine-web-client.git"
+  },
+  "keywords": [
+    "prismarine",
+    "web",
+    "client"
+  ],
+  "author": "Romain Beaumont",
+  "contributors": [
+    {
+      "name": "AwesomestCode"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/PrismarineJS/prismarine-web-client.git"
-    },
-    "keywords": [
-        "prismarine",
-        "web",
-        "client"
-    ],
-    "author": "Romain Beaumont",
-    "contributors": [
-        {
-            "name": "AwesomestCode"
-        },
-        {
-            "name": "circuit10"
-        }
-    ],
-    "license": "MIT",
-    "bin": {
-        "prismarine-web-client": "./server.js"
-    },
-    "bugs": {
-        "url": "https://github.com/PrismarineJS/prismarine-web-client/issues"
-    },
-    "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
-    "dependencies": {
-        "body-parser": "^1.19.0",
-        "compression": "^1.7.4",
-        "express": "^4.17.1",
-        "net-browserify": "^0.2.4",
-        "request": "^2.88.2"
-    },
-    "devDependencies": {
-        "assert": "^2.0.0",
-        "browserify-zlib": "^0.2.0",
-        "buffer": "^6.0.3",
-        "clean-webpack-plugin": "^3.0.0",
-        "constants-browserify": "^1.0.0",
-        "copy-webpack-plugin": "^7.0.0",
-        "crypto-browserify": "^3.12.0",
-        "events": "^3.2.0",
-        "http-browserify": "^1.7.0",
-        "http-server": "^0.12.3",
-        "https-browserify": "^1.0.0",
-        "lodash-webpack-plugin": "^0.11.6",
-        "memfs": "^3.2.0",
-        "mineflayer": "^2.39.2",
-        "mocha": "^8.3.0",
-        "os-browserify": "^0.3.0",
-        "path-browserify": "^1.0.1",
-        "prismarine-viewer": "^1.14.0",
-        "process": "^0.11.10",
-        "standard": "^16.0.3",
-        "stream-browserify": "^3.0.0",
-        "three": "^0.124.0",
-        "timers-browserify": "^2.0.12",
-        "webpack": "^5.11.0",
-        "webpack-cli": "^4.2.0",
-        "webpack-dev-server": "^3.11.0"
+    {
+      "name": "circuit10"
     }
+  ],
+  "license": "MIT",
+  "bin": {
+    "prismarine-web-client": "./server.js"
+  },
+  "bugs": {
+    "url": "https://github.com/PrismarineJS/prismarine-web-client/issues"
+  },
+  "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "net-browserify": "^0.2.4",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "assert": "^2.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "constants-browserify": "^1.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.2.0",
+    "http-browserify": "^1.7.0",
+    "http-server": "^0.12.3",
+    "https-browserify": "^1.0.0",
+    "lodash-webpack-plugin": "^0.11.6",
+    "memfs": "^3.2.0",
+    "mineflayer": "^2.39.2",
+    "mocha": "^8.3.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "prismarine-viewer": "^1.14.0",
+    "process": "^0.11.10",
+    "standard": "^16.0.3",
+    "stream-browserify": "^3.0.0",
+    "three": "^0.124.0",
+    "timers-browserify": "^2.0.12",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
 }

@@ -94,39 +94,28 @@ async function main () {
     })
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
+
+    const codes = {
+      KeyW: 'forward',
+      KeyS: 'back',
+      KeyA: 'right',
+      KeyD: 'left',
+      Space: 'jump',
+      ShiftLeft: 'sneak',
+      ControlLeft: 'sprint'
+    }
+
     document.addEventListener('keydown', (e) => {
       console.log(e.code)
-      if (e.code === 'KeyW') {
-        bot.setControlState('forward', true)
-      } else if (e.code === 'KeyS') {
-        bot.setControlState('back', true)
-      } else if (e.code === 'KeyA') {
-        bot.setControlState('right', true)
-      } else if (e.code === 'KeyD') {
-        bot.setControlState('left', true)
-      } else if (e.code === 'Space') {
-        bot.setControlState('jump', true)
-      } else if (e.code === 'ShiftLeft') {
-        bot.setControlState('sneak', true)
-      } else if (e.code === 'ControlLeft') {
-        bot.setControlState('sprint', true)
+
+      if (e.code in codes) {
+        bot.setControlState(codes[e.code], true)
       }
     }, false)
+
     document.addEventListener('keyup', (e) => {
-      if (e.code === 'KeyW') {
-        bot.setControlState('forward', false)
-      } else if (e.code === 'KeyS') {
-        bot.setControlState('back', false)
-      } else if (e.code === 'KeyA') {
-        bot.setControlState('right', false)
-      } else if (e.code === 'KeyD') {
-        bot.setControlState('left', false)
-      } else if (e.code === 'Space') {
-        bot.setControlState('jump', false)
-      } else if (e.code === 'ShiftLeft') {
-        bot.setControlState('sneak', false)
-      } else if (e.code === 'ControlLeft') {
-        bot.setControlState('sprint', false)
+      if (e.code in codes) {
+        bot.setControlState(codes[e.code], false)
       }
     }, false)
     document.addEventListener('mousedown', (e) => {

@@ -2,7 +2,6 @@
 
 const express = require('express')
 const netApi = require('net-browserify')
-const bodyParser = require('body-parser')
 const request = require('request')
 const compression = require('compression')
 const path = require('path')
@@ -30,7 +29,7 @@ app.use(compression())
 app.use(netApi())
 app.use(express.static(path.join(__dirname, './public')))
 
-app.use(bodyParser.json({ limit: '100kb' }))
+app.use(express.json({ limit: '100kb' }))
 
 app.all('*', function (req, res, next) {
   // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
