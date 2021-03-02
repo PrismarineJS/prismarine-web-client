@@ -3,3 +3,5 @@ package-lock.json
 .vscode
 public
 .DS_Store
+.idea/
+*.iml
