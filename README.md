@@ -7,28 +7,25 @@
 A Minecraft client running in a web page.
 
 ## How it Works
-prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy which translates the WebSocket connection into TCP to connect to normal Minecraft Servers.
+prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy which translates the WebSocket connection into TCP to connect to normal Minecraft servers.
 
 ## Screenshot
 ![Screenshot of MineWeb in action](screenshot.png)
 
 ## Live Demo
-https://prismarine-web-client.js.org
+Click on this link to open it in your browser, no installation necessary: https://prismarine-web-client.js.org
+
+*Note: Don't open on iOS. It doesn't work. You can try it on Android, which sometimes works and sometimes doesn't. It's best open it on a laptop/desktop though.*
 
 ## Usage (for self-hosted installations)
-First, clone this repo.
-
-Then, set your working directory to that of the repo. Example:
-```bash
-$ cd ~/prismarine-viewer/
-```
+If you want the latest version or want to use auth, you can download this repo and host it yourself.
 
 Run these commands in bash: 
 ```bash
 $ npm install -g prismarine-web-client
 $ prismarine-web-client
 ``` 
-Finally, open `http://localhost:8080` in your browser
+Finally, open `http://localhost:8080` in your browser.
 
 ## Features
 
@@ -52,12 +49,23 @@ Finally, open `http://localhost:8080` in your browser
 
 ## Development
 
-```js
-npm install
-npm run build-start
+If you're contributing/making changes, you need to install it in a different manner.
+
+First, clone the repo.
+
+Then, set your working directory to that of the repo. For example:
+```bash
+$ cd ~/prismarine-viewer/
 ```
 
-Then connect to http://localhost:8080
+Finally, don't
+
+```bash
+$ npm install
+$ npm run build-start
+```
+
+Then connect to http://localhost:8080 in your browser.
 
 
 
