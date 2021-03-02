@@ -58,7 +58,7 @@ Then, set your working directory to that of the repo. For example:
 $ cd ~/prismarine-viewer/
 ```
 
-Finally, don't
+Finally, run
 
 ```bash
 $ npm install
