@@ -4,37 +4,67 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-A minecraft client running in a web page. Demo at https://prismarine-web-client.js.org
+### A Minecraft client running in a web page. **Live demo at https://prismarine-web-client.js.org**
 
-It runs mineflayer in the browser which connects to a websocket minecraft server.
-It provides a simple websocket to tcp proxy as a backend to make it possible to connect to any minecraft server.
+
+
+## How it Works
+prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy which translates the WebSocket connection into TCP to connect to normal Minecraft servers.
 
 ## Screenshot
-![Screenshot of MineWeb in action](screenshot.png)
+![Screenshot of prismarine-web-client in action](screenshot.png)
 
-## Usage
+## Live Demo
+Click on this link to open it in your browser, no installation necessary: https://prismarine-web-client.js.org
 
-`npm install -g prismarine-web-client` then run `prismarine-web-client` then open `http://localhost:8080` in your browser
+*Tested on Chrome & Firefox for desktop platforms.*
+
+## Usage (for self-hosted installations)
+If you want the latest version or want to use auth, you can host an instance yourself.
+
+Run these commands in bash: 
+```bash
+$ npm install -g prismarine-web-client
+$ prismarine-web-client
+``` 
+Finally, open `http://localhost:8080` in your browser.
 
 ## Features
 
-* display blocks
-* display entities as colored rectangles
-* movement sync
+* Display mobs (though sometimes messed up)
+* Display players
+* Display other entities as colored rectangles
+* Display blocks 
+* Movement (you can move, and you see entities moving live)
+* Place and break blocks
 
 ## Roadmap
-
-* chat
-* block placing and breaking
+* Containers (inventory, chests, etc.)
+* More Customisation (e.g. mouse sensitivity, text size, issue #40)
+* Sounds
+* More World Interactions (attacking entities, etc.)
+* Cosmetic Rendering Features (day night cycle, fog, etc.)
+* Server-Side Support Plugins (for auth bypass & possibly hosting its own websocket proxy to reduce latency, issue #13)
 
 ## Development
 
-```js
-npm install
-npm run build-start
+If you're contributing/making changes, you need to install it differently.
+
+First, clone the repo.
+
+Then, set your working directory to that of the repo. For example:
+```bash
+$ cd ~/prismarine-viewer/
 ```
 
-Then connect to http://localhost:8080
+Finally, run
+
+```bash
+$ npm install
+$ npm run build-start
+```
+
+Then connect to http://localhost:8080 in your browser.
 
 
 
