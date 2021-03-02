@@ -18,7 +18,7 @@ Click on this link to open it in your browser, no installation necessary: https:
 *Note: Don't open it on iOS. It doesn't work. You can try it on Android, which sometimes works and sometimes doesn't. It's best open it on a laptop/desktop though.*
 
 ## Usage (for self-hosted installations)
-If you want the latest version or want to use auth, you can download this repo and host it yourself.
+If you want the latest version or want to use auth, you can host an instance yourself.
 
 Run these commands in bash: 
 ```bash
@@ -49,7 +49,7 @@ Finally, open `http://localhost:8080` in your browser.
 
 ## Development
 
-If you're contributing/making changes, you need to install it in a different manner.
+If you're contributing/making changes, you need to install it differently.
 
 First, clone the repo.
 
