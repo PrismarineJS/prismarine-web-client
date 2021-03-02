@@ -49,18 +49,19 @@ async function main () {
     password
   })
 
-  bot.once('error', () => {
+  bot.on('error', () => {
     console.log('Encountered error!')
     status = 'Error encountered. Please reload the page'
   })
 
-  bot.once('kicked', () => {
+  bot.on('kicked', () => {
     console.log('User was kicked!')
     status = 'The Minecraft server kicked you. Please reload the page to rejoin'
   })
 
   bot.on('end', () => {
     console.log('disconnected')
+    status = 'You have been disconnected from the server. Please reload the page to rejoin'
   })
   bot.once('login', () => {
     status = 'Loading world...'
