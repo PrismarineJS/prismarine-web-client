@@ -39,15 +39,12 @@ Finally, open `http://localhost:8080` in your browser.
 * Place and break blocks
 
 ## Roadmap
-* Hotbar (PR #42)
-* Loading Screen (PR #26)
-* Inventory 
-* Containers
-* More customisation (e.g. mouse sensitivity, text size, issue #40)
-* Sounds (Issue #43)
-* Day Night Cycle (Issue #8)
-* Attacking Entities (Issue #9)
-* Spigot Plugin (for auth bypass & possibly hosting its own websocket proxy to reduce latency, issue #13)
+* Containers (inventory, chests, etc.)
+* More Customisation (e.g. mouse sensitivity, text size, issue #40)
+* Sounds
+* More World Interactions (attacking entities, etc.)
+* Cosmetic Rendering Features (day night cycle, fog, etc.)
+* Server-Side Support Plugins (for auth bypass & possibly hosting its own websocket proxy to reduce latency, issue #13)
 
 ## Development
 
