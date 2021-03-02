@@ -54,6 +54,11 @@ async function main () {
     status = 'Error encountered. Please reload the page'
   })
 
+  bot.once('kicked', () => {
+    console.log('User was kicked!')
+    status = 'The Minecraft server kicked you. Please reload the page to rejoin'
+  })
+
   bot.on('end', () => {
     console.log('disconnected')
   })
