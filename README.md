@@ -10,7 +10,7 @@ A Minecraft client running in a web page.
 prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy which translates the WebSocket connection into TCP to connect to normal Minecraft servers.
 
 ## Screenshot
-![Screenshot of MineWeb in action](screenshot.png)
+![Screenshot of prismarine-web-client in action](screenshot.png)
 
 ## Live Demo
 Click on this link to open it in your browser, no installation necessary: https://prismarine-web-client.js.org
