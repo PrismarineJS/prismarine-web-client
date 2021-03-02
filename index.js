@@ -7,7 +7,7 @@ const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const Vec3 = require('vec3').Vec3
 global.THREE = require('three')
-const chat = require('./lib/chat')
+const Chat = require('./lib/chat')
 let status = 'Waiting for user'
 
 const maxPitch = 0.5 * Math.PI
