@@ -15,7 +15,7 @@ prismarine-web-client runs mineflayer and prismarine-viewer in the browser, whic
 ## Live Demo
 Click on this link to open it in your browser, no installation necessary: https://prismarine-web-client.js.org
 
-*Note: Don't open on iOS. It doesn't work. You can try it on Android, which sometimes works and sometimes doesn't. It's best open it on a laptop/desktop though.*
+*Note: Don't open it on iOS. It doesn't work. You can try it on Android, which sometimes works and sometimes doesn't. It's best open it on a laptop/desktop though.*
 
 ## Usage (for self-hosted installations)
 If you want the latest version or want to use auth, you can download this repo and host it yourself.
