@@ -7,7 +7,7 @@ const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const Vec3 = require('vec3').Vec3
 global.THREE = require('three')
-const chat = require('./lib/chat')
+const Chat = require('./lib/chat')
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -47,7 +47,7 @@ async function main () {
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    chat.init(undefined, bot._client, renderer)
+    const chat = Chat.init(bot._client, renderer)
 
     // Create viewer
     const viewer = new Viewer(renderer)
@@ -109,8 +109,8 @@ async function main () {
     }
 
     document.addEventListener('keydown', (e) => {
+      if (chat.inChat) return
       console.log(e.code)
-
       if (e.code in codes) {
         bot.setControlState(codes[e.code], true)
       }
@@ -127,7 +127,7 @@ async function main () {
       if (!ButtonBlock) return
       if (e.button === 0) {
         if (bot.canDigBlock(ButtonBlock)) {
-          bot.dig(ButtonBlock)
+          bot.dig(ButtonBlock, 'ignore')
         }
       } else if (e.button === 2) {
         const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
