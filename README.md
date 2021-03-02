@@ -4,28 +4,51 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-A minecraft client running in a web page. Demo at https://prismarine-web-client.js.org
+A Minecraft client running in a web page.
 
-It runs mineflayer in the browser which connects to a websocket minecraft server.
-It provides a simple websocket to tcp proxy as a backend to make it possible to connect to any minecraft server.
+## How it Works
+prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy which translates the WebSocket connection into TCP to connect to normal Minecraft Servers.
 
 ## Screenshot
 ![Screenshot of MineWeb in action](screenshot.png)
 
-## Usage
+## Live Demo
+https://prismarine-web-client.js.org
 
-`npm install -g prismarine-web-client` then run `prismarine-web-client` then open `http://localhost:8080` in your browser
+## Usage (for self-hosted installations)
+First, clone this repo.
+
+Then, set your working directory to that of the repo. Example:
+```bash
+$ cd ~/prismarine-viewer/
+```
+
+Run these commands in bash: 
+```bash
+$ npm install -g prismarine-web-client
+$ prismarine-web-client
+``` 
+Finally, open `http://localhost:8080` in your browser
 
 ## Features
 
-* display blocks
-* display entities as colored rectangles
-* movement sync
+* Display mobs (though sometimes messed up)
+* Display players
+* Display other entities as colored rectangles
+* Display blocks 
+* Movement (you can move, and you see entities moving live)
+* Place and break blocks
 
 ## Roadmap
-
-* chat
-* block placing and breaking
+* Hotbar (PR #42)
+* Loading Screen (PR #26)
+* Inventory 
+* Containers
+* More customisation (e.g. mouse sensitivity, text size, issue #40)
+* Sounds (Issue #43)
+* Day Night Cycle (Issue #8)
+* Attacking Entities (Issue #9)
+* Spigot Plugin (for auth bypass & possibly hosting its own websocket proxy to reduce latency, issue #13)
 
 ## Development
 
