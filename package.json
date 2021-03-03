@@ -8,6 +8,7 @@
     "start": "webpack serve",
     "prod-start": "node server.js",
     "build-start": "npm run prepare && npm run prod-start",
+    "public-start": "npm run prepare && node server.js 80",
     "lint": "standard",
     "fix": "standard --fix",
     "test": "npm run lint && mocha"
