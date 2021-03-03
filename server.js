@@ -73,6 +73,6 @@ app.all('*', function (req, res, next) {
 })
 
 // Start the server
-const server = app.listen(8080, function () {
+const server = app.listen(process.argv[2] === undefined ? 8080 : process.argv[2], function () {
   console.log('Server listening on port ' + server.address().port)
 })
