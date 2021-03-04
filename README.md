@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-### A Minecraft client running in a web page. **Live demo at https://prismarine-web-client.js.org**
+### A Minecraft client running in a web page. **Live demo at https://prismarine.js.org/prismarine-web-client/**
 
 
 
