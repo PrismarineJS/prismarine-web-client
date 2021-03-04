@@ -1,14 +1,16 @@
 /* global THREE, prompt */
 const net = require('net')
+const config = require('./config.json')
 
 // Workaround for process.versions.node not existing in the browser
 process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
-const Vec3 = require('vec3').Vec3
+const { Vec3 } = require('vec3').Vec3
 global.THREE = require('three')
 const Chat = require('./lib/chat')
+
 let status = 'Waiting for user'
 
 const maxPitch = 0.5 * Math.PI
@@ -32,8 +34,8 @@ async function statusRunner () {
 async function main () {
   statusRunner()
   const viewDistance = 6
-  const hostprompt = prompt('Host:port', '95.111.249.143:10000')
-  const proxyprompt = prompt('Proxy:port (blank for default)', '')
+  const hostprompt = prompt('Host:port', config.defaultHost)
+  const proxyprompt = prompt('Proxy:port (blank for default)', config.defaultProxy)
   const username = prompt('Username', 'pviewer' + (Math.floor(Math.random() * 1000)))
   let password = prompt('Password (blank for offline)', '')
   password = password === '' ? undefined : password
