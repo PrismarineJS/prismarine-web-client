@@ -42,8 +42,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
-    "net-browserify": "^0.2.4",
-    "request": "^2.88.2"
+    "net-browserify": "PrismarineJS/net-browserify"
   },
   "devDependencies": {
     "assert": "^2.0.0",
