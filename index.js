@@ -1,4 +1,5 @@
 /* global THREE, prompt */
+const net = require('net')
 
 // Workaround for process.versions.node not existing in the browser
 process.versions.node = '14.0.0'
@@ -31,12 +32,34 @@ async function statusRunner () {
 async function main () {
   statusRunner()
   const viewDistance = 6
-  const host = prompt('Host', '95.111.249.143')
-  const port = parseInt(prompt('Port', '10000'))
+  const hostprompt = prompt('Host:port', '95.111.249.143:10000')
+  const proxyprompt = prompt('Proxy:port (blank for default)', '')
   const username = prompt('Username', 'pviewer' + (Math.floor(Math.random() * 1000)))
   let password = prompt('Password (blank for offline)', '')
   password = password === '' ? undefined : password
+
+  let host, port, proxy, proxyport
+  if (!hostprompt.includes(':')) {
+    host = hostprompt
+    port = 25565
+  } else {
+    [host, port] = hostprompt.split(':')
+    port = parseInt(port, 10)
+  }
+
+  if (!proxyprompt.includes(':')) {
+    proxy = proxyprompt
+    proxyport = undefined
+  } else {
+    [proxy, proxyport] = proxyprompt.split(':')
+    proxyport = parseInt(proxyport, 10)
+  }
   console.log(`connecting to ${host} ${port} with ${username}`)
+
+  if (proxy) {
+    console.log(`using proxy ${proxy} ${proxyport}`)
+    net.setProxy({ hostname: proxy, port: proxyport })
+  }
 
   status = 'Logging in'
 
