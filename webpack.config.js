@@ -58,6 +58,7 @@ const config = {
     new CopyPlugin({
       patterns: [
         { from: path.join(__dirname, '/index.html'), to: './index.html' },
+        { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
