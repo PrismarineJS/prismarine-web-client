@@ -22,6 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: npm run build
     - run: npm test
   DeployPages:
     runs-on: ubuntu-latest
@@ -37,6 +38,7 @@ jobs:
       - name: Build
         run: |
           npm install
+          npm run build
           cp -R public/ ../
           git checkout -b gh-pages
           rm -Rf ./*

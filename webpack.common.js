@@ -1,17 +1,14 @@
 const webpack = require('webpack')
 const path = require('path')
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+// https://webpack.js.org/guides/production/
 
 const config = {
-  // devtool: 'inline-source-map',
-  // mode: 'development',
-  mode: 'production',
   entry: path.resolve(__dirname, './index.js'),
   output: {
     path: path.resolve(__dirname, './public'),
-    filename: './index.js'
+    filename: './index.js',
+    publicPath: '/'
   },
   resolve: {
     alias: {
@@ -44,7 +41,6 @@ const config = {
   },
   plugins: [
     // fix "process is not defined" error:
-    new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
       process: 'process/browser'
     }),
@@ -67,20 +63,8 @@ const config = {
         { from: path.join(__dirname, 'assets/mojangles.ttf'), to: './' },
         { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' }
       ]
-    }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new LodashModuleReplacementPlugin()
-  ],
-  devServer: {
-    contentBase: path.resolve(__dirname, './public'),
-    compress: true,
-    inline: true,
-    // open: true,
-    hot: true,
-    watchOptions: {
-      ignored: /node_modules/
-    }
-  }
+    })
+  ]
 }
 
 module.exports = config
