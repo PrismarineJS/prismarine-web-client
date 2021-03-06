@@ -4,11 +4,12 @@
   "description": "A minecraft client running in a browser",
   "main": "index.js",
   "scripts": {
-    "prepare": "webpack",
-    "start": "webpack serve",
+    "build": "webpack --config webpack.prod.js",
+    "dev-build": "webpack --config webpack.dev.js",
+    "start": "node server.js 8080 dev",
     "prod-start": "node server.js",
-    "build-start": "npm run prepare && npm run prod-start",
-    "public-start": "npm run prepare && node server.js 80",
+    "build-start": "npm run build && npm run prod-start",
+    "prepublishOnly": "npm run build",
     "lint": "standard",
     "fix": "standard --fix",
     "test": "npm run lint && mocha"
@@ -41,8 +42,8 @@
   "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
   "dependencies": {
     "compression": "^1.7.4",
-    "express": "^4.17.1",
-    "net-browserify": "PrismarineJS/net-browserify"
+    "net-browserify": "PrismarineJS/net-browserify",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "assert": "^2.0.0",
@@ -70,6 +71,8 @@
     "timers-browserify": "^2.0.12",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-middleware": "^3.7.3",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^5.7.3"
   }
 }

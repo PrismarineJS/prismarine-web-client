@@ -10,8 +10,21 @@ const app = express()
 
 app.use(compression())
 app.use(netApi({ allowOrigin: '*' }))
-app.use(express.static(path.join(__dirname, './public')))
-app.use(express.json({ limit: '100kb' }))
+if (process.argv[3] === 'dev') {
+  // https://webpack.js.org/guides/development/#using-webpack-dev-middleware
+  const webpackDevMiddleware = require('webpack-dev-middleware')
+  const config = require('./webpack.dev.js')
+  const webpack = require('webpack')
+  const compiler = webpack(config)
+
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: config.output.publicPath
+    })
+  )
+} else {
+  app.use(express.static(path.join(__dirname, './public')))
+}
 
 // Start the server
 const server = app.listen(process.argv[2] === undefined ? 8080 : process.argv[2], function () {
