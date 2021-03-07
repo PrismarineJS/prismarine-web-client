@@ -281,7 +281,7 @@ async function main () {
       }
       http.send()
     })
-    
+
     window.addEventListener('resize', () => {
       viewer.camera.aspect = window.innerWidth / window.innerHeight
       viewer.camera.updateProjectionMatrix()
