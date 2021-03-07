@@ -88,6 +88,7 @@ async function main () {
     console.log('disconnected')
     status = 'You have been disconnected from the server. Please reload the page to rejoin'
   })
+
   bot.once('login', () => {
     status = 'Loading world...'
   })
