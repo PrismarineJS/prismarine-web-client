@@ -64,7 +64,9 @@ async function main () {
   const viewDistance = 6
   const hostprompt = prompt('Host:port', config.defaultHost)
   const proxyprompt = prompt('Proxy:port (blank for default)', config.defaultProxy)
-  const username = prompt('Username', 'pviewer' + (Math.floor(Math.random() * 1000)))
+  const defaultUserName = window.localStorage.getItem('username') ?? 'pviewer' + (Math.floor(Math.random() * 1000))
+  const username = prompt('Username', defaultUserName)
+  window.localStorage.setItem('username', username)
   let password = prompt('Password (blank for offline)', '')
   password = password === '' ? undefined : password
 
