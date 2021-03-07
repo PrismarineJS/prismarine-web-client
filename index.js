@@ -31,6 +31,34 @@ async function statusRunner () {
   load()
 }
 
+async function reloadHotbar (bot) {
+  console.log('Loading hotbar.')
+  for (let i = 0; i < 9; i++) {
+    // eslint-disable-next-line no-undef
+    const http = new XMLHttpRequest()
+    let url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/items/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+    http.open('HEAD', url)
+
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        if (this.status === 404) {
+          url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/blocks/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+        }
+        document.getElementById('hotbar-' + i).src = url
+      }
+    }
+    http.send()
+  }
+}
+
+async function reloadHotbarSelected (bot, slot) {
+  console.log('Changing the selected hotbar slot to ' + slot.toString() + '!')
+  const planned = (20 * 4 * slot) + 'px'
+  document.getElementById('hotbar-highlight').style.marginLeft = planned
+  bot.setQuickBarSlot(slot)
+  console.log('Successfully changed to ' + planned + '!')
+}
+
 async function main () {
   statusRunner()
   const viewDistance = 6
@@ -86,14 +114,18 @@ async function main () {
     console.log('disconnected')
     status = 'You have been disconnected from the server. Please reload the page to rejoin'
   })
+
   bot.once('login', () => {
     status = 'Loading world...'
   })
 
   bot.once('spawn', () => {
+    reloadHotbarSelected(bot, 0)
     status = 'Placing blocks (starting viewer)...'
 
     console.log('bot spawned - starting viewer')
+
+    reloadHotbar(bot)
 
     const version = bot.version
 
@@ -176,6 +208,14 @@ async function main () {
       if (e.code in codes) {
         bot.setControlState(codes[e.code], true)
       }
+      if (e.code.startsWith('Digit')) {
+        const numPressed = e.code.substr(5)
+        console.log(numPressed)
+        reloadHotbarSelected(bot, numPressed - 1)
+      }
+      if (e.code === 'KeyQ') {
+        bot.tossStack(bot.heldItem)
+      }
     }, false)
 
     document.addEventListener('keyup', (e) => {
@@ -220,6 +260,27 @@ async function main () {
       renderer.render(viewer.scene, viewer.camera)
     }
     animate()
+
+    // inventory listener
+    bot.inventory.on('updateSlot', (slot, oldItem, newItem) => {
+      if (slot >= bot.inventory.hotbarStart + 9) return
+      if (slot < bot.inventory.hotbarStart) return
+
+      // eslint-disable-next-line no-undef
+      const http = new XMLHttpRequest()
+      let url = newItem ? window.location.href + 'textures/' + bot.version + '/items/' + newItem.name + '.png' : ''
+      http.open('HEAD', url)
+
+      http.onreadystatechange = function () {
+        if (this.readyState === this.DONE) {
+          if (this.status === 404) {
+            url = newItem ? window.location.href + 'textures/' + bot.version + '/blocks/' + newItem.name + '.png' : ''
+          }
+          document.getElementById('hotbar-' + (slot - bot.inventory.hotbarStart)).src = url
+        }
+      }
+      http.send()
+    })
 
     window.addEventListener('resize', () => {
       viewer.camera.aspect = window.innerWidth / window.innerHeight
