@@ -36,13 +36,13 @@ async function reloadHotbar (bot) {
   for (let i = 0; i < 9; i++) {
     // eslint-disable-next-line no-undef
     const http = new XMLHttpRequest()
-    let url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/items/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+    let url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + viewer.version + '/items/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
     http.open('HEAD', url)
 
     http.onreadystatechange = function () {
       if (this.readyState === this.DONE) {
         if (this.status === 404) {
-          url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/blocks/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+          url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + viewer.version + '/blocks/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
         }
         document.getElementById('hotbar-' + i).src = url
       }
@@ -268,13 +268,13 @@ async function main () {
 
       // eslint-disable-next-line no-undef
       const http = new XMLHttpRequest()
-      let url = newItem ? window.location.href + 'textures/' + bot.version + '/items/' + newItem.name + '.png' : ''
+      let url = newItem ? window.location.href + 'textures/' + viewer.version + '/items/' + newItem.name + '.png' : ''
       http.open('HEAD', url)
 
       http.onreadystatechange = function () {
         if (this.readyState === this.DONE) {
           if (this.status === 404) {
-            url = newItem ? window.location.href + 'textures/' + bot.version + '/blocks/' + newItem.name + '.png' : ''
+            url = newItem ? window.location.href + 'textures/' + viewer.version + '/blocks/' + newItem.name + '.png' : ''
           }
           document.getElementById('hotbar-' + (slot - bot.inventory.hotbarStart)).src = url
         }
