@@ -215,6 +215,9 @@ async function main () {
         console.log(numPressed)
         reloadHotbarSelected(bot, numPressed - 1)
       }
+      if (e.code === 'KeyQ') {
+        bot.tossStack(bot.heldItem)
+      }
     }, false)
 
     document.addEventListener('keyup', (e) => {
