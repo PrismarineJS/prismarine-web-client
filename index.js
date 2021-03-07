@@ -65,8 +65,6 @@ async function main () {
 
   status = 'Logging in'
 
-  document.getElementById('loading-text').requestFullscreen()
-
   const bot = mineflayer.createBot({
     host,
     port,
@@ -74,8 +72,8 @@ async function main () {
     password
   })
 
-  bot.on('error', () => {
-    console.log('Encountered error!')
+  bot.on('error', (err) => {
+    console.log('Encountered error!', err)
     status = 'Error encountered. Please reload the page'
   })
 
