@@ -50,6 +50,15 @@ async function reloadHotbar (bot) {
     http.send()
   }
 }
+
+async function reloadHotbarSelected (bot, slot) {
+  console.log('Changing the selected hotbar slot to ' + slot.toString() + '!')
+  const planned = (20 * 4 * slot) + 'px'
+  document.getElementById('hotbar-highlight').style.marginLeft = planned
+  bot.setQuickBarSlot(slot)
+  console.log('Successfully changed to ' + planned + '!')
+}
+
 async function main () {
   statusRunner()
   const viewDistance = 6
@@ -113,6 +122,7 @@ async function main () {
   })
 
   bot.once('spawn', () => {
+    reloadHotbarSelected(bot, 0)
     status = 'Placing blocks (starting viewer)...'
 
     console.log('bot spawned - starting viewer')
@@ -199,6 +209,11 @@ async function main () {
       console.log(e.code)
       if (e.code in codes) {
         bot.setControlState(codes[e.code], true)
+      }
+      if (e.code.startsWith('Digit')) {
+        const numPressed = e.code.substr(5)
+        console.log(numPressed)
+        reloadHotbarSelected(bot, numPressed - 1)
       }
     }, false)
 
