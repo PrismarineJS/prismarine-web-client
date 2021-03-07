@@ -31,7 +31,7 @@ async function statusRunner () {
   load()
 }
 
-async function reloadHotbar (bot) {
+async function reloadHotbar (bot, viewer) {
   console.log('Loading hotbar.')
   for (let i = 0; i < 9; i++) {
     // eslint-disable-next-line no-undef
@@ -125,8 +125,6 @@ async function main () {
 
     console.log('bot spawned - starting viewer')
 
-    reloadHotbar(bot)
-
     const version = bot.version
 
     const center = bot.entity.position
@@ -144,6 +142,8 @@ async function main () {
     // Create viewer
     const viewer = new Viewer(renderer)
     viewer.setVersion(version)
+
+    reloadHotbar(bot, viewer)
 
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
