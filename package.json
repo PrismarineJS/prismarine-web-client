@@ -42,8 +42,8 @@
   "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
   "dependencies": {
     "compression": "^1.7.4",
-    "net-browserify": "PrismarineJS/net-browserify",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "net-browserify": "PrismarineJS/net-browserify"
   },
   "devDependencies": {
     "assert": "^2.0.0",
@@ -64,7 +64,7 @@
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "prismarine-viewer": "^1.16.0",
-    "process": "^0.11.10",
+    "process": "PrismarineJS/node-process",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
     "three": "^0.126.0",
