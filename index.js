@@ -220,6 +220,12 @@ async function main () {
       renderer.render(viewer.scene, viewer.camera)
     }
     animate()
+
+    window.addEventListener('resize', () => {
+      viewer.camera.aspect = window.innerWidth / window.innerHeight
+      viewer.camera.updateProjectionMatrix()
+      renderer.setSize(window.innerWidth, window.innerHeight)
+    })
   })
 }
 main()
