@@ -244,6 +244,27 @@ async function main () {
       renderer.render(viewer.scene, viewer.camera)
     }
     animate()
+
+    // inventory listener
+    bot.inventory.on('updateSlot', (slot, oldItem, newItem) => {
+      if (slot >= bot.inventory.hotbarStart + 9) return
+      if (slot < bot.inventory.hotbarStart) return
+
+      // eslint-disable-next-line no-undef
+      const http = new XMLHttpRequest()
+      let url = newItem ? window.location.href + 'textures/' + bot.version + '/items/' + newItem.name + '.png' : ''
+      http.open('HEAD', url)
+
+      http.onreadystatechange = function () {
+        if (this.readyState === this.DONE) {
+          if (this.status === 404) {
+            url = newItem ? window.location.href + 'textures/' + bot.version + '/blocks/' + newItem.name + '.png' : ''
+          }
+          document.getElementById('hotbar-' + (slot - bot.inventory.hotbarStart)).src = url
+        }
+      }
+      http.send()
+    })
   })
 }
 main()
