@@ -31,6 +31,25 @@ async function statusRunner () {
   load()
 }
 
+async function reloadHotbar (bot) {
+  console.log('Loading hotbar.')
+  for (let i = 0; i < 9; i++) {
+    // eslint-disable-next-line no-undef
+    const http = new XMLHttpRequest()
+    let url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/items/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+    http.open('HEAD', url)
+
+    http.onreadystatechange = function () {
+      if (this.readyState === this.DONE) {
+        if (this.status === 404) {
+          url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + bot.version + '/blocks/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
+        }
+        document.getElementById('hotbar-' + i).src = url
+      }
+    }
+    http.send()
+  }
+}
 async function main () {
   statusRunner()
   const viewDistance = 6
@@ -97,6 +116,8 @@ async function main () {
     status = 'Placing blocks (starting viewer)...'
 
     console.log('bot spawned - starting viewer')
+
+    reloadHotbar(bot)
 
     const version = bot.version
 
