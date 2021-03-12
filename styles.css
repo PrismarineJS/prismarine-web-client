@@ -1,25 +1,67 @@
-@font-face {
-	font-family: minecraft;
-	src: url(minecraftia.woff);
+:root {
+  --guiScaleFactor: 3;
+  --guiScale: 3;
+  --chatWidth: 320px;
+  --chatHeight: 180px;
+  --chatScale: 1;
 }
 
-@font-face {
-	font-family: mojangles;
-	src: url(mojangles.ttf);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-	overflow: hidden;
+  height: 100vh;
+  overflow: hidden;
 }
 
-html,
+.dirt-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url('textures/1.17.1/gui/options_background.png'), rgba(0, 0, 0, 0.7);
+  background-size: 16px;
+  background-repeat: repeat;
+  width: 100%;
+  height: 100%;
+  transform-origin: top left;
+  transform: scale(2);
+  background-blend-mode: overlay;
+}
+
+@font-face {
+    font-family: minecraft;
+    src: url(minecraftia.woff);
+}
+
+@font-face {
+    font-family: mojangles;
+    src: url(mojangles.ttf);
+}
+
 body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+  overflow: hidden;
+  position: relative;
+  margin:0;
+  padding:0;
+  height: 100vh;
+  font-family: sans-serif;
+  background: #333;
+  /* background: linear-gradient(#141e30, #243b55); */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
 	height: 100%;
 	width: 100%;
 	font-size: 0;
@@ -27,156 +69,52 @@ canvas {
 	padding: 0;
 }
 
-.chat-wrapper {
-	position: fixed;
-	background-color: rgba(0, 0, 0, 0.5);
+#ui-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: scale(var(--guiScale));
+  width: calc(100% / var(--guiScale));
+  height: calc(100% / var(--guiScale));
+  z-index: 10;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  font-family: minecraft, mojangles, monospace;
 }
 
-.chat-display-wrapper {
-	bottom: calc(8px * 16);
-	padding: 4px;
-	max-height: calc(90px * 8);
-	width: calc(320px * 4);
+@media only screen and (max-width: 971px) {
+  #ui-root {
+    transform: scale(2);
+    width: calc(100% / 2);
+    height: calc(100% / 2);
+  }
 }
 
-.chat-input-wrapper {
-	bottom: calc(2px * 16);
-	width: 100%;
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0);
+@media only screen and (max-height: 670px) {
+  #ui-root {
+    transform: scale(2);
+    width: calc(100% / 2);
+    height: calc(100% / 2);
+  }
 }
 
-.chat {
-	overflow: hidden;
-	color: white;
-	font-size: 16px;
-	margin: 0px;
-	line-height: 100%;
-	text-shadow: 2px 2px 0px #3f3f3f;
-	font-family: mojangles, minecraft, monospace;
-	width: 100%;
-	max-height: calc(90px * 8)
+@media only screen and (max-width: 561px) {
+  #ui-root {
+    transform: scale(1);
+    width: calc(100% / 1);
+    height: calc(100% / 1);
+  }
 }
 
-input[type=text] {
-	background-color: rgba(0, 0, 0, 0.5);
-	display: none;
-}
-
-li {
-	display: block;
-}
-
-#crosshair {
-	image-rendering: optimizeSpeed;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: -o-crisp-edges;
-	image-rendering: pixelated;
-	-ms-interpolation-mode: nearest-neighbor;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	height: calc(256px * 4);
-	width: calc(256px * 4);
-	transform: translate(calc(-50% + 120px * 4), calc(-50% + 120px * 4));
-	clip-path: inset(0px calc(240px * 4) calc(240px * 4) 0px);
-}
-
-h1 {
-	font-family: mojangles, minecraft, monospace;
-}
-
-.loader {
-	display: initial;
-}
-
-#loading-image {
-	height: 75%;
-	top: 50%;
-	left: 50%;
-	position: absolute;
-	transform: translate(-50%, -50%);
-	image-rendering: crisp-edges;
-	image-rendering: -webkit-crisp-edges;
-}
-
-#loading-background {
-	background-color: #60a490;
-	z-index: 100;
-	height: 100% !important;
-	width: 100%;
-	position: fixed;
-}
-
-#loading-text {
-	color: #29594b;
-	z-index: 200;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, 12rem);
-}
-
-body {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-#hotbar-image {
-	image-rendering: optimizeSpeed;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: -o-crisp-edges;
-	image-rendering: pixelated;
-	-ms-interpolation-mode: nearest-neighbor;
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	height: calc(256px * 4);
-	width: calc(256px * 4);
-	transform: translate(calc(-182px * 2), calc(-22px * 4));
-	clip-path: inset(0px calc(74px * 4) calc(234px * 4) 0px);
-}
-#hotbar-items-wrapper {
-	image-rendering: optimizeSpeed;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: -o-crisp-edges;
-	image-rendering: pixelated;
-	-ms-interpolation-mode: nearest-neighbor;
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	height: calc(256px * 4);
-	width: calc(256px * 4);
-	transform: translate(calc(-182px * 2), calc(-22px * 4));
-	clip-path: inset(0px calc(74px * 4) calc(234px * 4) 0px);
-}
-
-#hotbar-highlight {
-	image-rendering: optimizeSpeed;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: -o-crisp-edges;
-	image-rendering: pixelated;
-	-ms-interpolation-mode: nearest-neighbor;
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	height: calc(256px * 4);
-	width: calc(256px * 4);
-	margin-left: calc(20px * 4 * 4); /* EDIT THIS TO CHANGE WHICH SLOT IS SELECTED */
-	transform: translate(calc((-24px * 2) - (20px * 4 * 4) ), calc((-22px * 4) + (-24px * 4) + 4px)); /* first need to translate up to account for clipping, then account for size of image, then 1px to center vertically over the image*/
-	clip-path: inset(calc(22px * 4) calc(232px * 4) calc(210px * 4) 0px);
-}
-
-.hotbar-item {
-	height: calc(16px * 4);
-	width: calc(16px * 4);
-	margin-top: calc(3px * 4);
-	margin-left: calc(3px * 4);
+@media only screen and (max-height: 430px) {
+  #ui-root {
+    transform: scale(1);
+    width: calc(100% / 1);
+    height: calc(100% / 1);
+  }
 }

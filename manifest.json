@@ -1,0 +1,13 @@
+{
+    "name": "Prismarine Web Client",
+    "short_name": "Prismarine Web Client",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [{
+        "src": "favicon.png",
+        "sizes": "512x512"
+    }],
+    "background_color": "#349474",
+    "theme_color": "#349474",
+    "display": "standalone"
+}
