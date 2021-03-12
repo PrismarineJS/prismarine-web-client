@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-A Minecraft client running in a web page. **Live demo at https://prismarine.js.org/prismarine-web-client/**
+A Minecraft client running in a web page. **Live demo at https://webclient.prismarine.js.org/**
 
 
 ## How it Works
@@ -15,7 +15,7 @@ which translates the WebSocket connection into TCP to connect to normal Minecraf
 ![Screenshot of prismarine-web-client in action](screenshot.png)
 
 ## Live Demo
-Click on this link to open it in your browser, no installation necessary: https://prismarine.js.org/prismarine-web-client
+Click on this link to open it in your browser, no installation necessary: https://webclient.prismarine.js.org/
 
 *Tested on Chrome & Firefox for desktop platforms.*
 
