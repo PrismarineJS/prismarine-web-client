@@ -41,6 +41,7 @@ jobs:
           npm run build
           cp -R public/ ../
           git checkout -b gh-pages
+          cp CNAME ../public/
           rm -Rf ./*
           rm -Rf .github .gitignore .gitpod .gitpod.DockerFile .npmignore .npmrc
           cp -R ../public/* ./
