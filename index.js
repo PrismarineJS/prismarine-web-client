@@ -102,6 +102,8 @@ async function main () {
     password
   })
 
+  window.bot = bot
+
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
     status = 'Error encountered. Please reload the page'
