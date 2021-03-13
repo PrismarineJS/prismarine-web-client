@@ -58,7 +58,7 @@ canvas {
 	max-height: calc(90px * 8)
 }
 
-input[type=text] {
+input[type=text], #chatinput {
 	background-color: rgba(0, 0, 0, 0.5);
 	display: none;
 }
