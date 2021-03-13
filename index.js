@@ -33,7 +33,6 @@ async function statusRunner () {
 }
 
 async function reloadHotbar (bot, viewer) {
-  console.log('Loading hotbar.')
   for (let i = 0; i < 9; i++) {
     // eslint-disable-next-line no-undef
     const http = new XMLHttpRequest()
@@ -53,11 +52,9 @@ async function reloadHotbar (bot, viewer) {
 }
 
 async function reloadHotbarSelected (bot, slot) {
-  console.log('Changing the selected hotbar slot to ' + slot.toString() + '!')
   const planned = (20 * 4 * slot) + 'px'
   document.getElementById('hotbar-highlight').style.marginLeft = planned
   bot.setQuickBarSlot(slot)
-  console.log('Successfully changed to ' + planned + '!')
 }
 
 async function main () {
