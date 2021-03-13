@@ -43,7 +43,8 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
-      hash: true
+      hash: true,
+      minify: false
     }),
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
