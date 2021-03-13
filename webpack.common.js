@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
 const config = {
@@ -40,6 +41,10 @@ const config = {
     }
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+      hash: true
+    }),
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
       process: 'process/browser'
@@ -53,7 +58,6 @@ const config = {
     ),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, '/index.html'), to: './index.html' },
         { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
