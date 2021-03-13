@@ -69,3 +69,10 @@ To check the production build (take a minute to build), you can run `npm run bui
 
 If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects
 
+Some variables are exposed in window for debugging:
+* bot
+* viewer
+* mcData
+* worldView
+* Vec3
+* pathfinder

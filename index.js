@@ -7,6 +7,7 @@ process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
+const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3').Vec3
 global.THREE = require('three')
 const Chat = require('./lib/chat')
@@ -102,8 +103,6 @@ async function main () {
     password
   })
 
-  window.bot = bot
-
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
     status = 'Error encountered. Please reload the page'
@@ -124,6 +123,8 @@ async function main () {
   })
 
   bot.once('spawn', () => {
+    const mcData = require('minecraft-data')(bot.version)
+
     reloadHotbarSelected(bot, 0)
     status = 'Placing blocks (starting viewer)...'
 
@@ -146,6 +147,13 @@ async function main () {
     // Create viewer
     const viewer = new Viewer(renderer)
     viewer.setVersion(version)
+
+    window.worldView = worldView
+    window.bot = bot
+    window.mcData = mcData
+    window.viewer = viewer
+    window.Vec3 = Vec3
+    window.pathfinder = pathfinder
 
     reloadHotbar(bot, viewer)
 
