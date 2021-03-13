@@ -101,6 +101,7 @@ async function main () {
     port,
     username,
     password,
+    viewDistance: 'tiny',
     checkTimeoutInterval: 240 * 1000,
     noPongTimeout: 240 * 1000,
     closeTimeout: 240 * 1000
@@ -223,7 +224,6 @@ async function main () {
       }
       if (e.code.startsWith('Digit')) {
         const numPressed = e.code.substr(5)
-        console.log(numPressed)
         reloadHotbarSelected(bot, numPressed - 1)
       }
       if (e.code === 'KeyQ') {
@@ -238,23 +238,32 @@ async function main () {
     }, false)
 
     document.addEventListener('mousedown', (e) => {
-      const ButtonBlock = bot.blockAtCursor()
-      if (!ButtonBlock) return
+      if (document.pointerLockElement !== renderer.domElement) return
+
+      const cursorBlock = bot.blockAtCursor()
+      if (!cursorBlock) return
+
       if (e.button === 0) {
-        if (bot.canDigBlock(ButtonBlock)) {
-          bot.dig(ButtonBlock, 'ignore')
+        if (bot.canDigBlock(cursorBlock)) {
+          bot.dig(cursorBlock, 'ignore')
         }
       } else if (e.button === 2) {
         const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
-        const vec = vecArray[ButtonBlock.face]
+        const vec = vecArray[cursorBlock.face]
 
-        bot.placeBlock(ButtonBlock, vec)
+        const delta = cursorBlock.intersect.minus(cursorBlock.position)
+        bot._placeBlockWithOptions(cursorBlock, vec, { delta, forceLook: 'ignore' })
       }
     }, false)
 
     document.addEventListener('mouseup', (e) => {
       bot.stopDigging()
     }, false)
+
+    document.addEventListener('wheel', (e) => {
+      const newSlot = ((bot.quickBarSlot + Math.sign(e.deltaY)) % 9 + 9) % 9
+      reloadHotbarSelected(bot, newSlot)
+    })
 
     status = 'Done!'
     console.log(status) // only do that because it's read in index.html and npm run fix complains.
