@@ -100,7 +100,8 @@ async function main () {
     host,
     port,
     username,
-    password
+    password,
+    checkTimeoutInterval: 120*1000
   })
 
   bot.on('error', (err) => {
