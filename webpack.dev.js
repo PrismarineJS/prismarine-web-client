@@ -11,9 +11,6 @@ module.exports = merge(common, {
     compress: true,
     inline: true,
     // open: true,
-    hot: true,
-    watchOptions: {
-      ignored: /node_modules/
-    }
+    hot: true
   }
 })
