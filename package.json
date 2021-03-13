@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "dev-build": "webpack --config webpack.dev.js",
+    "build-dev": "webpack --config webpack.dev.js",
     "start": "node server.js 8080 dev",
     "prod-start": "node server.js",
+    "build-dev-start": "npm run build-dev && npm run prod-start",
     "build-start": "npm run build && npm run prod-start",
     "prepublishOnly": "npm run build",
     "lint": "standard",
