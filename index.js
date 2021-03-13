@@ -160,6 +160,8 @@ async function main () {
 
     reloadHotbar(bot, viewer)
 
+    // Link WorldView and Viewer
+    viewer.listen(worldView)
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
 
@@ -167,11 +169,7 @@ async function main () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
     }
-
     bot.on('move', botPosition)
-
-    // Link WorldView and Viewer
-    viewer.listen(worldView)
     viewer.camera.position.set(center.x, center.y, center.z)
 
     status = 'Setting callbacks...'
