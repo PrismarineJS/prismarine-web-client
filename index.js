@@ -108,13 +108,13 @@ async function main () {
     status = 'Error encountered. Please reload the page'
   })
 
-  bot.on('kicked', () => {
-    console.log('User was kicked!')
+  bot.on('kicked', (kickReason) => {
+    console.log('User was kicked!', kickReason)
     status = 'The Minecraft server kicked you. Please reload the page to rejoin'
   })
 
-  bot.on('end', () => {
-    console.log('disconnected')
+  bot.on('end', (endReason) => {
+    console.log('disconnected for', endReason)
     status = 'You have been disconnected from the server. Please reload the page to rejoin'
   })
 
