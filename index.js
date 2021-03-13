@@ -8,7 +8,7 @@ process.versions.node = '14.0.0'
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
-const { Vec3 } = require('vec3').Vec3
+const { Vec3 } = require('vec3')
 global.THREE = require('three')
 const Chat = require('./lib/chat')
 
