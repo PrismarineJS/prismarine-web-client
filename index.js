@@ -196,7 +196,7 @@ async function connect (options) {
       }
       if (e.code.startsWith('Digit')) {
         const numPressed = e.code.substr(5)
-        hotbar.reloadHotbarSelected(bot, numPressed - 1)
+        hotbar.reloadHotbarSelected(numPressed - 1)
       }
       if (e.code === 'KeyQ') {
         if (bot.heldItem) bot.tossStack(bot.heldItem)
