@@ -1,0 +1,4812 @@
+{
+  "air": {
+    "name": "Air",
+    "x": 832,
+    "y": 2336
+  },
+  "stone": {
+    "name": "Stone",
+    "x": 224,
+    "y": 992
+  },
+  "granite": {
+    "name": "Granite",
+    "x": 96,
+    "y": 3360
+  },
+  "polished_granite": {
+    "name": "Polished Granite",
+    "x": 384,
+    "y": 896
+  },
+  "diorite": {
+    "name": "Diorite",
+    "x": 64,
+    "y": 3360
+  },
+  "polished_diorite": {
+    "name": "Polished Diorite",
+    "x": 352,
+    "y": 896
+  },
+  "andesite": {
+    "name": "Andesite",
+    "x": 832,
+    "y": 3328
+  },
+  "polished_andesite": {
+    "name": "Polished Andesite",
+    "x": 320,
+    "y": 896
+  },
+  "grass_block": {
+    "name": "Grass Block",
+    "x": 640,
+    "y": 960
+  },
+  "dirt": {
+    "name": "Dirt",
+    "x": 576,
+    "y": 960
+  },
+  "coarse_dirt": {
+    "name": "Coarse Dirt",
+    "x": 416,
+    "y": 960
+  },
+  "podzol": {
+    "name": "Podzol",
+    "x": 352,
+    "y": 3360
+  },
+  "crimson_nylium": {
+    "name": "Crimson Nylium",
+    "x": 640,
+    "y": 128
+  },
+  "warped_nylium": {
+    "name": "Warped Nylium",
+    "x": 768,
+    "y": 128
+  },
+  "cobblestone": {
+    "name": "Cobblestone",
+    "x": 960,
+    "y": 3328
+  },
+  "oak_planks": {
+    "name": "Oak Planks",
+    "x": 192,
+    "y": 896
+  },
+  "spruce_planks": {
+    "name": "Spruce Planks",
+    "x": 0,
+    "y": 928
+  },
+  "birch_planks": {
+    "name": "Birch Planks",
+    "x": 832,
+    "y": 832
+  },
+  "jungle_planks": {
+    "name": "Jungle Planks",
+    "x": 992,
+    "y": 864
+  },
+  "acacia_planks": {
+    "name": "Acacia Planks",
+    "x": 672,
+    "y": 832
+  },
+  "dark_oak_planks": {
+    "name": "Dark Oak Planks",
+    "x": 512,
+    "y": 864
+  },
+  "crimson_planks": {
+    "name": "Crimson Planks",
+    "x": 544,
+    "y": 128
+  },
+  "warped_planks": {
+    "name": "Warped Planks",
+    "x": 576,
+    "y": 128
+  },
+  "oak_sapling": {
+    "name": "Oak Sapling",
+    "x": 192,
+    "y": 3424
+  },
+  "spruce_sapling": {
+    "name": "Spruce Sapling",
+    "x": 608,
+    "y": 3424
+  },
+  "birch_sapling": {
+    "name": "Birch Sapling",
+    "x": 416,
+    "y": 3392
+  },
+  "jungle_sapling": {
+    "name": "Jungle Sapling",
+    "x": 960,
+    "y": 3392
+  },
+  "acacia_sapling": {
+    "name": "Acacia Sapling",
+    "x": 224,
+    "y": 3392
+  },
+  "dark_oak_sapling": {
+    "name": "Dark Oak Sapling",
+    "x": 768,
+    "y": 3392
+  },
+  "bedrock": {
+    "name": "Bedrock",
+    "x": 320,
+    "y": 960
+  },
+  "sand": {
+    "name": "Sand",
+    "x": 480,
+    "y": 3360
+  },
+  "red_sand": {
+    "name": "Red Sand",
+    "x": 416,
+    "y": 3360
+  },
+  "gravel": {
+    "name": "Gravel",
+    "x": 128,
+    "y": 3360
+  },
+  "gold_ore": {
+    "name": "Gold Ore",
+    "x": 32,
+    "y": 3392
+  },
+  "iron_ore": {
+    "name": "Iron Ore",
+    "x": 64,
+    "y": 3392
+  },
+  "coal_ore": {
+    "name": "Coal Ore",
+    "x": 960,
+    "y": 3360
+  },
+  "nether_gold_ore": {
+    "name": "Nether Gold Ore",
+    "x": 288,
+    "y": 192
+  },
+  "oak_log": {
+    "name": "Oak Log",
+    "x": 160,
+    "y": 3424
+  },
+  "spruce_log": {
+    "name": "Spruce Log",
+    "x": 576,
+    "y": 3424
+  },
+  "birch_log": {
+    "name": "Birch Log",
+    "x": 384,
+    "y": 3392
+  },
+  "jungle_log": {
+    "name": "Jungle Log",
+    "x": 928,
+    "y": 3392
+  },
+  "acacia_log": {
+    "name": "Acacia Log",
+    "x": 192,
+    "y": 3392
+  },
+  "dark_oak_log": {
+    "name": "Dark Oak Log",
+    "x": 736,
+    "y": 3392
+  },
+  "crimson_stem": {
+    "name": "Crimson Stem",
+    "x": 672,
+    "y": 128
+  },
+  "warped_stem": {
+    "name": "Warped Stem",
+    "x": 800,
+    "y": 128
+  },
+  "stripped_oak_log": {
+    "name": "Stripped Oak Log",
+    "x": 288,
+    "y": 1664
+  },
+  "stripped_spruce_log": {
+    "name": "Stripped Spruce Log",
+    "x": 320,
+    "y": 1664
+  },
+  "stripped_birch_log": {
+    "name": "Stripped Birch Log",
+    "x": 192,
+    "y": 1664
+  },
+  "stripped_jungle_log": {
+    "name": "Stripped Jungle Log",
+    "x": 256,
+    "y": 1664
+  },
+  "stripped_acacia_log": {
+    "name": "Stripped Acacia Log",
+    "x": 160,
+    "y": 1664
+  },
+  "stripped_dark_oak_log": {
+    "name": "Stripped Dark Oak Log",
+    "x": 224,
+    "y": 1664
+  },
+  "stripped_crimson_stem": {
+    "name": "Stripped Crimson Stem",
+    "x": 448,
+    "y": 160
+  },
+  "stripped_warped_stem": {
+    "name": "Stripped Warped Stem",
+    "x": 480,
+    "y": 160
+  },
+  "stripped_oak_wood": {
+    "name": "Stripped Oak Wood",
+    "x": 576,
+    "y": 2080
+  },
+  "stripped_spruce_wood": {
+    "name": "Stripped Spruce Wood",
+    "x": 608,
+    "y": 2080
+  },
+  "stripped_birch_wood": {
+    "name": "Stripped Birch Wood",
+    "x": 640,
+    "y": 2080
+  },
+  "stripped_jungle_wood": {
+    "name": "Stripped Jungle Wood",
+    "x": 672,
+    "y": 2080
+  },
+  "stripped_acacia_wood": {
+    "name": "Stripped Acacia Wood",
+    "x": 704,
+    "y": 2080
+  },
+  "stripped_dark_oak_wood": {
+    "name": "Stripped Dark Oak Wood",
+    "x": 736,
+    "y": 2080
+  },
+  "stripped_crimson_hyphae": {
+    "name": "Stripped Crimson Hyphae",
+    "x": 224,
+    "y": 192
+  },
+  "stripped_warped_hyphae": {
+    "name": "Stripped Warped Hyphae",
+    "x": 256,
+    "y": 192
+  },
+  "oak_wood": {
+    "name": "Oak Wood",
+    "x": 704,
+    "y": 3264
+  },
+  "spruce_wood": {
+    "name": "Spruce Wood",
+    "x": 736,
+    "y": 3296
+  },
+  "birch_wood": {
+    "name": "Birch Wood",
+    "x": 0,
+    "y": 3232
+  },
+  "jungle_wood": {
+    "name": "Jungle Wood",
+    "x": 192,
+    "y": 3264
+  },
+  "acacia_wood": {
+    "name": "Acacia Wood",
+    "x": 768,
+    "y": 3200
+  },
+  "dark_oak_wood": {
+    "name": "Dark Oak Wood",
+    "x": 704,
+    "y": 3232
+  },
+  "crimson_hyphae": {
+    "name": "Crimson Hyphae",
+    "x": 160,
+    "y": 192
+  },
+  "warped_hyphae": {
+    "name": "Warped Hyphae",
+    "x": 192,
+    "y": 192
+  },
+  "oak_leaves": {
+    "name": "Oak Leaves",
+    "x": 128,
+    "y": 3424
+  },
+  "spruce_leaves": {
+    "name": "Spruce Leaves",
+    "x": 544,
+    "y": 3424
+  },
+  "birch_leaves": {
+    "name": "Birch Leaves",
+    "x": 352,
+    "y": 3392
+  },
+  "jungle_leaves": {
+    "name": "Jungle Leaves",
+    "x": 896,
+    "y": 3392
+  },
+  "acacia_leaves": {
+    "name": "Acacia Leaves",
+    "x": 160,
+    "y": 3392
+  },
+  "dark_oak_leaves": {
+    "name": "Dark Oak Leaves",
+    "x": 704,
+    "y": 3392
+  },
+  "sponge": {
+    "name": "Sponge",
+    "x": 896,
+    "y": 3584
+  },
+  "wet_sponge": {
+    "name": "Wet Sponge",
+    "x": 0,
+    "y": 3616
+  },
+  "glass": {
+    "name": "Glass",
+    "x": 960,
+    "y": 3232
+  },
+  "lapis_ore": {
+    "name": "Lapis Lazuli Ore",
+    "x": 96,
+    "y": 3392
+  },
+  "lapis_block": {
+    "name": "Lapis Lazuli Block",
+    "x": 256,
+    "y": 3264
+  },
+  "dispenser": {
+    "name": "Dispenser",
+    "x": 576,
+    "y": 3584
+  },
+  "sandstone": {
+    "name": "Sandstone",
+    "x": 512,
+    "y": 3360
+  },
+  "chiseled_sandstone": {
+    "name": "Chiseled Sandstone",
+    "x": 384,
+    "y": 3232
+  },
+  "cut_sandstone": {
+    "name": "Cut Sandstone",
+    "x": 544,
+    "y": 3232
+  },
+  "note_block": {
+    "name": "Note Block",
+    "x": 832,
+    "y": 3584
+  },
+  "powered_rail": {
+    "name": "Powered Rail",
+    "x": 448,
+    "y": 3328
+  },
+  "detector_rail": {
+    "name": "Detector Rail",
+    "x": 160,
+    "y": 3328
+  },
+  "sticky_piston": {
+    "name": "Sticky Piston",
+    "x": 704,
+    "y": 3328
+  },
+  "cobweb": {
+    "name": "Cobweb",
+    "x": 992,
+    "y": 3328
+  },
+  "grass": {
+    "name": "Grass",
+    "x": 864,
+    "y": 3392
+  },
+  "fern": {
+    "name": "Fern",
+    "x": 832,
+    "y": 3392
+  },
+  "dead_bush": {
+    "name": "Dead Bush",
+    "x": 800,
+    "y": 3392
+  },
+  "seagrass": {
+    "name": "Seagrass",
+    "x": 384,
+    "y": 2016
+  },
+  "sea_pickle": {
+    "name": "Sea Pickle",
+    "x": 224,
+    "y": 1728
+  },
+  "piston": {
+    "name": "Piston",
+    "x": 416,
+    "y": 3328
+  },
+  "white_wool": {
+    "name": "White Wool",
+    "x": 0,
+    "y": 1536
+  },
+  "orange_wool": {
+    "name": "Orange Wool",
+    "x": 896,
+    "y": 1504
+  },
+  "magenta_wool": {
+    "name": "Magenta Wool",
+    "x": 864,
+    "y": 1504
+  },
+  "light_blue_wool": {
+    "name": "Light Blue Wool",
+    "x": 768,
+    "y": 1504
+  },
+  "yellow_wool": {
+    "name": "Yellow Wool",
+    "x": 32,
+    "y": 1536
+  },
+  "lime_wool": {
+    "name": "Lime Wool",
+    "x": 832,
+    "y": 1504
+  },
+  "pink_wool": {
+    "name": "Pink Wool",
+    "x": 928,
+    "y": 1504
+  },
+  "gray_wool": {
+    "name": "Gray Wool",
+    "x": 704,
+    "y": 1504
+  },
+  "light_gray_wool": {
+    "name": "Light Gray Wool",
+    "x": 800,
+    "y": 1504
+  },
+  "cyan_wool": {
+    "name": "Cyan Wool",
+    "x": 672,
+    "y": 1504
+  },
+  "purple_wool": {
+    "name": "Purple Wool",
+    "x": 960,
+    "y": 1504
+  },
+  "blue_wool": {
+    "name": "Blue Wool",
+    "x": 608,
+    "y": 1504
+  },
+  "brown_wool": {
+    "name": "Brown Wool",
+    "x": 640,
+    "y": 1504
+  },
+  "green_wool": {
+    "name": "Green Wool",
+    "x": 736,
+    "y": 1504
+  },
+  "red_wool": {
+    "name": "Red Wool",
+    "x": 992,
+    "y": 1504
+  },
+  "black_wool": {
+    "name": "Black Wool",
+    "x": 576,
+    "y": 1504
+  },
+  "dandelion": {
+    "name": "Dandelion",
+    "x": 672,
+    "y": 3392
+  },
+  "poppy": {
+    "name": "Poppy",
+    "x": 352,
+    "y": 3424
+  },
+  "blue_orchid": {
+    "name": "Blue Orchid",
+    "x": 448,
+    "y": 3392
+  },
+  "allium": {
+    "name": "Allium",
+    "x": 256,
+    "y": 3392
+  },
+  "azure_bluet": {
+    "name": "Azure Bluet",
+    "x": 288,
+    "y": 3392
+  },
+  "red_tulip": {
+    "name": "Red Tulip",
+    "x": 480,
+    "y": 3424
+  },
+  "orange_tulip": {
+    "name": "Orange Tulip",
+    "x": 224,
+    "y": 3424
+  },
+  "white_tulip": {
+    "name": "White Tulip",
+    "x": 768,
+    "y": 3424
+  },
+  "pink_tulip": {
+    "name": "Pink Tulip",
+    "x": 320,
+    "y": 3424
+  },
+  "oxeye_daisy": {
+    "name": "Oxeye Daisy",
+    "x": 256,
+    "y": 3424
+  },
+  "cornflower": {
+    "name": "Cornflower",
+    "x": 640,
+    "y": 2368
+  },
+  "lily_of_the_valley": {
+    "name": "Lily of the Valley",
+    "x": 672,
+    "y": 2368
+  },
+  "wither_rose": {
+    "name": "Wither Rose",
+    "x": 608,
+    "y": 2368
+  },
+  "brown_mushroom": {
+    "name": "Brown Mushroom",
+    "x": 512,
+    "y": 3392
+  },
+  "red_mushroom": {
+    "name": "Red Mushroom",
+    "x": 448,
+    "y": 3424
+  },
+  "crimson_fungus": {
+    "name": "Crimson Fungus",
+    "x": 928,
+    "y": 128
+  },
+  "warped_fungus": {
+    "name": "Warped Fungus",
+    "x": 960,
+    "y": 128
+  },
+  "crimson_roots": {
+    "name": "Crimson Roots",
+    "x": 928,
+    "y": 160
+  },
+  "warped_roots": {
+    "name": "Warped Roots",
+    "x": 992,
+    "y": 160
+  },
+  "nether_sprouts": {
+    "name": "Nether Sprouts",
+    "x": 928,
+    "y": 64
+  },
+  "weeping_vines": {
+    "name": "Weeping Vines",
+    "x": 992,
+    "y": 128
+  },
+  "twisting_vines": {
+    "name": "Twisting Vines",
+    "x": 320,
+    "y": 192
+  },
+  "sugar_cane": {
+    "name": "Sugar Cane",
+    "x": 640,
+    "y": 3424
+  },
+  "kelp": {
+    "name": "Kelp",
+    "x": 576,
+    "y": 1664
+  },
+  "bamboo": {
+    "name": "Bamboo",
+    "x": 128,
+    "y": 2368
+  },
+  "gold_block": {
+    "name": "Block of Gold",
+    "x": 128,
+    "y": 3232
+  },
+  "iron_block": {
+    "name": "Block of Iron",
+    "x": 160,
+    "y": 3232
+  },
+  "oak_slab": {
+    "name": "Oak Slab",
+    "x": 640,
+    "y": 3264
+  },
+  "spruce_slab": {
+    "name": "Spruce Slab",
+    "x": 672,
+    "y": 3296
+  },
+  "birch_slab": {
+    "name": "Birch Slab",
+    "x": 960,
+    "y": 3200
+  },
+  "jungle_slab": {
+    "name": "Jungle Slab",
+    "x": 128,
+    "y": 3264
+  },
+  "acacia_slab": {
+    "name": "Acacia Slab",
+    "x": 704,
+    "y": 3200
+  },
+  "dark_oak_slab": {
+    "name": "Dark Oak Slab",
+    "x": 640,
+    "y": 3232
+  },
+  "crimson_slab": {
+    "name": "Crimson Slab",
+    "x": 32,
+    "y": 160
+  },
+  "warped_slab": {
+    "name": "Warped Slab",
+    "x": 128,
+    "y": 160
+  },
+  "stone_slab": {
+    "name": "Stone Slab",
+    "x": 864,
+    "y": 3296
+  },
+  "smooth_stone_slab": {
+    "name": "Smooth Stone Slab",
+    "x": 544,
+    "y": 3296
+  },
+  "sandstone_slab": {
+    "name": "Sandstone Slab",
+    "x": 192,
+    "y": 3296
+  },
+  "cut_sandstone_slab": {
+    "name": "Cut Sandstone Slab",
+    "x": 64,
+    "y": 2464
+  },
+  "petrified_oak_slab": {
+    "name": "Petrified Oak Slab",
+    "x": 224,
+    "y": 896
+  },
+  "cobblestone_slab": {
+    "name": "Cobblestone Slab",
+    "x": 416,
+    "y": 3232
+  },
+  "brick_slab": {
+    "name": "Brick Slab",
+    "x": 256,
+    "y": 3232
+  },
+  "stone_brick_slab": {
+    "name": "Stone Brick Slab",
+    "x": 128,
+    "y": 928
+  },
+  "nether_brick_slab": {
+    "name": "Nether Brick Slab",
+    "x": 480,
+    "y": 3264
+  },
+  "quartz_slab": {
+    "name": "Quartz Slab",
+    "x": 960,
+    "y": 3264
+  },
+  "red_sandstone_slab": {
+    "name": "Red Sandstone Slab",
+    "x": 96,
+    "y": 3296
+  },
+  "cut_red_sandstone_slab": {
+    "name": "Cut Red Sandstone Slab",
+    "x": 32,
+    "y": 2464
+  },
+  "purpur_slab": {
+    "name": "Purpur Slab",
+    "x": 896,
+    "y": 3264
+  },
+  "prismarine_slab": {
+    "name": "Dark Prismarine Slab",
+    "x": 736,
+    "y": 3232
+  },
+  "prismarine_brick_slab": {
+    "name": "Prismarine Brick Slab",
+    "x": 864,
+    "y": 3264
+  },
+  "dark_prismarine_slab": {
+    "name": "Dark Prismarine Slab",
+    "x": 736,
+    "y": 3232
+  },
+  "smooth_quartz": {
+    "name": "Smooth Quartz Block",
+    "x": 64,
+    "y": 864
+  },
+  "smooth_red_sandstone": {
+    "name": "Smooth Red Sandstone",
+    "x": 416,
+    "y": 3296
+  },
+  "smooth_sandstone": {
+    "name": "Smooth Sandstone",
+    "x": 512,
+    "y": 3296
+  },
+  "smooth_stone": {
+    "name": "Smooth Stone",
+    "x": 832,
+    "y": 896
+  },
+  "bricks": {
+    "name": "Bricks",
+    "x": 416,
+    "y": 96
+  },
+  "tnt": {
+    "name": "TNT",
+    "x": 960,
+    "y": 3584
+  },
+  "bookshelf": {
+    "name": "Bookshelf",
+    "x": 224,
+    "y": 3232
+  },
+  "mossy_cobblestone": {
+    "name": "Mossy Cobblestone",
+    "x": 192,
+    "y": 3360
+  },
+  "obsidian": {
+    "name": "Obsidian",
+    "x": 288,
+    "y": 3360
+  },
+  "torch": {
+    "name": "Torch",
+    "x": 928,
+    "y": 3360
+  },
+  "end_rod": {
+    "name": "End Rod",
+    "x": 672,
+    "y": 3168
+  },
+  "chorus_plant": {
+    "name": "Chorus Plant",
+    "x": 640,
+    "y": 3392
+  },
+  "chorus_flower": {
+    "name": "Chorus Flower",
+    "x": 608,
+    "y": 3392
+  },
+  "purpur_block": {
+    "name": "Purpur Block",
+    "x": 416,
+    "y": 896
+  },
+  "purpur_pillar": {
+    "name": "Purpur Pillar",
+    "x": 448,
+    "y": 896
+  },
+  "purpur_stairs": {
+    "name": "Purpur Stairs",
+    "x": 928,
+    "y": 3264
+  },
+  "spawner": {
+    "name": "Spawner",
+    "x": 576,
+    "y": 3360
+  },
+  "oak_stairs": {
+    "name": "Oak Stairs",
+    "x": 672,
+    "y": 3264
+  },
+  "chest": {
+    "name": "Chest",
+    "x": 704,
+    "y": 1216
+  },
+  "diamond_ore": {
+    "name": "Diamond Ore",
+    "x": 992,
+    "y": 3360
+  },
+  "diamond_block": {
+    "name": "Block of Diamond",
+    "x": 64,
+    "y": 3232
+  },
+  "crafting_table": {
+    "name": "Crafting Table",
+    "x": 512,
+    "y": 3584
+  },
+  "farmland": {
+    "name": "Farmland",
+    "x": 672,
+    "y": 864
+  },
+  "furnace": {
+    "name": "Furnace",
+    "x": 704,
+    "y": 3584
+  },
+  "ladder": {
+    "name": "Ladder",
+    "x": 224,
+    "y": 3264
+  },
+  "rail": {
+    "name": "Rail",
+    "x": 480,
+    "y": 3328
+  },
+  "cobblestone_stairs": {
+    "name": "Cobblestone Stairs",
+    "x": 448,
+    "y": 3232
+  },
+  "lever": {
+    "name": "Lever",
+    "x": 288,
+    "y": 3328
+  },
+  "stone_pressure_plate": {
+    "name": "Stone Pressure Plate",
+    "x": 768,
+    "y": 3328
+  },
+  "oak_pressure_plate": {
+    "name": "Oak Pressure Plate",
+    "x": 384,
+    "y": 3328
+  },
+  "spruce_pressure_plate": {
+    "name": "Spruce Pressure Plate",
+    "x": 672,
+    "y": 3328
+  },
+  "birch_pressure_plate": {
+    "name": "Birch Pressure Plate",
+    "x": 32,
+    "y": 3328
+  },
+  "jungle_pressure_plate": {
+    "name": "Jungle Pressure Plate",
+    "x": 256,
+    "y": 3328
+  },
+  "acacia_pressure_plate": {
+    "name": "Acacia Pressure Plate",
+    "x": 960,
+    "y": 3296
+  },
+  "dark_oak_pressure_plate": {
+    "name": "Dark Oak Pressure Plate",
+    "x": 128,
+    "y": 3328
+  },
+  "crimson_pressure_plate": {
+    "name": "Crimson Pressure Plate",
+    "x": 256,
+    "y": 160
+  },
+  "warped_pressure_plate": {
+    "name": "Warped Pressure Plate",
+    "x": 384,
+    "y": 160
+  },
+  "polished_blackstone_pressure_plate": {
+    "name": "Polished Blackstone Pressure Plate",
+    "x": 928,
+    "y": 256
+  },
+  "redstone_ore": {
+    "name": "Redstone Ore",
+    "x": 128,
+    "y": 3392
+  },
+  "redstone_torch": {
+    "name": "Redstone Torch",
+    "x": 608,
+    "y": 3328
+  },
+  "snow": {
+    "name": "Snow",
+    "x": 544,
+    "y": 3360
+  },
+  "ice": {
+    "name": "Ice",
+    "x": 160,
+    "y": 3360
+  },
+  "snow_block": {
+    "name": "Snow Block",
+    "x": 576,
+    "y": 3296
+  },
+  "cactus": {
+    "name": "Cactus",
+    "x": 544,
+    "y": 3392
+  },
+  "clay": {
+    "name": "Clay",
+    "x": 928,
+    "y": 3328
+  },
+  "jukebox": {
+    "name": "Jukebox",
+    "x": 768,
+    "y": 3584
+  },
+  "oak_fence": {
+    "name": "Oak Fence",
+    "x": 608,
+    "y": 3264
+  },
+  "spruce_fence": {
+    "name": "Spruce Fence",
+    "x": 640,
+    "y": 3296
+  },
+  "birch_fence": {
+    "name": "Birch Fence",
+    "x": 928,
+    "y": 3200
+  },
+  "jungle_fence": {
+    "name": "Jungle Fence",
+    "x": 96,
+    "y": 3264
+  },
+  "acacia_fence": {
+    "name": "Acacia Fence",
+    "x": 672,
+    "y": 3200
+  },
+  "dark_oak_fence": {
+    "name": "Dark Oak Fence",
+    "x": 608,
+    "y": 3232
+  },
+  "crimson_fence": {
+    "name": "Crimson Fence",
+    "x": 0,
+    "y": 160
+  },
+  "warped_fence": {
+    "name": "Warped Fence",
+    "x": 96,
+    "y": 160
+  },
+  "pumpkin": {
+    "name": "Pumpkin",
+    "x": 384,
+    "y": 3424
+  },
+  "carved_pumpkin": {
+    "name": "Carved Pumpkin",
+    "x": 576,
+    "y": 3392
+  },
+  "netherrack": {
+    "name": "Netherrack",
+    "x": 832,
+    "y": 3360
+  },
+  "soul_sand": {
+    "name": "Soul Sand",
+    "x": 864,
+    "y": 3360
+  },
+  "soul_soil": {
+    "name": "Soul Soil",
+    "x": 736,
+    "y": 128
+  },
+  "basalt": {
+    "name": "Basalt",
+    "x": 608,
+    "y": 128
+  },
+  "polished_basalt": {
+    "name": "Polished Basalt",
+    "x": 416,
+    "y": 192
+  },
+  "soul_torch": {
+    "name": "Soul Torch",
+    "x": 864,
+    "y": 128
+  },
+  "glowstone": {
+    "name": "Glowstone",
+    "x": 672,
+    "y": 3360
+  },
+  "jack_o_lantern": {
+    "name": "Jack o'Lantern",
+    "x": 32,
+    "y": 3264
+  },
+  "oak_trapdoor": {
+    "name": "Oak Trapdoor",
+    "x": 928,
+    "y": 928
+  },
+  "spruce_trapdoor": {
+    "name": "Spruce Trapdoor",
+    "x": 448,
+    "y": 1632
+  },
+  "birch_trapdoor": {
+    "name": "Birch Trapdoor",
+    "x": 480,
+    "y": 1632
+  },
+  "jungle_trapdoor": {
+    "name": "Jungle Trapdoor",
+    "x": 512,
+    "y": 1632
+  },
+  "acacia_trapdoor": {
+    "name": "Acacia Trapdoor",
+    "x": 544,
+    "y": 1632
+  },
+  "dark_oak_trapdoor": {
+    "name": "Dark Oak Trapdoor",
+    "x": 576,
+    "y": 1632
+  },
+  "crimson_trapdoor": {
+    "name": "Crimson Trapdoor",
+    "x": 288,
+    "y": 160
+  },
+  "warped_trapdoor": {
+    "name": "Warped Trapdoor",
+    "x": 416,
+    "y": 160
+  },
+  "infested_stone": {
+    "name": "Infested Stone",
+    "x": 224,
+    "y": 992
+  },
+  "infested_cobblestone": {
+    "name": "Infested Cobblestone",
+    "x": 960,
+    "y": 3328
+  },
+  "infested_stone_bricks": {
+    "name": "Infested Stone Bricks",
+    "x": 608,
+    "y": 3360
+  },
+  "infested_mossy_stone_bricks": {
+    "name": "Infested Mossy Stone Bricks",
+    "x": 224,
+    "y": 3360
+  },
+  "infested_cracked_stone_bricks": {
+    "name": "Infested Cracked Stone Bricks",
+    "x": 0,
+    "y": 3360
+  },
+  "infested_chiseled_stone_bricks": {
+    "name": "Infested Chiseled Stone Bricks",
+    "x": 896,
+    "y": 3328
+  },
+  "stone_bricks": {
+    "name": "Stone Bricks",
+    "x": 608,
+    "y": 3360
+  },
+  "mossy_stone_bricks": {
+    "name": "Mossy Stone Bricks",
+    "x": 224,
+    "y": 3360
+  },
+  "cracked_stone_bricks": {
+    "name": "Cracked Stone Bricks",
+    "x": 0,
+    "y": 3360
+  },
+  "chiseled_stone_bricks": {
+    "name": "Chiseled Stone Bricks",
+    "x": 896,
+    "y": 3328
+  },
+  "brown_mushroom_block": {
+    "name": "Brown Mushroom Block",
+    "x": 480,
+    "y": 3392
+  },
+  "red_mushroom_block": {
+    "name": "Red Mushroom Block",
+    "x": 416,
+    "y": 3424
+  },
+  "mushroom_stem": {
+    "name": "Mushroom Stem",
+    "x": 96,
+    "y": 3424
+  },
+  "iron_bars": {
+    "name": "Iron Bars",
+    "x": 0,
+    "y": 3264
+  },
+  "chain": {
+    "name": "Chain",
+    "x": 32,
+    "y": 288
+  },
+  "glass_pane": {
+    "name": "Glass Pane",
+    "x": 928,
+    "y": 3232
+  },
+  "melon": {
+    "name": "Melon",
+    "x": 64,
+    "y": 3424
+  },
+  "vine": {
+    "name": "Vines",
+    "x": 736,
+    "y": 3424
+  },
+  "oak_fence_gate": {
+    "name": "Oak Fence Gate",
+    "x": 576,
+    "y": 3264
+  },
+  "spruce_fence_gate": {
+    "name": "Spruce Fence Gate",
+    "x": 608,
+    "y": 3296
+  },
+  "birch_fence_gate": {
+    "name": "Birch Fence Gate",
+    "x": 896,
+    "y": 3200
+  },
+  "jungle_fence_gate": {
+    "name": "Jungle Fence Gate",
+    "x": 64,
+    "y": 3264
+  },
+  "acacia_fence_gate": {
+    "name": "Acacia Fence Gate",
+    "x": 640,
+    "y": 3200
+  },
+  "dark_oak_fence_gate": {
+    "name": "Dark Oak Fence Gate",
+    "x": 576,
+    "y": 3232
+  },
+  "crimson_fence_gate": {
+    "name": "Crimson Fence Gate",
+    "x": 576,
+    "y": 160
+  },
+  "warped_fence_gate": {
+    "name": "Warped Fence Gate",
+    "x": 608,
+    "y": 160
+  },
+  "brick_stairs": {
+    "name": "Brick Stairs",
+    "x": 288,
+    "y": 3232
+  },
+  "stone_brick_stairs": {
+    "name": "Stone Brick Stairs",
+    "x": 800,
+    "y": 3296
+  },
+  "mycelium": {
+    "name": "Mycelium",
+    "x": 256,
+    "y": 3360
+  },
+  "lily_pad": {
+    "name": "Lily Pad",
+    "x": 32,
+    "y": 3424
+  },
+  "nether_bricks": {
+    "name": "Nether Bricks",
+    "x": 768,
+    "y": 3360
+  },
+  "cracked_nether_bricks": {
+    "name": "Cracked Nether Bricks",
+    "x": 448,
+    "y": 256
+  },
+  "chiseled_nether_bricks": {
+    "name": "Chiseled Nether Bricks",
+    "x": 384,
+    "y": 256
+  },
+  "nether_brick_fence": {
+    "name": "Nether Brick Fence",
+    "x": 704,
+    "y": 3360
+  },
+  "nether_brick_stairs": {
+    "name": "Nether Brick Stairs",
+    "x": 736,
+    "y": 3360
+  },
+  "enchanting_table": {
+    "name": "Enchanting Table",
+    "x": 640,
+    "y": 3584
+  },
+  "end_portal_frame": {
+    "name": "End Portal Frame",
+    "x": 640,
+    "y": 3168
+  },
+  "end_stone": {
+    "name": "End Stone",
+    "x": 704,
+    "y": 3168
+  },
+  "end_stone_bricks": {
+    "name": "End Stone Bricks",
+    "x": 896,
+    "y": 3232
+  },
+  "dragon_egg": {
+    "name": "Dragon Egg",
+    "x": 576,
+    "y": 3168
+  },
+  "redstone_lamp": {
+    "name": "Redstone Lamp",
+    "x": 544,
+    "y": 3328
+  },
+  "sandstone_stairs": {
+    "name": "Sandstone Stairs",
+    "x": 224,
+    "y": 3296
+  },
+  "emerald_ore": {
+    "name": "Emerald Ore",
+    "x": 0,
+    "y": 3392
+  },
+  "ender_chest": {
+    "name": "Ender Chest",
+    "x": 672,
+    "y": 3584
+  },
+  "tripwire_hook": {
+    "name": "Tripwire Hook",
+    "x": 800,
+    "y": 3328
+  },
+  "emerald_block": {
+    "name": "Block of Emerald",
+    "x": 96,
+    "y": 3232
+  },
+  "spruce_stairs": {
+    "name": "Spruce Stairs",
+    "x": 704,
+    "y": 3296
+  },
+  "birch_stairs": {
+    "name": "Birch Stairs",
+    "x": 992,
+    "y": 3200
+  },
+  "jungle_stairs": {
+    "name": "Jungle Stairs",
+    "x": 160,
+    "y": 3264
+  },
+  "crimson_stairs": {
+    "name": "Crimson Stairs",
+    "x": 64,
+    "y": 160
+  },
+  "warped_stairs": {
+    "name": "Warped Stairs",
+    "x": 160,
+    "y": 160
+  },
+  "command_block": {
+    "name": "Impulse Command Block Revision 1",
+    "x": 736,
+    "y": 1216
+  },
+  "beacon": {
+    "name": "Beacon",
+    "x": 352,
+    "y": 3584
+  },
+  "cobblestone_wall": {
+    "name": "Cobblestone Wall",
+    "x": 480,
+    "y": 3232
+  },
+  "mossy_cobblestone_wall": {
+    "name": "Mossy Cobblestone Wall",
+    "x": 352,
+    "y": 3264
+  },
+  "brick_wall": {
+    "name": "Brick Wall",
+    "x": 320,
+    "y": 3232
+  },
+  "prismarine_wall": {
+    "name": "Prismarine Wall",
+    "x": 0,
+    "y": 96
+  },
+  "red_sandstone_wall": {
+    "name": "Red Sandstone Wall",
+    "x": 160,
+    "y": 3296
+  },
+  "mossy_stone_brick_wall": {
+    "name": "Mossy Stone Brick Wall",
+    "x": 448,
+    "y": 3264
+  },
+  "granite_wall": {
+    "name": "Granite Wall",
+    "x": 32,
+    "y": 2400
+  },
+  "stone_brick_wall": {
+    "name": "Stone Brick Wall",
+    "x": 832,
+    "y": 3296
+  },
+  "nether_brick_wall": {
+    "name": "Nether Brick Wall",
+    "x": 512,
+    "y": 3264
+  },
+  "andesite_wall": {
+    "name": "Andesite Wall",
+    "x": 864,
+    "y": 3200
+  },
+  "red_nether_brick_wall": {
+    "name": "Red Nether Brick Wall",
+    "x": 64,
+    "y": 3296
+  },
+  "sandstone_wall": {
+    "name": "Sandstone Wall",
+    "x": 256,
+    "y": 3296
+  },
+  "end_stone_brick_wall": {
+    "name": "End Stone Brick Wall",
+    "x": 0,
+    "y": 2400
+  },
+  "diorite_wall": {
+    "name": "Diorite Wall",
+    "x": 864,
+    "y": 3232
+  },
+  "blackstone_wall": {
+    "name": "Blackstone Wall",
+    "x": 672,
+    "y": 256
+  },
+  "polished_blackstone_wall": {
+    "name": "Polished Blackstone Wall",
+    "x": 864,
+    "y": 256
+  },
+  "polished_blackstone_brick_wall": {
+    "name": "Polished Blackstone Brick Wall",
+    "x": 768,
+    "y": 256
+  },
+  "stone_button": {
+    "name": "Stone Button",
+    "x": 736,
+    "y": 3328
+  },
+  "oak_button": {
+    "name": "Oak Button",
+    "x": 352,
+    "y": 3328
+  },
+  "spruce_button": {
+    "name": "Spruce Button",
+    "x": 640,
+    "y": 3328
+  },
+  "birch_button": {
+    "name": "Birch Button",
+    "x": 0,
+    "y": 3328
+  },
+  "jungle_button": {
+    "name": "Jungle Button",
+    "x": 224,
+    "y": 3328
+  },
+  "acacia_button": {
+    "name": "Acacia Button",
+    "x": 928,
+    "y": 3296
+  },
+  "dark_oak_button": {
+    "name": "Dark Oak Button",
+    "x": 96,
+    "y": 3328
+  },
+  "crimson_button": {
+    "name": "Crimson Button",
+    "x": 192,
+    "y": 160
+  },
+  "warped_button": {
+    "name": "Warped Button",
+    "x": 320,
+    "y": 160
+  },
+  "polished_blackstone_button": {
+    "name": "Polished Blackstone Button",
+    "x": 896,
+    "y": 256
+  },
+  "anvil": {
+    "name": "Anvil",
+    "x": 288,
+    "y": 3584
+  },
+  "chipped_anvil": {
+    "name": "Chipped Anvil",
+    "x": 480,
+    "y": 3584
+  },
+  "damaged_anvil": {
+    "name": "Damaged Anvil",
+    "x": 544,
+    "y": 3584
+  },
+  "trapped_chest": {
+    "name": "Trapped Chest",
+    "x": 992,
+    "y": 3584
+  },
+  "light_weighted_pressure_plate": {
+    "name": "Light Weighted Pressure Plate",
+    "x": 320,
+    "y": 3328
+  },
+  "heavy_weighted_pressure_plate": {
+    "name": "Heavy Weighted Pressure Plate",
+    "x": 192,
+    "y": 3328
+  },
+  "daylight_detector": {
+    "name": "Daylight Detector",
+    "x": 800,
+    "y": 1216
+  },
+  "redstone_block": {
+    "name": "Block of Redstone",
+    "x": 64,
+    "y": 3328
+  },
+  "nether_quartz_ore": {
+    "name": "Nether Quartz Ore",
+    "x": 800,
+    "y": 3360
+  },
+  "hopper": {
+    "name": "Hopper",
+    "x": 736,
+    "y": 3584
+  },
+  "chiseled_quartz_block": {
+    "name": "Chiseled Quartz Block",
+    "x": 224,
+    "y": 864
+  },
+  "quartz_block": {
+    "name": "Block of Quartz",
+    "x": 192,
+    "y": 3232
+  },
+  "quartz_bricks": {
+    "name": "Quartz Bricks",
+    "x": 992,
+    "y": 256
+  },
+  "quartz_pillar": {
+    "name": "Quartz Pillar",
+    "x": 288,
+    "y": 896
+  },
+  "quartz_stairs": {
+    "name": "Quartz Stairs",
+    "x": 992,
+    "y": 3264
+  },
+  "activator_rail": {
+    "name": "Activator Rail",
+    "x": 992,
+    "y": 3296
+  },
+  "dropper": {
+    "name": "Dropper",
+    "x": 608,
+    "y": 3584
+  },
+  "white_terracotta": {
+    "name": "White Terracotta",
+    "x": 672,
+    "y": 768
+  },
+  "orange_terracotta": {
+    "name": "Orange Terracotta",
+    "x": 928,
+    "y": 736
+  },
+  "magenta_terracotta": {
+    "name": "Magenta Terracotta",
+    "x": 736,
+    "y": 736
+  },
+  "light_blue_terracotta": {
+    "name": "Light Blue Terracotta",
+    "x": 160,
+    "y": 736
+  },
+  "yellow_terracotta": {
+    "name": "Yellow Terracotta",
+    "x": 864,
+    "y": 768
+  },
+  "lime_terracotta": {
+    "name": "Lime Terracotta",
+    "x": 544,
+    "y": 736
+  },
+  "pink_terracotta": {
+    "name": "Pink Terracotta",
+    "x": 96,
+    "y": 768
+  },
+  "gray_terracotta": {
+    "name": "Gray Terracotta",
+    "x": 800,
+    "y": 704
+  },
+  "light_gray_terracotta": {
+    "name": "Light Gray Terracotta",
+    "x": 352,
+    "y": 736
+  },
+  "cyan_terracotta": {
+    "name": "Cyan Terracotta",
+    "x": 608,
+    "y": 704
+  },
+  "purple_terracotta": {
+    "name": "Purple Terracotta",
+    "x": 288,
+    "y": 768
+  },
+  "blue_terracotta": {
+    "name": "Blue Terracotta",
+    "x": 224,
+    "y": 704
+  },
+  "brown_terracotta": {
+    "name": "Brown Terracotta",
+    "x": 416,
+    "y": 704
+  },
+  "green_terracotta": {
+    "name": "Green Terracotta",
+    "x": 992,
+    "y": 704
+  },
+  "red_terracotta": {
+    "name": "Red Terracotta",
+    "x": 480,
+    "y": 768
+  },
+  "black_terracotta": {
+    "name": "Black Terracotta",
+    "x": 32,
+    "y": 704
+  },
+  "barrier": {
+    "name": "Barrier",
+    "x": 320,
+    "y": 3584
+  },
+  "iron_trapdoor": {
+    "name": "Iron Trapdoor",
+    "x": 416,
+    "y": 928
+  },
+  "hay_block": {
+    "name": "Hay Bale",
+    "x": 992,
+    "y": 3232
+  },
+  "white_carpet": {
+    "name": "White Carpet",
+    "x": 64,
+    "y": 1632
+  },
+  "orange_carpet": {
+    "name": "Orange Carpet",
+    "x": 960,
+    "y": 1600
+  },
+  "magenta_carpet": {
+    "name": "Magenta Carpet",
+    "x": 928,
+    "y": 1600
+  },
+  "light_blue_carpet": {
+    "name": "Light Blue Carpet",
+    "x": 832,
+    "y": 1600
+  },
+  "yellow_carpet": {
+    "name": "Yellow Carpet",
+    "x": 96,
+    "y": 1632
+  },
+  "lime_carpet": {
+    "name": "Lime Carpet",
+    "x": 896,
+    "y": 1600
+  },
+  "pink_carpet": {
+    "name": "Pink Carpet",
+    "x": 992,
+    "y": 1600
+  },
+  "gray_carpet": {
+    "name": "Gray Carpet",
+    "x": 768,
+    "y": 1600
+  },
+  "light_gray_carpet": {
+    "name": "Light Gray Carpet",
+    "x": 864,
+    "y": 1600
+  },
+  "cyan_carpet": {
+    "name": "Cyan Carpet",
+    "x": 736,
+    "y": 1600
+  },
+  "purple_carpet": {
+    "name": "Purple Carpet",
+    "x": 0,
+    "y": 1632
+  },
+  "blue_carpet": {
+    "name": "Blue Carpet",
+    "x": 672,
+    "y": 1600
+  },
+  "brown_carpet": {
+    "name": "Brown Carpet",
+    "x": 704,
+    "y": 1600
+  },
+  "green_carpet": {
+    "name": "Green Carpet",
+    "x": 800,
+    "y": 1600
+  },
+  "red_carpet": {
+    "name": "Red Carpet",
+    "x": 32,
+    "y": 1632
+  },
+  "black_carpet": {
+    "name": "Black Carpet",
+    "x": 640,
+    "y": 1600
+  },
+  "terracotta": {
+    "name": "Terracotta",
+    "x": 640,
+    "y": 3360
+  },
+  "coal_block": {
+    "name": "Block of Coal",
+    "x": 32,
+    "y": 3232
+  },
+  "packed_ice": {
+    "name": "Packed Ice",
+    "x": 320,
+    "y": 3360
+  },
+  "acacia_stairs": {
+    "name": "Acacia Stairs",
+    "x": 736,
+    "y": 3200
+  },
+  "dark_oak_stairs": {
+    "name": "Dark Oak Stairs",
+    "x": 672,
+    "y": 3232
+  },
+  "slime_block": {
+    "name": "Slime Block",
+    "x": 736,
+    "y": 896
+  },
+  "grass_path": {
+    "name": "Grass Path",
+    "x": 96,
+    "y": 1344
+  },
+  "sunflower": {
+    "name": "Sunflower",
+    "x": 672,
+    "y": 3424
+  },
+  "lilac": {
+    "name": "Lilac",
+    "x": 0,
+    "y": 3424
+  },
+  "rose_bush": {
+    "name": "Rose Bush",
+    "x": 512,
+    "y": 3424
+  },
+  "peony": {
+    "name": "Peony",
+    "x": 288,
+    "y": 3424
+  },
+  "tall_grass": {
+    "name": "Tall Grass",
+    "x": 704,
+    "y": 3424
+  },
+  "large_fern": {
+    "name": "Large Fern",
+    "x": 992,
+    "y": 3392
+  },
+  "white_stained_glass": {
+    "name": "White Stained Glass",
+    "x": 704,
+    "y": 768
+  },
+  "orange_stained_glass": {
+    "name": "Orange Stained Glass",
+    "x": 960,
+    "y": 736
+  },
+  "magenta_stained_glass": {
+    "name": "Magenta Stained Glass",
+    "x": 768,
+    "y": 736
+  },
+  "light_blue_stained_glass": {
+    "name": "Light Blue Stained Glass",
+    "x": 192,
+    "y": 736
+  },
+  "yellow_stained_glass": {
+    "name": "Yellow Stained Glass",
+    "x": 896,
+    "y": 768
+  },
+  "lime_stained_glass": {
+    "name": "Lime Stained Glass",
+    "x": 576,
+    "y": 736
+  },
+  "pink_stained_glass": {
+    "name": "Pink Stained Glass",
+    "x": 128,
+    "y": 768
+  },
+  "gray_stained_glass": {
+    "name": "Gray Stained Glass",
+    "x": 832,
+    "y": 704
+  },
+  "light_gray_stained_glass": {
+    "name": "Light Gray Stained Glass",
+    "x": 384,
+    "y": 736
+  },
+  "cyan_stained_glass": {
+    "name": "Cyan Stained Glass",
+    "x": 640,
+    "y": 704
+  },
+  "purple_stained_glass": {
+    "name": "Purple Stained Glass",
+    "x": 320,
+    "y": 768
+  },
+  "blue_stained_glass": {
+    "name": "Blue Stained Glass",
+    "x": 256,
+    "y": 704
+  },
+  "brown_stained_glass": {
+    "name": "Brown Stained Glass",
+    "x": 448,
+    "y": 704
+  },
+  "green_stained_glass": {
+    "name": "Green Stained Glass",
+    "x": 0,
+    "y": 736
+  },
+  "red_stained_glass": {
+    "name": "Red Stained Glass",
+    "x": 512,
+    "y": 768
+  },
+  "black_stained_glass": {
+    "name": "Black Stained Glass",
+    "x": 64,
+    "y": 704
+  },
+  "white_stained_glass_pane": {
+    "name": "White Stained Glass Pane",
+    "x": 736,
+    "y": 768
+  },
+  "orange_stained_glass_pane": {
+    "name": "Orange Stained Glass Pane",
+    "x": 992,
+    "y": 736
+  },
+  "magenta_stained_glass_pane": {
+    "name": "Magenta Stained Glass Pane",
+    "x": 800,
+    "y": 736
+  },
+  "light_blue_stained_glass_pane": {
+    "name": "Light Blue Stained Glass Pane",
+    "x": 224,
+    "y": 736
+  },
+  "yellow_stained_glass_pane": {
+    "name": "Yellow Stained Glass Pane",
+    "x": 928,
+    "y": 768
+  },
+  "lime_stained_glass_pane": {
+    "name": "Lime Stained Glass Pane",
+    "x": 608,
+    "y": 736
+  },
+  "pink_stained_glass_pane": {
+    "name": "Pink Stained Glass Pane",
+    "x": 160,
+    "y": 768
+  },
+  "gray_stained_glass_pane": {
+    "name": "Gray Stained Glass Pane",
+    "x": 864,
+    "y": 704
+  },
+  "light_gray_stained_glass_pane": {
+    "name": "Light Gray Stained Glass Pane",
+    "x": 416,
+    "y": 736
+  },
+  "cyan_stained_glass_pane": {
+    "name": "Cyan Stained Glass Pane",
+    "x": 672,
+    "y": 704
+  },
+  "purple_stained_glass_pane": {
+    "name": "Purple Stained Glass Pane",
+    "x": 352,
+    "y": 768
+  },
+  "blue_stained_glass_pane": {
+    "name": "Blue Stained Glass Pane",
+    "x": 288,
+    "y": 704
+  },
+  "brown_stained_glass_pane": {
+    "name": "Brown Stained Glass Pane",
+    "x": 480,
+    "y": 704
+  },
+  "green_stained_glass_pane": {
+    "name": "Green Stained Glass Pane",
+    "x": 32,
+    "y": 736
+  },
+  "red_stained_glass_pane": {
+    "name": "Red Stained Glass Pane",
+    "x": 544,
+    "y": 768
+  },
+  "black_stained_glass_pane": {
+    "name": "Black Stained Glass Pane",
+    "x": 96,
+    "y": 704
+  },
+  "prismarine": {
+    "name": "Prismarine Wall",
+    "x": 0,
+    "y": 96
+  },
+  "prismarine_bricks": {
+    "name": "Prismarine Bricks",
+    "x": 384,
+    "y": 3360
+  },
+  "dark_prismarine": {
+    "name": "Dark Prismarine",
+    "x": 32,
+    "y": 3360
+  },
+  "prismarine_stairs": {
+    "name": "Dark Prismarine Stairs",
+    "x": 768,
+    "y": 3232
+  },
+  "prismarine_brick_stairs": {
+    "name": "Prismarine Brick Stairs",
+    "x": 448,
+    "y": 96
+  },
+  "dark_prismarine_stairs": {
+    "name": "Dark Prismarine Stairs",
+    "x": 768,
+    "y": 3232
+  },
+  "sea_lantern": {
+    "name": "Sea Lantern BE",
+    "x": 512,
+    "y": 192
+  },
+  "red_sandstone": {
+    "name": "Red Sandstone",
+    "x": 448,
+    "y": 3360
+  },
+  "chiseled_red_sandstone": {
+    "name": "Chiseled Red Sandstone",
+    "x": 352,
+    "y": 3232
+  },
+  "cut_red_sandstone": {
+    "name": "Cut Red Sandstone",
+    "x": 512,
+    "y": 3232
+  },
+  "red_sandstone_stairs": {
+    "name": "Red Sandstone Stairs",
+    "x": 128,
+    "y": 3296
+  },
+  "magma_block": {
+    "name": "Magma Block BE",
+    "x": 928,
+    "y": 480
+  },
+  "nether_wart_block": {
+    "name": "Nether Wart Block",
+    "x": 544,
+    "y": 3264
+  },
+  "warped_wart_block": {
+    "name": "Warped Wart Block",
+    "x": 832,
+    "y": 128
+  },
+  "red_nether_bricks": {
+    "name": "Red Nether Bricks",
+    "x": 704,
+    "y": 1344
+  },
+  "bone_block": {
+    "name": "Bone Block",
+    "x": 864,
+    "y": 3328
+  },
+  "structure_void": {
+    "name": "Structure Void",
+    "x": 928,
+    "y": 3584
+  },
+  "observer": {
+    "name": "Observer",
+    "x": 864,
+    "y": 3584
+  },
+  "shulker_box": {
+    "name": "Shulker Box",
+    "x": 448,
+    "y": 1600
+  },
+  "white_shulker_box": {
+    "name": "White Shulker Box",
+    "x": 512,
+    "y": 1600
+  },
+  "orange_shulker_box": {
+    "name": "Orange Shulker Box",
+    "x": 384,
+    "y": 1600
+  },
+  "magenta_shulker_box": {
+    "name": "Magenta Shulker Box",
+    "x": 352,
+    "y": 1600
+  },
+  "light_blue_shulker_box": {
+    "name": "Light Blue Shulker Box",
+    "x": 256,
+    "y": 1600
+  },
+  "yellow_shulker_box": {
+    "name": "Yellow Shulker Box",
+    "x": 544,
+    "y": 1600
+  },
+  "lime_shulker_box": {
+    "name": "Lime Shulker Box",
+    "x": 320,
+    "y": 1600
+  },
+  "pink_shulker_box": {
+    "name": "Pink Shulker Box",
+    "x": 416,
+    "y": 1600
+  },
+  "gray_shulker_box": {
+    "name": "Gray Shulker Box",
+    "x": 192,
+    "y": 1600
+  },
+  "light_gray_shulker_box": {
+    "name": "Light Gray Shulker Box",
+    "x": 288,
+    "y": 1600
+  },
+  "cyan_shulker_box": {
+    "name": "Cyan Shulker Box",
+    "x": 160,
+    "y": 1600
+  },
+  "purple_shulker_box": {
+    "name": "Purple Shulker Box",
+    "x": 608,
+    "y": 1408
+  },
+  "blue_shulker_box": {
+    "name": "Blue Shulker Box",
+    "x": 96,
+    "y": 1600
+  },
+  "brown_shulker_box": {
+    "name": "Brown Shulker Box",
+    "x": 128,
+    "y": 1600
+  },
+  "green_shulker_box": {
+    "name": "Green Shulker Box",
+    "x": 224,
+    "y": 1600
+  },
+  "red_shulker_box": {
+    "name": "Red Shulker Box",
+    "x": 480,
+    "y": 1600
+  },
+  "black_shulker_box": {
+    "name": "Black Shulker Box",
+    "x": 64,
+    "y": 1600
+  },
+  "white_glazed_terracotta": {
+    "name": "White Glazed Terracotta",
+    "x": 192,
+    "y": 1536
+  },
+  "orange_glazed_terracotta": {
+    "name": "Orange Glazed Terracotta",
+    "x": 160,
+    "y": 1536
+  },
+  "magenta_glazed_terracotta": {
+    "name": "Magenta Glazed Terracotta",
+    "x": 128,
+    "y": 1536
+  },
+  "light_blue_glazed_terracotta": {
+    "name": "Light Blue Glazed Terracotta",
+    "x": 704,
+    "y": 1472
+  },
+  "yellow_glazed_terracotta": {
+    "name": "Yellow Glazed Terracotta",
+    "x": 544,
+    "y": 1504
+  },
+  "lime_glazed_terracotta": {
+    "name": "Lime Glazed Terracotta",
+    "x": 896,
+    "y": 1472
+  },
+  "pink_glazed_terracotta": {
+    "name": "Pink Glazed Terracotta",
+    "x": 160,
+    "y": 1504
+  },
+  "gray_glazed_terracotta": {
+    "name": "Gray Glazed Terracotta",
+    "x": 512,
+    "y": 1472
+  },
+  "light_gray_glazed_terracotta": {
+    "name": "Light Gray Glazed Terracotta",
+    "x": 800,
+    "y": 1472
+  },
+  "cyan_glazed_terracotta": {
+    "name": "Cyan Glazed Terracotta",
+    "x": 96,
+    "y": 1536
+  },
+  "purple_glazed_terracotta": {
+    "name": "Purple Glazed Terracotta",
+    "x": 256,
+    "y": 1504
+  },
+  "blue_glazed_terracotta": {
+    "name": "Blue Glazed Terracotta",
+    "x": 224,
+    "y": 1472
+  },
+  "brown_glazed_terracotta": {
+    "name": "Brown Glazed Terracotta",
+    "x": 320,
+    "y": 1472
+  },
+  "green_glazed_terracotta": {
+    "name": "Green Glazed Terracotta",
+    "x": 608,
+    "y": 1472
+  },
+  "red_glazed_terracotta": {
+    "name": "Red Glazed Terracotta",
+    "x": 352,
+    "y": 1504
+  },
+  "black_glazed_terracotta": {
+    "name": "Black Glazed Terracotta",
+    "x": 128,
+    "y": 1472
+  },
+  "white_concrete": {
+    "name": "White Concrete",
+    "x": 384,
+    "y": 1504
+  },
+  "orange_concrete": {
+    "name": "Orange Concrete",
+    "x": 0,
+    "y": 1504
+  },
+  "magenta_concrete": {
+    "name": "Magenta Concrete",
+    "x": 928,
+    "y": 1472
+  },
+  "light_blue_concrete": {
+    "name": "Light Blue Concrete",
+    "x": 640,
+    "y": 1472
+  },
+  "yellow_concrete": {
+    "name": "Yellow Concrete",
+    "x": 480,
+    "y": 1504
+  },
+  "lime_concrete": {
+    "name": "Lime Concrete",
+    "x": 832,
+    "y": 1472
+  },
+  "pink_concrete": {
+    "name": "Pink Concrete",
+    "x": 96,
+    "y": 1504
+  },
+  "gray_concrete": {
+    "name": "Gray Concrete",
+    "x": 448,
+    "y": 1472
+  },
+  "light_gray_concrete": {
+    "name": "Light Gray Concrete",
+    "x": 736,
+    "y": 1472
+  },
+  "cyan_concrete": {
+    "name": "Cyan Concrete",
+    "x": 352,
+    "y": 1472
+  },
+  "purple_concrete": {
+    "name": "Purple Concrete",
+    "x": 192,
+    "y": 1504
+  },
+  "blue_concrete": {
+    "name": "Blue Concrete",
+    "x": 160,
+    "y": 1472
+  },
+  "brown_concrete": {
+    "name": "Brown Concrete",
+    "x": 256,
+    "y": 1472
+  },
+  "green_concrete": {
+    "name": "Green Concrete",
+    "x": 544,
+    "y": 1472
+  },
+  "red_concrete": {
+    "name": "Red Concrete",
+    "x": 288,
+    "y": 1504
+  },
+  "black_concrete": {
+    "name": "Black Concrete",
+    "x": 64,
+    "y": 1472
+  },
+  "white_concrete_powder": {
+    "name": "White Concrete Powder",
+    "x": 416,
+    "y": 1504
+  },
+  "orange_concrete_powder": {
+    "name": "Orange Concrete Powder",
+    "x": 32,
+    "y": 1504
+  },
+  "magenta_concrete_powder": {
+    "name": "Magenta Concrete Powder",
+    "x": 960,
+    "y": 1472
+  },
+  "light_blue_concrete_powder": {
+    "name": "Light Blue Concrete Powder",
+    "x": 672,
+    "y": 1472
+  },
+  "yellow_concrete_powder": {
+    "name": "Yellow Concrete Powder",
+    "x": 512,
+    "y": 1504
+  },
+  "lime_concrete_powder": {
+    "name": "Lime Concrete Powder",
+    "x": 864,
+    "y": 1472
+  },
+  "pink_concrete_powder": {
+    "name": "Pink Concrete Powder",
+    "x": 128,
+    "y": 1504
+  },
+  "gray_concrete_powder": {
+    "name": "Gray Concrete Powder",
+    "x": 480,
+    "y": 1472
+  },
+  "light_gray_concrete_powder": {
+    "name": "Light Gray Concrete Powder",
+    "x": 768,
+    "y": 1472
+  },
+  "cyan_concrete_powder": {
+    "name": "Cyan Concrete Powder",
+    "x": 384,
+    "y": 1472
+  },
+  "purple_concrete_powder": {
+    "name": "Purple Concrete Powder",
+    "x": 224,
+    "y": 1504
+  },
+  "blue_concrete_powder": {
+    "name": "Blue Concrete Powder",
+    "x": 192,
+    "y": 1472
+  },
+  "brown_concrete_powder": {
+    "name": "Brown Concrete Powder",
+    "x": 288,
+    "y": 1472
+  },
+  "green_concrete_powder": {
+    "name": "Green Concrete Powder",
+    "x": 576,
+    "y": 1472
+  },
+  "red_concrete_powder": {
+    "name": "Red Concrete Powder",
+    "x": 320,
+    "y": 1504
+  },
+  "black_concrete_powder": {
+    "name": "Black Concrete Powder",
+    "x": 96,
+    "y": 1472
+  },
+  "turtle_egg": {
+    "name": "Turtle Egg",
+    "x": 608,
+    "y": 1952
+  },
+  "dead_tube_coral_block": {
+    "name": "Dead Tube Coral Block",
+    "x": 640,
+    "y": 1696
+  },
+  "dead_brain_coral_block": {
+    "name": "Dead Brain Coral Block",
+    "x": 672,
+    "y": 1696
+  },
+  "dead_bubble_coral_block": {
+    "name": "Dead Bubble Coral Block",
+    "x": 704,
+    "y": 1696
+  },
+  "dead_fire_coral_block": {
+    "name": "Dead Fire Coral Block",
+    "x": 736,
+    "y": 1696
+  },
+  "dead_horn_coral_block": {
+    "name": "Dead Horn Coral Block",
+    "x": 768,
+    "y": 1696
+  },
+  "tube_coral_block": {
+    "name": "Tube Coral Block",
+    "x": 288,
+    "y": 1696
+  },
+  "brain_coral_block": {
+    "name": "Brain Coral Block",
+    "x": 320,
+    "y": 1696
+  },
+  "bubble_coral_block": {
+    "name": "Bubble Coral Block",
+    "x": 352,
+    "y": 1696
+  },
+  "fire_coral_block": {
+    "name": "Fire Coral Block",
+    "x": 384,
+    "y": 1696
+  },
+  "horn_coral_block": {
+    "name": "Horn Coral Block",
+    "x": 416,
+    "y": 1696
+  },
+  "tube_coral": {
+    "name": "Tube Coral",
+    "x": 448,
+    "y": 1696
+  },
+  "brain_coral": {
+    "name": "Brain Coral",
+    "x": 480,
+    "y": 1696
+  },
+  "bubble_coral": {
+    "name": "Bubble Coral",
+    "x": 512,
+    "y": 1696
+  },
+  "fire_coral": {
+    "name": "Fire Coral",
+    "x": 544,
+    "y": 1696
+  },
+  "horn_coral": {
+    "name": "Horn Coral",
+    "x": 576,
+    "y": 1696
+  },
+  "dead_brain_coral": {
+    "name": "Dead Brain Coral",
+    "x": 992,
+    "y": 2336
+  },
+  "dead_bubble_coral": {
+    "name": "Dead Bubble Coral",
+    "x": 0,
+    "y": 2368
+  },
+  "dead_fire_coral": {
+    "name": "Dead Fire Coral",
+    "x": 32,
+    "y": 2368
+  },
+  "dead_horn_coral": {
+    "name": "Dead Horn Coral",
+    "x": 64,
+    "y": 2368
+  },
+  "dead_tube_coral": {
+    "name": "Dead Tube Coral",
+    "x": 960,
+    "y": 2336
+  },
+  "tube_coral_fan": {
+    "name": "Tube Coral Fan",
+    "x": 704,
+    "y": 2112
+  },
+  "brain_coral_fan": {
+    "name": "Brain Coral Fan",
+    "x": 608,
+    "y": 2112
+  },
+  "bubble_coral_fan": {
+    "name": "Bubble Coral Fan",
+    "x": 640,
+    "y": 2112
+  },
+  "fire_coral_fan": {
+    "name": "Fire Coral Fan",
+    "x": 896,
+    "y": 1696
+  },
+  "horn_coral_fan": {
+    "name": "Horn Coral Fan",
+    "x": 672,
+    "y": 2112
+  },
+  "dead_tube_coral_fan": {
+    "name": "Dead Tube Coral Fan",
+    "x": 160,
+    "y": 2144
+  },
+  "dead_brain_coral_fan": {
+    "name": "Dead Brain Coral Fan",
+    "x": 32,
+    "y": 2144
+  },
+  "dead_bubble_coral_fan": {
+    "name": "Dead Bubble Coral Fan",
+    "x": 64,
+    "y": 2144
+  },
+  "dead_fire_coral_fan": {
+    "name": "Dead Fire Coral Fan",
+    "x": 96,
+    "y": 2144
+  },
+  "dead_horn_coral_fan": {
+    "name": "Dead Horn Coral Fan",
+    "x": 128,
+    "y": 2144
+  },
+  "blue_ice": {
+    "name": "Blue Ice",
+    "x": 192,
+    "y": 1728
+  },
+  "conduit": {
+    "name": "Conduit",
+    "x": 512,
+    "y": 2016
+  },
+  "polished_granite_stairs": {
+    "name": "Polished Granite Stairs",
+    "x": 960,
+    "y": 2400
+  },
+  "smooth_red_sandstone_stairs": {
+    "name": "Smooth Red Sandstone Stairs",
+    "x": 384,
+    "y": 3296
+  },
+  "mossy_stone_brick_stairs": {
+    "name": "Mossy Stone Brick Stairs",
+    "x": 416,
+    "y": 3264
+  },
+  "polished_diorite_stairs": {
+    "name": "Polished Diorite Stairs",
+    "x": 832,
+    "y": 3264
+  },
+  "mossy_cobblestone_stairs": {
+    "name": "Mossy Cobblestone Stairs",
+    "x": 320,
+    "y": 3264
+  },
+  "end_stone_brick_stairs": {
+    "name": "End Stone Brick Stairs",
+    "x": 576,
+    "y": 2400
+  },
+  "stone_stairs": {
+    "name": "Stone Stairs",
+    "x": 896,
+    "y": 3296
+  },
+  "smooth_sandstone_stairs": {
+    "name": "Smooth Sandstone Stairs",
+    "x": 480,
+    "y": 3296
+  },
+  "smooth_quartz_stairs": {
+    "name": "Smooth Quartz Stairs",
+    "x": 320,
+    "y": 3296
+  },
+  "granite_stairs": {
+    "name": "Granite Stairs",
+    "x": 640,
+    "y": 2400
+  },
+  "andesite_stairs": {
+    "name": "Andesite Stairs",
+    "x": 832,
+    "y": 3200
+  },
+  "red_nether_brick_stairs": {
+    "name": "Red Nether Brick Stairs",
+    "x": 32,
+    "y": 3296
+  },
+  "polished_andesite_stairs": {
+    "name": "Polished Andesite Stairs",
+    "x": 768,
+    "y": 3264
+  },
+  "diorite_stairs": {
+    "name": "Diorite Stairs",
+    "x": 832,
+    "y": 3232
+  },
+  "polished_granite_slab": {
+    "name": "Polished Granite Slab",
+    "x": 928,
+    "y": 2400
+  },
+  "smooth_red_sandstone_slab": {
+    "name": "Smooth Red Sandstone Slab",
+    "x": 352,
+    "y": 3296
+  },
+  "mossy_stone_brick_slab": {
+    "name": "Mossy Stone Brick Slab",
+    "x": 384,
+    "y": 3264
+  },
+  "polished_diorite_slab": {
+    "name": "Polished Diorite Slab",
+    "x": 800,
+    "y": 3264
+  },
+  "mossy_cobblestone_slab": {
+    "name": "Mossy Cobblestone Slab",
+    "x": 288,
+    "y": 3264
+  },
+  "end_stone_brick_slab": {
+    "name": "End Stone Brick Slab",
+    "x": 544,
+    "y": 2400
+  },
+  "smooth_sandstone_slab": {
+    "name": "Smooth Sandstone Slab",
+    "x": 448,
+    "y": 3296
+  },
+  "smooth_quartz_slab": {
+    "name": "Smooth Quartz Slab",
+    "x": 288,
+    "y": 3296
+  },
+  "granite_slab": {
+    "name": "Granite Slab",
+    "x": 608,
+    "y": 2400
+  },
+  "andesite_slab": {
+    "name": "Andesite Slab",
+    "x": 800,
+    "y": 3200
+  },
+  "red_nether_brick_slab": {
+    "name": "Red Nether Brick Slab",
+    "x": 0,
+    "y": 3296
+  },
+  "polished_andesite_slab": {
+    "name": "Polished Andesite Slab",
+    "x": 736,
+    "y": 3264
+  },
+  "diorite_slab": {
+    "name": "Diorite Slab",
+    "x": 800,
+    "y": 3232
+  },
+  "scaffolding": {
+    "name": "Scaffolding",
+    "x": 416,
+    "y": 2400
+  },
+  "iron_door": {
+    "name": "Iron Door",
+    "x": 384,
+    "y": 928
+  },
+  "oak_door": {
+    "name": "Oak Door",
+    "x": 512,
+    "y": 928
+  },
+  "spruce_door": {
+    "name": "Spruce Door",
+    "x": 800,
+    "y": 928
+  },
+  "birch_door": {
+    "name": "Birch Door",
+    "x": 256,
+    "y": 928
+  },
+  "jungle_door": {
+    "name": "Jungle Door",
+    "x": 448,
+    "y": 928
+  },
+  "acacia_door": {
+    "name": "Acacia Door",
+    "x": 192,
+    "y": 928
+  },
+  "dark_oak_door": {
+    "name": "Dark Oak Door",
+    "x": 320,
+    "y": 928
+  },
+  "crimson_door": {
+    "name": "Crimson Door",
+    "x": 224,
+    "y": 160
+  },
+  "warped_door": {
+    "name": "Warped Door",
+    "x": 352,
+    "y": 160
+  },
+  "repeater": {
+    "name": "Redstone Repeater",
+    "x": 576,
+    "y": 3328
+  },
+  "comparator": {
+    "name": "Redstone Comparator",
+    "x": 512,
+    "y": 3328
+  },
+  "structure_block": {
+    "name": "Structure Block",
+    "x": 96,
+    "y": 1376
+  },
+  "jigsaw": {
+    "name": "Jigsaw Block",
+    "x": 64,
+    "y": 288
+  },
+  "turtle_helmet": {
+    "name": "Turtle Shell",
+    "x": 512,
+    "y": 1664
+  },
+  "scute": {
+    "name": "Scute",
+    "x": 608,
+    "y": 1664
+  },
+  "flint_and_steel": {
+    "name": "Flint and Steel",
+    "x": 480,
+    "y": 3552
+  },
+  "apple": {
+    "name": "Apple",
+    "x": 768,
+    "y": 3168
+  },
+  "bow": {
+    "name": "Bow",
+    "x": 992,
+    "y": 1248
+  },
+  "arrow": {
+    "name": "Arrow",
+    "x": 576,
+    "y": 1248
+  },
+  "coal": {
+    "name": "Coal",
+    "x": 576,
+    "y": 3488
+  },
+  "charcoal": {
+    "name": "Charcoal",
+    "x": 512,
+    "y": 3488
+  },
+  "diamond": {
+    "name": "Diamond",
+    "x": 608,
+    "y": 3488
+  },
+  "iron_ingot": {
+    "name": "Iron Ingot",
+    "x": 896,
+    "y": 3488
+  },
+  "gold_ingot": {
+    "name": "Gold Ingot",
+    "x": 800,
+    "y": 3488
+  },
+  "netherite_ingot": {
+    "name": "Netherite Ingot",
+    "x": 192,
+    "y": 128
+  },
+  "netherite_scrap": {
+    "name": "Netherite Scrap",
+    "x": 224,
+    "y": 128
+  },
+  "wooden_sword": {
+    "name": "Wooden Sword",
+    "x": 800,
+    "y": 3616
+  },
+  "wooden_shovel": {
+    "name": "Wooden Shovel",
+    "x": 192,
+    "y": 3584
+  },
+  "wooden_pickaxe": {
+    "name": "Wooden Pickaxe",
+    "x": 160,
+    "y": 3584
+  },
+  "wooden_axe": {
+    "name": "Wooden Axe",
+    "x": 96,
+    "y": 3584
+  },
+  "wooden_hoe": {
+    "name": "Wooden Hoe",
+    "x": 128,
+    "y": 3584
+  },
+  "stone_sword": {
+    "name": "Stone Sword",
+    "x": 736,
+    "y": 3616
+  },
+  "stone_shovel": {
+    "name": "Stone Shovel",
+    "x": 64,
+    "y": 3584
+  },
+  "stone_pickaxe": {
+    "name": "Stone Pickaxe",
+    "x": 32,
+    "y": 3584
+  },
+  "stone_axe": {
+    "name": "Stone Axe",
+    "x": 992,
+    "y": 3552
+  },
+  "stone_hoe": {
+    "name": "Stone Hoe",
+    "x": 0,
+    "y": 3584
+  },
+  "golden_sword": {
+    "name": "Golden Sword",
+    "x": 608,
+    "y": 3616
+  },
+  "golden_shovel": {
+    "name": "Golden Shovel",
+    "x": 640,
+    "y": 3552
+  },
+  "golden_pickaxe": {
+    "name": "Golden Pickaxe",
+    "x": 608,
+    "y": 3552
+  },
+  "golden_axe": {
+    "name": "Golden Axe",
+    "x": 544,
+    "y": 3552
+  },
+  "golden_hoe": {
+    "name": "Golden Hoe",
+    "x": 576,
+    "y": 3552
+  },
+  "iron_sword": {
+    "name": "Iron Sword",
+    "x": 640,
+    "y": 3616
+  },
+  "iron_shovel": {
+    "name": "Iron Shovel",
+    "x": 768,
+    "y": 3552
+  },
+  "iron_pickaxe": {
+    "name": "Iron Pickaxe",
+    "x": 736,
+    "y": 3552
+  },
+  "iron_axe": {
+    "name": "Iron Axe",
+    "x": 672,
+    "y": 3552
+  },
+  "iron_hoe": {
+    "name": "Iron Hoe",
+    "x": 704,
+    "y": 3552
+  },
+  "diamond_sword": {
+    "name": "Diamond Sword",
+    "x": 576,
+    "y": 3616
+  },
+  "diamond_shovel": {
+    "name": "Diamond Shovel",
+    "x": 288,
+    "y": 3552
+  },
+  "diamond_pickaxe": {
+    "name": "Diamond Pickaxe",
+    "x": 256,
+    "y": 3552
+  },
+  "diamond_axe": {
+    "name": "Diamond Axe",
+    "x": 192,
+    "y": 3552
+  },
+  "diamond_hoe": {
+    "name": "Diamond Hoe",
+    "x": 224,
+    "y": 3552
+  },
+  "netherite_sword": {
+    "name": "Netherite Sword",
+    "x": 384,
+    "y": 128
+  },
+  "netherite_shovel": {
+    "name": "Netherite Shovel",
+    "x": 352,
+    "y": 128
+  },
+  "netherite_pickaxe": {
+    "name": "Netherite Pickaxe",
+    "x": 320,
+    "y": 128
+  },
+  "netherite_axe": {
+    "name": "Netherite Axe",
+    "x": 256,
+    "y": 128
+  },
+  "netherite_hoe": {
+    "name": "Netherite Hoe",
+    "x": 288,
+    "y": 128
+  },
+  "stick": {
+    "name": "Stick",
+    "x": 608,
+    "y": 1120
+  },
+  "bowl": {
+    "name": "Bowl",
+    "x": 384,
+    "y": 3520
+  },
+  "mushroom_stew": {
+    "name": "Mushroom Stew",
+    "x": 224,
+    "y": 3200
+  },
+  "string": {
+    "name": "String",
+    "x": 320,
+    "y": 3520
+  },
+  "feather": {
+    "name": "Feather",
+    "x": 704,
+    "y": 3488
+  },
+  "gunpowder": {
+    "name": "Gunpowder",
+    "x": 864,
+    "y": 3488
+  },
+  "wheat_seeds": {
+    "name": "Wheat Seeds",
+    "x": 320,
+    "y": 1056
+  },
+  "wheat": {
+    "name": "Wheat",
+    "x": 608,
+    "y": 3200
+  },
+  "bread": {
+    "name": "Bread",
+    "x": 896,
+    "y": 3168
+  },
+  "leather_helmet": {
+    "name": "Leather Cap",
+    "x": 608,
+    "y": 2496
+  },
+  "leather_chestplate": {
+    "name": "Leather Tunic",
+    "x": 672,
+    "y": 2496
+  },
+  "leather_leggings": {
+    "name": "Leather Pants",
+    "x": 640,
+    "y": 2496
+  },
+  "leather_boots": {
+    "name": "Leather Boots",
+    "x": 576,
+    "y": 2496
+  },
+  "chainmail_helmet": {
+    "name": "Chainmail Helmet",
+    "x": 320,
+    "y": 2464
+  },
+  "chainmail_chestplate": {
+    "name": "Chainmail Chestplate",
+    "x": 288,
+    "y": 2464
+  },
+  "chainmail_leggings": {
+    "name": "Chainmail Leggings",
+    "x": 352,
+    "y": 2464
+  },
+  "chainmail_boots": {
+    "name": "Chainmail Boots",
+    "x": 256,
+    "y": 2464
+  },
+  "iron_helmet": {
+    "name": "Iron Helmet",
+    "x": 512,
+    "y": 2496
+  },
+  "iron_chestplate": {
+    "name": "Iron Chestplate",
+    "x": 480,
+    "y": 2496
+  },
+  "iron_leggings": {
+    "name": "Iron Leggings",
+    "x": 544,
+    "y": 2496
+  },
+  "iron_boots": {
+    "name": "Iron Boots",
+    "x": 448,
+    "y": 2496
+  },
+  "diamond_helmet": {
+    "name": "Diamond Helmet",
+    "x": 160,
+    "y": 2496
+  },
+  "diamond_chestplate": {
+    "name": "Diamond Chestplate",
+    "x": 128,
+    "y": 2496
+  },
+  "diamond_leggings": {
+    "name": "Diamond Leggings",
+    "x": 192,
+    "y": 2496
+  },
+  "diamond_boots": {
+    "name": "Diamond Boots",
+    "x": 96,
+    "y": 2496
+  },
+  "golden_helmet": {
+    "name": "Golden Helmet",
+    "x": 320,
+    "y": 2496
+  },
+  "golden_chestplate": {
+    "name": "Golden Chestplate",
+    "x": 288,
+    "y": 2496
+  },
+  "golden_leggings": {
+    "name": "Golden Leggings",
+    "x": 352,
+    "y": 2496
+  },
+  "golden_boots": {
+    "name": "Golden Boots",
+    "x": 256,
+    "y": 2496
+  },
+  "netherite_helmet": {
+    "name": "Netherite Helmet",
+    "x": 480,
+    "y": 128
+  },
+  "netherite_chestplate": {
+    "name": "Netherite Chestplate",
+    "x": 448,
+    "y": 128
+  },
+  "netherite_leggings": {
+    "name": "Netherite Leggings",
+    "x": 512,
+    "y": 128
+  },
+  "netherite_boots": {
+    "name": "Netherite Boots",
+    "x": 416,
+    "y": 128
+  },
+  "flint": {
+    "name": "Flint",
+    "x": 736,
+    "y": 3488
+  },
+  "porkchop": {
+    "name": "Raw Porkchop",
+    "x": 480,
+    "y": 3200
+  },
+  "cooked_porkchop": {
+    "name": "Cooked Porkchop",
+    "x": 32,
+    "y": 3200
+  },
+  "painting": {
+    "name": "Painting",
+    "x": 544,
+    "y": 3136
+  },
+  "golden_apple": {
+    "name": "Golden Apple",
+    "x": 160,
+    "y": 3200
+  },
+  "enchanted_golden_apple": {
+    "name": "Enchanted Golden Apple",
+    "x": 128,
+    "y": 256
+  },
+  "oak_sign": {
+    "name": "Oak Sign",
+    "x": 896,
+    "y": 3360
+  },
+  "spruce_sign": {
+    "name": "Spruce Sign",
+    "x": 800,
+    "y": 2368
+  },
+  "birch_sign": {
+    "name": "Birch Sign",
+    "x": 768,
+    "y": 2368
+  },
+  "jungle_sign": {
+    "name": "Jungle Sign",
+    "x": 832,
+    "y": 2368
+  },
+  "acacia_sign": {
+    "name": "Acacia Sign",
+    "x": 864,
+    "y": 2368
+  },
+  "dark_oak_sign": {
+    "name": "Dark Oak Sign",
+    "x": 896,
+    "y": 2368
+  },
+  "crimson_sign": {
+    "name": "Crimson Sign",
+    "x": 512,
+    "y": 160
+  },
+  "warped_sign": {
+    "name": "Warped Sign",
+    "x": 544,
+    "y": 160
+  },
+  "bucket": {
+    "name": "Bucket",
+    "x": 288,
+    "y": 3136
+  },
+  "water_bucket": {
+    "name": "Water Bucket",
+    "x": 384,
+    "y": 3136
+  },
+  "lava_bucket": {
+    "name": "Lava Bucket",
+    "x": 320,
+    "y": 3136
+  },
+  "minecart": {
+    "name": "Minecart",
+    "x": 160,
+    "y": 3616
+  },
+  "saddle": {
+    "name": "Saddle",
+    "x": 928,
+    "y": 3552
+  },
+  "redstone": {
+    "name": "Redstone Dust",
+    "x": 224,
+    "y": 3520
+  },
+  "snowball": {
+    "name": "Snowball",
+    "x": 672,
+    "y": 3616
+  },
+  "oak_boat": {
+    "name": "Oak Boat",
+    "x": 352,
+    "y": 3616
+  },
+  "leather": {
+    "name": "Leather",
+    "x": 960,
+    "y": 3488
+  },
+  "milk_bucket": {
+    "name": "Milk Bucket",
+    "x": 352,
+    "y": 3136
+  },
+  "pufferfish_bucket": {
+    "name": "Bucket of Pufferfish",
+    "x": 704,
+    "y": 1664
+  },
+  "salmon_bucket": {
+    "name": "Bucket of Salmon",
+    "x": 736,
+    "y": 1664
+  },
+  "cod_bucket": {
+    "name": "Bucket of Cod",
+    "x": 672,
+    "y": 1664
+  },
+  "tropical_fish_bucket": {
+    "name": "Bucket of Tropical Fish",
+    "x": 352,
+    "y": 2016
+  },
+  "brick": {
+    "name": "Brick",
+    "x": 480,
+    "y": 3488
+  },
+  "clay_ball": {
+    "name": "Clay Ball",
+    "x": 544,
+    "y": 3488
+  },
+  "dried_kelp_block": {
+    "name": "Dried Kelp Block",
+    "x": 128,
+    "y": 1664
+  },
+  "paper": {
+    "name": "Paper",
+    "x": 64,
+    "y": 3520
+  },
+  "book": {
+    "name": "Book",
+    "x": 448,
+    "y": 3488
+  },
+  "slime_ball": {
+    "name": "Slimeball",
+    "x": 288,
+    "y": 3520
+  },
+  "chest_minecart": {
+    "name": "Minecart with Chest",
+    "x": 192,
+    "y": 3616
+  },
+  "furnace_minecart": {
+    "name": "Minecart with Furnace",
+    "x": 256,
+    "y": 3616
+  },
+  "egg": {
+    "name": "Egg",
+    "x": 128,
+    "y": 3200
+  },
+  "compass": {
+    "name": "Compass",
+    "x": 992,
+    "y": 480
+  },
+  "fishing_rod": {
+    "name": "Fishing Rod",
+    "x": 448,
+    "y": 3552
+  },
+  "clock": {
+    "name": "Clock",
+    "x": 960,
+    "y": 480
+  },
+  "glowstone_dust": {
+    "name": "Glowstone Dust",
+    "x": 768,
+    "y": 3488
+  },
+  "cod": {
+    "name": "Raw Cod",
+    "x": 896,
+    "y": 1664
+  },
+  "salmon": {
+    "name": "Raw Salmon",
+    "x": 928,
+    "y": 1664
+  },
+  "tropical_fish": {
+    "name": "Tropical Fish",
+    "x": 768,
+    "y": 1664
+  },
+  "pufferfish": {
+    "name": "Pufferfish",
+    "x": 864,
+    "y": 1664
+  },
+  "cooked_cod": {
+    "name": "Cooked Cod",
+    "x": 800,
+    "y": 1664
+  },
+  "cooked_salmon": {
+    "name": "Cooked Salmon",
+    "x": 832,
+    "y": 1664
+  },
+  "ink_sac": {
+    "name": "Ink Sac",
+    "x": 736,
+    "y": 3136
+  },
+  "cocoa_beans": {
+    "name": "Cocoa Beans",
+    "x": 608,
+    "y": 3136
+  },
+  "lapis_lazuli": {
+    "name": "Lapis Lazuli",
+    "x": 768,
+    "y": 3136
+  },
+  "white_dye": {
+    "name": "White Dye",
+    "x": 288,
+    "y": 2368
+  },
+  "orange_dye": {
+    "name": "Orange Dye",
+    "x": 928,
+    "y": 3136
+  },
+  "magenta_dye": {
+    "name": "Magenta Dye",
+    "x": 896,
+    "y": 3136
+  },
+  "light_blue_dye": {
+    "name": "Light Blue Dye",
+    "x": 800,
+    "y": 3136
+  },
+  "yellow_dye": {
+    "name": "Yellow Dye",
+    "x": 32,
+    "y": 3168
+  },
+  "lime_dye": {
+    "name": "Lime Dye",
+    "x": 864,
+    "y": 3136
+  },
+  "pink_dye": {
+    "name": "Pink Dye",
+    "x": 960,
+    "y": 3136
+  },
+  "gray_dye": {
+    "name": "Gray Dye",
+    "x": 672,
+    "y": 3136
+  },
+  "light_gray_dye": {
+    "name": "Light Gray Dye",
+    "x": 832,
+    "y": 3136
+  },
+  "cyan_dye": {
+    "name": "Cyan Dye",
+    "x": 640,
+    "y": 3136
+  },
+  "purple_dye": {
+    "name": "Purple Dye",
+    "x": 992,
+    "y": 3136
+  },
+  "blue_dye": {
+    "name": "Blue Dye",
+    "x": 224,
+    "y": 2368
+  },
+  "brown_dye": {
+    "name": "Brown Dye",
+    "x": 256,
+    "y": 2368
+  },
+  "green_dye": {
+    "name": "Green Dye",
+    "x": 704,
+    "y": 3136
+  },
+  "red_dye": {
+    "name": "Red Dye",
+    "x": 0,
+    "y": 3168
+  },
+  "black_dye": {
+    "name": "Black Dye",
+    "x": 192,
+    "y": 2368
+  },
+  "bone_meal": {
+    "name": "Bone Meal",
+    "x": 576,
+    "y": 3136
+  },
+  "bone": {
+    "name": "Bone",
+    "x": 416,
+    "y": 3488
+  },
+  "sugar": {
+    "name": "Sugar",
+    "x": 576,
+    "y": 3200
+  },
+  "cake": {
+    "name": "Cake",
+    "x": 416,
+    "y": 3584
+  },
+  "white_bed": {
+    "name": "White Bed",
+    "x": 512,
+    "y": 3168
+  },
+  "orange_bed": {
+    "name": "Orange Bed",
+    "x": 384,
+    "y": 3168
+  },
+  "magenta_bed": {
+    "name": "Magenta Bed",
+    "x": 352,
+    "y": 3168
+  },
+  "light_blue_bed": {
+    "name": "Light Blue Bed",
+    "x": 256,
+    "y": 3168
+  },
+  "yellow_bed": {
+    "name": "Yellow Bed",
+    "x": 544,
+    "y": 3168
+  },
+  "lime_bed": {
+    "name": "Lime Bed",
+    "x": 320,
+    "y": 3168
+  },
+  "pink_bed": {
+    "name": "Pink Bed",
+    "x": 416,
+    "y": 3168
+  },
+  "gray_bed": {
+    "name": "Gray Bed",
+    "x": 192,
+    "y": 3168
+  },
+  "light_gray_bed": {
+    "name": "Light Gray Bed",
+    "x": 288,
+    "y": 3168
+  },
+  "cyan_bed": {
+    "name": "Cyan Bed",
+    "x": 160,
+    "y": 3168
+  },
+  "purple_bed": {
+    "name": "Purple Bed",
+    "x": 448,
+    "y": 3168
+  },
+  "blue_bed": {
+    "name": "Blue Bed",
+    "x": 96,
+    "y": 3168
+  },
+  "brown_bed": {
+    "name": "Brown Bed",
+    "x": 128,
+    "y": 3168
+  },
+  "green_bed": {
+    "name": "Green Bed",
+    "x": 224,
+    "y": 3168
+  },
+  "red_bed": {
+    "name": "Red Bed",
+    "x": 480,
+    "y": 3168
+  },
+  "black_bed": {
+    "name": "Black Bed",
+    "x": 64,
+    "y": 3168
+  },
+  "cookie": {
+    "name": "Cookie",
+    "x": 96,
+    "y": 3200
+  },
+  "filled_map": {
+    "name": "Map",
+    "x": 832,
+    "y": 3552
+  },
+  "shears": {
+    "name": "Shears",
+    "x": 960,
+    "y": 3552
+  },
+  "melon_slice": {
+    "name": "Melon Slice",
+    "x": 192,
+    "y": 3200
+  },
+  "dried_kelp": {
+    "name": "Dried Kelp",
+    "x": 544,
+    "y": 1664
+  },
+  "pumpkin_seeds": {
+    "name": "Pumpkin Seeds",
+    "x": 128,
+    "y": 1056
+  },
+  "melon_seeds": {
+    "name": "Melon Seeds",
+    "x": 800,
+    "y": 1024
+  },
+  "beef": {
+    "name": "Raw Beef",
+    "x": 384,
+    "y": 3200
+  },
+  "cooked_beef": {
+    "name": "Steak",
+    "x": 480,
+    "y": 832
+  },
+  "chicken": {
+    "name": "Raw Chicken",
+    "x": 416,
+    "y": 3200
+  },
+  "cooked_chicken": {
+    "name": "Cooked Chicken",
+    "x": 992,
+    "y": 3168
+  },
+  "rotten_flesh": {
+    "name": "Rotten Flesh",
+    "x": 544,
+    "y": 3200
+  },
+  "ender_pearl": {
+    "name": "Ender Pearl",
+    "x": 672,
+    "y": 3488
+  },
+  "blaze_rod": {
+    "name": "Blaze Rod",
+    "x": 448,
+    "y": 640
+  },
+  "ghast_tear": {
+    "name": "Ghast Tear",
+    "x": 96,
+    "y": 3136
+  },
+  "gold_nugget": {
+    "name": "Gold Nugget",
+    "x": 832,
+    "y": 3488
+  },
+  "nether_wart": {
+    "name": "Nether Wart",
+    "x": 704,
+    "y": 640
+  },
+  "potion": {
+    "name": "Potion of Luck",
+    "x": 960,
+    "y": 3424
+  },
+  "glass_bottle": {
+    "name": "Glass Bottle",
+    "x": 512,
+    "y": 3552
+  },
+  "spider_eye": {
+    "name": "Spider Eye",
+    "x": 256,
+    "y": 3136
+  },
+  "fermented_spider_eye": {
+    "name": "Fermented Spider Eye",
+    "x": 64,
+    "y": 3136
+  },
+  "blaze_powder": {
+    "name": "Blaze Powder",
+    "x": 416,
+    "y": 640
+  },
+  "magma_cream": {
+    "name": "Magma Cream",
+    "x": 192,
+    "y": 3136
+  },
+  "brewing_stand": {
+    "name": "Brewing Stand",
+    "x": 384,
+    "y": 3584
+  },
+  "cauldron": {
+    "name": "Cauldron",
+    "x": 448,
+    "y": 3584
+  },
+  "ender_eye": {
+    "name": "Eye of Ender",
+    "x": 384,
+    "y": 3552
+  },
+  "glistering_melon_slice": {
+    "name": "Glistering Melon Slice",
+    "x": 128,
+    "y": 3136
+  },
+  "bat_spawn_egg": {
+    "name": "Bat Spawn Egg",
+    "x": 672,
+    "y": 1120
+  },
+  "bee_spawn_egg": {
+    "name": "Bee Spawn Egg",
+    "x": 224,
+    "y": 96
+  },
+  "blaze_spawn_egg": {
+    "name": "Blaze Spawn Egg",
+    "x": 704,
+    "y": 1120
+  },
+  "cat_spawn_egg": {
+    "name": "Cat Spawn Egg",
+    "x": 288,
+    "y": 2400
+  },
+  "cave_spider_spawn_egg": {
+    "name": "Cave Spider Spawn Egg",
+    "x": 736,
+    "y": 1120
+  },
+  "chicken_spawn_egg": {
+    "name": "Chicken Spawn Egg",
+    "x": 768,
+    "y": 1120
+  },
+  "cod_spawn_egg": {
+    "name": "Cod Spawn Egg",
+    "x": 0,
+    "y": 1696
+  },
+  "cow_spawn_egg": {
+    "name": "Cow Spawn Egg",
+    "x": 800,
+    "y": 1120
+  },
+  "creeper_spawn_egg": {
+    "name": "Creeper Spawn Egg",
+    "x": 832,
+    "y": 1120
+  },
+  "dolphin_spawn_egg": {
+    "name": "Dolphin Spawn Egg",
+    "x": 448,
+    "y": 1952
+  },
+  "donkey_spawn_egg": {
+    "name": "Donkey Spawn Egg",
+    "x": 832,
+    "y": 1344
+  },
+  "drowned_spawn_egg": {
+    "name": "Drowned Spawn Egg",
+    "x": 960,
+    "y": 1696
+  },
+  "elder_guardian_spawn_egg": {
+    "name": "Elder Guardian Spawn Egg",
+    "x": 864,
+    "y": 1344
+  },
+  "enderman_spawn_egg": {
+    "name": "Enderman Spawn Egg",
+    "x": 864,
+    "y": 1120
+  },
+  "endermite_spawn_egg": {
+    "name": "Endermite Spawn Egg",
+    "x": 896,
+    "y": 1120
+  },
+  "evoker_spawn_egg": {
+    "name": "Evoker Spawn Egg",
+    "x": 64,
+    "y": 1408
+  },
+  "fox_spawn_egg": {
+    "name": "Fox Spawn Egg",
+    "x": 992,
+    "y": 2432
+  },
+  "ghast_spawn_egg": {
+    "name": "Ghast Spawn Egg",
+    "x": 928,
+    "y": 1120
+  },
+  "guardian_spawn_egg": {
+    "name": "Guardian Spawn Egg",
+    "x": 960,
+    "y": 1120
+  },
+  "hoglin_spawn_egg": {
+    "name": "Hoglin Spawn Egg",
+    "x": 32,
+    "y": 192
+  },
+  "horse_spawn_egg": {
+    "name": "Horse Spawn Egg",
+    "x": 992,
+    "y": 1120
+  },
+  "husk_spawn_egg": {
+    "name": "Husk Spawn Egg",
+    "x": 896,
+    "y": 1344
+  },
+  "llama_spawn_egg": {
+    "name": "Llama Spawn Egg",
+    "x": 96,
+    "y": 1408
+  },
+  "magma_cube_spawn_egg": {
+    "name": "Magma Cube Spawn Egg",
+    "x": 0,
+    "y": 1152
+  },
+  "mooshroom_spawn_egg": {
+    "name": "Mooshroom Spawn Egg",
+    "x": 32,
+    "y": 1152
+  },
+  "mule_spawn_egg": {
+    "name": "Mule Spawn Egg",
+    "x": 928,
+    "y": 1344
+  },
+  "ocelot_spawn_egg": {
+    "name": "Ocelot Spawn Egg",
+    "x": 64,
+    "y": 1152
+  },
+  "panda_spawn_egg": {
+    "name": "Panda Spawn Egg",
+    "x": 352,
+    "y": 2400
+  },
+  "parrot_spawn_egg": {
+    "name": "Parrot Spawn Egg",
+    "x": 224,
+    "y": 1536
+  },
+  "phantom_spawn_egg": {
+    "name": "Phantom Spawn Egg",
+    "x": 672,
+    "y": 1952
+  },
+  "pig_spawn_egg": {
+    "name": "Pig Spawn Egg",
+    "x": 96,
+    "y": 1152
+  },
+  "piglin_spawn_egg": {
+    "name": "Piglin Spawn Egg",
+    "x": 0,
+    "y": 192
+  },
+  "piglin_brute_spawn_egg": {
+    "name": "Piglin Brute Spawn Egg",
+    "x": 160,
+    "y": 256
+  },
+  "pillager_spawn_egg": {
+    "name": "Pillager Spawn Egg",
+    "x": 384,
+    "y": 2400
+  },
+  "polar_bear_spawn_egg": {
+    "name": "Polar Bear Spawn Egg",
+    "x": 960,
+    "y": 1344
+  },
+  "pufferfish_spawn_egg": {
+    "name": "Pufferfish Spawn Egg",
+    "x": 32,
+    "y": 1696
+  },
+  "rabbit_spawn_egg": {
+    "name": "Rabbit Spawn Egg",
+    "x": 128,
+    "y": 1152
+  },
+  "ravager_spawn_egg": {
+    "name": "Ravager Spawn Egg",
+    "x": 320,
+    "y": 2400
+  },
+  "salmon_spawn_egg": {
+    "name": "Salmon Spawn Egg",
+    "x": 64,
+    "y": 1696
+  },
+  "sheep_spawn_egg": {
+    "name": "Sheep Spawn Egg",
+    "x": 160,
+    "y": 1152
+  },
+  "shulker_spawn_egg": {
+    "name": "Shulker Spawn Egg",
+    "x": 192,
+    "y": 1152
+  },
+  "silverfish_spawn_egg": {
+    "name": "Silverfish Spawn Egg",
+    "x": 224,
+    "y": 1152
+  },
+  "skeleton_spawn_egg": {
+    "name": "Skeleton Spawn Egg",
+    "x": 256,
+    "y": 1152
+  },
+  "skeleton_horse_spawn_egg": {
+    "name": "Skeleton Horse Spawn Egg",
+    "x": 992,
+    "y": 1344
+  },
+  "slime_spawn_egg": {
+    "name": "Slime Spawn Egg",
+    "x": 288,
+    "y": 1152
+  },
+  "spider_spawn_egg": {
+    "name": "Spider Spawn Egg",
+    "x": 320,
+    "y": 1152
+  },
+  "squid_spawn_egg": {
+    "name": "Squid Spawn Egg",
+    "x": 352,
+    "y": 1152
+  },
+  "stray_spawn_egg": {
+    "name": "Stray Spawn Egg",
+    "x": 0,
+    "y": 1376
+  },
+  "strider_spawn_egg": {
+    "name": "Strider Spawn Egg",
+    "x": 960,
+    "y": 192
+  },
+  "trader_llama_spawn_egg": {
+    "name": "Trader Llama Spawn Egg",
+    "x": 928,
+    "y": 2432
+  },
+  "tropical_fish_spawn_egg": {
+    "name": "Tropical Fish Spawn Egg",
+    "x": 800,
+    "y": 1696
+  },
+  "turtle_spawn_egg": {
+    "name": "Turtle Spawn Egg",
+    "x": 0,
+    "y": 1728
+  },
+  "vex_spawn_egg": {
+    "name": "Vex Spawn Egg",
+    "x": 128,
+    "y": 1408
+  },
+  "villager_spawn_egg": {
+    "name": "Villager Spawn Egg",
+    "x": 384,
+    "y": 1152
+  },
+  "vindicator_spawn_egg": {
+    "name": "Vindicator Spawn Egg",
+    "x": 160,
+    "y": 1408
+  },
+  "wandering_trader_spawn_egg": {
+    "name": "Wandering Trader Spawn Egg",
+    "x": 960,
+    "y": 2432
+  },
+  "witch_spawn_egg": {
+    "name": "Witch Spawn Egg",
+    "x": 416,
+    "y": 1152
+  },
+  "wither_skeleton_spawn_egg": {
+    "name": "Wither Skeleton Spawn Egg",
+    "x": 32,
+    "y": 1376
+  },
+  "wolf_spawn_egg": {
+    "name": "Wolf Spawn Egg",
+    "x": 448,
+    "y": 1152
+  },
+  "zoglin_spawn_egg": {
+    "name": "Zoglin Spawn Egg",
+    "x": 352,
+    "y": 256
+  },
+  "zombie_spawn_egg": {
+    "name": "Zombie Spawn Egg",
+    "x": 480,
+    "y": 1152
+  },
+  "zombie_horse_spawn_egg": {
+    "name": "Zombie Horse Spawn Egg",
+    "x": 64,
+    "y": 1376
+  },
+  "zombie_villager_spawn_egg": {
+    "name": "Zombie Villager Spawn Egg",
+    "x": 128,
+    "y": 1344
+  },
+  "zombified_piglin_spawn_egg": {
+    "name": "Zombified Piglin Spawn Egg",
+    "x": 512,
+    "y": 1152
+  },
+  "experience_bottle": {
+    "name": "Bottle o' Enchanting",
+    "x": 288,
+    "y": 3456
+  },
+  "fire_charge": {
+    "name": "Fire Charge",
+    "x": 416,
+    "y": 3552
+  },
+  "writable_book": {
+    "name": "Book and Quill",
+    "x": 352,
+    "y": 3520
+  },
+  "written_book": {
+    "name": "Written Book",
+    "x": 256,
+    "y": 3584
+  },
+  "emerald": {
+    "name": "Emerald",
+    "x": 640,
+    "y": 3488
+  },
+  "item_frame": {
+    "name": "Item Frame",
+    "x": 480,
+    "y": 3136
+  },
+  "flower_pot": {
+    "name": "Flower Pot",
+    "x": 448,
+    "y": 3136
+  },
+  "carrot": {
+    "name": "Carrot",
+    "x": 928,
+    "y": 3168
+  },
+  "potato": {
+    "name": "Potato",
+    "x": 288,
+    "y": 3200
+  },
+  "baked_potato": {
+    "name": "Baked Potato",
+    "x": 800,
+    "y": 3168
+  },
+  "poisonous_potato": {
+    "name": "Poisonous Potato",
+    "x": 256,
+    "y": 3200
+  },
+  "map": {
+    "name": "Empty Map",
+    "x": 320,
+    "y": 3552
+  },
+  "golden_carrot": {
+    "name": "Golden Carrot",
+    "x": 160,
+    "y": 3136
+  },
+  "skeleton_skull": {
+    "name": "Skeleton Skull",
+    "x": 192,
+    "y": 960
+  },
+  "wither_skeleton_skull": {
+    "name": "Wither Skeleton Skull",
+    "x": 224,
+    "y": 960
+  },
+  "player_head": {
+    "name": "Player Head",
+    "x": 160,
+    "y": 960
+  },
+  "zombie_head": {
+    "name": "Zombie Head",
+    "x": 256,
+    "y": 960
+  },
+  "creeper_head": {
+    "name": "Creeper Head",
+    "x": 96,
+    "y": 960
+  },
+  "dragon_head": {
+    "name": "Dragon Head",
+    "x": 128,
+    "y": 960
+  },
+  "carrot_on_a_stick": {
+    "name": "Carrot on a Stick",
+    "x": 416,
+    "y": 3520
+  },
+  "warped_fungus_on_a_stick": {
+    "name": "Warped Fungus on a Stick",
+    "x": 992,
+    "y": 192
+  },
+  "nether_star": {
+    "name": "Nether Star",
+    "x": 64,
+    "y": 352
+  },
+  "pumpkin_pie": {
+    "name": "Pumpkin Pie",
+    "x": 320,
+    "y": 3200
+  },
+  "firework_rocket": {
+    "name": "Firework Rocket",
+    "x": 736,
+    "y": 3168
+  },
+  "firework_star": {
+    "name": "Firework Star",
+    "x": 256,
+    "y": 800
+  },
+  "enchanted_book": {
+    "name": "Enchanted Book",
+    "x": 352,
+    "y": 3552
+  },
+  "nether_brick": {
+    "name": "Nether Brick",
+    "x": 992,
+    "y": 3488
+  },
+  "quartz": {
+    "name": "Nether Quartz",
+    "x": 0,
+    "y": 3520
+  },
+  "tnt_minecart": {
+    "name": "Minecart with TNT",
+    "x": 320,
+    "y": 3616
+  },
+  "hopper_minecart": {
+    "name": "Minecart with Hopper",
+    "x": 288,
+    "y": 3616
+  },
+  "prismarine_shard": {
+    "name": "Prismarine Shard",
+    "x": 160,
+    "y": 3520
+  },
+  "prismarine_crystals": {
+    "name": "Prismarine Crystals",
+    "x": 128,
+    "y": 3520
+  },
+  "rabbit": {
+    "name": "Raw Rabbit",
+    "x": 512,
+    "y": 3200
+  },
+  "cooked_rabbit": {
+    "name": "Cooked Rabbit",
+    "x": 64,
+    "y": 3200
+  },
+  "rabbit_stew": {
+    "name": "Rabbit Stew",
+    "x": 352,
+    "y": 3200
+  },
+  "rabbit_foot": {
+    "name": "Rabbit's Foot",
+    "x": 224,
+    "y": 3136
+  },
+  "rabbit_hide": {
+    "name": "Rabbit Hide",
+    "x": 192,
+    "y": 3520
+  },
+  "armor_stand": {
+    "name": "Armor Stand",
+    "x": 416,
+    "y": 3136
+  },
+  "iron_horse_armor": {
+    "name": "Iron Horse Armor",
+    "x": 192,
+    "y": 32
+  },
+  "golden_horse_armor": {
+    "name": "Golden Horse Armor",
+    "x": 32,
+    "y": 32
+  },
+  "diamond_horse_armor": {
+    "name": "Diamond Horse Armor",
+    "x": 896,
+    "y": 0
+  },
+  "leather_horse_armor": {
+    "name": "Leather Horse Armor",
+    "x": 160,
+    "y": 1376
+  },
+  "lead": {
+    "name": "Lead",
+    "x": 800,
+    "y": 3552
+  },
+  "name_tag": {
+    "name": "Name Tag",
+    "x": 864,
+    "y": 3552
+  },
+  "command_block_minecart": {
+    "name": "Minecart with Command Block",
+    "x": 224,
+    "y": 3616
+  },
+  "mutton": {
+    "name": "Raw Mutton",
+    "x": 448,
+    "y": 3200
+  },
+  "cooked_mutton": {
+    "name": "Cooked Mutton",
+    "x": 0,
+    "y": 3200
+  },
+  "white_banner": {
+    "name": "White Banner",
+    "x": 608,
+    "y": 768
+  },
+  "orange_banner": {
+    "name": "Orange Banner",
+    "x": 864,
+    "y": 736
+  },
+  "magenta_banner": {
+    "name": "Magenta Banner",
+    "x": 672,
+    "y": 736
+  },
+  "light_blue_banner": {
+    "name": "Light Blue Banner",
+    "x": 96,
+    "y": 736
+  },
+  "yellow_banner": {
+    "name": "Yellow Banner",
+    "x": 800,
+    "y": 768
+  },
+  "lime_banner": {
+    "name": "Lime Banner",
+    "x": 480,
+    "y": 736
+  },
+  "pink_banner": {
+    "name": "Pink Banner",
+    "x": 32,
+    "y": 768
+  },
+  "gray_banner": {
+    "name": "Gray Banner",
+    "x": 736,
+    "y": 704
+  },
+  "light_gray_banner": {
+    "name": "Light Gray Banner",
+    "x": 288,
+    "y": 736
+  },
+  "cyan_banner": {
+    "name": "Cyan Banner",
+    "x": 544,
+    "y": 704
+  },
+  "purple_banner": {
+    "name": "Purple Banner",
+    "x": 224,
+    "y": 768
+  },
+  "blue_banner": {
+    "name": "Blue Banner",
+    "x": 160,
+    "y": 704
+  },
+  "brown_banner": {
+    "name": "Brown Banner",
+    "x": 352,
+    "y": 704
+  },
+  "green_banner": {
+    "name": "Green Banner",
+    "x": 928,
+    "y": 704
+  },
+  "red_banner": {
+    "name": "Red Banner",
+    "x": 416,
+    "y": 768
+  },
+  "black_banner": {
+    "name": "Black Banner",
+    "x": 992,
+    "y": 672
+  },
+  "end_crystal": {
+    "name": "End Crystal",
+    "x": 608,
+    "y": 3168
+  },
+  "chorus_fruit": {
+    "name": "Chorus Fruit",
+    "x": 960,
+    "y": 3168
+  },
+  "popped_chorus_fruit": {
+    "name": "Popped Chorus Fruit",
+    "x": 96,
+    "y": 3520
+  },
+  "beetroot": {
+    "name": "Beetroot",
+    "x": 864,
+    "y": 3168
+  },
+  "beetroot_seeds": {
+    "name": "Beetroot Seeds",
+    "x": 320,
+    "y": 3392
+  },
+  "beetroot_soup": {
+    "name": "Beetroot Soup",
+    "x": 832,
+    "y": 3168
+  },
+  "dragon_breath": {
+    "name": "Dragon's Breath",
+    "x": 32,
+    "y": 3136
+  },
+  "splash_potion": {
+    "name": "Splash Potion of Luck",
+    "x": 512,
+    "y": 3456
+  },
+  "spectral_arrow": {
+    "name": "Spectral Arrow",
+    "x": 704,
+    "y": 3616
+  },
+  "tipped_arrow": {
+    "name": "Tipped Arrow",
+    "x": 544,
+    "y": 1248
+  },
+  "lingering_potion": {
+    "name": "Lingering Potion of Luck",
+    "x": 0,
+    "y": 3488
+  },
+  "shield": {
+    "name": "Shield",
+    "x": 960,
+    "y": 2496
+  },
+  "elytra": {
+    "name": "Elytra",
+    "x": 224,
+    "y": 2496
+  },
+  "spruce_boat": {
+    "name": "Spruce Boat",
+    "x": 384,
+    "y": 3616
+  },
+  "birch_boat": {
+    "name": "Birch Boat",
+    "x": 64,
+    "y": 3616
+  },
+  "jungle_boat": {
+    "name": "Jungle Boat",
+    "x": 128,
+    "y": 3616
+  },
+  "acacia_boat": {
+    "name": "Acacia Boat",
+    "x": 32,
+    "y": 3616
+  },
+  "dark_oak_boat": {
+    "name": "Dark Oak Boat",
+    "x": 96,
+    "y": 3616
+  },
+  "totem_of_undying": {
+    "name": "Totem of Undying",
+    "x": 768,
+    "y": 3616
+  },
+  "shulker_shell": {
+    "name": "Shulker Shell",
+    "x": 256,
+    "y": 3520
+  },
+  "iron_nugget": {
+    "name": "Iron Nugget",
+    "x": 928,
+    "y": 3488
+  },
+  "knowledge_book": {
+    "name": "Knowledge Book",
+    "x": 800,
+    "y": 3584
+  },
+  "debug_stick": {
+    "name": "Debug Stick",
+    "x": 608,
+    "y": 1120
+  },
+  "music_disc_pigstep": {
+    "name": "Music Disc 13",
+    "x": 0,
+    "y": 672
+  },
+  "trident": {
+    "name": "Trident",
+    "x": 608,
+    "y": 1696
+  },
+  "phantom_membrane": {
+    "name": "Phantom Membrane",
+    "x": 32,
+    "y": 1728
+  },
+  "nautilus_shell": {
+    "name": "Nautilus Shell",
+    "x": 448,
+    "y": 1728
+  },
+  "heart_of_the_sea": {
+    "name": "Heart of the Sea",
+    "x": 416,
+    "y": 1728
+  },
+  "crossbow": {
+    "name": "Crossbow",
+    "x": 416,
+    "y": 2368
+  },
+  "suspicious_stew": {
+    "name": "Suspicious Stew",
+    "x": 928,
+    "y": 2368
+  },
+  "loom": {
+    "name": "Loom",
+    "x": 416,
+    "y": 2432
+  },
+  "flower_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "creeper_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "skull_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "mojang_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "globe_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "piglin_banner_pattern": {
+    "name": "Banner Pattern",
+    "x": 704,
+    "y": 2368
+  },
+  "composter": {
+    "name": "Composter",
+    "x": 864,
+    "y": 2432
+  },
+  "barrel": {
+    "name": "Barrel",
+    "x": 64,
+    "y": 2432
+  },
+  "smoker": {
+    "name": "Smoker",
+    "x": 480,
+    "y": 2432
+  },
+  "blast_furnace": {
+    "name": "Blast Furnace",
+    "x": 288,
+    "y": 2432
+  },
+  "cartography_table": {
+    "name": "Cartography Table",
+    "x": 608,
+    "y": 2432
+  },
+  "fletching_table": {
+    "name": "Fletching Table",
+    "x": 640,
+    "y": 2432
+  },
+  "grindstone": {
+    "name": "Grindstone",
+    "x": 896,
+    "y": 2432
+  },
+  "lectern": {
+    "name": "Lectern",
+    "x": 576,
+    "y": 0
+  },
+  "smithing_table": {
+    "name": "Smithing Table",
+    "x": 672,
+    "y": 2432
+  },
+  "stonecutter": {
+    "name": "Stonecutter BE",
+    "x": 800,
+    "y": 1056
+  },
+  "bell": {
+    "name": "Bell",
+    "x": 256,
+    "y": 2400
+  },
+  "lantern": {
+    "name": "Lantern",
+    "x": 576,
+    "y": 2432
+  },
+  "soul_lantern": {
+    "name": "Soul Lantern",
+    "x": 896,
+    "y": 128
+  },
+  "sweet_berries": {
+    "name": "Sweet Berries",
+    "x": 768,
+    "y": 2432
+  },
+  "campfire": {
+    "name": "Campfire",
+    "x": 832,
+    "y": 2432
+  },
+  "soul_campfire": {
+    "name": "Soul Campfire",
+    "x": 960,
+    "y": 256
+  },
+  "shroomlight": {
+    "name": "Shroomlight",
+    "x": 704,
+    "y": 128
+  },
+  "honeycomb": {
+    "name": "Honeycomb",
+    "x": 928,
+    "y": 32
+  },
+  "bee_nest": {
+    "name": "Bee Nest",
+    "x": 992,
+    "y": 32
+  },
+  "beehive": {
+    "name": "Beehive",
+    "x": 960,
+    "y": 32
+  },
+  "honey_bottle": {
+    "name": "Honey Bottle",
+    "x": 896,
+    "y": 32
+  },
+  "honey_block": {
+    "name": "Honey Block",
+    "x": 320,
+    "y": 96
+  },
+  "honeycomb_block": {
+    "name": "Honeycomb Block",
+    "x": 64,
+    "y": 96
+  },
+  "lodestone": {
+    "name": "Lodestone",
+    "x": 928,
+    "y": 192
+  },
+  "netherite_block": {
+    "name": "Block of Netherite",
+    "x": 96,
+    "y": 128
+  },
+  "ancient_debris": {
+    "name": "Ancient Debris",
+    "x": 160,
+    "y": 128
+  },
+  "target": {
+    "name": "Target",
+    "x": 96,
+    "y": 192
+  },
+  "crying_obsidian": {
+    "name": "Crying Obsidian",
+    "x": 128,
+    "y": 192
+  },
+  "blackstone": {
+    "name": "Blackstone",
+    "x": 96,
+    "y": 256
+  },
+  "blackstone_slab": {
+    "name": "Blackstone Slab",
+    "x": 608,
+    "y": 256
+  },
+  "blackstone_stairs": {
+    "name": "Blackstone Stairs",
+    "x": 640,
+    "y": 256
+  },
+  "gilded_blackstone": {
+    "name": "Gilded Blackstone",
+    "x": 512,
+    "y": 256
+  },
+  "polished_blackstone": {
+    "name": "Polished Blackstone",
+    "x": 544,
+    "y": 256
+  },
+  "polished_blackstone_slab": {
+    "name": "Polished Blackstone Slab",
+    "x": 800,
+    "y": 256
+  },
+  "polished_blackstone_stairs": {
+    "name": "Polished Blackstone Stairs",
+    "x": 832,
+    "y": 256
+  },
+  "chiseled_polished_blackstone": {
+    "name": "Chiseled Polished Blackstone",
+    "x": 416,
+    "y": 256
+  },
+  "polished_blackstone_bricks": {
+    "name": "Polished Blackstone Bricks",
+    "x": 576,
+    "y": 256
+  },
+  "polished_blackstone_brick_slab": {
+    "name": "Polished Blackstone Brick Slab",
+    "x": 704,
+    "y": 256
+  },
+  "polished_blackstone_brick_stairs": {
+    "name": "Polished Blackstone Brick Stairs",
+    "x": 736,
+    "y": 256
+  },
+  "cracked_polished_blackstone_bricks": {
+    "name": "Cracked Polished Blackstone Bricks",
+    "x": 480,
+    "y": 256
+  },
+  "respawn_anchor": {
+    "name": "Respawn Anchor",
+    "x": 448,
+    "y": 192
+  }
+}
