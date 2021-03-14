@@ -16,6 +16,7 @@ const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
 let highlightCube
+let highlightGeometry
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -49,9 +50,9 @@ async function moveHighlight (x, y, z) {
 
   points.push(new THREE.Vector3(x + size + offset, y - offset, z + size + offset))
 
-  const geometry = new THREE.BufferGeometry().setFromPoints(points)
+  highlightGeometry = new THREE.BufferGeometry().setFromPoints(points)
 
-  highlightCube.geometry = geometry
+  highlightCube.geometry = highlightGeometry
 }
 
 async function main () {
@@ -178,11 +179,11 @@ async function connect (options) {
 
     const points = []
 
-    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+    highlightGeometry = new THREE.BufferGeometry().setFromPoints(points)
 
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
-    highlightCube = new THREE.Line(geometry, material)
+    highlightCube = new THREE.Line(highlightGeometry, material)
 
     viewer.scene.add(highlightCube)
 
