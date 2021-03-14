@@ -34,7 +34,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Edit config
-        run: >
+        run: |
           sed -i -E 's/^  "defaultProxy": ""/  "defaultProxy": "pproxy.rom1504.fr"/g' config.json
           sed -i -E 's/^  "defaultProxyPort": ""/  "defaultProxyPort": "443"/g' config.json
       - name: Build
