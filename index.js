@@ -25,32 +25,35 @@ async function moveHighlight (x, y, z) {
   const size = 1
   const offset = 0.005
 
-  const points = []
-  /* top */
-  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z + size + offset))
-  points.push(new THREE.Vector3(x - offset, y + size + offset, z + size + offset))
-  points.push(new THREE.Vector3(x - offset, y + size + offset, z))
-  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z - offset))
-  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z + size + offset))
+  const vertices = new Float32Array([
+    x + size + offset, y + size + offset, z + size + offset,
+    x - offset, y + size + offset, z + size + offset,
+    x - offset, y + size + offset, z,
+    x + size + offset, y + size + offset, z - offset,
+    x + size + offset, y + size + offset, z + size + offset,
 
-  /* bottom and connectors */
-  points.push(new THREE.Vector3(x + size + offset, y - offset, z + size + offset))
+    /* bottom and connectors */
+    x + size + offset, y - offset, z + size + offset,
 
-  points.push(new THREE.Vector3(x, y - offset, z + size + offset))
-  points.push(new THREE.Vector3(x, y + size + offset, z + size + offset)) // connector
-  points.push(new THREE.Vector3(x, y - offset, z + size + offset))
+    x, y - offset, z + size + offset,
+    x, y + size + offset, z + size + offset, // connector
+    x, y - offset, z + size + offset,
 
-  points.push(new THREE.Vector3(x, y - offset, z))
-  points.push(new THREE.Vector3(x, y + size + offset, z)) // connector
-  points.push(new THREE.Vector3(x, y - offset, z))
+    x, y - offset, z,
+    x, y + size + offset, z, // connector
+    x, y - offset, z,
 
-  points.push(new THREE.Vector3(x + size + offset, y - offset, z))
-  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z)) // connector
-  points.push(new THREE.Vector3(x + size + offset, y - offset, z))
+    x + size + offset, y - offset, z,
+    x + size + offset, y + size + offset, z, // connector
+    x + size + offset, y - offset, z,
 
-  points.push(new THREE.Vector3(x + size + offset, y - offset, z + size + offset))
+    x + size + offset, y - offset, z + size + offset])
 
-  highlightGeometry = new THREE.BufferGeometry().setFromPoints(points)
+  window.vertices = vertices
+
+  highlightGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+
+  console.log('Set looking at: ' + x + ' ' + y + ' ' + z)
 
   highlightCube.geometry = highlightGeometry
 }
@@ -177,9 +180,19 @@ async function connect (options) {
 
     // Set highlight
 
-    const points = []
+    highlightGeometry = new THREE.BufferGeometry()
 
-    highlightGeometry = new THREE.BufferGeometry().setFromPoints(points)
+    const vertices = new Float32Array([
+      -1.0, -1.0, 1.0,
+      1.0, -1.0, 1.0,
+      1.0, 1.0, 1.0,
+
+      1.0, 1.0, 1.0,
+      -1.0, 1.0, 1.0,
+      -1.0, -1.0, 1.0
+    ])
+
+    highlightGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
 
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
