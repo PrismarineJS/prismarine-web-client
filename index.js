@@ -3,6 +3,7 @@ require('./lib/menu')
 require('./lib/loading_screen')
 require('./lib/hotbar')
 require('./lib/chat')
+require('./lib/crosshair')
 
 const net = require('net')
 
