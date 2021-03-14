@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div id="hotbar-wrapper">
+    <div id="hotbar-wrapper"  style="display: none;">
       <img id="hotbar-image" src="textures/1.16.4/gui/widgets.png">
       <img id="hotbar-highlight" src="textures/1.16.4/gui/widgets.png">
       <div id="hotbar-items-wrapper">
@@ -21,22 +21,23 @@
       </div>
 
     </div>
-    <img id="crosshair" src="extra-textures/icons.png">
-    <div class="chat-wrapper chat-display-wrapper">
+    <img id="crosshair" src="extra-textures/icons.png" style="display: none;">
+    <div id="chat-wrapper" class="chat-wrapper chat-display-wrapper" style="display: none;">
     <div class="chat" id="chat">
       <p>Welcome to prismarine-web-client! Chat appears here.</p>
     </div>
     </div>
-    <div class="chat-wrapper chat-input-wrapper">
+    <div id="chat-wrapper2" class="chat-wrapper chat-input-wrapper" style="display: none;">
       <div class="chat" id="chat-input">
         <input type="text" class="chat" id="chatinput"></input>
       </div>
     </div>
-    <div id="loading-background" class="loader">
+    <div id="loading-background" class="loader" style="display: none;">
       <img src="extra-textures/loading.png" id="loading-image">
       <div id="loading" class="loader">
         <h1 class="middle" id="loading-text">Waiting for JS load...</h1>
       </div>
     </div>
+    <prismarine-menu id="prismarine-menu"></prismarine-menu>
   </body>
 </html>
