@@ -1,4 +1,6 @@
 {
-  "defaultHost": "95.111.249.143:10000",
-  "defaultProxy": ""
+  "defaultHost": "95.111.249.143",
+  "defaultHostPort": 10000,
+  "defaultProxy": "",
+  "defaultProxyPort": 0
 }
