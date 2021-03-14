@@ -2,6 +2,7 @@
 require('./lib/menu')
 require('./lib/loading_screen')
 require('./lib/hotbar')
+require('./lib/chat')
 
 const net = require('net')
 
@@ -13,7 +14,6 @@ const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
-const Chat = require('./lib/chat')
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -25,8 +25,7 @@ async function main () {
     menu.style = 'display: none;'
     document.getElementById('hotbar').style = 'display:block'
     document.getElementById('crosshair').style = 'display:block'
-    document.getElementById('chat-wrapper').style = 'display:block'
-    document.getElementById('chat-wrapper2').style = 'display:block'
+    document.getElementById('chatbox').style = 'display:block'
     document.getElementById('loading-background').style = 'display:block'
 
     connect(options)
@@ -36,6 +35,7 @@ async function main () {
 async function connect (options) {
   const loadingScreen = document.getElementById('loading-background')
   const hotbar = document.getElementById('hotbar')
+  const chat = document.getElementById('chatbox')
 
   const viewDistance = 6
   const hostprompt = options.server
@@ -119,7 +119,7 @@ async function connect (options) {
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    const chat = Chat.init(bot._client, renderer)
+    chat.init(bot._client, renderer)
 
     // Create viewer
     const viewer = new Viewer(renderer)

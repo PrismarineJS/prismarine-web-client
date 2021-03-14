@@ -1,22 +1,28 @@
-@font-face {
-	font-family: minecraft;
-	src: url(minecraftia.woff);
-}
-
-@font-face {
-	font-family: mojangles;
-	src: url(mojangles.ttf);
-}
-
 html {
   height: 100%;
   overflow: hidden;
+}
+
+@font-face {
+    font-family: minecraft;
+    src: url(minecraftia.woff);
+}
+
+@font-face {
+    font-family: mojangles;
+    src: url(mojangles.ttf);
 }
 body {
   margin:0;
   padding:0;
   font-family: sans-serif;
   background: linear-gradient(#141e30, #243b55);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 canvas {
@@ -25,46 +31,6 @@ canvas {
 	font-size: 0;
 	margin: 0;
 	padding: 0;
-}
-
-.chat-wrapper {
-	position: fixed;
-	background-color: rgba(0, 0, 0, 0.5);
-}
-
-.chat-display-wrapper {
-	bottom: calc(8px * 16);
-	padding: 4px;
-	max-height: calc(90px * 8);
-	width: calc(320px * 4);
-}
-
-.chat-input-wrapper {
-	bottom: calc(2px * 16);
-	width: 100%;
-	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0);
-}
-
-.chat {
-	overflow: hidden;
-	color: white;
-	font-size: 16px;
-	margin: 0px;
-	line-height: 100%;
-	text-shadow: 2px 2px 0px #3f3f3f;
-	font-family: mojangles, minecraft, monospace;
-	width: 100%;
-	max-height: calc(90px * 8)
-}
-
-input[type=text], #chatinput {
-	background-color: rgba(0, 0, 0, 0.5);
-	display: none;
-}
-
-li {
-	display: block;
 }
 
 #crosshair {
@@ -81,13 +47,4 @@ li {
 	width: calc(256px * 4);
 	transform: translate(calc(-50% + 120px * 4), calc(-50% + 120px * 4));
 	clip-path: inset(0px calc(240px * 4) calc(240px * 4) 0px);
-}
-
-body {
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
