@@ -20,6 +20,40 @@ let highlightCube
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
+async function moveHighlight (x, y, z) {
+  const size = 1
+  const offset = 0.005
+
+  const points = []
+  /* top */
+  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z + size + offset))
+  points.push(new THREE.Vector3(x - offset, y + size + offset, z + size + offset))
+  points.push(new THREE.Vector3(x - offset, y + size + offset, z))
+  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z - offset))
+  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z + size + offset))
+
+  /* bottom and connectors */
+  points.push(new THREE.Vector3(x + size + offset, y - offset, z + size + offset))
+
+  points.push(new THREE.Vector3(x, y - offset, z + size + offset))
+  points.push(new THREE.Vector3(x, y + size + offset, z + size + offset)) // connector
+  points.push(new THREE.Vector3(x, y - offset, z + size + offset))
+
+  points.push(new THREE.Vector3(x, y - offset, z))
+  points.push(new THREE.Vector3(x, y + size + offset, z)) // connector
+  points.push(new THREE.Vector3(x, y - offset, z))
+
+  points.push(new THREE.Vector3(x + size + offset, y - offset, z))
+  points.push(new THREE.Vector3(x + size + offset, y + size + offset, z)) // connector
+  points.push(new THREE.Vector3(x + size + offset, y - offset, z))
+
+  points.push(new THREE.Vector3(x + size + offset, y - offset, z + size + offset))
+
+  const geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+  highlightCube.geometry = geometry
+}
+
 async function main () {
   const menu = document.getElementById('prismarine-menu')
   menu.addEventListener('connect', e => {
@@ -141,10 +175,15 @@ async function connect (options) {
     worldView.init(bot.entity.position)
 
     // Set highlight
-    const geometry = new THREE.BoxGeometry(1.1, 1.1, 1.1)
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-    highlightCube = new THREE.Mesh(geometry, material)
-    highlightCube.position.set(bot.blockAtCursor().position.x + 0.5, bot.blockAtCursor().position.y + 0.5, bot.blockAtCursor().position.z + 0.5)
+
+    const points = []
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
+
+    highlightCube = new THREE.Line(geometry, material)
+
     viewer.scene.add(highlightCube)
 
     function botPosition () {
