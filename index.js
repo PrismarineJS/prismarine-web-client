@@ -1,6 +1,7 @@
-/* global THREE, prompt */
+/* global THREE */
+require('./lib/menu')
+
 const net = require('net')
-const config = require('./config.json')
 
 // Workaround for process.versions.node not existing in the browser
 process.versions.node = '14.0.0'
@@ -58,15 +59,27 @@ async function reloadHotbarSelected (bot, slot) {
 }
 
 async function main () {
+  const menu = document.getElementById('prismarine-menu')
+  menu.addEventListener('connect', e => {
+    const options = e.detail
+    menu.style = 'display: none;'
+    document.getElementById('hotbar-wrapper').style = 'display:block'
+    document.getElementById('crosshair').style = 'display:block'
+    document.getElementById('chat-wrapper').style = 'display:block'
+    document.getElementById('chat-wrapper2').style = 'display:block'
+    document.getElementById('loading-background').style = 'display:block'
+
+    connect(options)
+  })
+}
+
+async function connect (options) {
   statusRunner()
   const viewDistance = 6
-  const hostprompt = prompt('Host:port', config.defaultHost)
-  const proxyprompt = prompt('Proxy:port (blank for default)', config.defaultProxy)
-  const defaultUserName = window.localStorage.getItem('username') ?? 'pviewer' + (Math.floor(Math.random() * 1000))
-  const username = prompt('Username', defaultUserName)
-  window.localStorage.setItem('username', username)
-  let password = prompt('Password (blank for offline)', '')
-  password = password === '' ? undefined : password
+  const hostprompt = options.server
+  const proxyprompt = options.proxy
+  const username = options.username
+  const password = options.password
 
   let host, port, proxy, proxyport
   if (!hostprompt.includes(':')) {
