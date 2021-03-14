@@ -15,6 +15,7 @@ const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
+let highlightCube
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -139,6 +140,13 @@ async function connect (options) {
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
 
+    // Set highlight
+    const geometry = new THREE.BoxGeometry(1.1, 1.1, 1.1)
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+    highlightCube = new THREE.Mesh(geometry, material)
+    highlightCube.position.set(bot.blockAtCursor().position.x + 0.5, bot.blockAtCursor().position.y + 0.5, bot.blockAtCursor().position.z + 0.5)
+    viewer.scene.add(highlightCube)
+
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
@@ -154,6 +162,10 @@ async function connect (options) {
       bot.entity.yaw -= e.movementX * 0.01
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
+
+      const cursorBlock = bot.blockAtCursor().position
+      if (!cursorBlock) return
+      moveHighlight(cursorBlock.x, cursorBlock.y, cursorBlock.z)
     }
 
     function changeCallback () {
