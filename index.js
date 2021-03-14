@@ -237,7 +237,7 @@ async function connect (options) {
         reloadHotbarSelected(bot, numPressed - 1)
       }
       if (e.code === 'KeyQ') {
-        bot.tossStack(bot.heldItem)
+        if (bot.heldItem) bot.tossStack(bot.heldItem)
       }
     }, false)
 
