@@ -1,6 +1,7 @@
 /* global THREE */
 require('./lib/menu')
 require('./lib/loading_screen')
+require('./lib/hotbar')
 
 const net = require('net')
 
@@ -17,37 +18,12 @@ const Chat = require('./lib/chat')
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
-async function reloadHotbar (bot, viewer) {
-  for (let i = 0; i < 9; i++) {
-    // eslint-disable-next-line no-undef
-    const http = new XMLHttpRequest()
-    let url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + viewer.version + '/items/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
-    http.open('HEAD', url)
-
-    http.onreadystatechange = function () {
-      if (this.readyState === this.DONE) {
-        if (this.status === 404) {
-          url = bot.inventory.slots[bot.inventory.hotbarStart + i] ? window.location.href + 'textures/' + viewer.version + '/blocks/' + bot.inventory.slots[bot.inventory.hotbarStart + i].name + '.png' : ''
-        }
-        document.getElementById('hotbar-' + i).src = url
-      }
-    }
-    http.send()
-  }
-}
-
-async function reloadHotbarSelected (bot, slot) {
-  const planned = (20 * 4 * slot) + 'px'
-  document.getElementById('hotbar-highlight').style.marginLeft = planned
-  bot.setQuickBarSlot(slot)
-}
-
 async function main () {
   const menu = document.getElementById('prismarine-menu')
   menu.addEventListener('connect', e => {
     const options = e.detail
     menu.style = 'display: none;'
-    document.getElementById('hotbar-wrapper').style = 'display:block'
+    document.getElementById('hotbar').style = 'display:block'
     document.getElementById('crosshair').style = 'display:block'
     document.getElementById('chat-wrapper').style = 'display:block'
     document.getElementById('chat-wrapper2').style = 'display:block'
@@ -59,6 +35,7 @@ async function main () {
 
 async function connect (options) {
   const loadingScreen = document.getElementById('loading-background')
+  const hotbar = document.getElementById('hotbar')
 
   const viewDistance = 6
   const hostprompt = options.server
@@ -102,6 +79,8 @@ async function connect (options) {
     closeTimeout: 240 * 1000
   })
 
+  hotbar.bot = bot
+
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
     loadingScreen.status = 'Error encountered. Please reload the page'
@@ -124,7 +103,6 @@ async function connect (options) {
   bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version)
 
-    reloadHotbarSelected(bot, 0)
     loadingScreen.status = 'Placing blocks (starting viewer)...'
 
     console.log('bot spawned - starting viewer')
@@ -147,14 +125,13 @@ async function connect (options) {
     const viewer = new Viewer(renderer)
     viewer.setVersion(version)
 
+    hotbar.viewerVersion = viewer.version
     window.worldView = worldView
     window.bot = bot
     window.mcData = mcData
     window.viewer = viewer
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
-
-    reloadHotbar(bot, viewer)
 
     // Link WorldView and Viewer
     viewer.listen(worldView)
@@ -219,7 +196,7 @@ async function connect (options) {
       }
       if (e.code.startsWith('Digit')) {
         const numPressed = e.code.substr(5)
-        reloadHotbarSelected(bot, numPressed - 1)
+        hotbar.reloadHotbarSelected(bot, numPressed - 1)
       }
       if (e.code === 'KeyQ') {
         if (bot.heldItem) bot.tossStack(bot.heldItem)
@@ -255,11 +232,6 @@ async function connect (options) {
       bot.stopDigging()
     }, false)
 
-    document.addEventListener('wheel', (e) => {
-      const newSlot = ((bot.quickBarSlot + Math.sign(e.deltaY)) % 9 + 9) % 9
-      reloadHotbarSelected(bot, newSlot)
-    })
-
     loadingScreen.status = 'Done!'
     console.log(loadingScreen.status) // only do that because it's read in index.html and npm run fix complains.
 
@@ -275,27 +247,6 @@ async function connect (options) {
       renderer.render(viewer.scene, viewer.camera)
     }
     animate()
-
-    // inventory listener
-    bot.inventory.on('updateSlot', (slot, oldItem, newItem) => {
-      if (slot >= bot.inventory.hotbarStart + 9) return
-      if (slot < bot.inventory.hotbarStart) return
-
-      // eslint-disable-next-line no-undef
-      const http = new XMLHttpRequest()
-      let url = newItem ? window.location.href + 'textures/' + viewer.version + '/items/' + newItem.name + '.png' : ''
-      http.open('HEAD', url)
-
-      http.onreadystatechange = function () {
-        if (this.readyState === this.DONE) {
-          if (this.status === 404) {
-            url = newItem ? window.location.href + 'textures/' + viewer.version + '/blocks/' + newItem.name + '.png' : ''
-          }
-          document.getElementById('hotbar-' + (slot - bot.inventory.hotbarStart)).src = url
-        }
-      }
-      http.send()
-    })
 
     window.addEventListener('resize', () => {
       viewer.camera.aspect = window.innerWidth / window.innerHeight
