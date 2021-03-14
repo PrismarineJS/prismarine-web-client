@@ -36,7 +36,7 @@ jobs:
       - name: Edit config
         run: |
           sed -i -E 's/^  "defaultProxy": ""/  "defaultProxy": "pproxy.rom1504.fr"/g' config.json
-          sed -i -E 's/^  "defaultProxyPort": ""/  "defaultProxyPort": "443"/g' config.json
+          sed -i -E 's/^  "defaultProxyPort": 0/  "defaultProxyPort": 443/g' config.json
       - name: Build
         run: |
           npm install
