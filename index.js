@@ -52,10 +52,10 @@ async function moveHighlight (x, y, z) {
   window.vertices = vertices
 
   highlightGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+  highlightGeometry.computeBoundingBox()
+  highlightGeometry.computeBoundingSphere()
 
   console.log('Set looking at: ' + x + ' ' + y + ' ' + z)
-
-  highlightCube.geometry = highlightGeometry
 }
 
 async function main () {
@@ -193,6 +193,7 @@ async function connect (options) {
     ])
 
     highlightGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+    highlightGeometry.attributes.position.needsUpdate = true
 
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 })
 
