@@ -1,5 +1,5 @@
 /* global THREE */
-import './lib/menu'
+require('./lib/menu')
 
 const net = require('net')
 
