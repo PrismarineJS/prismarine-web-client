@@ -1,5 +1,6 @@
 /* global THREE */
 require('./lib/menu')
+require('./lib/loading_screen')
 
 const net = require('net')
 
@@ -13,25 +14,8 @@ const { Vec3 } = require('vec3')
 global.THREE = require('three')
 const Chat = require('./lib/chat')
 
-let status = 'Waiting for user'
-
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
-
-async function statusRunner () {
-  const array = ['.', '..', '...', '']
-  // eslint-disable-next-line promise/param-names
-  const timer = ms => new Promise(res => setTimeout(res, ms))
-
-  async function load () {
-    for (let i = 0; true; i = ((i + 1) % array.length)) {
-      document.getElementById('loading-text').innerText = status + array[i]
-      await timer(500)
-    }
-  }
-
-  load()
-}
 
 async function reloadHotbar (bot, viewer) {
   for (let i = 0; i < 9; i++) {
@@ -74,7 +58,8 @@ async function main () {
 }
 
 async function connect (options) {
-  statusRunner()
+  const loadingScreen = document.getElementById('loading-background')
+
   const viewDistance = 6
   const hostprompt = options.server
   const proxyprompt = options.proxy
@@ -104,7 +89,7 @@ async function connect (options) {
     net.setProxy({ hostname: proxy, port: proxyport })
   }
 
-  status = 'Logging in'
+  loadingScreen.status = 'Logging in'
 
   const bot = mineflayer.createBot({
     host,
@@ -119,28 +104,28 @@ async function connect (options) {
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
-    status = 'Error encountered. Please reload the page'
+    loadingScreen.status = 'Error encountered. Please reload the page'
   })
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
-    status = 'The Minecraft server kicked you. Please reload the page to rejoin'
+    loadingScreen.status = 'The Minecraft server kicked you. Please reload the page to rejoin'
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
-    status = 'You have been disconnected from the server. Please reload the page to rejoin'
+    loadingScreen.status = 'You have been disconnected from the server. Please reload the page to rejoin'
   })
 
   bot.once('login', () => {
-    status = 'Loading world...'
+    loadingScreen.status = 'Loading world...'
   })
 
   bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version)
 
     reloadHotbarSelected(bot, 0)
-    status = 'Placing blocks (starting viewer)...'
+    loadingScreen.status = 'Placing blocks (starting viewer)...'
 
     console.log('bot spawned - starting viewer')
 
@@ -183,7 +168,7 @@ async function connect (options) {
     bot.on('move', botPosition)
     viewer.camera.position.set(center.x, center.y, center.z)
 
-    status = 'Setting callbacks...'
+    loadingScreen.status = 'Setting callbacks...'
 
     function moveCallback (e) {
       bot.entity.pitch -= e.movementY * 0.01
@@ -275,14 +260,12 @@ async function connect (options) {
       reloadHotbarSelected(bot, newSlot)
     })
 
-    status = 'Done!'
-    console.log(status) // only do that because it's read in index.html and npm run fix complains.
+    loadingScreen.status = 'Done!'
+    console.log(loadingScreen.status) // only do that because it's read in index.html and npm run fix complains.
 
     setTimeout(function () {
       // remove loading screen, wait a second to make sure a frame has properly rendered
-      document.querySelectorAll('.loader').forEach((item) => {
-        item.style = 'display: none;'
-      })
+      loadingScreen.style = 'display: none;'
     }, 2500)
 
     // Browser animation loop
