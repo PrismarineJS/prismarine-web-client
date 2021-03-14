@@ -63,8 +63,6 @@ and you can refresh the page to get the new result.
 
 Connect to http://localhost:8080 in your browser.
 
-If editing files in node_modules, you'll need to run `npm run build-dev-start` as the webpack dev server doesn't watch changes in node_modules.
-
 You may want to disable auto saving in your IDE to avoid constant rebuilding, see https://webpack.js.org/guides/development/#adjusting-your-text-editor
 
 To check the production build (take a minute to build), you can run `npm run build-start`
