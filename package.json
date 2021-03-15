@@ -25,14 +25,6 @@
     "client"
   ],
   "author": "Romain Beaumont",
-  "contributors": [
-    {
-      "name": "AwesomestCode"
-    },
-    {
-      "name": "circuit10"
-    }
-  ],
   "license": "MIT",
   "bin": {
     "prismarine-web-client": "./server.js"
