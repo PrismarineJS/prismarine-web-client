@@ -21,16 +21,16 @@ const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
 async function main () {
+  const showEl = (str) => { document.getElementById(str).style = 'display:block' }
   const menu = document.getElementById('prismarine-menu')
   menu.addEventListener('connect', e => {
     const options = e.detail
     menu.style = 'display: none;'
-    document.getElementById('hotbar').style = 'display:block'
-    document.getElementById('crosshair').style = 'display:block'
-    document.getElementById('chatbox').style = 'display:block'
-    document.getElementById('loading-background').style = 'display:block'
-    document.getElementById('playerlist').style = 'display:block'
-
+    showEl('hotbar')
+    showEl('crosshair')
+    showEl('chatbox')
+    showEl('loading-background')
+    showEl('playerlist')
     connect(options)
   })
 }
