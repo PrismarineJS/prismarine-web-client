@@ -146,7 +146,12 @@ async function connect (options) {
 
     function updateCursor () {
       const cursorBlock = bot.blockAtCursor()
-      if (!cursorBlock || !bot.canDigBlock(cursorBlock)) return
+      if (!cursorBlock || !bot.canDigBlock(cursorBlock)) {
+        cursorMesh.visible = false
+        return
+      } else {
+        cursorMesh.visible = true
+      }
       cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
     }
 
