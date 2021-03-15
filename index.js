@@ -4,6 +4,7 @@ require('./lib/loading_screen')
 require('./lib/hotbar')
 require('./lib/chat')
 require('./lib/crosshair')
+require('./lib/playerlist')
 
 const net = require('net')
 
@@ -28,6 +29,7 @@ async function main () {
     document.getElementById('crosshair').style = 'display:block'
     document.getElementById('chatbox').style = 'display:block'
     document.getElementById('loading-background').style = 'display:block'
+    document.getElementById('playerlist').style = 'display:block'
 
     connect(options)
   })
@@ -37,6 +39,7 @@ async function connect (options) {
   const loadingScreen = document.getElementById('loading-background')
   const hotbar = document.getElementById('hotbar')
   const chat = document.getElementById('chatbox')
+  const playerList = document.getElementById('playerlist')
 
   const viewDistance = 6
   const hostprompt = options.server
@@ -121,6 +124,7 @@ async function connect (options) {
     document.body.appendChild(renderer.domElement)
 
     chat.init(bot._client, renderer)
+    playerList.init(bot)
 
     // Create viewer
     const viewer = new Viewer(renderer)
