@@ -139,9 +139,26 @@ async function connect (options) {
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
 
+    // Create cursor mesh
+    const boxGeometry = new THREE.BoxBufferGeometry(1.001, 1.001, 1.001)
+    const cursorMesh = new THREE.LineSegments(new THREE.EdgesGeometry(boxGeometry), new THREE.LineBasicMaterial({ color: 0 }))
+    viewer.scene.add(cursorMesh)
+
+    function updateCursor () {
+      const cursorBlock = bot.blockAtCursor()
+      if (!cursorBlock || !bot.canDigBlock(cursorBlock)) {
+        cursorMesh.visible = false
+        return
+      } else {
+        cursorMesh.visible = true
+      }
+      cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
+    }
+
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
+      updateCursor()
     }
     bot.on('move', botPosition)
     viewer.camera.position.set(center.x, center.y, center.z)
@@ -154,6 +171,7 @@ async function connect (options) {
       bot.entity.yaw -= e.movementX * 0.01
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
+      updateCursor()
     }
 
     function changeCallback () {
