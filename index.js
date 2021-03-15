@@ -21,7 +21,7 @@ const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
 async function main () {
-  const showEl = (str) => document.getElementById(str).style = 'display:block'
+  const showEl = (str) => { document.getElementById(str).style = 'display:block' }
   const menu = document.getElementById('prismarine-menu')
   menu.addEventListener('connect', e => {
     const options = e.detail
