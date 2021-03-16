@@ -1,0 +1,5 @@
+# we dont want default config to be loaded in the dockerfile, but rather using a volume
+config.json
+# build stuff
+node_modules
+public
