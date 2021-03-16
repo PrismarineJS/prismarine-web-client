@@ -87,6 +87,7 @@ async function connect (options) {
   })
 
   hotbar.bot = bot
+  debugMenu.bot = bot
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
@@ -128,7 +129,6 @@ async function connect (options) {
 
     chat.init(bot._client, renderer)
     playerList.init(bot)
-    debugMenu.init(bot)
 
     // Create viewer
     const viewer = new Viewer(renderer)
@@ -141,6 +141,7 @@ async function connect (options) {
     window.viewer = viewer
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
+    window.debugMenu = debugMenu
 
     // Link WorldView and Viewer
     viewer.listen(worldView)
