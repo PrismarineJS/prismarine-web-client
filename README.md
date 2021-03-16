@@ -76,6 +76,12 @@ Some variables are exposed in window for debugging:
 * worldView
 * Vec3
 * pathfinder
+* debugMenu
+
+### How to add more stuff to the debugMenu ?
+
+debugMenu.customEntries['myKey'] = 'myValue'
+delete debugMenu.customEntries['myKey']
 
 ### Some debugging examples
 
