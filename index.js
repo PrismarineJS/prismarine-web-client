@@ -154,6 +154,7 @@ async function connect (options) {
 
     function updateCursor () {
       const cursorBlock = bot.blockAtCursor()
+      debugMenu.cursorBlock = cursorBlock
       if (!cursorBlock || !bot.canDigBlock(cursorBlock)) {
         cursorMesh.visible = false
         return
