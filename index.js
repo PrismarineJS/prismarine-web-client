@@ -213,6 +213,28 @@ async function connect (options) {
       cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
     }
 
+    // Create block break mesh
+
+    const loader = new THREE.TextureLoader()
+
+    const material = new THREE.MeshBasicMaterial({
+      map: loader.load('https://threejsfundamentals.org/threejs/resources/images/wall.jpg')
+    })
+    const geometry = new THREE.BoxGeometry(1.001, 1.001, 1.001)
+    const blockBreakMesh = new THREE.Mesh(geometry, material)
+    viewer.scene.add(blockBreakMesh)
+    blockBreakMesh.visible = false
+
+    function updateBreakMesh (x, y, z, progress) {
+      blockBreakMesh.visible = true
+      blockBreakMesh.position.set(x + 0.5, y + 0.5, z + 0.5)
+    }
+    function hideBreakMesh () {
+      blockBreakMesh.visible = false
+    }
+
+    // Bot position callback
+
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
