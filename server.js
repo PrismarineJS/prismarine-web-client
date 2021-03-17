@@ -8,10 +8,6 @@ const path = require('path')
 // Create our app
 const app = express()
 
-app.get('/config.json', (_, res) => {
-  res.sendFile(path.join(__dirname, 'config.json'))
-})
-
 app.use(compression())
 app.use(netApi({ allowOrigin: '*' }))
 if (process.argv[3] === 'dev') {
@@ -31,9 +27,6 @@ if (process.argv[3] === 'dev') {
 }
 
 // Start the server
-const server = app.listen(
-  process.argv[2] === undefined ? 8080 : process.argv[2],
-  function () {
-    console.log('Server listening on port ' + server.address().port)
-  }
-)
+const server = app.listen(process.argv[2] === undefined ? 8080 : process.argv[2], function () {
+  console.log('Server listening on port ' + server.address().port)
+})
