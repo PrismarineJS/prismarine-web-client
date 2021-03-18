@@ -142,6 +142,7 @@ async function connect (options) {
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
+    window.renderer = renderer
 
     // Link WorldView and Viewer
     viewer.listen(worldView)
