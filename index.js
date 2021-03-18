@@ -282,6 +282,17 @@ async function connect (options) {
       viewer.camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
     })
+
+    // TODO: Remove after #85 is done
+    debugMenu.customEntries.hp = bot.health
+    debugMenu.customEntries.food = bot.food
+    debugMenu.customEntries.saturation = bot.foodSaturation
+
+    bot.on('health', () => {
+      debugMenu.customEntries.hp = bot.health
+      debugMenu.customEntries.food = bot.food
+      debugMenu.customEntries.saturation = bot.foodSaturation
+    })
   })
 }
 main()
