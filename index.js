@@ -309,6 +309,13 @@ async function connect (options) {
       bot.stopDigging()
     }, false)
 
+    window.addEventListener('beforeunload', function (e) {
+      const confirmationMessage = 'Are you sure you want to exit?';
+
+      (e || window.event).returnValue = confirmationMessage // Gecko + IE
+      return confirmationMessage // Webkit, Safari, Chrome
+    })
+
     loadingScreen.status = 'Done!'
     console.log(loadingScreen.status) // only do that because it's read in index.html and npm run fix complains.
 
