@@ -21,6 +21,52 @@ global.THREE = require('three')
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
+// Create three.js context, add to page
+const renderer = new THREE.WebGLRenderer()
+renderer.setPixelRatio(window.devicePixelRatio || 1)
+renderer.setSize(window.innerWidth, window.innerHeight)
+document.body.appendChild(renderer.domElement)
+
+// Create viewer
+const viewer = new Viewer(renderer)
+
+// Menu panorama background
+function getPanoramaMesh () {
+  const geometry = new THREE.SphereGeometry(500, 60, 40)
+  geometry.scale(-1, 1, 1)
+  const texture = new THREE.TextureLoader().load('title_blured.jpg')
+  const material = new THREE.MeshBasicMaterial({ map: texture })
+  const mesh = new THREE.Mesh(geometry, material)
+  mesh.rotation.y = Math.PI
+  mesh.onBeforeRender = () => {
+    mesh.rotation.y += 0.0005
+    mesh.rotation.x = -Math.sin(mesh.rotation.y * 3) * 0.3
+  }
+  return mesh
+}
+
+function removePanorama () {
+  viewer.scene.remove(panoramaMesh)
+  panoramaMesh = null
+}
+
+let panoramaMesh = getPanoramaMesh()
+viewer.scene.add(panoramaMesh)
+
+// Browser animation loop
+const animate = () => {
+  window.requestAnimationFrame(animate)
+  viewer.update()
+  renderer.render(viewer.scene, viewer.camera)
+}
+animate()
+
+window.addEventListener('resize', () => {
+  viewer.camera.aspect = window.innerWidth / window.innerHeight
+  viewer.camera.updateProjectionMatrix()
+  renderer.setSize(window.innerWidth, window.innerHeight)
+})
+
 async function main () {
   const showEl = (str) => { document.getElementById(str).style = 'display:block' }
   const menu = document.getElementById('prismarine-menu')
@@ -33,6 +79,7 @@ async function main () {
     showEl('loading-background')
     showEl('playerlist')
     showEl('debugmenu')
+    removePanorama()
     connect(options)
   })
 }
@@ -121,17 +168,9 @@ async function connect (options) {
 
     const worldView = new WorldView(bot.world, viewDistance, center)
 
-    // Create three.js context, add to page
-    const renderer = new THREE.WebGLRenderer()
-    renderer.setPixelRatio(window.devicePixelRatio || 1)
-    renderer.setSize(window.innerWidth, window.innerHeight)
-    document.body.appendChild(renderer.domElement)
-
     chat.init(bot._client, renderer)
     playerList.init(bot)
 
-    // Create viewer
-    const viewer = new Viewer(renderer)
     viewer.setVersion(version)
 
     hotbar.viewerVersion = viewer.version
@@ -277,20 +316,6 @@ async function connect (options) {
       // remove loading screen, wait a second to make sure a frame has properly rendered
       loadingScreen.style = 'display: none;'
     }, 2500)
-
-    // Browser animation loop
-    const animate = () => {
-      window.requestAnimationFrame(animate)
-      viewer.update()
-      renderer.render(viewer.scene, viewer.camera)
-    }
-    animate()
-
-    window.addEventListener('resize', () => {
-      viewer.camera.aspect = window.innerWidth / window.innerHeight
-      viewer.camera.updateProjectionMatrix()
-      renderer.setSize(window.innerWidth, window.innerHeight)
-    })
 
     // TODO: Remove after #85 is done
     debugMenu.customEntries.hp = bot.health
