@@ -33,6 +33,16 @@ const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      console.log('SW registered: ', registration)
+    }).catch(registrationError => {
+      console.log('SW registration failed: ', registrationError)
+    })
+  })
+}
+
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
 
@@ -219,7 +229,7 @@ export default class Minecraft {
   getSplashes() {
     return this.splashes;
   }
-
+   
   async main() {
     this.currentScreen = null;
 
@@ -410,6 +420,30 @@ export default class Minecraft {
         renderer.domElement.webkitRequestPointerLock
 
       let i = true;
+
+      let lastTouch;
+      document.addEventListener('touchmove', (e) => {
+        window.scrollTo(0, 0)
+        e.preventDefault()
+        e.stopPropagation()
+        if (lastTouch !== undefined) {
+          moveCallback({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
+        }
+        lastTouch = e.touches[0]
+      }, { passive: false })
+      document.addEventListener('touchend', (e) => {
+        window.scrollTo(0, 0)
+        e.preventDefault()
+        e.stopPropagation()
+        lastTouch = undefined
+      }, { passive: false })
+  
+      renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
+        renderer.domElement.mozRequestPointerLock ||
+        renderer.domElement.webkitRequestPointerLock
+      document.addEventListener('mousedown', (e) => {
+        renderer.domElement.requestPointerLock()
+      })
 
       document.addEventListener('mousedown', (e) => {
         if(i || (!(document.pointerLockElement === renderer.domElement ||
