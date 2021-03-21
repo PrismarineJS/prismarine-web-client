@@ -36,8 +36,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
-    "net-browserify": "PrismarineJS/net-browserify",
-    "sync-request": "^6.1.0"
+    "net-browserify": "PrismarineJS/net-browserify"
   },
   "devDependencies": {
     "assert": "^2.0.0",
@@ -65,6 +64,7 @@
     "process": "PrismarineJS/node-process",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
+    "sync-request": "^6.1.0",
     "three": "^0.126.0",
     "timers-browserify": "^2.0.12",
     "webpack": "^5.11.0",
