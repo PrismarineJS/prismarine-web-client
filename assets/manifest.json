@@ -3,7 +3,7 @@
     "short_name": "Prismarine Web Client",
     "icons": [{
         "src": "favicon.png",
-        "sizes": "256x256"
+        "sizes": "512x512"
     }],
     "background_color": "#ffffff",
     "theme_color": "#ffffff",
