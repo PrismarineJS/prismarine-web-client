@@ -73,7 +73,8 @@ const config = {
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
         { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
         { from: path.join(__dirname, 'assets/'), to: './' },
-        { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' }
+        { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' },
+        { from: path.join(__dirname, 'config.json'), to: './config.json' }
       ]
     })
   ]

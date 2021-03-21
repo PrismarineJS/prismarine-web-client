@@ -8,6 +8,8 @@ const path = require('path')
 // Create our app
 const app = express()
 
+app.get('/config.json', (_, res) => res.sendFile(path.join(__dirname, 'config.json')))
+
 app.use(compression())
 app.use(netApi({ allowOrigin: '*' }))
 if (process.argv[3] === 'dev') {
