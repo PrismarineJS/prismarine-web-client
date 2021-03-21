@@ -248,22 +248,20 @@ async function connect (options) {
 
     let lastTouch
     document.addEventListener('touchmove', (e) => {
+      window.scrollTo(0, 0)
       e.preventDefault()
+      e.stopPropagation()
       if (lastTouch !== undefined) {
         moveCallback({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
       }
       lastTouch = e.touches[0]
-    })
-    document.addEventListener('touchstart', (e) => {
-      e.preventDefault()
-    })
-    document.addEventListener('touchcancel', (e) => {
-      e.preventDefault()
-    })
+    }, { passive: false })
     document.addEventListener('touchend', (e) => {
+      window.scrollTo(0, 0)
       e.preventDefault()
+      e.stopPropagation()
       lastTouch = undefined
-    })
+    }, { passive: false })
 
     renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
