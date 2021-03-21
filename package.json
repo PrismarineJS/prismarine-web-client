@@ -64,7 +64,6 @@
     "process": "PrismarineJS/node-process",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
-    "sync-request": "^6.1.0",
     "three": "^0.126.0",
     "timers-browserify": "^2.0.12",
     "webpack": "^5.11.0",
