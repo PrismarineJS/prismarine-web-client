@@ -40,6 +40,12 @@ document.body.appendChild(renderer.domElement)
 // Create viewer
 const viewer = new Viewer(renderer)
 
+const textures = []
+
+const loader = new THREE.TextureLoader()
+
+let breakStartTime
+
 // Menu panorama background
 function getPanoramaMesh () {
   const geometry = new THREE.SphereGeometry(500, 60, 40)
@@ -223,6 +229,65 @@ async function connect (options) {
       cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
     }
 
+    // Create block break mesh
+
+    const material = new THREE.MeshBasicMaterial({
+      transparent: true,
+      alphaTest: 0.1
+    })
+
+    for (let i = 0; i < 10; i++) {
+      const texture = loader.load('textures/' + viewer.version + '/blocks/destroy_stage_' + i + '.png')
+      texture.magFilter = THREE.NearestFilter
+      texture.minFilter = THREE.NearestFilter
+      textures.push(texture)
+    }
+
+    const geometry = new THREE.BoxGeometry(1.001, 1.001, 1.001)
+    const blockBreakMesh = new THREE.Mesh(geometry, material)
+    viewer.scene.add(blockBreakMesh)
+    blockBreakMesh.visible = false
+
+    async function updateBreakMesh (x, y, z, time) {
+      const thisBreakStartTime = new Date().getTime()
+      breakStartTime = thisBreakStartTime
+      console.log('updating break mesh')
+      blockBreakMesh.position.set(x + 0.5, y + 0.5, z + 0.5)
+      // eslint-disable-next-line promise/param-names
+      const timer = ms => new Promise(res => setTimeout(res, ms))
+
+      const animate = async () => {
+        for (let i = 0; i < 10; i++) {
+          if (thisBreakStartTime !== breakStartTime) break
+          await timer(time / 10)
+          console.log('At stage ' + i)
+          blockBreakMesh.material.map = textures[i]
+          blockBreakMesh.visible = true
+        }
+        hideBreakMesh()
+        updateCursor()
+      }
+      animate()
+    }
+
+    function hideBreakMesh () {
+      console.log('hiding break mesh & canceling loop')
+      breakStartTime = new Date().getTime()
+      blockBreakMesh.visible = false
+    }
+
+    bot.on('diggingAborted', () => {
+      console.log('digging aborted')
+      hideBreakMesh()
+    })
+
+    bot.on('diggingCompleted', () => {
+      console.log('digging completed')
+      hideBreakMesh()
+    })
+
+    // Bot position callback
+
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
@@ -321,6 +386,7 @@ async function connect (options) {
 
       if (e.button === 0) {
         if (bot.canDigBlock(cursorBlock)) {
+          updateBreakMesh(cursorBlock.position.x, cursorBlock.position.y, cursorBlock.position.z, bot.digTime(cursorBlock))
           bot.dig(cursorBlock, 'ignore')
         }
       } else if (e.button === 2) {
