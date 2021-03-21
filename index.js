@@ -248,12 +248,20 @@ async function connect (options) {
 
     let lastTouch
     document.addEventListener('touchmove', (e) => {
+      e.preventDefault()
       if (lastTouch !== undefined) {
         moveCallback({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
       }
       lastTouch = e.touches[0]
     })
-    document.addEventListener('touchend', () => {
+    document.addEventListener('touchstart', (e) => {
+      e.preventDefault()
+    })
+    document.addEventListener('touchcancel', (e) => {
+      e.preventDefault()
+    })
+    document.addEventListener('touchend', (e) => {
+      e.preventDefault()
       lastTouch = undefined
     })
 
