@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
 const config = {
@@ -57,6 +58,13 @@ const config = {
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
     ),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+      include: ['index.html', 'manifest.json'] // not caching a lot as anyway this works only online
+    }),
     new CopyPlugin({
       patterns: [
         { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
