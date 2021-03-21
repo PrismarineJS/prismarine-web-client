@@ -36,14 +36,6 @@ const loader = new THREE.TextureLoader()
 
 let breakStartTime
 
-for (let i = 0; i < 10; i++) {
-  loader.load('textures/1.16.4/blocks/destroy_stage_' + i + '.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter
-    texture.minFilter = THREE.NearestFilter
-    textures.push(texture)
-  })
-}
-
 // Menu panorama background
 function getPanoramaMesh () {
   const geometry = new THREE.SphereGeometry(500, 60, 40)
@@ -233,6 +225,14 @@ async function connect (options) {
       transparent: true,
       alphaTest: 0.1
     })
+
+    for (let i = 0; i < 10; i++) {
+      const texture = loader.load('textures/' + viewer.version + '/blocks/destroy_stage_' + i + '.png')
+      texture.magFilter = THREE.NearestFilter
+      texture.minFilter = THREE.NearestFilter
+      textures.push(texture)
+    }
+
     const geometry = new THREE.BoxGeometry(1.001, 1.001, 1.001)
     const blockBreakMesh = new THREE.Mesh(geometry, material)
     viewer.scene.add(blockBreakMesh)
