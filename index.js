@@ -17,6 +17,7 @@ const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
+const { initVR } = require('./lib/vr')
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -191,6 +192,8 @@ async function connect (options) {
       get mouseSensY () { return this.mouseSensYValue }
     }
 
+    initVR(bot, renderer, viewer)
+
     // Link WorldView and Viewer
     viewer.listen(worldView)
     worldView.listenToBot(bot)
@@ -219,7 +222,7 @@ async function connect (options) {
       updateCursor()
     }
     bot.on('move', botPosition)
-    viewer.camera.position.set(center.x, center.y, center.z)
+    botPosition()
 
     loadingScreen.status = 'Setting callbacks...'
 
