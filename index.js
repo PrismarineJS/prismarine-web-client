@@ -246,6 +246,17 @@ async function connect (options) {
     document.addEventListener('mozpointerlockchange', changeCallback, false)
     document.addEventListener('webkitpointerlockchange', changeCallback, false)
 
+    let lastTouch
+    document.addEventListener('touchmove', (e) => {
+      if (lastTouch !== undefined) {
+        moveCallback({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
+      }
+      lastTouch = e.touches[0]
+    })
+    document.addEventListener('touchend', () => {
+      lastTouch = undefined
+    })
+
     renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
