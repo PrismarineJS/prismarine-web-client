@@ -6,4 +6,5 @@ WORKDIR /app
 COPY . /app
 RUN npm install
 RUN npm run build
+RUN rm config.json
 ENTRYPOINT ["npm", "run", "prod-start"]
