@@ -282,6 +282,7 @@ async function connect (options) {
     bot.on('diggingAborted', () => {
       console.log('digging aborted')
       hideBreakMesh()
+      keepMouseDownAction = false
     })
 
     bot.on('diggingCompleted', () => {
@@ -379,27 +380,41 @@ async function connect (options) {
       }
     }, false)
 
-    document.addEventListener('mousedown', (e) => {
+    async function sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+    let keepMouseDownAction = false
+    document.addEventListener('mousedown', async (e) => {
       if (document.pointerLockElement !== renderer.domElement) return
 
-      const cursorBlock = bot.blockAtCursor()
-      if (!cursorBlock) return
-
-      if (e.button === 0) {
-        if (bot.canDigBlock(cursorBlock)) {
-          updateBreakMesh(cursorBlock.position.x, cursorBlock.position.y, cursorBlock.position.z, bot.digTime(cursorBlock))
-          bot.dig(cursorBlock, 'ignore')
+      keepMouseDownAction = true
+      while (keepMouseDownAction) { // eslint-disable-line
+        const cursorBlock = bot.blockAtCursor()
+        if (!cursorBlock) {
+          await sleep(100)
+          continue
         }
-      } else if (e.button === 2) {
-        const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
-        const vec = vecArray[cursorBlock.face]
 
-        const delta = cursorBlock.intersect.minus(cursorBlock.position)
-        bot._placeBlockWithOptions(cursorBlock, vec, { delta, forceLook: 'ignore' })
+        if (e.button === 0) {
+          if (bot.canDigBlock(cursorBlock)) {
+            updateBreakMesh(cursorBlock.position.x, cursorBlock.position.y, cursorBlock.position.z, bot.digTime(cursorBlock))
+            await bot.dig(cursorBlock, 'ignore')
+          } else {
+            await sleep(100)
+            continue
+          }
+        } else if (e.button === 2) {
+          const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
+          const vec = vecArray[cursorBlock.face]
+
+          const delta = cursorBlock.intersect.minus(cursorBlock.position)
+          await bot._placeBlockWithOptions(cursorBlock, vec, { delta, forceLook: 'ignore' })
+        }
       }
     }, false)
 
     document.addEventListener('mouseup', (e) => {
+      keepMouseDownAction = false
       bot.stopDigging()
     }, false)
 
