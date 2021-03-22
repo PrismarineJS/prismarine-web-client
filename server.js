@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const express = require('express')
 const netApi = require('net-browserify')
 const compression = require('compression')
