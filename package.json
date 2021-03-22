@@ -60,7 +60,7 @@
     "mocha": "^8.3.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
-    "prismarine-viewer": "^1.19.0",
+    "prismarine-viewer": "^1.19.1",
     "process": "PrismarineJS/node-process",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
