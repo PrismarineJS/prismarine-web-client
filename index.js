@@ -334,12 +334,6 @@ async function connect (options) {
       }
       lastTouch = e.touches[0]
     }, { passive: false })
-    document.addEventListener('touchend', (e) => {
-      window.scrollTo(0, 0)
-      e.preventDefault()
-      e.stopPropagation()
-      lastTouch = undefined
-    }, { passive: false })
 
     renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
