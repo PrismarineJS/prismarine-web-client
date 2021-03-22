@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./deploy/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: |
             prismarinejs/prismarine-web-client:latest
