@@ -335,6 +335,10 @@ async function connect (options) {
       lastTouch = e.touches[0]
     }, { passive: false })
 
+    document.addEventListener('touchend', (e) => {
+      lastTouch = undefined
+    }, { passive: false })
+
     renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
