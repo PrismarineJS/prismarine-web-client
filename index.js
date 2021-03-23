@@ -409,6 +409,8 @@ async function connect (options) {
 
           const delta = cursorBlock.intersect.minus(cursorBlock.position)
           await bot._placeBlockWithOptions(cursorBlock, vec, { delta, forceLook: 'ignore' })
+        } else {
+          return
         }
       }
     }, false)
