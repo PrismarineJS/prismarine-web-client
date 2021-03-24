@@ -7,7 +7,7 @@ import { MCCanvas } from './lib/new/MCCanvas'
 import MouseHelper from './lib/new/MouseHelper'
 import IngameMenu from './lib/new/gui/screen/IngameMenu.js'
 import TextureManager from './lib/new/renderer/TextureManager.js'
-import ResourceLocation, { setAssetsDir } from './lib/new/utils/ResourceLocation.js'
+import { setAssetsDir } from './lib/new/utils/ResourceLocation.js'
 import TextureBuffer from './lib/new/renderer/TextureBuffer.js'
 import IngameGui from './lib/new/gui/IngameGui.js'
 import Splashes from './lib/new/utils/Splashes.js'
@@ -18,7 +18,6 @@ import PlayerBot from './lib/new/PlayerBot.js'
 
 /* global THREE */
 require('./lib/menu')
-require('./lib/hotbar')
 require('./lib/chat')
 require('./lib/playerlist')
 
@@ -99,204 +98,139 @@ window.addEventListener('resize', () => {
 
 let mcInstance;
 
-const ICONS = new ResourceLocation('textures/gui/icons.png');
-
 export default class Minecraft {
   constructor(gameConfig) {
     setMCInstance(this)
     this.mccanvas = new MCCanvas(this)
     this.timer = new Timer(20, 0);
-
     this.gameConfig = gameConfig
     setAssetsDir(gameConfig.folderInfo.assetsDir)
-
     this.gameSettings = new GameSettings(this)
-    this.updateWindowSize()
-
+    this.updateWindowSize();
     this.mouseHelper = new MouseHelper(this)
     this.mouseHelper.registerCallbacks()
-
     this.keyboardListener = new KeyboardListener(this)
     this.keyboardListener.setupCallbacks()
-
     this.splashes = new Splashes(this.gameConfig.userInfo.username)
-
-    this.textureManager = new TextureManager()
+    this.textureManager = new TextureManager(this)
     this.textureBuffer = new TextureBuffer()
-
     this.running = true
     this.isInsideWorld = false
-
     this.loadingGui = null
     this.isReloading = false
-
     this.ingameGUI = new IngameGui(this)
     this.currentScreen = null;
 
-    this.displayGuiScreen(new MainMenuScreen(true))
+    this.displayGuiScreen(new MainMenuScreen(true));
 
     this.playerBot = null;
-
-    this.player = {}; 
-    this.bot = {};
-    this.world = {};
-
-    this.reloadResources()
+    this.world = null;
+    this.reloadResources();
   }
 
   async reloadResources () {
-    this.setLoadingGui(new ResourceLoadingGui(this))
-    this.isReloading = true
+    this.loadingGui = new ResourceLoadingGui(this);
+    this.isReloading = true;
+    await this.textureManager.reload();
+    await this.splashes.reload();
 
-    // await this.textureManager.load();
-    // await this.fontRenderer.load();
-    // await this.languageManager.reload();
-    // await this.soundManager.reload();
-    await this.splashes.reload()
-
-    this.isReloading = false
-    this.setLoadingGui(null)
-    return this.currentScreen.initScreen(this, this.mccanvas.getScaledWidth(), this.mccanvas.getScaledHeight())
+    this.isReloading = false;
+    this.loadingGui = null;
+    return this.currentScreen.initScreen(this, this.mccanvas.scaledWidth, this.mccanvas.scaledHeight)
   }
 
-  updateWindowSize () {
+  updateWindowSize() {
     const i = this.mccanvas.calcGuiScale(this.gameSettings.guiScale)
     this.mccanvas.setGuiScale(i)
-
-    if (this.currentScreen != null) {
-      this.currentScreen.resize(this, this.mccanvas.getScaledWidth(), this.mccanvas.getScaledHeight())
-    }
-
+    if(this.currentScreen != null) this.currentScreen.resize(this, this.mccanvas.scaledWidth, this.mccanvas.scaledHeight);
     this.mccanvas.canvas.width = window.innerWidth
     this.mccanvas.canvas.height = window.innerHeight
 
-    Context2D.setup(this.mccanvas.getGuiScaleFactor(), true)
-
+    Context2D.setup(this.mccanvas.guiScaleFactor, true)
     console.log(this.mccanvas.canvas.width, this.mccanvas.canvas.height, 'MCGUI resized')
   }
 
-  run () {
+  run() {
     try {
-      let loopFunc
+      let loopFunc;
 
       const loop = () => {
         loopFunc = requestAnimationFrame(loop)
 
-        if (this.running) {
-          this.runGameLoop()
-        } else {
-          cancelAnimationFrame(loopFunc)
-        }
+        if(this.running) this.runGameLoop()
+        else cancelAnimationFrame(loopFunc)
       }
 
       loop()
     } catch (e) {
-      console.log('Failed and stopped frame loop!')
+      console.log(`Failed and stopped frame loop: ${e}`)
     }
   }
 
-  runGameLoop () {
+  runGameLoop() {
     if(this.isInsideWorld) {
       let j = this.timer.getPartialTicks(new Date().getMilliseconds());
-    
-      for(let k = 0; k < Math.min(10, j); ++k) {
-        this.runTick();
-      }
+      for(let k = 0; k < Math.min(10, j); ++k) this.runTick();
     }
     
-    this.render()
+    this.render();
   }
 
   runTick() {
     this.ingameGUI.tick();
-
-    /* if(this.loadingGui == null && this.currentScreen == null) {
-      this.processKeyBinds();
-    } */
   }
 
-  processKeyBinds() {
-    // TODO: Change hotbar currentItem
-  }
+  render() {
+    const i = (this.mouseHelper.mouseX / this.mccanvas.guiScaleFactor);
+    const j = (this.mouseHelper.mouseY / this.mccanvas.guiScaleFactor);
 
-  render () {
-    const i = (this.mouseHelper.getMouseX() / this.mccanvas.getGuiScaleFactor())
-    const j = (this.mouseHelper.getMouseY() / this.mccanvas.getGuiScaleFactor())
-
-    Context2D.clear()
+    Context2D.clear();
 
     if(this.isInsideWorld) {
-      if (!this.gameSettings.hideGUI || this.currentScreen != null) {
-        this.ingameGUI.renderIngameGui();
-      }
+      if(!this.gameSettings.hideGUI || this.currentScreen != null) this.ingameGUI.renderIngameGui();
     }
 
-    if (this.loadingGui != null) {
-      this.loadingGui.render(i, j)
-    } else if (this.currentScreen != null) {
-      this.currentScreen.render(i, j)
-    }
+    if(this.loadingGui != null) this.loadingGui.render(i, j);
+    else if(this.currentScreen != null) this.currentScreen.render(i, j);
   }
 
   displayGuiScreen (guiScreen) {
-    if (this.currentScreen != null) this.currentScreen.onClose()
+    if(this.currentScreen != null) this.currentScreen.onClose()
 
-    if (guiScreen == null && !this.isInsideWorld) guiScreen = new MainMenuScreen()
+    if(guiScreen == null && !this.isInsideWorld) guiScreen = new MainMenuScreen()
 
-    if (guiScreen instanceof MainMenuScreen) {
-      this.gameSettings.showDebugInfo = false;
-    }
+    if(guiScreen instanceof MainMenuScreen) this.gameSettings.showDebugInfo = false;
 
     this.currentScreen = guiScreen
 
-    if (guiScreen != null) {
-      guiScreen.initScreen(this, this.mccanvas.getScaledWidth(), this.mccanvas.getScaledHeight())
-    }
-  }
-
-  setLoadingGui (loadingGuiIn) {
-    this.loadingGui = loadingGuiIn
-  }
-
-  getTextureManager () {
-    return this.textureManager
-  }
-
-  getSplashes () {
-    return this.splashes
+    if(guiScreen != null) guiScreen.initScreen(this, this.mccanvas.scaledWidth, this.mccanvas.scaledHeight)
   }
 
   async main () {
-    this.currentScreen = null
-
+    this.currentScreen = null;
     const menu = document.getElementById('prismarine-menu')
-    menu.addEventListener('connect', this.handleConnect);
+    // menu.addEventListener('connect', this.handleConnect);
 
+   /*  const handleConnect = (e) => {
+      const menu = document.getElementById('prismarine-menu')
+      const options = e.detail
+      menu.style = 'display: none;'
+      getMCInstance().displayGuiScreen(new WorldLoading());
+      
+      getMCInstance().connect(options)
+    } */
     
-   /*  menu.addEventListener('connect', (e) => {
+    menu.addEventListener('connect', (e) => {
       const menu = document.getElementById('prismarine-menu')
       const options = e.detail
       menu.style = 'display: none;'
       this.displayGuiScreen(new WorldLoading());
-      
+      removePanorama();
       this.connect(options)
     });
-     */
-   
-  }
-
-  handleConnect(e) {
-    const menu = document.getElementById('prismarine-menu')
-    const options = e.detail
-    menu.style = 'display: none;'
-    getMCInstance().displayGuiScreen(new WorldLoading());
-    
-    getMCInstance().connect(options)
   }
 
   async connect (options) {
-    const showEl = (str) => { document.getElementById(str).style = 'display:block' }
-    const hotbar = document.getElementById('hotbar')
     const chat = document.getElementById('chatbox')
     const playerList = document.getElementById('playerlist')
 
@@ -342,33 +276,8 @@ export default class Minecraft {
       closeTimeout: 240 * 1000
     })
 
-    this.playerBot = new PlayerBot(bot);
-    this.bot = bot
-
-    hotbar.bot = bot
-
-    bot.on('error', (err) => {
-      console.log('Encountered error!', err)
-       if(this.currentScreen instanceof WorldLoading) this.currentScreen.setStatus('Error encountered. Please reload the page');
-    })
-
-    bot.on('kicked', (kickReason) => {
-      console.log('User was kicked!', kickReason)
-      if(this.currentScreen instanceof WorldLoading) this.currentScreen.setStatus('The Minecraft server kicked you. Please reload the page to rejoin');
-    })
-/*     
-    bot.on('death', () => {
-      
-    }); */
-
-    bot.on('end', (endReason) => {
-      console.log('disconnected for', endReason)
-      if(this.currentScreen instanceof WorldLoading) this.currentScreen.setStatus('You have been disconnected from the server. Please reload the page to rejoin');
-    })
-
-    this.playerBot.bot.once('login', () => {
-      this.currentScreen.setStatus('Loading world...');
-    })
+    this.world = {};
+    this.playerBot = new PlayerBot(this, bot);
 
     bot.once('spawn', () => {
       const mcData = require('minecraft-data')(bot.version)
@@ -388,14 +297,12 @@ export default class Minecraft {
 
       viewer.setVersion(version)
 
-      hotbar.viewerVersion = viewer.version
       window.worldView = worldView
       window.bot = bot
       window.mcData = mcData
       window.viewer = viewer
       window.Vec3 = Vec3
       window.pathfinder = pathfinder
-     // window.debugMenu = debugMenu 
       window.renderer = renderer
       window.settings = {
         mouseSensXValue: window.localStorage.getItem('mouseSensX') ?? 0.005,
@@ -418,7 +325,6 @@ export default class Minecraft {
 
       const updateCursor = () => {
         const cursorBlock = bot.blockAtCursor()
-        this.world.cursorBlock = cursorBlock
         if (!cursorBlock || !bot.canDigBlock(cursorBlock)) {
           cursorMesh.visible = false
           return
@@ -427,13 +333,12 @@ export default class Minecraft {
         }
         cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
       }
+ 
+      bot.on('move', () => {
+        /* this.playerBot.updateBotPosition(viewer, worldView);
+        this.playerBot.updateCursor(cursorMesh); */
+      });
 
-      function botPosition () {
-        viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
-        worldView.updatePosition(bot.entity.position)
-        updateCursor()
-      }
-      bot.on('move', botPosition)
       viewer.camera.position.set(center.x, center.y, center.z)
 
       this.currentScreen.setStatus('Setting callbacks...');
@@ -514,10 +419,6 @@ export default class Minecraft {
         if (e.code in codes) {
           bot.setControlState(codes[e.code], true)
         }
-       /*  if (e.code.startsWith('Digit') && this.currentScreen == null && this.isInsideWorld) {
-          const numPressed = e.code.substr(5)
-          hotbar.reloadHotbarSelected(numPressed - 1)
-        } */
         if (e.code === 'KeyQ') {
           if (bot.heldItem) bot.tossStack(bot.heldItem)
         }
@@ -557,15 +458,11 @@ export default class Minecraft {
       this.currentScreen.setStatus('Done!');
       console.log('Done!') // only do that because it's read in index.html and npm run fix complains.
 
-      setTimeout(() => {
-        this.currentScreen = null;
-
-        showEl('hotbar')
-        showEl('chatbox')
-        showEl('playerlist')
-      }, 2500)
-
       this.isInsideWorld = true
+
+      bot.on('health', () => {
+        this.playerBot.updateAttributes();
+      })
     })
   }
 }
@@ -580,7 +477,7 @@ export function getMCInstance() {
 
 class Main {
   static main () {
-    const gameConfig = new GameConfiguration(new UserInformation('Steve'), new GameInformation(false, 'X.X.X', 'vanilla', false, false), new FolderInformation('./extra-textures/'))
+    const gameConfig = new GameConfiguration(new UserInformation('Steve'), new FolderInformation('https://webclient.prismarine.js.org/'))
 
     let mc;
     try {
