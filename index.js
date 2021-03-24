@@ -8,6 +8,7 @@ require('./lib/playerlist')
 require('./lib/debugmenu')
 
 const net = require('net')
+const Cursor = require('./lib/cursor')
 
 // Workaround for process.versions.node not existing in the browser
 process.versions.node = '14.0.0'
@@ -41,12 +42,6 @@ document.body.appendChild(renderer.domElement)
 // Create viewer
 const viewer = new Viewer(renderer)
 
-const textures = []
-
-const loader = new THREE.TextureLoader()
-
-let breakStartTime
-
 // Menu panorama background
 function getPanoramaMesh () {
   const geometry = new THREE.SphereGeometry(500, 60, 40)
@@ -71,7 +66,7 @@ let panoramaMesh = getPanoramaMesh()
 viewer.scene.add(panoramaMesh)
 
 // Browser animation loop
-const animate = () => {
+let animate = () => {
   window.requestAnimationFrame(animate)
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
@@ -210,92 +205,24 @@ async function connect (options) {
 
     initVR(bot, renderer, viewer)
 
+    const cursor = new Cursor(viewer, renderer)
+    animate = () => {
+      window.requestAnimationFrame(animate)
+      viewer.update()
+      cursor.update(bot)
+      debugMenu.cursorBlock = cursor.cursorBlock
+      renderer.render(viewer.scene, viewer.camera)
+    }
+
     // Link WorldView and Viewer
     viewer.listen(worldView)
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
 
-    // Create cursor mesh
-    const boxGeometry = new THREE.BoxBufferGeometry(1.001, 1.001, 1.001)
-    const cursorMesh = new THREE.LineSegments(new THREE.EdgesGeometry(boxGeometry), new THREE.LineBasicMaterial({ color: 0 }))
-    viewer.scene.add(cursorMesh)
-
-    function updateCursor () {
-      const cursorBlock = bot.blockAtCursor()
-      debugMenu.cursorBlock = cursorBlock
-      if (!cursorBlock || !bot.canDigBlock(cursorBlock)) {
-        cursorMesh.visible = false
-        return
-      } else {
-        cursorMesh.visible = true
-      }
-      cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
-    }
-
-    // Create block break mesh
-
-    const material = new THREE.MeshBasicMaterial({
-      transparent: true,
-      alphaTest: 0.1
-    })
-
-    for (let i = 0; i < 10; i++) {
-      const texture = loader.load('textures/' + viewer.version + '/blocks/destroy_stage_' + i + '.png')
-      texture.magFilter = THREE.NearestFilter
-      texture.minFilter = THREE.NearestFilter
-      textures.push(texture)
-    }
-
-    const geometry = new THREE.BoxGeometry(1.001, 1.001, 1.001)
-    const blockBreakMesh = new THREE.Mesh(geometry, material)
-    viewer.scene.add(blockBreakMesh)
-    blockBreakMesh.visible = false
-
-    async function updateBreakMesh (x, y, z, time) {
-      const thisBreakStartTime = new Date().getTime()
-      breakStartTime = thisBreakStartTime
-      console.log('updating break mesh')
-      blockBreakMesh.position.set(x + 0.5, y + 0.5, z + 0.5)
-      // eslint-disable-next-line promise/param-names
-      const timer = ms => new Promise(res => setTimeout(res, ms))
-
-      const animate = async () => {
-        for (let i = 0; i < 10; i++) {
-          if (thisBreakStartTime !== breakStartTime) break
-          await timer(time / 10)
-          console.log('At stage ' + i)
-          blockBreakMesh.material.map = textures[i]
-          blockBreakMesh.visible = true
-        }
-        hideBreakMesh()
-        updateCursor()
-      }
-      animate()
-    }
-
-    function hideBreakMesh () {
-      console.log('hiding break mesh & canceling loop')
-      breakStartTime = new Date().getTime()
-      blockBreakMesh.visible = false
-    }
-
-    bot.on('diggingAborted', () => {
-      console.log('digging aborted')
-      hideBreakMesh()
-      keepMouseDownAction = false
-    })
-
-    bot.on('diggingCompleted', () => {
-      console.log('digging completed')
-      hideBreakMesh()
-    })
-
     // Bot position callback
-
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
-      updateCursor()
     }
     bot.on('move', botPosition)
     botPosition()
@@ -308,7 +235,6 @@ async function connect (options) {
       bot.entity.yaw -= e.movementX * window.settings.mouseSensXValue
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
-      updateCursor()
     }
 
     function changeCallback () {
@@ -378,46 +304,6 @@ async function connect (options) {
       if (e.code in codes) {
         bot.setControlState(codes[e.code], false)
       }
-    }, false)
-
-    async function sleep (ms) {
-      return new Promise(resolve => setTimeout(resolve, ms))
-    }
-    let keepMouseDownAction = false
-    document.addEventListener('mousedown', async (e) => {
-      if (document.pointerLockElement !== renderer.domElement) return
-
-      keepMouseDownAction = true
-      while (keepMouseDownAction) { // eslint-disable-line
-        const cursorBlock = bot.blockAtCursor()
-        if (!cursorBlock) {
-          await sleep(100)
-          continue
-        }
-
-        if (e.button === 0) {
-          if (bot.canDigBlock(cursorBlock)) {
-            updateBreakMesh(cursorBlock.position.x, cursorBlock.position.y, cursorBlock.position.z, bot.digTime(cursorBlock))
-            await bot.dig(cursorBlock, 'ignore')
-          } else {
-            await sleep(100)
-            continue
-          }
-        } else if (e.button === 2) {
-          const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
-          const vec = vecArray[cursorBlock.face]
-
-          const delta = cursorBlock.intersect.minus(cursorBlock.position)
-          await bot._placeBlockWithOptions(cursorBlock, vec, { delta, forceLook: 'ignore' })
-        } else {
-          return
-        }
-      }
-    }, false)
-
-    document.addEventListener('mouseup', (e) => {
-      keepMouseDownAction = false
-      bot.stopDigging()
     }, false)
 
     loadingScreen.status = 'Done!'
