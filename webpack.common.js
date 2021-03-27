@@ -20,9 +20,11 @@ const config = {
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
-      fs: 'memfs'
+      fs: 'memfs',
+      'node-fetch': 'cross-fetch'
     },
     fallback: {
+      'node-fetch': require.resolve('cross-fetch'),
       zlib: require.resolve('browserify-zlib'),
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer/'),
