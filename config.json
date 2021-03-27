@@ -1,6 +1,6 @@
 {
-  "defaultHost": "95.111.249.143",
-  "defaultHostPort": 10000,
+  "defaultHost": "join.mineheroes.org",
+  "defaultHostPort": 25565,
   "defaultProxy": "",
   "defaultProxyPort": 0
 }

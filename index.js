@@ -142,7 +142,9 @@ async function connect (options) {
     viewDistance: 'tiny',
     checkTimeoutInterval: 240 * 1000,
     noPongTimeout: 240 * 1000,
-    closeTimeout: 240 * 1000
+    closeTimeout: 240 * 1000,
+    authServer: 'https://mcauth.rom1504.fr',
+    sessionServer: 'https://mcsession.rom1504.fr'
   })
 
   hotbar.bot = bot
