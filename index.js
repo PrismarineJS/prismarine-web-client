@@ -150,17 +150,20 @@ async function connect (options) {
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
-    loadingScreen.status = 'Error encountered. Please reload the page'
+    loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
+    loadingScreen.style = 'display: block;'
   })
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
-    loadingScreen.status = 'The Minecraft server kicked you. Please reload the page to rejoin'
+    loadingScreen.status = `The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`
+    loadingScreen.style = 'display: block;'
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
-    loadingScreen.status = 'You have been disconnected from the server. Please reload the page to rejoin'
+    loadingScreen.status = `You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`
+    loadingScreen.style = 'display: block;'
   })
 
   bot.once('login', () => {
