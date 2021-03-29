@@ -1,3 +1,7 @@
+:root {
+  --guiScaleFactor: 3;
+}
+
 html {
   height: 100%;
   overflow: hidden;
@@ -33,4 +37,8 @@ canvas {
 	font-size: 0;
 	margin: 0;
 	padding: 0;
+}
+
+#prismarine-menu {
+  --gui-scale-factor: var(--guiScaleFactor);
 }
