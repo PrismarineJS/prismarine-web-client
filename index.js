@@ -88,6 +88,8 @@ window.setScaleFactor = (value) => {
   setScaleFactor(value)
 }
 
+setScaleFactor(3);
+
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
   viewer.camera.updateProjectionMatrix()
