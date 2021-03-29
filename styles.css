@@ -1,3 +1,7 @@
+:root {
+  --guiScaleFactor: 3;
+}
+
 html {
   height: 100%;
   overflow: hidden;
