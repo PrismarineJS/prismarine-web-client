@@ -25,6 +25,11 @@ To host it yourself, run these commands in bash:
 $ npm install -g prismarine-web-client
 $ prismarine-web-client
 ``` 
+Or, if you prefer using Docker  
+```
+$ wget https://raw.githubusercontent.com/PrismarineJS/prismarine-web-client/master/config.json
+$ docker run -v (pwd)/config.json:/app/config.json -p 8080:8080 prismarinejs/prismarine-web-client:latest
+```  
 Finally, open `http://localhost:8080` in your browser.
 
 ## Features
