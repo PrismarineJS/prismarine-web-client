@@ -1,4 +1,6 @@
 /* global THREE */
+require('./lib/screens/ingamemenu')
+require('./lib/screens/optionsscreen')
 require('./lib/menu')
 require('./lib/loading_screen')
 require('./lib/hotbar')
@@ -244,9 +246,11 @@ async function connect (options) {
       if (document.pointerLockElement === renderer.domElement ||
         document.mozPointerLockElement === renderer.domElement ||
         document.webkitPointerLockElement === renderer.domElement) {
-        document.addEventListener('mousemove', moveCallback, false)
+        document.addEventListener('mousemove', moveCallback, false);
+        document.getElementById('ingame-menu').style.display = "none";
       } else {
         document.removeEventListener('mousemove', moveCallback, false)
+        document.getElementById('ingame-menu').style.display = "block";
       }
     }
 
