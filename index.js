@@ -82,7 +82,7 @@ const calcGuiScale = (guiScaleIn) => {
 const setScaleFactor = (value) => {
   const i = calcGuiScale(value)
   document.documentElement.style.setProperty('--guiScaleFactor', i)
-  console.log(`Scale: ${i}`);
+  console.log(`Scale: ${i}`)
 }
 
 window.setScaleFactor = (value) => {
