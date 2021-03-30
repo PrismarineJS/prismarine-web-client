@@ -82,13 +82,14 @@ const calcGuiScale = (guiScaleIn) => {
 const setScaleFactor = (value) => {
   const i = calcGuiScale(value)
   document.documentElement.style.setProperty('--guiScaleFactor', i)
+  console.log(`Scale: ${i}`);
 }
 
 window.setScaleFactor = (value) => {
   setScaleFactor(value)
 }
 
-setScaleFactor(3);
+setScaleFactor(3)
 
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
