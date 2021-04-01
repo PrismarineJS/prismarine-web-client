@@ -87,10 +87,29 @@ let animate = () => {
 }
 animate()
 
+const calcGuiScale = (guiScaleIn) => {
+  let i
+  for (i = 1; i !== guiScaleIn && i < window.innerWidth && i < (window.innerHeight) && window.innerWidth / (i + 1) >= 320 && (window.innerHeight) / (i + 1) >= 240; ++i);
+  return i
+}
+
+const setScaleFactor = (value) => {
+  const i = calcGuiScale(value)
+  document.documentElement.style.setProperty('--guiScaleFactor', i)
+  console.log(`Scale: ${i}`)
+}
+
+window.setScaleFactor = (value) => {
+  setScaleFactor(value)
+}
+
+setScaleFactor(3)
+
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
   viewer.camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
+  setScaleFactor(3)
 })
 
 async function main () {
