@@ -340,11 +340,26 @@ async function connect (options) {
     debugMenu.customEntries.hp = bot.health
     debugMenu.customEntries.food = bot.food
     debugMenu.customEntries.saturation = bot.foodSaturation
+    hotbar.reloadHealth(bot.health)
+    hotbar.reloadFood(bot.food)
+    hotbar.reloadXP(bot.experience)
 
     bot.on('health', () => {
       debugMenu.customEntries.hp = bot.health
       debugMenu.customEntries.food = bot.food
       debugMenu.customEntries.saturation = bot.foodSaturation
+      hotbar.reloadHealth(bot.health)
+      hotbar.reloadFood(bot.food)
+    })
+
+    bot.on('experience', () => {
+      hotbar.reloadXP(bot.experience)
+    })
+
+    bot.on('game', () => {
+      hotbar.reloadHealth(bot.health)
+      hotbar.reloadFood(bot.food)
+      hotbar.reloadXP(bot.experience)
     })
   })
 }
