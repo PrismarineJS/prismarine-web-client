@@ -52,7 +52,7 @@ First, clone the repo.
 
 Then, set your working directory to that of the repo. For example:
 ```bash
-$ cd ~/prismarine-viewer/
+$ cd ~/prismarine-web-client/
 ```
 
 Finally, run
