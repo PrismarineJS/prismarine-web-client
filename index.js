@@ -54,7 +54,21 @@ function getPanoramaMesh () {
     mesh.rotation.y += 0.0005
     mesh.rotation.x = -Math.sin(mesh.rotation.y * 3) * 0.3
   }
-  return mesh
+  const group = new THREE.Object3D()
+  group.add(mesh)
+  const Entity = require('prismarine-viewer/viewer/lib/entity/Entity')
+  for (let i = 0; i < 42; i++) {
+    const m = new Entity('1.16.4', 'squid').mesh
+    m.position.set(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 30)
+    m.rotation.set(0, Math.PI + Math.random(), -Math.PI / 4, 'ZYX')
+    const v = Math.random() * 0.01
+    m.children[0].onBeforeRender = () => {
+      m.rotation.y += v
+      m.rotation.z = Math.cos(mesh.rotation.y * 3) * Math.PI / 4 - Math.PI / 2
+    }
+    group.add(m)
+  }
+  return group
 }
 
 function removePanorama () {
@@ -73,10 +87,29 @@ let animate = () => {
 }
 animate()
 
+const calcGuiScale = (guiScaleIn) => {
+  let i
+  for (i = 1; i !== guiScaleIn && i < window.innerWidth && i < (window.innerHeight) && window.innerWidth / (i + 1) >= 320 && (window.innerHeight) / (i + 1) >= 240; ++i);
+  return i
+}
+
+const setScaleFactor = (value) => {
+  const i = calcGuiScale(value)
+  document.documentElement.style.setProperty('--guiScaleFactor', i)
+  console.log(`Scale: ${i}`)
+}
+
+window.setScaleFactor = (value) => {
+  setScaleFactor(value)
+}
+
+setScaleFactor(3)
+
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
   viewer.camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
+  setScaleFactor(3)
 })
 
 async function main () {
