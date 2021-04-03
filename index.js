@@ -321,6 +321,10 @@ async function connect (options) {
       ControlLeft: 'sprint'
     }
 
+    window.addEventListener('blur', (e) => {
+      bot.clearControlStates()
+    }, false)
+
     document.addEventListener('keydown', (e) => {
       if (chat.inChat) return
       console.log(e.code)
