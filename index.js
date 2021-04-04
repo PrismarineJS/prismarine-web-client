@@ -200,7 +200,7 @@ async function connect (options) {
   })
 
   bot.once('login', () => {
-    loadingScreen.status = 'Loading world...'
+    loadingScreen.status = 'Loading world'
   })
 
   bot.once('spawn', () => {
