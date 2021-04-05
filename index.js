@@ -200,7 +200,7 @@ async function connect (options) {
   })
 
   bot.once('login', () => {
-    loadingScreen.status = 'Loading world...'
+    loadingScreen.status = 'Loading world'
   })
 
   bot.once('spawn', () => {
@@ -320,6 +320,10 @@ async function connect (options) {
       ShiftLeft: 'sneak',
       ControlLeft: 'sprint'
     }
+
+    window.addEventListener('blur', (e) => {
+      bot.clearControlStates()
+    }, false)
 
     document.addEventListener('keydown', (e) => {
       if (chat.inChat) return
