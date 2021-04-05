@@ -306,7 +306,9 @@ async function connect (options) {
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
     document.addEventListener('mousedown', (e) => {
-      renderer.domElement.requestPointerLock()
+      if(!chat.inChat) {
+        renderer.domElement.requestPointerLock()
+      }
     })
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
