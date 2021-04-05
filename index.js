@@ -219,7 +219,7 @@ async function connect (options) {
     const worldView = new WorldView(bot.world, viewDistance, center)
 
     chat.init(bot._client, renderer)
-    gameMenu.init();
+    gameMenu.init()
     playerList.init(bot)
 
     viewer.setVersion(version)
@@ -309,7 +309,7 @@ async function connect (options) {
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
     document.addEventListener('mousedown', (e) => {
-      if(!chat.inChat && !gameMenu.inMenu) {
+      if (!chat.inChat && !gameMenu.inMenu) {
         renderer.domElement.requestPointerLock()
       }
     })
@@ -332,7 +332,7 @@ async function connect (options) {
 
     document.addEventListener('keydown', (e) => {
       if (chat.inChat) return
-      if(gameMenu.inMenu) return
+      if (gameMenu.inMenu) return
       console.log(e.code)
       if (e.code in codes) {
         bot.setControlState(codes[e.code], true)
