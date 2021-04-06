@@ -219,7 +219,7 @@ async function connect (options) {
     const worldView = new WorldView(bot.world, viewDistance, center)
 
     chat.init(bot._client, renderer)
-    gameMenu.init()
+    gameMenu.init(renderer)
     playerList.init(bot)
 
     viewer.setVersion(version)
