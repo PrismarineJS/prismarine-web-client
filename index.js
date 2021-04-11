@@ -2,6 +2,7 @@
 require('./lib/menu')
 require('./lib/loading_screen')
 require('./lib/hotbar')
+require('./lib/gameMenu')
 require('./lib/chat')
 require('./lib/crosshair')
 require('./lib/playerlist')
@@ -135,6 +136,7 @@ async function connect (options) {
   const chat = document.getElementById('chatbox')
   const playerList = document.getElementById('playerlist')
   const debugMenu = document.getElementById('debugmenu')
+  const gameMenu = document.getElementById('game-menu')
 
   const viewDistance = 6
   const hostprompt = options.server
@@ -200,7 +202,7 @@ async function connect (options) {
   })
 
   bot.once('login', () => {
-    loadingScreen.status = 'Loading world...'
+    loadingScreen.status = 'Loading world'
   })
 
   bot.once('spawn', () => {
@@ -217,6 +219,7 @@ async function connect (options) {
     const worldView = new WorldView(bot.world, viewDistance, center)
 
     chat.init(bot._client, renderer)
+    gameMenu.init(renderer)
     playerList.init(bot)
 
     viewer.setVersion(version)
@@ -306,7 +309,9 @@ async function connect (options) {
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
     document.addEventListener('mousedown', (e) => {
-      renderer.domElement.requestPointerLock()
+      if (!chat.inChat && !gameMenu.inMenu) {
+        renderer.domElement.requestPointerLock()
+      }
     })
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
@@ -321,8 +326,13 @@ async function connect (options) {
       ControlLeft: 'sprint'
     }
 
+    window.addEventListener('blur', (e) => {
+      bot.clearControlStates()
+    }, false)
+
     document.addEventListener('keydown', (e) => {
       if (chat.inChat) return
+      if (gameMenu.inMenu) return
       console.log(e.code)
       if (e.code in codes) {
         bot.setControlState(codes[e.code], true)
