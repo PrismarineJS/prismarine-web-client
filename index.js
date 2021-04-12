@@ -244,7 +244,7 @@ async function connect (options) {
 
     initVR(bot, renderer, viewer)
 
-    const cursor = new Cursor(viewer, renderer)
+    const cursor = new Cursor(viewer, renderer, bot)
     animate = () => {
       window.requestAnimationFrame(animate)
       viewer.update()
