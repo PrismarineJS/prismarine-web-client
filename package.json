@@ -64,7 +64,7 @@
     "process": "PrismarineJS/node-process",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
-    "three": "^0.128.0",
+    "three": "^0.127.0",
     "timers-browserify": "^2.0.12",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0",
