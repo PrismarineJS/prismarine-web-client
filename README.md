@@ -92,7 +92,7 @@ delete debugMenu.customEntries['myKey']
 In chrome dev tools
 
 * `bot.chat('test')` allows you to use the chat
-* `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))` display the ping of everyone
+* `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))))` display the ping of everyone
 * `window.bot.entity.position.y += 5` jumps
 * `bot.chat(JSON.stringify(bot.findBlock({matching:(block) => block.name==='diamond_ore', maxDistance:256}).position))` finds the position of a diamond block
 * `bot.physics.stepHeight = 2` allows you to walk about blocks
