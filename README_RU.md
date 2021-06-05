@@ -71,6 +71,7 @@ $ npm start
 Для входа в Prismarine Web Client откройте http://localhost:8080 в вашем браузере.
 
 Если вы захотите отключить автоматическое сохранение в своем IDE, чтобы избежать постоянной пересборки Web Client'а, смотрите: https://webpack.js.org/guides/development/#adjusting-your-text-editor
+
 Чтобы проверить сборку Web Client'а (на сборку потребуется минута), вы можете запустить `npm run build-start`
 
 Если вы заинтересованы в участии, вы можете проверить проекты [тут](https://github.com/PrismarineJS/prismarine-web-client/projects)
