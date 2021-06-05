@@ -7,7 +7,7 @@
 | 🇺🇸 [English](README.md) | 🇷🇺 [Russian](README_RU.md) |
 | ----------------------- | -------------------------- |
 
-A Minecraft client running in a web page. **Live demo at https://webclient.prismarine.js.org/**
+Клиент Minecraft, запущенный на веб-странице. **Демонстрация на https://webclient.prismarine.js.org/**
 
 
 ## Как это работает
@@ -21,7 +21,7 @@ prismarine-web-client запускает mineflayer и prismarine-viewer в ва
 ## Скриншот
 ![Screenshot of prismarine-web-client in action](screenshot.png)
 
-## Live Demo
+## Демонстация
 Нажмите на эту ссылку, чтобы открыть ее в вашем браузере, установка не требуется: https://webclient.prismarine.js.org/
 
 *Протестировано в Chrome и Firefox для настольных платформ.*
@@ -34,7 +34,7 @@ $ prismarine-web-client
 ``` 
 Наконец, откройте `http://localhost:8080` в вашем браузере.
 
-## Features
+## Функции
 
 * Показывание мобов и игроков
 * Показывание блоков 
@@ -43,40 +43,39 @@ $ prismarine-web-client
 
 ## Roadmap
 * Containers (inventory, chests, etc.)
-* Sounds
+* Звуки
 * More World Interactions (attacking entities, etc.)
-* Cosmetic Rendering Features (day night cycle, fog, etc.)
+* Косметические особенности рендера (Цикл дня и ночи, fog, и другое.)
 
-## Development
+## Разработка
 
-If you're contributing/making changes, you need to install it differently.
+Если вы ввносите изменения, вам нужно установить его по-другому.
 
-First, clone the repo.
+Во-первых, клонируйте репозиторий.
 
-Then, set your working directory to that of the repo. For example:
+Затем установите свой рабочий каталог в каталог репозитория. Например:
 ```bash
 $ cd ~/prismarine-web-client/
 ```
 
-Finally, run
+Наконец, запустите.
 
 ```bash
 $ npm install
 $ npm start
 ```
 
-This will start express and webpack in development mode: whenever you save a file, the build will be redone (it takes 5s), 
-and you can refresh the page to get the new result.
+Это запустит express и webpack в режиме разработки: всякий раз, когда вы сохраняете файл, сборка будет переделана (это займет 5 секунд),
+и вы можете обновить страницу, чтобы получить новый результат.
 
-Connect to http://localhost:8080 in your browser.
+Для входа в Prismarine Web Client откройте http://localhost:8080 в вашем браузере.
 
-You may want to disable auto saving in your IDE to avoid constant rebuilding, see https://webpack.js.org/guides/development/#adjusting-your-text-editor
+Если вы захотите отключить автоматическое сохранение в своем IDE, чтобы избежать постоянной пересборки Web Client'а, смотрите: https://webpack.js.org/guides/development/#adjusting-your-text-editor
+Чтобы проверить сборку Web Client'а (на сборку потребуется минута), вы можете запустить `npm run build-start`
 
-To check the production build (take a minute to build), you can run `npm run build-start`
+Если вы заинтересованы в участии, вы можете проверить проекты [тут](https://github.com/PrismarineJS/prismarine-web-client/projects)
 
-If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects
-
-Some variables are exposed in window for debugging:
+Некоторые переменные которые отображаются в окне для отладки:
 * bot
 * viewer
 * mcData
@@ -98,8 +97,8 @@ delete debugMenu.customEntries['myKey']
 * `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))))` показывает пинг всех игроков
 * `window.bot.entity.position.y += 5` прыжок
 * `bot.chat(JSON.stringify(bot.findBlock({matching:(block) => block.name==='diamond_ore', maxDistance:256}).position))` ищет позицию алмазной руды
-* `bot.physics.stepHeight = 2` allows you to walk about blocks
-* `bot.physics.sprintSpeed = 5` walks faster
+* `bot.physics.stepHeight = 2` позволяет вам взбиратся по блокам
+* `bot.physics.sprintSpeed = 5` более быстрый бег
 * `bot.loadPlugin(pathfinder.pathfinder)` затем `bot.pathfinder.goto(new pathfinder.goals.GoalXZ(100, 100))` идет к координатам 100, 100
 
 Для получения дополнительных идей по отладке прочитайте [mineflayer](https://github.com/PrismarineJS/mineflayer) документацию
