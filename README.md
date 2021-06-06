@@ -72,18 +72,18 @@ Connect to http://localhost:8080 in your browser.
 
 You may want to disable auto saving in your IDE to avoid constant rebuilding; see https://webpack.js.org/guides/development/#adjusting-your-text-editor.
 
-To check the production build (take a minute to build), you can run `npm run build-start`.
+To check the production build (will take a minute to build), you can run `npm run build-start`.
 
 If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects.
 
-Some variables are exposed in the window for debugging:
-* bot
-* viewer
-* mcData
-* worldView
-* Vec3
-* pathfinder
-* debugMenu
+Some variables are exposed in the global ``window`` object for debugging:
+* ``bot``
+* ``viewer``
+* ``mcData``
+* ``worldView``
+* ``Vec3``
+* ``pathfinder``
+* ``debugMenu``
 
 ### Adding stuff to the debugMenu
 
@@ -92,7 +92,7 @@ delete debugMenu.customEntries['myKey']
 
 ### Some debugging examples
 
-In Chrome dev tools
+In Chrome DevTools:
 
 * `bot.chat('test')` allows you to use the chat
 * `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))))` display the ping of everyone
@@ -103,4 +103,3 @@ In Chrome dev tools
 * `bot.loadPlugin(pathfinder.pathfinder)` then `bot.pathfinder.goto(new pathfinder.goals.GoalXZ(100, 100))` goes to position 100, 100
 
 For more debugging ideas, read the [mineflayer](https://github.com/PrismarineJS/mineflayer) doc.
-
