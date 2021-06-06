@@ -44,8 +44,8 @@ Finally, open `http://localhost:8080` in your browser.
 ## Roadmap
 * Containers (inventory, chests, etc.)
 * Sounds
-* More World Interactions (attacking entities, etc.)
-* Cosmetic Rendering Features (day night cycle, fog, etc.)
+* More world interactions (attacking entities, etc.)
+* Cosmetic rendering features (day night cycle, fog, etc.)
 
 ## Development
 
