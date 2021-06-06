@@ -65,7 +65,7 @@ $ npm install
 $ npm start
 ```
 
-This will start express and webpack in development mode: whenever you save a file, the build will be redone (it takes 5s), 
+This will start express and webpack in development mode; whenever you save a file, the build will be redone (it takes 5s), 
 and you can refresh the page to get the new result.
 
 Connect to http://localhost:8080 in your browser.
