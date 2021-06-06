@@ -14,7 +14,7 @@ A Minecraft client running in a web page. **Live demo at https://webclient.prism
 prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy 
 which translates the WebSocket connection into TCP to connect to normal Minecraft servers. Prismarine-web-client is based on:
 * [prismarine-viewer](https://github.com/PrismarineJS/prismarine-viewer) for the world rendering
-* [mineflayer](https://github.com/PrismarineJS/mineflayer) for the high level minecraft client API
+* [mineflayer](https://github.com/PrismarineJS/mineflayer) for the high-level Minecraft client API
 
 Check these modules if you want to understand more how it works and contribute!
 
@@ -44,8 +44,8 @@ Finally, open `http://localhost:8080` in your browser.
 ## Roadmap
 * Containers (inventory, chests, etc.)
 * Sounds
-* More World Interactions (attacking entities, etc.)
-* Cosmetic Rendering Features (day night cycle, fog, etc.)
+* More world interactions (attacking entities, etc.)
+* Cosmetic rendering features (day night cycle, fog, etc.)
 
 ## Development
 
@@ -65,34 +65,34 @@ $ npm install
 $ npm start
 ```
 
-This will start express and webpack in development mode: whenever you save a file, the build will be redone (it takes 5s), 
+This will start express and webpack in development mode; whenever you save a file, the build will be redone (it takes 5s), 
 and you can refresh the page to get the new result.
 
 Connect to http://localhost:8080 in your browser.
 
-You may want to disable auto saving in your IDE to avoid constant rebuilding, see https://webpack.js.org/guides/development/#adjusting-your-text-editor
+You may want to disable auto saving in your IDE to avoid constant rebuilding; see https://webpack.js.org/guides/development/#adjusting-your-text-editor.
 
-To check the production build (take a minute to build), you can run `npm run build-start`
+To check the production build (will take a minute to build), you can run `npm run build-start`.
 
-If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects
+If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects.
 
-Some variables are exposed in window for debugging:
-* bot
-* viewer
-* mcData
-* worldView
-* Vec3
-* pathfinder
-* debugMenu
+Some variables are exposed in the global ``window`` object for debugging:
+* ``bot``
+* ``viewer``
+* ``mcData``
+* ``worldView``
+* ``Vec3``
+* ``pathfinder``
+* ``debugMenu``
 
-### How to add more stuff to the debugMenu ?
+### Adding stuff to the debugMenu
 
 debugMenu.customEntries['myKey'] = 'myValue'
 delete debugMenu.customEntries['myKey']
 
 ### Some debugging examples
 
-In chrome dev tools
+In Chrome DevTools:
 
 * `bot.chat('test')` allows you to use the chat
 * `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))))` display the ping of everyone
@@ -102,5 +102,4 @@ In chrome dev tools
 * `bot.physics.sprintSpeed = 5` walks faster
 * `bot.loadPlugin(pathfinder.pathfinder)` then `bot.pathfinder.goto(new pathfinder.goals.GoalXZ(100, 100))` goes to position 100, 100
 
-For more debugging ideas, read [mineflayer](https://github.com/PrismarineJS/mineflayer) doc
-
+For more debugging ideas, read the [mineflayer](https://github.com/PrismarineJS/mineflayer) doc.
