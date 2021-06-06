@@ -92,7 +92,7 @@ delete debugMenu.customEntries['myKey']
 
 ### Some debugging examples
 
-In chrome dev tools
+In Chrome dev tools
 
 * `bot.chat('test')` allows you to use the chat
 * `bot.chat(JSON.stringify(Object.values(bot.players).map(({username, ping}) => ({username, ping}))))` display the ping of everyone
