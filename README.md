@@ -102,5 +102,5 @@ In Chrome dev tools
 * `bot.physics.sprintSpeed = 5` walks faster
 * `bot.loadPlugin(pathfinder.pathfinder)` then `bot.pathfinder.goto(new pathfinder.goals.GoalXZ(100, 100))` goes to position 100, 100
 
-For more debugging ideas, read [mineflayer](https://github.com/PrismarineJS/mineflayer) doc.
+For more debugging ideas, read the [mineflayer](https://github.com/PrismarineJS/mineflayer) doc.
 
