@@ -70,11 +70,11 @@ and you can refresh the page to get the new result.
 
 Connect to http://localhost:8080 in your browser.
 
-You may want to disable auto saving in your IDE to avoid constant rebuilding, see https://webpack.js.org/guides/development/#adjusting-your-text-editor
+You may want to disable auto saving in your IDE to avoid constant rebuilding, see https://webpack.js.org/guides/development/#adjusting-your-text-editor.
 
-To check the production build (take a minute to build), you can run `npm run build-start`
+To check the production build (take a minute to build), you can run `npm run build-start`.
 
-If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects
+If you're interested in contributing, you can check projects at https://github.com/PrismarineJS/prismarine-web-client/projects.
 
 Some variables are exposed in window for debugging:
 * bot
