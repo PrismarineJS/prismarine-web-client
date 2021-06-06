@@ -85,7 +85,7 @@ Some variables are exposed in the window for debugging:
 * pathfinder
 * debugMenu
 
-### How to add more stuff to the debugMenu?
+### Adding stuff to the debugMenu
 
 debugMenu.customEntries['myKey'] = 'myValue'
 delete debugMenu.customEntries['myKey']
