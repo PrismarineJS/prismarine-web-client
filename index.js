@@ -43,6 +43,16 @@ document.body.appendChild(renderer.domElement)
 // Create viewer
 const viewer = new Viewer(renderer)
 
+// Initialise settings
+window.settings = {
+  mouseSensXValue: window.localStorage.getItem('mouseSensX') ?? 0.005,
+  mouseSensYValue: window.localStorage.getItem('mouseSensY') ?? 0.005,
+  set mouseSensX (v) { this.mouseSensXValue = v; window.localStorage.setItem('mouseSensX', v) },
+  set mouseSensY (v) { this.mouseSensYValue = v; window.localStorage.setItem('mouseSensY', v) },
+  get mouseSensX () { return this.mouseSensXValue },
+  get mouseSensY () { return this.mouseSensYValue }
+}
+
 // Menu panorama background
 function getPanoramaMesh () {
   const geometry = new THREE.SphereGeometry(500, 60, 40)
@@ -233,14 +243,6 @@ async function connect (options) {
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
     window.renderer = renderer
-    window.settings = {
-      mouseSensXValue: window.localStorage.getItem('mouseSensX') ?? 0.005,
-      mouseSensYValue: window.localStorage.getItem('mouseSensY') ?? 0.005,
-      set mouseSensX (v) { this.mouseSensXValue = v; window.localStorage.setItem('mouseSensX', v) },
-      set mouseSensY (v) { this.mouseSensYValue = v; window.localStorage.setItem('mouseSensY', v) },
-      get mouseSensX () { return this.mouseSensXValue },
-      get mouseSensY () { return this.mouseSensYValue }
-    }
 
     initVR(bot, renderer, viewer)
 
