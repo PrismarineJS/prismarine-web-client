@@ -45,12 +45,9 @@ const viewer = new Viewer(renderer)
 
 // Initialise settings
 window.settings = {
-  mouseSensXValue: window.localStorage.getItem('mouseSensX') ?? 0.005,
-  mouseSensYValue: window.localStorage.getItem('mouseSensY') ?? 0.005,
-  set mouseSensX (v) { this.mouseSensXValue = v; window.localStorage.setItem('mouseSensX', v) },
-  set mouseSensY (v) { this.mouseSensYValue = v; window.localStorage.setItem('mouseSensY', v) },
-  get mouseSensX () { return this.mouseSensXValue },
-  get mouseSensY () { return this.mouseSensYValue }
+  mouseSensValue: window.localStorage.getItem('mouseSens') ?? 0.005,
+  set mouseSens (v) { this.mouseSensValue = v; window.localStorage.setItem('mouseSens', v) },
+  get mouseSens () { return this.mouseSensValue }
 }
 
 // Menu panorama background
@@ -271,9 +268,9 @@ async function connect (options) {
     loadingScreen.status = 'Setting callbacks...'
 
     function moveCallback (e) {
-      bot.entity.pitch -= e.movementY * window.settings.mouseSensYValue
+      bot.entity.pitch -= e.movementY * window.settings.mouseSensValue
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      bot.entity.yaw -= e.movementX * window.settings.mouseSensXValue
+      bot.entity.yaw -= e.movementX * window.settings.mouseSensValue
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
     }
