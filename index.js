@@ -357,7 +357,7 @@ async function connect (options) {
     setTimeout(function () {
       // remove loading screen, wait a second to make sure a frame has properly rendered
       loadingScreen.style = 'display: none;'
-    }, 2500)
+    }, 0)
 
     // TODO: Remove after #85 is done
     debugMenu.customEntries.hp = bot.health
