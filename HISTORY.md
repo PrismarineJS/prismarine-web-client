@@ -1,5 +1,9 @@
 ## History
 
+### 1.3.0
+
+* a lot
+
 ### 1.2.0
 
 * custom proxy selection (@Karang)
