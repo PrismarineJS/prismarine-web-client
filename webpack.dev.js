@@ -1,6 +1,3 @@
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin') // TODO: Remove
-const smp = new SpeedMeasurePlugin()
-
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -34,7 +31,7 @@ class SymlinkPlugin {
   }
 }
 
-module.exports = smp.wrap(merge(common, {
+module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   cache: true,
@@ -49,4 +46,4 @@ module.exports = smp.wrap(merge(common, {
     new CopyPlugin({ patterns: common[Symbol.for('webpack_files')] }),
     new SymlinkPlugin({ directories: common[Symbol.for('webpack_directories')] })
   ]
-}))
+})

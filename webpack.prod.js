@@ -1,6 +1,3 @@
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin') // TODO: Remove
-const smp = new SpeedMeasurePlugin()
-
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
@@ -10,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
-module.exports = smp.wrap(merge(common, {
+module.exports = merge(common, {
   mode: 'production',
   plugins: [
     new CleanWebpackPlugin(),
@@ -30,4 +27,4 @@ module.exports = smp.wrap(merge(common, {
       include: ['index.html', 'manifest.json'] // not caching a lot as anyway this works only online
     })
   ]
-}))
+})
