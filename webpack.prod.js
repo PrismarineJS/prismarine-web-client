@@ -1,4 +1,4 @@
-const SpeedMeasurePlugin = require("speed-measure-webpack-plugin") // TODO: Remove
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin') // TODO: Remove
 const smp = new SpeedMeasurePlugin()
 
 const { merge } = require('webpack-merge')
@@ -19,7 +19,7 @@ module.exports = smp.wrap(merge(common, {
     new CopyPlugin({
       patterns: [
         ...common[Symbol.for('webpack_directories')],
-        ...common[Symbol.for('webpack_files')],
+        ...common[Symbol.for('webpack_files')]
       ]
     }),
     new WorkboxPlugin.GenerateSW({
@@ -28,6 +28,6 @@ module.exports = smp.wrap(merge(common, {
       clientsClaim: true,
       skipWaiting: true,
       include: ['index.html', 'manifest.json'] // not caching a lot as anyway this works only online
-    }),
+    })
   ]
 }))

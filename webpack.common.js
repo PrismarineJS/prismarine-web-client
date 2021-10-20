@@ -55,7 +55,7 @@ const config = {
     new webpack.NormalModuleReplacementPlugin(
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
-    ),
+    )
   ],
   // The directories that can be optionally symlinked
   [Symbol.for('webpack_directories')]: [
