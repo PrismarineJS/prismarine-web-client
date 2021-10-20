@@ -1,8 +1,11 @@
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin") // TODO: Remove
+const smp = new SpeedMeasurePlugin()
+
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 const path = require('path')
 
-module.exports = merge(common, {
+module.exports = smp.wrap(merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   cache: true,
@@ -13,4 +16,4 @@ module.exports = merge(common, {
     // open: true,
     hot: true
   }
-})
+}))

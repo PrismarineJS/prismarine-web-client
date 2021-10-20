@@ -62,6 +62,7 @@
     "path-browserify": "^1.0.1",
     "prismarine-viewer": "^1.20.0",
     "process": "PrismarineJS/node-process",
+    "speed-measure-webpack-plugin": "^1.5.0",
     "standard": "^16.0.3",
     "stream-browserify": "^3.0.0",
     "three": "^0.127.0",
