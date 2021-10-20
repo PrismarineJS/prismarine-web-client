@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const path = require('path')
-const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
@@ -57,6 +56,20 @@ const config = {
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
     ),
+  ],
+  // The directories that can be optionally symlinked
+  [Symbol.for('webpack_directories')]: [
+    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
+    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
+    { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' }
+  ],
+  // The files that will be copied
+  [Symbol.for('webpack_files')]: [
+    { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
+    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
+    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
+    { from: path.join(__dirname, 'assets/'), to: './' },
+    { from: path.join(__dirname, 'config.json'), to: './config.json' }
   ]
 }
 
