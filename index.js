@@ -7,6 +7,8 @@ require('./src/chat')
 require('./src/crosshair')
 require('./src/playerlist')
 require('./src/debugmenu')
+// Components
+require('./src/lib/healthbar')
 
 const net = require('net')
 const Cursor = require('./src/cursor')
