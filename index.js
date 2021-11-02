@@ -119,6 +119,7 @@ async function main () {
   menu.addEventListener('connect', e => {
     const options = e.detail
     menu.style = 'display: none;'
+    showEl('healthbar')
     showEl('hotbar')
     showEl('crosshair')
     showEl('chatbox')
@@ -132,6 +133,7 @@ async function main () {
 
 async function connect (options) {
   const loadingScreen = document.getElementById('loading-background')
+  const healthbar = document.getElementById('healthbar')
   const hotbar = document.getElementById('hotbar')
   const chat = document.getElementById('chatbox')
   const playerList = document.getElementById('playerlist')
@@ -180,6 +182,7 @@ async function connect (options) {
     closeTimeout: 240 * 1000
   })
 
+  healthbar.bot = bot
   hotbar.bot = bot
   debugMenu.bot = bot
 
@@ -361,12 +364,10 @@ async function connect (options) {
     }, 2500)
 
     // TODO: Remove after #85 is done
-    debugMenu.customEntries.hp = bot.health
     debugMenu.customEntries.food = bot.food
     debugMenu.customEntries.saturation = bot.foodSaturation
 
     bot.on('health', () => {
-      debugMenu.customEntries.hp = bot.health
       debugMenu.customEntries.food = bot.food
       debugMenu.customEntries.saturation = bot.foodSaturation
     })
