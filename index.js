@@ -1,15 +1,15 @@
 /* global THREE */
-require('./lib/menu')
-require('./lib/loading_screen')
-require('./lib/hotbar')
-require('./lib/gameMenu')
-require('./lib/chat')
-require('./lib/crosshair')
-require('./lib/playerlist')
-require('./lib/debugmenu')
+require('./src/menu')
+require('./src/loading_screen')
+require('./src/hotbar')
+require('./src/gameMenu')
+require('./src/chat')
+require('./src/crosshair')
+require('./src/playerlist')
+require('./src/debugmenu')
 
 const net = require('net')
-const Cursor = require('./lib/cursor')
+const Cursor = require('./src/cursor')
 
 // Workaround for process.versions.node not existing in the browser
 process.versions.node = '14.0.0'
@@ -19,7 +19,7 @@ const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 global.THREE = require('three')
-const { initVR } = require('./lib/vr')
+const { initVR } = require('./src/vr')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
