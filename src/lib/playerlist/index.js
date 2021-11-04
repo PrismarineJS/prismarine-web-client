@@ -2,55 +2,12 @@ const { LitElement, html, css } = require('lit-element')
 
 class PlayerList extends LitElement {
   static get styles () {
-    return css`
-        .playerlist-container {
-          position: absolute;
-          background-color: rgba(0, 0, 0, 0.5);
-          left: 50%;
-          top: 1%;
-          transform: translateX(-50%);
-          border: 2px solid rgba(0, 0, 0, 0.8);
-          padding: 5px;
-          min-width: 8%;
-        }
-        
-        .playerlist-entry {
-          overflow: hidden;
-          color: white;
-          font-size: 20px;
-          margin: 0px;
-          line-height: 100%;
-          text-shadow: 2px 2px 0px #3f3f3f;
-          font-family: mojangles, minecraft, monospace;
-          width: 100%;
-        }
-
-        .plist-active-player {
-          color: rgb(42, 204, 237);
-        }
-        
-        .plist-ping-container {
-          text-align: right;
-          float: right;
-          padding-left: 20px;
-        }
-
-        .plist-ping-value {
-          color: rgb(114, 255, 114);
-          float: left;
-          margin: 0px;
-        }
-
-        .plist-ping-label {
-          color: white;
-          float: right;
-          margin: 0px;
-        }
-    `
+    return css(require('./index.css'))
   }
 
   static get properties () {
     return {
+      bot: { type: Object },
       clientId: { type: String },
       players: { type: Object }
     }
@@ -78,7 +35,10 @@ class PlayerList extends LitElement {
     `
   }
 
-  init (bot) {
+  connectedCallback() {
+    super.connectedCallback()
+    const bot = this.bot
+
     const playerList = this.shadowRoot.querySelector('#playerlist-container')
 
     this.isOpen = false
