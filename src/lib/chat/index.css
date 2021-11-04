@@ -1,0 +1,40 @@
+.chat-wrapper {
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index:10;
+}
+
+.chat-display-wrapper {
+	bottom: calc(8px * 16);
+	padding: 4px;
+	max-height: calc(90px * 8);
+	width: calc(320px * 4);
+}
+
+.chat-input-wrapper {
+	bottom: calc(2px * 16);
+	width: 100%;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.chat {
+	overflow: hidden;
+	color: white;
+	font-size: 16px;
+	margin: 0px;
+	line-height: 100%;
+	text-shadow: 2px 2px 0px #3f3f3f;
+	font-family: mojangles, minecraft, monospace;
+	width: 100%;
+	max-height: calc(90px * 8)
+}
+
+input[type=text], #chatinput {
+	background-color: rgba(0, 0, 0, 0.5);
+	display: none;
+}
+
+li {
+	display: block;
+}

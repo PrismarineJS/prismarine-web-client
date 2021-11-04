@@ -1,27 +1,24 @@
 const { LitElement, html, css } = require('lit-element')
 
-const styles = {
-  black: 'color:#000000',
-  dark_blue: 'color:#0000AA',
-  dark_green: 'color:#00AA00',
-  dark_aqua: 'color:#00AAAA',
-  dark_red: 'color:#AA0000',
-  dark_purple: 'color:#AA00AA',
-  gold: 'color:#FFAA00',
-  gray: 'color:#AAAAAA',
-  dark_gray: 'color:#555555',
-  blue: 'color:#5555FF',
-  green: 'color:#55FF55',
-  aqua: 'color:#55FFFF',
-  red: 'color:#FF5555',
-  light_purple: 'color:#FF55FF',
-  yellow: 'color:#FFFF55',
-  white: 'color:#FFFFFF',
-  bold: 'font-weight:900',
-  strikethrough: 'text-decoration:line-through',
-  underlined: 'text-decoration:underline',
-  italic: 'font-style:italic'
+const colors = {
+  black: '#000000',
+  dark_blue: '#0000AA',
+  dark_green: '#00AA00',
+  dark_aqua: '#00AAAA',
+  dark_red: '#AA0000',
+  dark_purple: '#AA00AA',
+  gold: '#FFAA00',
+  gray: '#AAAAAA',
+  dark_gray: '#555555',
+  blue: '#5555FF',
+  green: '#55FF55',
+  aqua: '#55FFFF',
+  red: '#FF5555',
+  light_purple: '#FF55FF',
+  yellow: '#FFFF55',
+  white: '#FFFFFF'
 }
+
 const dictionary = {
   'chat.stream.emote': '(%s) * %s %s',
   'chat.stream.text': '(%s) <%s> %s',
@@ -37,48 +34,7 @@ const dictionary = {
 
 class ChatBox extends LitElement {
   static get styles () {
-    return css`
-        .chat-wrapper {
-            position: fixed;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index:10;
-        }
-
-        .chat-display-wrapper {
-            bottom: calc(8px * 16);
-            padding: 4px;
-            max-height: calc(90px * 8);
-            width: calc(320px * 4);
-        }
-
-        .chat-input-wrapper {
-            bottom: calc(2px * 16);
-            width: 100%;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, 0);
-        }
-
-        .chat {
-            overflow: hidden;
-            color: white;
-            font-size: 16px;
-            margin: 0px;
-            line-height: 100%;
-            text-shadow: 2px 2px 0px #3f3f3f;
-            font-family: mojangles, minecraft, monospace;
-            width: 100%;
-            max-height: calc(90px * 8)
-        }
-
-        input[type=text], #chatinput {
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-        }
-
-        li {
-            display: block;
-        }    
-    `
+    return css(require('./index.css'))
   }
 
   render () {
@@ -251,7 +207,7 @@ class ChatBox extends LitElement {
             } else {
               const text = readExtra(obj.extra)
               if (text.length > 1) {
-                console.log('Unsupported chat alert :(')
+                console.log('Unsupported chat alert', text)
               }
               msg = msg.replace('%s', text[0].text)
               msglist.push({ text: msg, color: undefined })
@@ -268,16 +224,13 @@ class ChatBox extends LitElement {
       }
       const li = document.createElement('li')
       msglist.forEach(msg => {
-        const span = document.createElement('span')
+        let span = document.createElement('span')
         span.appendChild(document.createTextNode(msg.text))
-        span.setAttribute(
-          'style',
-                `${msg.color ? styles[msg.color.toLowerCase()] : styles.white}; ${
-                msg.bold ? styles.bold + ';' : ''
-                }${msg.italic ? styles.italic + ';' : ''}${
-                msg.strikethrough ? styles.strikethrough + ';' : ''
-                }${msg.underlined ? styles.underlined + ';' : ''}`
-        )
+        if (msg.color) { span.style.color = colors[msg.color.toLowerCase()] }
+        if (msg.bold) { span.style.fontWeight = '900' }
+        if (msg.italic) { span.style.fontStyle = 'italic' }
+        if (msg.underlined) { span.style.textDecoration = 'underline' }
+        if (msg.strikethrough) { span.style.textDecoration += ' line-through' }
         li.appendChild(span)
       })
       chat.appendChild(li)
