@@ -12,6 +12,7 @@ function getEffectClass (effect) {
 class HealthBar extends LitElement {
   static get properties() {
     return {
+      bot: { type: Object },
       health: { type: Number }
     }
   }
