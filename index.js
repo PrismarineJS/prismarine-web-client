@@ -4,7 +4,7 @@ require('./src/loading_screen')
 require('./src/hotbar')
 require('./src/gameMenu')
 require('./src/chat')
-require('./src/crosshair')
+require('./src/lib/crosshair')
 require('./src/playerlist')
 require('./src/debugmenu')
 // Components
