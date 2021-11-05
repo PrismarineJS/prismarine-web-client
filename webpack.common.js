@@ -70,7 +70,17 @@ const config = {
     { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
     { from: path.join(__dirname, 'assets/'), to: './' },
     { from: path.join(__dirname, 'config.json'), to: './config.json' }
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
+      }
+    ]
+  }
 }
 
 module.exports = config
