@@ -343,6 +343,7 @@ async function connect (options) {
       }
       if (e.code.startsWith('Digit')) {
         const numPressed = e.code.substr(5)
+        if (numPressed < 1 || numPressed > 9) return
         hotbar.reloadHotbarSelected(numPressed - 1)
       }
       if (e.code === 'KeyQ') {
