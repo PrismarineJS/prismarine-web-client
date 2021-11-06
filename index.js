@@ -1,10 +1,10 @@
 /* global THREE */
 require('./src/menu')
+// Components
 require('./src/lib/chat')
 require('./src/lib/crosshair')
-require('./src/playerlist')
-// Components
 require('./src/lib/debug')
+require('./src/lib/playerlist')
 require('./src/lib/healthbar')
 require('./src/lib/hotbar')
 require('./src/lib/menu')
