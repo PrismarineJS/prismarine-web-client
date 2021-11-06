@@ -1,6 +1,5 @@
 /* global THREE */
 require('./src/menu')
-require('./src/gameMenu')
 require('./src/lib/chat')
 require('./src/lib/crosshair')
 require('./src/playerlist')
@@ -8,6 +7,7 @@ require('./src/debugmenu')
 // Components
 require('./src/lib/healthbar')
 require('./src/lib/hotbar')
+require('./src/lib/menu')
 require('./src/lib/loadingscreen')
 
 const net = require('net')
