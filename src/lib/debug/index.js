@@ -19,33 +19,7 @@ class DebugMenu extends LitElement {
   }
 
   static get styles () {
-    return css`
-        .debugmenu-wrapper {
-            position: fixed;
-            z-index:25;
-        }
-
-        .debugmenu {
-            overflow: hidden;
-            color: white;
-            font-size: 16px;
-            margin: 0px;
-            line-height: 100%;
-            text-shadow: 2px 2px 0px #3f3f3f;
-            font-family: mojangles, minecraft, monospace;
-            width: calc(320px * 4);
-            max-height: calc(90px * 8);
-            top: calc(8px * 16);
-            padding: 4px;
-        }
-
-        .debugmenu p {
-            margin: 0px;
-            padding: 1px;
-            width: fit-content;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-    `
+    return css(require('./index.css'))
   }
 
   static get properties () {
@@ -54,7 +28,6 @@ class DebugMenu extends LitElement {
       cursorBlock: { type: Object },
       bot: { type: Object },
       customEntries: { type: Object }
-
     }
   }
 
