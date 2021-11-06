@@ -55,4 +55,5 @@ class GithubLink extends LitElement {
     </a>`
   }
 }
+
 window.customElements.define('github-link', GithubLink)

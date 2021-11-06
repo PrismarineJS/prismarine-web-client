@@ -1,5 +1,5 @@
 const { LitElement, html, css } = require('lit-element')
-require('./github_link')
+require('./components/githublink')
 require('./components/button')
 require('./components/buttonlink')
 require('./components/textfield')
