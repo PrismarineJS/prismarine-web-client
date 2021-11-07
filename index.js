@@ -34,15 +34,6 @@ if ('serviceWorker' in navigator) {
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
-//Ctrl-W Workaround
-addEventListener(
-    'beforeunload',
-    function(e){        
-    alert("Sprinting with CTRL+W doesn't work, so please install this plugin. ");
-    window.open("https://chrome.google.com/webstore/detail/better-ctrl-w/jfknaapblnppeflfamkegnnonlfgokhp", '_blank');
-    },
-    true
-);
 // Create three.js context, add to page
 const renderer = new THREE.WebGLRenderer()
 renderer.setPixelRatio(window.devicePixelRatio || 1)
