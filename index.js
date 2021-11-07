@@ -9,7 +9,6 @@ require('./lib/crosshair')
 require('./lib/playerlist')
 require('./lib/debugmenu')
 
-
 const net = require('net')
 const Cursor = require('./lib/cursor')
 
