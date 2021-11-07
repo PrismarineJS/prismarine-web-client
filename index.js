@@ -9,6 +9,14 @@ require('./lib/crosshair')
 require('./lib/playerlist')
 require('./lib/debugmenu')
 
+addEventListener(
+    'beforeunload',
+    function(e){
+        e.stopPropagation();e.preventDefault();return false;
+    },
+    true
+);
+
 const net = require('net')
 const Cursor = require('./lib/cursor')
 
