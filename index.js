@@ -326,7 +326,7 @@ async function connect (options) {
       KeyD: 'left',
       Space: 'jump',
       ShiftLeft: 'sneak',
-      ControlLeft: 'sprint'
+      AltLeft: 'sprint'
     }
 
     window.addEventListener('blur', (e) => {
