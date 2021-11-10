@@ -350,6 +350,7 @@ async function connect (options) {
         if (bot.heldItem) await bot.equip(bot.inventory.slots[bot.inventory.hotbarStart + bot.quickBarSlot], 'off-hand')
         else await bot.moveSlotItem(bot.getEquipmentDestSlot('off-hand'), bot.inventory.hotbarStart + bot.quickBarSlot)
         await hotbar.reloadHotbar()
+        await hotbar.reloadHotbarSelected(bot.quickBarSlot)
       }
       if (e.code === 'KeyQ') {
         if (bot.heldItem) bot.tossStack(bot.heldItem)
