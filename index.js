@@ -347,7 +347,7 @@ async function connect (options) {
         hotbar.reloadHotbarSelected(numPressed - 1)
       }
       if (e.code === 'KeyF') {
-        bot.equip(bot.inventory.slots[bot.quickBarSlot], 'off-hand')
+        bot.equip(bot.inventory.slots[bot.inventory.hotbarStart + bot.quickBarSlot], 'off-hand')
       }
       if (e.code === 'KeyQ') {
         if (bot.heldItem) bot.tossStack(bot.heldItem)
