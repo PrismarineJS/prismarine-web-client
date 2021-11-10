@@ -334,7 +334,7 @@ async function connect (options) {
       bot.clearControlStates()
     }, false)
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', async (e) => {
       if (chat.inChat) return
       if (gameMenu.inMenu) return
       console.log(e.code)
@@ -347,8 +347,9 @@ async function connect (options) {
         hotbar.reloadHotbarSelected(numPressed - 1)
       }
       if (e.code === 'KeyF') {
-        if (bot.heldItem) bot.equip(bot.inventory.slots[bot.inventory.hotbarStart + bot.quickBarSlot], 'off-hand')
-        else bot.moveSlotItem(bot.getEquipmentDestSlot('off-hand'), bot.inventory.hotbarStart + bot.quickBarSlot)
+        if (bot.heldItem) await bot.equip(bot.inventory.slots[bot.inventory.hotbarStart + bot.quickBarSlot], 'off-hand')
+        else await bot.moveSlotItem(bot.getEquipmentDestSlot('off-hand'), bot.inventory.hotbarStart + bot.quickBarSlot)
+        await hotbar.reloadHotbar()
       }
       if (e.code === 'KeyQ') {
         if (bot.heldItem) bot.tossStack(bot.heldItem)
