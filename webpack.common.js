@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const path = require('path')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
 const config = {
@@ -18,9 +20,11 @@ const config = {
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
-      fs: 'memfs'
+      fs: 'memfs',
+      jose: false
     },
     fallback: {
+      jose: false,
       zlib: require.resolve('browserify-zlib'),
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer/'),
@@ -55,32 +59,27 @@ const config = {
     new webpack.NormalModuleReplacementPlugin(
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
-    )
-  ],
-  // The directories that can be optionally symlinked
-  [Symbol.for('webpack_directories')]: [
-    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
-    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
-    { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' }
-  ],
-  // The files that will be copied
-  [Symbol.for('webpack_files')]: [
-    { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
-    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
-    { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
-    { from: path.join(__dirname, 'assets/'), to: './' },
-    { from: path.join(__dirname, 'config.json'), to: './config.json' }
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false
-        }
-      }
-    ]
-  }
+    ),
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+      include: ['index.html', 'manifest.json'] // not caching a lot as anyway this works only online
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
+        { from: path.join(__dirname, 'assets/'), to: './' },
+        { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' },
+        { from: path.join(__dirname, 'config.json'), to: './config.json' }
+      ]
+    })
+  ]
 }
 
 module.exports = config
