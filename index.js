@@ -349,6 +349,7 @@ async function connect (options) {
       if (e.code === 'KeyF') {
         if (bot.heldItem) await bot.equip(bot.inventory.slots[bot.inventory.hotbarStart + bot.quickBarSlot], 'off-hand')
         else await bot.moveSlotItem(bot.getEquipmentDestSlot('off-hand'), bot.inventory.hotbarStart + bot.quickBarSlot)
+        await bot.updateHeldItem()
         await hotbar.reloadHotbar()
         await hotbar.reloadHotbarSelected(bot.quickBarSlot)
       }
