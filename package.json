@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
-    "start": "node server.js 8080 dev",
+    "start": "node --max-old-space-size=8192 server.js 8080 dev",
     "prod-start": "node server.js",
     "build-dev-start": "npm run build-dev && npm run prod-start",
     "build-start": "npm run build && npm run prod-start",

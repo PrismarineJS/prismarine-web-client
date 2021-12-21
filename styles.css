@@ -1,10 +1,34 @@
 :root {
   --guiScaleFactor: 3;
+  --guiScale: 3;
+  --chatWidth: 320px;
+  --chatHeight: 180px;
+  --chatScale: 1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
+}
+
+.dirt-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url('textures/1.17.1/gui/options_background.png'), rgba(0, 0, 0, 0.7);
+  background-size: 16px;
+  background-repeat: repeat;
+  width: 100%;
+  height: 100%;
+  transform-origin: top left;
+  transform: scale(2);
+  background-blend-mode: overlay;
 }
 
 @font-face {
@@ -16,13 +40,16 @@ html {
     font-family: mojangles;
     src: url(mojangles.ttf);
 }
+
 body {
   overflow: hidden;
   position: relative;
   margin:0;
   padding:0;
+  height: 100vh;
   font-family: sans-serif;
-  background: linear-gradient(#141e30, #243b55);
+  background: #333;
+  /* background: linear-gradient(#141e30, #243b55); */
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -32,9 +59,30 @@ body {
 }
 
 canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
 	height: 100%;
 	width: 100%;
 	font-size: 0;
 	margin: 0;
 	padding: 0;
+}
+
+#ui-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  transform: scale(var(--guiScale));
+  width: calc(100% / var(--guiScale));
+  height: calc(100% / var(--guiScale));
+  z-index: 10;
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  font-family: minecraft, mojangles, monospace;
 }

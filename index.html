@@ -17,14 +17,14 @@
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
   </head>
   <body>
-    <game-menu id="game-menu" style="display: none;"></game-menu>
-    <debug-menu id="debugmenu" style="display: none;"></debug-menu>
-    <player-list id="playerlist" style="display: none;"></player-list>
-    <cross-hair id="crosshair" style="display: none;"></cross-hair>
-    <chat-box id="chatbox" style="display: none;"></chat-box>
-    <health-bar id="healthbar" style="display: none;"></health-bar>
-    <hot-bar id="hotbar" style="display: none;"></hot-bar>
-    <loading-screen id="loading-background"  style="display: none;"></loading-screen>
-    <prismarine-menu id="prismarine-menu"></prismarine-menu>
+    <div id="ui-root">
+      <pmui-hud id="hud" style="display: none;"></pmui-hud>
+      <pmui-pausescreen id="pause-screen" style="display: none;"></pmui-pausescreen>
+      <pmui-loadingscreen id="loading-screen" style="display: none;"></pmui-loadingscreen>
+      <pmui-playscreen id="play-screen" style="display: none;"></pmui-playscreen>
+      <pmui-keybindsscreen id="keybinds-screen" style="display: none;"></pmui-keybindsscreen>
+      <pmui-optionsscreen id="options-screen" style="display: none;"></pmui-optionsscreen>
+      <pmui-titlescreen id="title-screen" style="display: block;"></pmui-titlescreen>
+    </div>
   </body>
 </html>
