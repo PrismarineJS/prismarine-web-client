@@ -86,3 +86,19 @@ canvas {
   -ms-interpolation-mode: nearest-neighbor;
   font-family: minecraft, mojangles, monospace;
 }
+
+@media only screen and (max-width: 971px) {
+  #ui-root {
+    transform: scale(2);
+    width: calc(100% / 2);
+    height: calc(100% / 2);
+  }
+}
+
+@media only screen and (max-width: 561px) {
+  #ui-root {
+    transform: scale(1);
+    width: calc(100% / 1);
+    height: calc(100% / 1);
+  }
+}

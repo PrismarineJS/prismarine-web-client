@@ -9,7 +9,7 @@
 
 Um cliente de Minecraft a funcionar numa página web. **Demostração em https://webclient.prismarine.js.org/**
 
-## Como functiona
+## Como funciona
 prismarine-web-client executa mineflayer e prismarine-viewer no teu navegador, que se conecta por WebSocket a uma proxy 
 que traduz o conexão do WebSocket em TCP para poderes conectar-te a servidores normais do Minecraft. Prismarine-web-client é basiado em:
 * [prismarine-viewer](https://github.com/PrismarineJS/prismarine-viewer) para renderizar o mundo
