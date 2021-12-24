@@ -37,7 +37,9 @@
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "lit": "^2.0.2",
-    "net-browserify": "PrismarineJS/net-browserify"
+    "net-browserify": "PrismarineJS/net-browserify",
+    "querystring": "^0.2.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "assert": "^2.0.0",
