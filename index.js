@@ -178,7 +178,7 @@ async function connect (options) {
   const bot = mineflayer.createBot({
     host,
     port,
-    version: options.botVersion,
+    version: options.botVersion === '' ? false : options.botVersion,
     username,
     password,
     viewDistance: 'tiny',
