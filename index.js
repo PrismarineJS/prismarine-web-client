@@ -1,13 +1,22 @@
 /* global THREE */
-require('./lib/menu')
-require('./lib/loading_screen')
-require('./lib/healthbar')
-require('./lib/hotbar')
-require('./lib/gameMenu')
 require('./lib/chat')
-require('./lib/crosshair')
-require('./lib/playerlist')
-require('./lib/debugmenu')
+
+require('./lib/menus/components/button')
+require('./lib/menus/components/edit_box')
+require('./lib/menus/components/slider')
+require('./lib/menus/components/hotbar')
+require('./lib/menus/components/health_bar')
+require('./lib/menus/components/food_bar')
+require('./lib/menus/components/breath_bar')
+require('./lib/menus/components/debug_overlay')
+require('./lib/menus/components/playerlist_overlay')
+require('./lib/menus/hud')
+require('./lib/menus/play_screen')
+require('./lib/menus/pause_screen')
+require('./lib/menus/loading_screen')
+require('./lib/menus/keybinds_screen')
+require('./lib/menus/options_screen')
+require('./lib/menus/title_screen')
 
 const net = require('net')
 const Cursor = require('./lib/cursor')
@@ -45,43 +54,60 @@ document.body.appendChild(renderer.domElement)
 const viewer = new Viewer(renderer)
 
 // Menu panorama background
-function getPanoramaMesh () {
-  const geometry = new THREE.SphereGeometry(500, 60, 40)
-  geometry.scale(-1, 1, 1)
-  const texture = new THREE.TextureLoader().load('title_blured.jpg')
-  const material = new THREE.MeshBasicMaterial({ map: texture })
-  const mesh = new THREE.Mesh(geometry, material)
-  mesh.rotation.y = Math.PI
-  mesh.onBeforeRender = () => {
-    mesh.rotation.y += 0.0005
-    mesh.rotation.x = -Math.sin(mesh.rotation.y * 3) * 0.3
+function addPanoramaCubeMap () {
+  let time = 0
+  viewer.camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.05, 1000)
+  viewer.camera.updateProjectionMatrix()
+  viewer.camera.position.set(0, 0, 0)
+  viewer.camera.rotation.set(0, 0, 0)
+  const panorGeo = new THREE.BoxGeometry(1000, 1000, 1000)
+
+  const loader = new THREE.TextureLoader()
+  const panorMaterials = [
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_1.png'), transparent: true, side: THREE.DoubleSide }), // WS
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_3.png'), transparent: true, side: THREE.DoubleSide }), // ES
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_4.png'), transparent: true, side: THREE.DoubleSide }), // Up
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_5.png'), transparent: true, side: THREE.DoubleSide }), // Down
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_0.png'), transparent: true, side: THREE.DoubleSide }), // NS
+    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_2.png'), transparent: true, side: THREE.DoubleSide }) // SS
+  ]
+
+  const panoramaBox = new THREE.Mesh(panorGeo, panorMaterials)
+
+  panoramaBox.onBeforeRender = () => {
+    time += 0.01
+    panoramaBox.rotation.y = Math.PI + time * 0.01
+    panoramaBox.rotation.z = Math.sin(-time * 0.001) * 0.001
   }
+
   const group = new THREE.Object3D()
-  group.add(mesh)
+  group.add(panoramaBox)
+
   const Entity = require('prismarine-viewer/viewer/lib/entity/Entity')
   for (let i = 0; i < 42; i++) {
     const m = new Entity('1.16.4', 'squid').mesh
-    m.position.set(Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 30)
+    m.position.set(Math.random() * 30 - 15, Math.random() * 20 - 10, Math.random() * 10 - 17)
     m.rotation.set(0, Math.PI + Math.random(), -Math.PI / 4, 'ZYX')
     const v = Math.random() * 0.01
     m.children[0].onBeforeRender = () => {
       m.rotation.y += v
-      m.rotation.z = Math.cos(mesh.rotation.y * 3) * Math.PI / 4 - Math.PI / 2
+      m.rotation.z = Math.cos(panoramaBox.rotation.y * 3) * Math.PI / 4 - Math.PI / 2
     }
     group.add(m)
   }
+
+  viewer.scene.add(group)
   return group
 }
 
+const panoramaCubeMap = addPanoramaCubeMap()
+
 function removePanorama () {
-  viewer.scene.remove(panoramaMesh)
-  panoramaMesh = null
+  viewer.camera = new THREE.PerspectiveCamera(document.getElementById('options-screen').fov, window.innerWidth / window.innerHeight, 0.1, 1000)
+  viewer.camera.updateProjectionMatrix()
+  viewer.scene.remove(panoramaCubeMap)
 }
 
-let panoramaMesh = getPanoramaMesh()
-viewer.scene.add(panoramaMesh)
-
-// Browser animation loop
 let animate = () => {
   window.requestAnimationFrame(animate)
   viewer.update()
@@ -89,59 +115,36 @@ let animate = () => {
 }
 animate()
 
-const calcGuiScale = (guiScaleIn) => {
-  let i
-  for (i = 1; i !== guiScaleIn && i < window.innerWidth && i < (window.innerHeight) && window.innerWidth / (i + 1) >= 320 && (window.innerHeight) / (i + 1) >= 240; ++i);
-  return i
-}
-
-const setScaleFactor = (value) => {
-  const i = calcGuiScale(value)
-  document.documentElement.style.setProperty('--guiScaleFactor', i)
-  console.log(`Scale: ${i}`)
-}
-
-window.setScaleFactor = (value) => {
-  setScaleFactor(value)
-}
-
-setScaleFactor(3)
-
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
   viewer.camera.updateProjectionMatrix()
   renderer.setSize(window.innerWidth, window.innerHeight)
-  setScaleFactor(3)
 })
 
+const showEl = (str) => { document.getElementById(str).style = 'display:block' }
 async function main () {
-  const showEl = (str) => { document.getElementById(str).style = 'display:block' }
-  const menu = document.getElementById('prismarine-menu')
+  const menu = document.getElementById('play-screen')
+
   menu.addEventListener('connect', e => {
     const options = e.detail
     menu.style = 'display: none;'
-    showEl('healthbar')
-    showEl('hotbar')
-    showEl('crosshair')
-    showEl('chatbox')
-    showEl('loading-background')
-    showEl('playerlist')
-    showEl('debugmenu')
+    showEl('loading-screen')
     removePanorama()
     connect(options)
   })
 }
 
 async function connect (options) {
-  const loadingScreen = document.getElementById('loading-background')
-  const healthbar = document.getElementById('healthbar')
-  const hotbar = document.getElementById('hotbar')
-  const chat = document.getElementById('chatbox')
-  const playerList = document.getElementById('playerlist')
-  const debugMenu = document.getElementById('debugmenu')
-  const gameMenu = document.getElementById('game-menu')
+  const loadingScreen = document.getElementById('loading-screen')
 
-  const viewDistance = 6
+  const hud = document.getElementById('hud')
+  const chat = hud.shadowRoot.querySelector('#chat')
+  const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
+  const optionsScrn = document.getElementById('options-screen')
+  const keyBindScrn = document.getElementById('keybinds-screen')
+  const gameMenu = document.getElementById('pause-screen')
+
+  const viewDistance = optionsScrn.renderDistance
   const hostprompt = options.server
   const proxyprompt = options.proxy
   const username = options.username
@@ -183,26 +186,25 @@ async function connect (options) {
     closeTimeout: 240 * 1000
   })
 
-  healthbar.bot = bot
-  hotbar.bot = bot
-  debugMenu.bot = bot
-
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
     loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
     loadingScreen.style = 'display: block;'
+    loadingScreen.hasError = true
   })
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
     loadingScreen.status = `The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`
     loadingScreen.style = 'display: block;'
+    loadingScreen.hasError = true
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
     loadingScreen.status = `You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`
     loadingScreen.style = 'display: block;'
+    loadingScreen.hasError = true
   })
 
   bot.once('login', () => {
@@ -212,7 +214,7 @@ async function connect (options) {
   bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version)
 
-    loadingScreen.status = 'Placing blocks (starting viewer)...'
+    loadingScreen.status = 'Placing blocks (starting viewer)'
 
     console.log('bot spawned - starting viewer')
 
@@ -220,15 +222,18 @@ async function connect (options) {
 
     const center = bot.entity.position
 
+    console.log(viewDistance)
     const worldView = new WorldView(bot.world, viewDistance, center)
 
-    chat.init(bot._client, renderer)
     gameMenu.init(renderer)
-    playerList.init(bot)
+    optionsScrn.isInsideWorld = true
+    optionsScrn.addEventListener('fov_changed', (e) => {
+      viewer.camera.fov = e.detail.fov
+      viewer.camera.updateProjectionMatrix()
+    })
 
     viewer.setVersion(version)
 
-    hotbar.viewerVersion = viewer.version
     window.worldView = worldView
     window.bot = bot
     window.mcData = mcData
@@ -236,15 +241,8 @@ async function connect (options) {
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
+    window.settings = optionsScrn
     window.renderer = renderer
-    window.settings = {
-      mouseSensXValue: window.localStorage.getItem('mouseSensX') ?? 0.005,
-      mouseSensYValue: window.localStorage.getItem('mouseSensY') ?? 0.005,
-      set mouseSensX (v) { this.mouseSensXValue = v; window.localStorage.setItem('mouseSensX', v) },
-      set mouseSensY (v) { this.mouseSensYValue = v; window.localStorage.setItem('mouseSensY', v) },
-      get mouseSensX () { return this.mouseSensXValue },
-      get mouseSensY () { return this.mouseSensYValue }
-    }
 
     initVR(bot, renderer, viewer)
 
@@ -270,12 +268,12 @@ async function connect (options) {
     bot.on('move', botPosition)
     botPosition()
 
-    loadingScreen.status = 'Setting callbacks...'
+    loadingScreen.status = 'Setting callbacks'
 
     function moveCallback (e) {
-      bot.entity.pitch -= e.movementY * window.settings.mouseSensYValue
+      bot.entity.pitch -= e.movementY * optionsScrn.mouseSensitivityY * 0.0001
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      bot.entity.yaw -= e.movementX * window.settings.mouseSensXValue
+      bot.entity.yaw -= e.movementX * optionsScrn.mouseSensitivityX * 0.0001
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
     }
@@ -320,16 +318,6 @@ async function connect (options) {
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
 
-    const codes = {
-      KeyW: 'forward',
-      KeyS: 'back',
-      KeyA: 'right',
-      KeyD: 'left',
-      Space: 'jump',
-      ShiftLeft: 'sneak',
-      ControlLeft: 'sprint'
-    }
-
     window.addEventListener('blur', (e) => {
       bot.clearControlStates()
     }, false)
@@ -337,42 +325,79 @@ async function connect (options) {
     document.addEventListener('keydown', (e) => {
       if (chat.inChat) return
       if (gameMenu.inMenu) return
-      console.log(e.code)
-      if (e.code in codes) {
-        bot.setControlState(codes[e.code], true)
-      }
-      if (e.code.startsWith('Digit')) {
-        const numPressed = e.code.substr(5)
-        if (numPressed < 1 || numPressed > 9) return
-        hotbar.reloadHotbarSelected(numPressed - 1)
-      }
-      if (e.code === 'KeyQ') {
-        if (bot.heldItem) bot.tossStack(bot.heldItem)
-      }
+
+      keyBindScrn.keymaps.forEach(km => {
+        if (e.code === km.key) {
+          switch (km.defaultKey) {
+            case 'KeyQ':
+              if (bot.heldItem) bot.tossStack(bot.heldItem)
+              break
+            case 'ControlLeft':
+              bot.setControlState('sprint', true)
+              break
+            case 'ShiftLeft':
+              bot.setControlState('sneak', true)
+              break
+            case 'Space':
+              bot.setControlState('jump', true)
+              break
+            case 'KeyD':
+              bot.setControlState('left', true)
+              break
+            case 'KeyA':
+              bot.setControlState('right', true)
+              break
+            case 'KeyS':
+              bot.setControlState('back', true)
+              break
+            case 'KeyW':
+              bot.setControlState('forward', true)
+              break
+          }
+        }
+      })
     }, false)
 
     document.addEventListener('keyup', (e) => {
-      if (e.code in codes) {
-        bot.setControlState(codes[e.code], false)
-      }
+      keyBindScrn.keymaps.forEach(km => {
+        if (e.code === km.key) {
+          switch (km.defaultKey) {
+            case 'ControlLeft':
+              bot.setControlState('sprint', false)
+              break
+            case 'ShiftLeft':
+              bot.setControlState('sneak', false)
+              break
+            case 'Space':
+              bot.setControlState('jump', false)
+              break
+            case 'KeyD':
+              bot.setControlState('left', false)
+              break
+            case 'KeyA':
+              bot.setControlState('right', false)
+              break
+            case 'KeyS':
+              bot.setControlState('back', false)
+              break
+            case 'KeyW':
+              bot.setControlState('forward', false)
+              break
+          }
+        }
+      })
     }, false)
 
     loadingScreen.status = 'Done!'
     console.log(loadingScreen.status) // only do that because it's read in index.html and npm run fix complains.
 
+    hud.init(renderer, bot, host)
+    hud.style.display = 'block'
+
     setTimeout(function () {
       // remove loading screen, wait a second to make sure a frame has properly rendered
       loadingScreen.style = 'display: none;'
     }, 2500)
-
-    // TODO: Remove after #85 is done
-    debugMenu.customEntries.food = bot.food
-    debugMenu.customEntries.saturation = bot.foodSaturation
-
-    bot.on('health', () => {
-      debugMenu.customEntries.food = bot.food
-      debugMenu.customEntries.saturation = bot.foodSaturation
-    })
   })
 }
 main()
