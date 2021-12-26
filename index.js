@@ -17,6 +17,7 @@ require('./lib/menus/loading_screen')
 require('./lib/menus/keybinds_screen')
 require('./lib/menus/options_screen')
 require('./lib/menus/title_screen')
+require('./lib/menus/inventory')
 
 const net = require('net')
 const Cursor = require('./lib/cursor')
@@ -143,6 +144,7 @@ async function connect (options) {
   const optionsScrn = document.getElementById('options-screen')
   const keyBindScrn = document.getElementById('keybinds-screen')
   const gameMenu = document.getElementById('pause-screen')
+  const inventoryMenu = document.getElementById('inventory')
 
   const viewDistance = optionsScrn.renderDistance
   const hostprompt = options.server
@@ -227,6 +229,8 @@ async function connect (options) {
     const worldView = new WorldView(bot.world, viewDistance, center)
 
     gameMenu.init(renderer)
+    inventoryMenu.init(renderer)
+
     optionsScrn.isInsideWorld = true
     optionsScrn.addEventListener('fov_changed', (e) => {
       viewer.camera.fov = e.detail.fov
