@@ -4808,5 +4808,10 @@
     "name": "Respawn Anchor",
     "x": 448,
     "y": 192
+  },
+  "question_mark": {
+    "name": "Question Mark",
+    "x": 0,
+    "y": 0
   }
 }

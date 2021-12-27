@@ -229,7 +229,7 @@ async function connect (options) {
     const worldView = new WorldView(bot.world, viewDistance, center)
 
     gameMenu.init(renderer)
-    inventoryMenu.init(renderer)
+    inventoryMenu.init(renderer, bot)
 
     optionsScrn.isInsideWorld = true
     optionsScrn.addEventListener('fov_changed', (e) => {
