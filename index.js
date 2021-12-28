@@ -316,7 +316,7 @@ async function connect (options) {
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
     document.addEventListener('mousedown', (e) => {
-      if (!chat.inChat && !gameMenu.inMenu) {
+      if (!chat.inChat && !gameMenu.inMenu && !inventoryMenu.inMenu) {
         renderer.domElement.requestPointerLock()
       }
     })
