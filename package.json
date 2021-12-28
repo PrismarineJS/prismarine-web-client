@@ -38,7 +38,7 @@
     "express": "^4.17.1",
     "ismobilejs": "^1.1.1",
     "lit": "^2.0.2",
-    "minecraft-inventory-gui": "file:////Users/owl/Documents/GitHub/prismarine-inventory-gui/",
+    "minecraft-inventory-gui": "github:AwesomestCode/prismarine-inventory-gui",
     "net-browserify": "PrismarineJS/net-browserify",
     "querystring": "^0.2.1",
     "url": "^0.11.0"
