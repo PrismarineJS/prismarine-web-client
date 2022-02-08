@@ -1,9 +1,25 @@
+const fs = require('fs').promises
 const webpack = require('webpack')
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 // https://webpack.js.org/guides/production/
+
+function filterExisting (directory = '') {
+  const relative = path.resolve(__dirname, directory)
+  return async function filter (pathname) {
+    const { mtimeMs: modified } = await fs.stat(pathname)
+    const buildname = path.resolve(config.output.path, path.relative(relative, pathname))
+    try {
+      const { mtimeMs: modifiedExisting } = await fs.stat(buildname)
+      return modified > modifiedExisting
+    } catch (e) {
+      if (e.code === 'ENOENT') return true
+      throw e
+    }
+  }
+}
 
 const config = {
   entry: path.resolve(__dirname, './index.js'),
@@ -69,14 +85,14 @@ const config = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
-        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
-        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
-        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
-        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
-        { from: path.join(__dirname, 'assets/'), to: './' },
-        { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' },
-        { from: path.join(__dirname, 'config.json'), to: './config.json' }
+        { from: path.join(__dirname, '/styles.css'), to: './styles.css', filter: filterExisting() },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/', filter: filterExisting('/node_modules/prismarine-viewer/public/') },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/', filter: filterExisting('/node_modules/prismarine-viewer/public/') },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './', filter: filterExisting('/node_modules/prismarine-viewer/public/') },
+        { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './', filter: filterExisting('/node_modules/prismarine-viewer/public/') },
+        { from: path.join(__dirname, 'assets/'), to: './', filter: filterExisting('assets/') },
+        { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/', filter: filterExisting() },
+        { from: path.join(__dirname, 'config.json'), to: './config.json', filter: filterExisting() }
       ]
     })
   ]
