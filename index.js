@@ -403,13 +403,13 @@ async function connect (options) {
 }
 
 /**
- * @param {URLSearchParams} params 
+ * @param {URLSearchParams} params
  */
-async function fromTheOutside(params, addr) {
+async function fromTheOutside (params, addr) {
   const opts = {}
   const dfltConfig = await (await window.fetch('config.json')).json()
 
-  let server, port, proxy, proxyPort;
+  let server, port, proxy, proxyPort
 
   if (address.includes(':')) {
     const s = address.split(':')
@@ -430,8 +430,8 @@ async function fromTheOutside(params, addr) {
     proxyPort = !dfltConfig.defaultProxy && !dfltConfig.defaultProxyPort ? '' : dfltConfig.defaultProxyPort ?? 443
   }
 
-  opts.server = `${server}:${port}` 
-  opts.proxy = `${proxy}:${proxyPort}` 
+  opts.server = `${server}:${port}`
+  opts.proxy = `${proxy}:${proxyPort}`
   opts.username = params.get('username') ?? `pviewer${Math.floor(Math.random() * 1000)}`
   opts.password = params.get('password') ?? ''
   opts.botVersion = params.get('version') ?? false
