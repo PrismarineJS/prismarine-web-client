@@ -401,4 +401,53 @@ async function connect (options) {
     }, 2500)
   })
 }
-main()
+
+/**
+ * @param {URLSearchParams} params
+ */
+async function fromTheOutside (params, addr) {
+  const opts = {}
+  const dfltConfig = await (await window.fetch('config.json')).json()
+
+  let server, port, proxy, proxyPort
+
+  if (address.includes(':')) {
+    const s = address.split(':')
+    server = s[0]
+    port = Number(s[1]) || 25565
+  } else {
+    server = address
+    port = Number(params.get('port')) || 25565
+  }
+
+  const proxyAddr = params.get('proxy')
+  if (proxyAddr) {
+    const s = proxyAddr.split(':')
+    proxy = s[0]
+    proxyPort = Number(s[1] ?? 'NaN') || 22
+  } else {
+    proxy = dfltConfig.defaultProxy
+    proxyPort = !dfltConfig.defaultProxy && !dfltConfig.defaultProxyPort ? '' : dfltConfig.defaultProxyPort ?? 443
+  }
+
+  opts.server = `${server}:${port}`
+  opts.proxy = `${proxy}:${proxyPort}`
+  opts.username = params.get('username') ?? `pviewer${Math.floor(Math.random() * 1000)}`
+  opts.password = params.get('password') ?? ''
+  opts.botVersion = params.get('version') ?? false
+
+  console.log(opts)
+
+  showEl('loading-screen')
+  removePanorama()
+  connect(opts)
+}
+
+const params = new URLSearchParams(window.location.search)
+let address
+if ((address = params.get('address'))) {
+  fromTheOutside(params, address)
+} else {
+  showEl('title-screen')
+  main()
+}
