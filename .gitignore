@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 .vscode
 public
 .DS_Store
