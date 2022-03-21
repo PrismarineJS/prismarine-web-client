@@ -58,7 +58,7 @@
     "lodash-webpack-plugin": "^0.11.6",
     "memfs": "^3.2.0",
     "mineflayer": "^4.1.0",
-    "mineflayer-pathfinder": "^1.6.1",
+    "mineflayer-pathfinder": "^2.0.0",
     "mocha": "^9.0.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
