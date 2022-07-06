@@ -1,5 +1,9 @@
 ## History
 
+### 1.4.0
+
+* so much
+
 ### 1.3.0
 
 * a lot
