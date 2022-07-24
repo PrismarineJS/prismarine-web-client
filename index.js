@@ -187,7 +187,7 @@ async function connect (options) {
     noPongTimeout: 240 * 1000,
     closeTimeout: 240 * 1000
   })
-  hud.preload(bot);
+  hud.preload(bot)
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
