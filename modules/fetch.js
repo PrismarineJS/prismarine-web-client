@@ -2,7 +2,7 @@ const config = require('../config.json')
 
 let hasExtension
 let version
-if (chrome.runtime && config.extension_id) {
+if (chrome && chrome.runtime && config.extension_id) {
   try {
     chrome.runtime.sendMessage(config.extension_id, { type: 'version' }, response => {
       hasExtension = true
