@@ -21,7 +21,7 @@ const config = {
       express: false,
       net: 'net-browserify',
       fs: 'memfs',
-      "node-fetch": require.resolve('./modules/fetch.js'),
+      'node-fetch': require.resolve('./modules/fetch.js'),
       jose: false
     },
     fallback: {
