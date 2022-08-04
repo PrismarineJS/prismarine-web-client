@@ -184,7 +184,9 @@ async function connect (options) {
     viewDistance: 'tiny',
     checkTimeoutInterval: 240 * 1000,
     noPongTimeout: 240 * 1000,
-    closeTimeout: 240 * 1000
+    closeTimeout: 240 * 1000,
+    session: options.onlineMode ? options.auth : undefined,
+    skipValidation: true
   })
 
   bot.on('error', (err) => {
