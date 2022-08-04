@@ -75,5 +75,8 @@
     "webpack-dev-server": "^4.0.0",
     "webpack-merge": "^5.7.3",
     "workbox-webpack-plugin": "^6.1.2"
+  },
+  "standard": {
+    "globals": [ "chrome" ]
   }
 }
