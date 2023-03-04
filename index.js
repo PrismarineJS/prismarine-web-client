@@ -10,6 +10,7 @@ require('./lib/menus/components/food_bar')
 require('./lib/menus/components/breath_bar')
 require('./lib/menus/components/debug_overlay')
 require('./lib/menus/components/playerlist_overlay')
+require('./lib/menus/components/bossbars_overlay')
 require('./lib/menus/hud')
 require('./lib/menus/play_screen')
 require('./lib/menus/pause_screen')
@@ -186,6 +187,7 @@ async function connect (options) {
     noPongTimeout: 240 * 1000,
     closeTimeout: 240 * 1000
   })
+  hud.preload(bot)
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
