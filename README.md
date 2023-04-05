@@ -7,7 +7,7 @@
 | 🇺🇸 [English](README.md) | 🇷🇺 [Russian](README_RU.md)  | 🇵🇹 [Portuguese](README_PT.md) |
 | ----------------------- | -------------------------- | ---------------------------- |
 
-A Minecraft client running in a web page. **Live demo at https://webclient.prismarine.js.org/**
+A Minecraft client running in a web page. **Live demo at https://prismarinejs.github.io/prismarine-web-client/**
 
 
 ## How it Works
@@ -22,7 +22,7 @@ Check these modules if you want to understand more how it works and contribute!
 ![Screenshot of prismarine-web-client in action](screenshot.png)
 
 ## Live Demo
-Click on this link to open it in your browser, no installation necessary: https://webclient.prismarine.js.org/
+Click on this link to open it in your browser, no installation necessary: https://prismarinejs.github.io/prismarine-web-client/
 
 *Tested on Chrome & Firefox for desktop platforms.*
 

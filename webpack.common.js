@@ -10,7 +10,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, './public'),
     filename: './index.js',
-    publicPath: '/'
+    publicPath: './'
   },
   resolve: {
     alias: {
