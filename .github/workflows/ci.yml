@@ -44,7 +44,6 @@ jobs:
           cp -R public/ ../
           rm -Rf ./*
           git checkout gh-pages
-          cp CNAME ../public/
           rm -Rf ./*
           rm -Rf .github .gitignore .gitpod .gitpod.DockerFile .npmignore .npmrc
           cp -R ../public/* ./
