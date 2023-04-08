@@ -20,7 +20,7 @@ const config = {
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
-      fs: 'memfs',
+      fs: false,
       jose: false
     },
     fallback: {
