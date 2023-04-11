@@ -263,6 +263,54 @@ async function connect (options) {
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
 
+    // Day and night
+    const skyColor = viewer.scene.background.getHexString()
+
+    // Darken by factor (0 to black, 0.5 half as bright, 1 unchanged)
+    function darkenSky (color, factor) {
+      color = parseInt(color, 16)
+      return (Math.round((color & 0x0000FF) * factor) |
+             (Math.round(((color >> 8) & 0x00FF) * factor) << 8) |
+             (Math.round((color >> 16) * factor) << 16)).toString(16)
+    }
+
+    // Provides gradual sunrise or sunset sky
+    function intensityCalc (time) {
+      if ((time >= 13000) && (time <= 23000)) {
+        return 0
+      } else if ((time <= 12000) && (time >= 0)) {
+        return 0.75
+      } else if ((time < 13000) && (time > 12000)) {
+        const transition = time - 12000
+        return (0.75 - (0.75 * transition / 1000))
+      } else {
+        const transition = time - 23000
+        return (0.75 * transition / 1000)
+      }
+    }
+
+    // Used for directionalLight vector calculation
+    function timeToRads (time) {
+      return time * (Math.PI / 12000)
+    }
+
+    // Every 750ms change light settings
+    window.setInterval(function () {
+      const currentTime = bot.time.timeOfDay
+      const moonPhase = bot.time.moonPhase
+      if (typeof currentTime !== 'undefined') {
+        const intensity = intensityCalc(currentTime)
+        viewer.scene.background = new THREE.Color('#' + darkenSky(skyColor, intensity).padStart(6, 0))
+        viewer.ambientLight.intensity = ((intensity < 0.25) ? 0.25 : intensity) + (0.07 - (moonPhase / 100))
+        viewer.directionalLight.intensity = intensity + (0.07 - (moonPhase / 100))
+        viewer.directionalLight.position.set(
+          Math.cos(timeToRads(currentTime)),
+          Math.sin(timeToRads(currentTime)),
+          0.2
+        ).normalize()
+      }
+    }, 750)
+
     // Bot position callback
     function botPosition () {
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
