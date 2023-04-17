@@ -1,5 +1,10 @@
 ## History
 
+### 1.5.0
+
+* Add BossBars @sverben (PrismarineJS#319)
+* save all play screen options @Fury-101 (PrismarineJS#326)
+
 ### 1.4.0
 
 * so much
