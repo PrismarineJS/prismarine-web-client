@@ -8,7 +8,7 @@ const config = {
   entry: path.resolve(__dirname, './index.js'),
   output: {
     path: path.resolve(__dirname, './public'),
-    filename: './index.js',
+    filename: './[name]-[chunkhash].js',
     publicPath: './'
   },
   resolve: {
@@ -47,7 +47,8 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       hash: true,
-      minify: false
+      minify: false,
+      chunks: ['main', 'vendors'],
     }),
     // fix "process is not defined" error:
     new webpack.ProvidePlugin({
