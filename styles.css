@@ -15,6 +15,7 @@
 html {
   height: 100vh;
   overflow: hidden;
+  touch-action: none;
 }
 
 .dirt-bg {

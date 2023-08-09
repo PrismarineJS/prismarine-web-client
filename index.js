@@ -310,9 +310,25 @@ async function connect (options) {
       lastTouch = undefined
     }, { passive: false })
 
-    renderer.domElement.requestPointerLock = renderer.domElement.requestPointerLock ||
+    const requestPointerLock = renderer.domElement.requestPointerLock ||
       renderer.domElement.mozRequestPointerLock ||
       renderer.domElement.webkitRequestPointerLock
+    renderer.domElement.requestPointerLock = async () => {
+      // request full keyboard access
+      // await renderer.domElement.requestFullscreen()
+    //   // navigator.keyboard.lock(['KeyW'])
+    //   const promise = requestPointerLock.apply(renderer.domElement, {
+    //     unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
+    //   });
+    //   promise?.catch((error) => {
+    //     if (error.name === "NotSupportedError") {
+    //       // Some platforms may not support unadjusted movement, request again a regular pointer lock.
+    //       requestPointerLock.apply(renderer.domElement)
+    //     } else {
+    //       console.error(error)
+    //     }
+    //   })
+    // }
     document.addEventListener('mousedown', (e) => {
       if (!chat.inChat && !gameMenu.inMenu) {
         renderer.domElement.requestPointerLock()
