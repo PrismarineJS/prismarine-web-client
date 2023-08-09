@@ -1,6 +1,7 @@
 const fsExtra = require('fs-extra')
 
 exports.copyFiles = () => {
+    fsExtra.copySync('styles.css', 'public/styles.css')
     fsExtra.copySync('node_modules/prismarine-viewer/public/blocksStates/', 'public/blocksStates/')
     fsExtra.copySync('node_modules/prismarine-viewer/public/textures/', 'public/textures/')
     fsExtra.copySync('node_modules/prismarine-viewer/public/worker.js', 'public/worker.js')
