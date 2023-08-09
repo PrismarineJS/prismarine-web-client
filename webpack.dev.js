@@ -19,5 +19,19 @@ module.exports = merge(common,
     devMiddleware: {
       writeToDisk: true,
     },
+  },
+  optimization: {
+    splitChunks: {
+      maxAsyncRequests: 10,
+      maxInitialRequests: 10,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          priority: 10,
+          chunks: 'all'
+        }
+      }
+    }
   }
 })
