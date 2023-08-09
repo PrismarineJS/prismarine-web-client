@@ -361,10 +361,10 @@ async function connect (options) {
               bot.setControlState('jump', true)
               break
             case 'KeyD':
-              bot.setControlState('left', true)
+              bot.setControlState('right', true)
               break
             case 'KeyA':
-              bot.setControlState('right', true)
+              bot.setControlState('left', true)
               break
             case 'KeyS':
               bot.setControlState('back', true)
