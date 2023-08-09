@@ -258,6 +258,14 @@ async function connect (options) {
       renderer.render(viewer.scene, viewer.camera)
     }
 
+    try {
+      const gl = renderer.getContext();
+      debugMenu.rendererDevice = gl.getParameter(gl.getExtension('WEBGL_debug_renderer_info').UNMASKED_RENDERER_WEBGL)
+    } catch (err) {
+      console.error(err)
+      debugMenu.rendererDevice = '???'
+    }
+
     // Link WorldView and Viewer
     viewer.listen(worldView)
     worldView.listenToBot(bot)
