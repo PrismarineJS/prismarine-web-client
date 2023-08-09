@@ -1,33 +1,18 @@
-name: npm-publish
+name: Deploy to GitHub pages
 on:
   push:
-    branches:
-      - master # Change this to your default branch
+    branches: [main]
 jobs:
-  npm-publish:
-    name: npm-publish
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@master
-    - name: Set up Node.js
-      uses: actions/setup-node@master
-      with:
-        node-version: 18.0.0
-    - run: npm install
-    - id: publish
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_AUTH_TOKEN }}
-    - name: Create Release
-      if: steps.publish.outputs.type != 'none'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.publish.outputs.version }}
-        release_name: Release ${{ steps.publish.outputs.version }}
-        body: ${{ steps.publish.outputs.version }}
-        draft: false
-        prerelease: false
+      - name: Checkout repository
+        uses: actions/checkout@master
+      - run: pnpm install
+      - run: pnpm build
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          force_orphan: true
