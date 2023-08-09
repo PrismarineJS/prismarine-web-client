@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
+      - name: Install pnpm
+        run: npm i -g pnpm
       - run: pnpm install
       - run: pnpm build
       - uses: peaceiris/actions-gh-pages@v3
