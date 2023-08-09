@@ -4,7 +4,7 @@
   "description": "A minecraft client running in a browser",
   "main": "index.js",
   "scripts": {
-    "build": "node build.js copyFiles && webpack --config webpack.prod.js",
+    "build": "webpack --config webpack.prod.js --progress && node build.js copyFiles",
     "build-dev": "node build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "start": "node --max-old-space-size=8192 server.js 8080 dev",
     "prod-start": "node server.js",
