@@ -1,3 +1,4 @@
+//@ts-check
 /* global THREE */
 require('./lib/chat')
 
@@ -29,6 +30,7 @@ const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
+//@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./lib/vr')
 
@@ -171,6 +173,7 @@ async function connect (options) {
 
   if (proxy) {
     console.log(`using proxy ${proxy} ${proxyport}`)
+    //@ts-ignore
     net.setProxy({ hostname: proxy, port: proxyport })
   }
 
@@ -291,7 +294,9 @@ async function connect (options) {
 
     function changeCallback () {
       if (document.pointerLockElement === renderer.domElement ||
+        // @ts-ignore
         document.mozPointerLockElement === renderer.domElement ||
+        // @ts-ignore
         document.webkitPointerLockElement === renderer.domElement) {
         document.addEventListener('mousemove', moveCallback, false)
       } else {

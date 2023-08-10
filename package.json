@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js --progress && node build.js copyFiles",
     "build-dev": "node build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
-    "start": "node --max-old-space-size=8192 server.js 8080 dev",
+    "start": "NODE_OPTIONS=--max-old-space-size=8192 pnpm build-dev",
     "prod-start": "node server.js",
     "build-dev-start": "npm run build-dev && npm run prod-start",
     "build-start": "npm run build && npm run prod-start",
