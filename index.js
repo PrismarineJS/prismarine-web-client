@@ -214,6 +214,11 @@ async function connect (options) {
   })
 
   bot.once('login', () => {
+    // server is ok, add it to the history
+    /** @type {string[]} */
+    const serverHistory = JSON.parse(localStorage.getItem('serverHistory') || '[]')
+    serverHistory.unshift(options.server)
+    localStorage.setItem('serverHistory', JSON.stringify([...new Set(serverHistory)]))
     loadingScreen.status = 'Loading world'
   })
 
