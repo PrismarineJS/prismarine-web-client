@@ -219,6 +219,7 @@ async function connect (options) {
     const serverHistory = JSON.parse(localStorage.getItem('serverHistory') || '[]')
     serverHistory.unshift(options.server)
     localStorage.setItem('serverHistory', JSON.stringify([...new Set(serverHistory)]))
+
     loadingScreen.status = 'Loading world'
   })
 
