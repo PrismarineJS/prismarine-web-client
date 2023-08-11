@@ -121,12 +121,10 @@ function removePanorama () {
 
 let postRenderFrameFn = () => { }
 let animate = () => {
-  stats.begin()
   window.requestAnimationFrame(animate)
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
-  stats.end()
 }
 animate()
 
@@ -159,6 +157,7 @@ async function main () {
     removePanorama()
     connect(options)
   })
+}
 let justHitEscape = false
 
 const goFullscreen = async (doToggle = false) => {
