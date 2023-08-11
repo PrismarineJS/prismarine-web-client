@@ -124,6 +124,13 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
 
+const loadingScreen = document.getElementById('loading-screen')
+
+const hud = document.getElementById('hud')
+const optionsScrn = document.getElementById('options-screen')
+const keyBindScrn = document.getElementById('keybinds-screen')
+const pauseMenu = document.getElementById('pause-screen')
+
 const showEl = (str) => { document.getElementById(str).style = 'display:block' }
 async function main () {
   const menu = document.getElementById('play-screen')
@@ -131,21 +138,13 @@ async function main () {
   menu.addEventListener('connect', e => {
     const options = e.detail
     menu.style = 'display: none;'
-    showEl('loading-screen')
     removePanorama()
     connect(options)
   })
 }
 
 async function connect (options) {
-  const loadingScreen = document.getElementById('loading-screen')
-
-  const hud = document.getElementById('hud')
-  const chat = hud.shadowRoot.querySelector('#chat')
   const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
-  const optionsScrn = document.getElementById('options-screen')
-  const keyBindScrn = document.getElementById('keybinds-screen')
-  const gameMenu = document.getElementById('pause-screen')
 
   const viewDistance = optionsScrn.renderDistance
   const hostprompt = options.server
@@ -194,22 +193,22 @@ async function connect (options) {
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
+    showModal(loadingScreen)
     loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
-    loadingScreen.style = 'display: block;'
     loadingScreen.hasError = true
   })
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
+    showModal(loadingScreen)
     loadingScreen.status = `The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`
-    loadingScreen.style = 'display: block;'
     loadingScreen.hasError = true
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
+    showModal(loadingScreen)
     loadingScreen.status = `You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`
-    loadingScreen.style = 'display: block;'
     loadingScreen.hasError = true
   })
 
@@ -234,10 +233,8 @@ async function connect (options) {
 
     const center = bot.entity.position
 
-    console.log(viewDistance)
     const worldView = new WorldView(bot.world, viewDistance, center)
 
-    gameMenu.init(renderer)
     optionsScrn.isInsideWorld = true
     optionsScrn.addEventListener('fov_changed', (e) => {
       viewer.camera.fov = e.detail.fov
@@ -268,7 +265,7 @@ async function connect (options) {
     }
 
     try {
-      const gl = renderer.getContext();
+      const gl = renderer.getContext()
       debugMenu.rendererDevice = gl.getParameter(gl.getExtension('WEBGL_debug_renderer_info').UNMASKED_RENDERER_WEBGL)
     } catch (err) {
       console.error(err)
@@ -291,6 +288,7 @@ async function connect (options) {
     loadingScreen.status = 'Setting callbacks'
 
     function moveCallback (e) {
+      if (!pointerLock.hasPointerLock) return
       bot.entity.pitch -= e.movementY * optionsScrn.mouseSensitivityY * 0.0001
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
       bot.entity.yaw -= e.movementX * optionsScrn.mouseSensitivityX * 0.0001
@@ -299,17 +297,12 @@ async function connect (options) {
     }
 
     function changeCallback () {
-      if (document.pointerLockElement === renderer.domElement ||
-        // @ts-ignore
-        document.mozPointerLockElement === renderer.domElement ||
-        // @ts-ignore
-        document.webkitPointerLockElement === renderer.domElement) {
-        document.addEventListener('mousemove', moveCallback, false)
-      } else {
-        document.removeEventListener('mousemove', moveCallback, false)
+      if (!pointerLock.hasPointerLock && activeModalStack.length === 0) {
+        showModal(pauseMenu)
       }
     }
 
+    document.addEventListener('mousemove', moveCallback, false)
     document.addEventListener('pointerlockchange', changeCallback, false)
     document.addEventListener('mozpointerlockchange', changeCallback, false)
     document.addEventListener('webkitpointerlockchange', changeCallback, false)
@@ -338,7 +331,7 @@ async function connect (options) {
       // navigator.keyboard.lock(['KeyW'])
       const promise = requestPointerLock.apply(renderer.domElement, {
         unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
-      });
+      })
       promise?.catch((error) => {
         if (error.name === "NotSupportedError") {
           // Some platforms may not support unadjusted movement, request again a regular pointer lock.
@@ -361,8 +354,7 @@ async function connect (options) {
     }, false)
 
     document.addEventListener('keydown', (e) => {
-      if (chat.inChat) return
-      if (gameMenu.inMenu) return
+      if (activeModalStack.length) return
 
       keyBindScrn.keymaps.forEach(km => {
         if (e.code === km.key) {
@@ -427,17 +419,35 @@ async function connect (options) {
     }, false)
 
     loadingScreen.status = 'Done!'
-    console.log(loadingScreen.status) // only do that because it's read in index.html and npm run fix complains.
+    console.log('Done!')
 
     hud.init(renderer, bot, host)
     hud.style.display = 'block'
 
     setTimeout(function () {
+      if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
-      loadingScreen.style = 'display: none;'
+      hideModal(loadingScreen)
     }, 2500)
   })
 }
+
+const requestPointerLock = () => {
+  if (hud.style.display === 'none' || activeModalStack.length) return
+  renderer.domElement.requestPointerLock()
+}
+
+window.addEventListener('mousedown', (e) => {
+  requestPointerLock()
+})
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Escape') {
+    hideModal(undefined, { event: e, renderer }, () => {
+      requestPointerLock() // if no modals left
+    })
+  }
+})
 
 showEl('title-screen')
 main()
