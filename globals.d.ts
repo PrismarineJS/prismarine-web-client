@@ -1,4 +1,4 @@
-declare const THREE: any;
+declare const THREE: typeof import('three');
 
 declare interface Document {
     getElementById(id): any

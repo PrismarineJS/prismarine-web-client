@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
+        "target": "ES2022",
+        "moduleResolution": "Node",
+        "module": "CommonJS",
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
-        "noEmit": true
+        "noEmit": true,
+        // "strictNullChecks": true
     },
     "include": [
         "index.js",
