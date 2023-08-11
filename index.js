@@ -131,7 +131,13 @@ const optionsScrn = document.getElementById('options-screen')
 const keyBindScrn = document.getElementById('keybinds-screen')
 const pauseMenu = document.getElementById('pause-screen')
 
-const showEl = (str) => { document.getElementById(str).style = 'display:block' }
+function setLoadingScreenStatus (status, isError = false) {
+  showModal(loadingScreen)
+  if (loadingScreen.hasError) return
+  loadingScreen.status = status
+  loadingScreen.hasError = isError
+}
+
 async function main () {
   const menu = document.getElementById('play-screen')
 
@@ -176,7 +182,7 @@ async function connect (options) {
     net.setProxy({ hostname: proxy, port: proxyport })
   }
 
-  loadingScreen.status = 'Logging in'
+  setLoadingScreenStatus('Logging in')
 
   const bot = mineflayer.createBot({
     host,
@@ -193,23 +199,17 @@ async function connect (options) {
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
-    showModal(loadingScreen)
-    loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
-    loadingScreen.hasError = true
+    setLoadingScreenStatus(`Error encountered. Error message: ${err}. Please reload the page`, true)
   })
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
-    showModal(loadingScreen)
-    loadingScreen.status = `The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`
-    loadingScreen.hasError = true
+    setLoadingScreenStatus(`The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`, true)
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
-    showModal(loadingScreen)
-    loadingScreen.status = `You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`
-    loadingScreen.hasError = true
+    setLoadingScreenStatus(`You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`, true)
   })
 
   bot.once('login', () => {
@@ -219,13 +219,13 @@ async function connect (options) {
     serverHistory.unshift(options.server)
     localStorage.setItem('serverHistory', JSON.stringify([...new Set(serverHistory)]))
 
-    loadingScreen.status = 'Loading world'
+    setLoadingScreenStatus('Loading world')
   })
 
   bot.once('spawn', () => {
     const mcData = require('minecraft-data')(bot.version)
 
-    loadingScreen.status = 'Placing blocks (starting viewer)'
+    setLoadingScreenStatus('Placing blocks (starting viewer)')
 
     console.log('bot spawned - starting viewer')
 
@@ -285,7 +285,7 @@ async function connect (options) {
     bot.on('move', botPosition)
     botPosition()
 
-    loadingScreen.status = 'Setting callbacks'
+    setLoadingScreenStatus('Setting callbacks')
 
     function moveCallback (e) {
       if (!pointerLock.hasPointerLock) return
@@ -418,7 +418,7 @@ async function connect (options) {
       })
     }, false)
 
-    loadingScreen.status = 'Done!'
+    setLoadingScreenStatus('Done!')
     console.log('Done!')
 
     hud.init(renderer, bot, host)
@@ -427,7 +427,8 @@ async function connect (options) {
     setTimeout(function () {
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
-      hideModal(loadingScreen)
+      loadingScreen.style.display = 'none'
+      activeModalStack.splice(0, activeModalStack.length)
     }, 2500)
   })
 }
@@ -449,5 +450,5 @@ window.addEventListener('keydown', (e) => {
   }
 })
 
-showEl('title-screen')
+showModal(document.getElementById('title-screen'))
 main()
