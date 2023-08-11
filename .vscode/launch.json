@@ -2,9 +2,9 @@
     "configurations": [
         {
             "type": "msedge",
-            "name": "https://localhost:8080/",
+            "name": "http://localhost:8080/",
             "request": "launch",
-            "url": "https://localhost:8080/",
+            "url": "http://localhost:8080/",
             "outFiles": [
                 "${workspaceFolder}/public/**/*.js",
                 "!${workspaceFolder}/public/**/*vendors*",
