@@ -18,6 +18,8 @@ require('./lib/menus/pause_screen')
 require('./lib/menus/loading_screen')
 require('./lib/menus/keybinds_screen')
 require('./lib/menus/options_screen')
+require('./lib/menus/advanced_options_screen')
+require('./lib/menus/notification')
 require('./lib/menus/title_screen')
 
 const net = require('net')
@@ -33,6 +35,9 @@ const { Vec3 } = require('vec3')
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./lib/vr')
+const { activeModalStack, showModal, hideModal, hideCurrentModal } = require('./lib/globalState')
+const { pointerLock } = require('./lib/utils')
+const { notification } = require('./lib/menus/notification')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -43,6 +48,9 @@ if ('serviceWorker' in navigator) {
     })
   })
 }
+
+// ACTUAL CODE
+
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -111,10 +119,14 @@ function removePanorama () {
   viewer.scene.remove(panoramaCubeMap)
 }
 
+let postRenderFrameFn = () => { }
 let animate = () => {
+  stats.begin()
   window.requestAnimationFrame(animate)
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
+  postRenderFrameFn()
+  stats.end()
 }
 animate()
 
@@ -147,6 +159,18 @@ async function main () {
     removePanorama()
     connect(options)
   })
+let justHitEscape = false
+
+const goFullscreen = async (doToggle = false) => {
+  if (!document.fullscreenElement) {
+    // todo display a message or repeat?
+    await document.documentElement.requestFullscreen().catch(() => { })
+    // request full keyboard access
+    //@ts-ignore
+    navigator.keyboard?.lock?.(['Escape', 'KeyW'])
+  } else if (doToggle) {
+    await document.exitFullscreen().catch(() => { })
+  }
 }
 
 async function connect (options) {
@@ -199,6 +223,12 @@ async function connect (options) {
 
   bot.on('error', (err) => {
     console.log('Encountered error!', err)
+    const controller = new AbortController()
+    window.addEventListener('keydown', (e) => {
+      if (e.code !== 'KeyR') return
+      controller.abort()
+      connect(options)
+    })
     setLoadingScreenStatus(`Error encountered. Error message: ${err}. Please reload the page`, true)
   })
 
@@ -289,14 +319,17 @@ async function connect (options) {
 
     function moveCallback (e) {
       if (!pointerLock.hasPointerLock) return
-      bot.entity.pitch -= e.movementY * optionsScrn.mouseSensitivityY * 0.0001
+      let { mouseSensX, mouseSensY } = optionsScrn
+      if (mouseSensY === true) mouseSensY = mouseSensX
+      bot.entity.pitch -= e.movementY * mouseSensX
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      bot.entity.yaw -= e.movementX * optionsScrn.mouseSensitivityX * 0.0001
+      bot.entity.yaw -= e.movementX * mouseSensY
 
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
     }
 
     function changeCallback () {
+      notification.show = false
       if (!pointerLock.hasPointerLock && activeModalStack.length === 0) {
         showModal(pauseMenu)
       }
@@ -323,29 +356,40 @@ async function connect (options) {
     }, { passive: false })
 
     const requestPointerLock = renderer.domElement.requestPointerLock ||
-      renderer.domElement.mozRequestPointerLock ||
-      renderer.domElement.webkitRequestPointerLock
+      renderer.domElement['mozRequestPointerLock'] ||
+      renderer.domElement['webkitRequestPointerLock']
     renderer.domElement.requestPointerLock = async () => {
-      // await renderer.domElement.requestFullscreen()
-      // request full keyboard access
-      // navigator.keyboard.lock(['KeyW'])
-      const promise = requestPointerLock.apply(renderer.domElement, {
-        unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
-      })
-      promise?.catch((error) => {
-        if (error.name === "NotSupportedError") {
-          // Some platforms may not support unadjusted movement, request again a regular pointer lock.
-          requestPointerLock.apply(renderer.domElement)
-        } else {
-          console.error(error)
-        }
-      })
-    }
-    document.addEventListener('mousedown', (e) => {
-      if (!chat.inChat && !gameMenu.inMenu) {
-        renderer.domElement.requestPointerLock()
+      if (hud.style.display === 'none' || activeModalStack.length) return
+      const autoFullScreen = window.localStorage.getItem('autoFullscreen') === 'true'
+      if (autoFullScreen) {
+        await goFullscreen()
       }
-    })
+      const displayBrowserProblem = () => {
+        notification.show = true
+        // todo use notification stack
+        notification.autoHide = true
+        notification.message = navigator['keyboard'] ? 'Browser Limitation: Click on screen, enable Auto Fullscreen or F11' : 'Browser Limitation: Click on screen or use fullscreen in Chrome'
+      }
+      if (!(document.fullscreenElement && navigator['keyboard']) && justHitEscape) {
+        displayBrowserProblem()
+      } else {
+        const promise = requestPointerLock.apply(renderer.domElement, {
+          unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
+        })
+        promise?.catch((error) => {
+          if (error.name === "NotSupportedError") {
+            // Some platforms may not support unadjusted movement, request again a regular pointer lock.
+            requestPointerLock.apply(renderer.domElement)
+          } else if (error.name === 'SecurityError') {
+            // cause: https://discourse.threejs.org/t/how-to-avoid-pointerlockcontrols-error/33017/4
+            displayBrowserProblem()
+          } else {
+            console.error(error)
+          }
+        })
+      }
+      justHitEscape = false
+    }
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
 
@@ -433,20 +477,33 @@ async function connect (options) {
   })
 }
 
-const requestPointerLock = () => {
+window.addEventListener('mousedown', (e) => {
+  // todo remove this code duplication somehow
   if (hud.style.display === 'none' || activeModalStack.length) return
   renderer.domElement.requestPointerLock()
-}
-
-window.addEventListener('mousedown', (e) => {
-  requestPointerLock()
 })
 
 window.addEventListener('keydown', (e) => {
-  if (e.code === 'Escape') {
-    hideModal(undefined, { event: e, renderer }, () => {
-      requestPointerLock() // if no modals left
+  if (e.code !== 'Escape') return
+  if (activeModalStack.length) {
+    hideCurrentModal(undefined, () => {
+      if (!activeModalStack.length) {
+        justHitEscape = true
+      }
     })
+  } else {
+    if (pointerLock.hasPointerLock) {
+      document.exitPointerLock()
+    } else {
+      document.dispatchEvent(new Event('pointerlockchange'))
+    }
+  }
+})
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'F11') {
+    e.preventDefault()
+    goFullscreen(true)
   }
 })
 
