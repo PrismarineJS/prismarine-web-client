@@ -42,7 +42,8 @@
     "net-browserify": "github:PrismarineJS/net-browserify",
     "querystring": "^0.2.1",
     "stats.js": "^0.17.0",
-    "url": "^0.11.1"
+    "url": "^0.11.1",
+    "valtio": "^1.11.1"
   },
   "devDependencies": {
     "@types/three": "0.128.0",
