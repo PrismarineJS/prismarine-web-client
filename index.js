@@ -23,15 +23,17 @@ require('./lib/menus/notification')
 require('./lib/menus/title_screen')
 
 const net = require('net')
-const Cursor = require('./lib/cursor')
+const Stats = require('stats.js')
 
-// Workaround for process.versions.node not existing in the browser
+// workaround for mineflayer
 process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
+
+const Cursor = require('./lib/cursor')
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./lib/vr')
@@ -51,6 +53,13 @@ if ('serviceWorker' in navigator) {
 
 // ACTUAL CODE
 
+const stats = new Stats()
+const stats2 = new Stats()
+stats2.showPanel(2)
+
+document.body.appendChild(stats.dom)
+stats2.dom.style.left = '80px'
+document.body.appendChild(stats2.dom)
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -121,10 +130,14 @@ function removePanorama () {
 
 let postRenderFrameFn = () => { }
 let animate = () => {
+  stats.begin()
+  stats2.begin()
   window.requestAnimationFrame(animate)
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
+  stats.end()
+  stats2.end()
 }
 animate()
 
@@ -227,7 +240,8 @@ async function connect (options) {
       if (e.code !== 'KeyR') return
       controller.abort()
       connect(options)
-    })
+      loadingScreen.hasError = false
+    }, { signal: controller.signal })
     setLoadingScreenStatus(`Error encountered. Error message: ${err}. Please reload the page`, true)
   })
 
@@ -285,12 +299,9 @@ async function connect (options) {
     initVR(bot, renderer, viewer)
 
     const cursor = new Cursor(viewer, renderer, bot)
-    animate = () => {
-      window.requestAnimationFrame(animate)
-      viewer.update()
-      cursor.update(bot)
+    postRenderFrameFn = () => {
       debugMenu.cursorBlock = cursor.cursorBlock
-      renderer.render(viewer.scene, viewer.camera)
+      cursor.update(bot)
     }
 
     try {
@@ -503,6 +514,9 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'F11') {
     e.preventDefault()
     goFullscreen(true)
+  }
+  if (e.code === 'KeyL') {
+    console.clear()
   }
 })
 
