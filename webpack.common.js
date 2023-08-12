@@ -8,7 +8,7 @@ const config = {
   entry: path.resolve(__dirname, './index.js'),
   output: {
     path: path.resolve(__dirname, './public'),
-    filename: './[name]-[chunkhash].js',
+    filename: './[name].js',
     publicPath: './'
   },
   resolve: {
@@ -61,18 +61,11 @@ const config = {
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
     ),
-    // new CopyPlugin({
-    //   patterns: [
-    //     { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
-    //     { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/blocksStates/'), to: './blocksStates/' },
-    //     { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/textures/'), to: './textures/' },
-    //     { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/worker.js'), to: './' },
-    //     { from: path.join(__dirname, '/node_modules/prismarine-viewer/public/supportedVersions.json'), to: './' },
-    //     { from: path.join(__dirname, 'assets/'), to: './' },
-    //     { from: path.join(__dirname, 'extra-textures/'), to: './extra-textures/' },
-    //     { from: path.join(__dirname, 'config.json'), to: './config.json' }
-    //   ]
-    // })
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
+      ]
+    })
   ]
 }
 

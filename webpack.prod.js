@@ -7,6 +7,9 @@ const WorkboxPlugin = require('workbox-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = merge(common, {
+  output: {
+    filename: './[name].js',
+  },
   mode: 'production',
   devtool: 'source-map',
   plugins: [
