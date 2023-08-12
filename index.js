@@ -15,7 +15,7 @@ require('./lib/menus/components/bossbars_overlay')
 require('./lib/menus/hud')
 require('./lib/menus/play_screen')
 require('./lib/menus/pause_screen')
-require('./lib/menus/loading_screen')
+require('./lib/menus/loading_or_error_screen')
 require('./lib/menus/keybinds_screen')
 require('./lib/menus/options_screen')
 require('./lib/menus/advanced_options_screen')
@@ -39,9 +39,10 @@ const Cursor = require('./lib/cursor')
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./lib/vr')
-const { activeModalStack, showModal, hideModal, hideCurrentModal } = require('./lib/globalState')
+const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack } = require('./lib/globalState')
 const { pointerLock, goFullscreen, toNumber } = require('./lib/utils')
 const { notification } = require('./lib/menus/notification')
+const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./lib/panorama')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -83,61 +84,7 @@ document.body.appendChild(renderer.domElement)
 
 // Create viewer
 const viewer = new Viewer(renderer)
-
-// Menu panorama background
-function addPanoramaCubeMap () {
-  let time = 0
-  viewer.camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.05, 1000)
-  viewer.camera.updateProjectionMatrix()
-  viewer.camera.position.set(0, 0, 0)
-  viewer.camera.rotation.set(0, 0, 0)
-  const panorGeo = new THREE.BoxGeometry(1000, 1000, 1000)
-
-  const loader = new THREE.TextureLoader()
-  const panorMaterials = [
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_1.png'), transparent: true, side: THREE.DoubleSide }), // WS
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_3.png'), transparent: true, side: THREE.DoubleSide }), // ES
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_4.png'), transparent: true, side: THREE.DoubleSide }), // Up
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_5.png'), transparent: true, side: THREE.DoubleSide }), // Down
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_0.png'), transparent: true, side: THREE.DoubleSide }), // NS
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_2.png'), transparent: true, side: THREE.DoubleSide }) // SS
-  ]
-
-  const panoramaBox = new THREE.Mesh(panorGeo, panorMaterials)
-
-  panoramaBox.onBeforeRender = () => {
-    time += 0.01
-    panoramaBox.rotation.y = Math.PI + time * 0.01
-    panoramaBox.rotation.z = Math.sin(-time * 0.001) * 0.001
-  }
-
-  const group = new THREE.Object3D()
-  group.add(panoramaBox)
-
-  const Entity = require('prismarine-viewer/viewer/lib/entity/Entity')
-  for (let i = 0; i < 42; i++) {
-    const m = new Entity('1.16.4', 'squid').mesh
-    m.position.set(Math.random() * 30 - 15, Math.random() * 20 - 10, Math.random() * 10 - 17)
-    m.rotation.set(0, Math.PI + Math.random(), -Math.PI / 4, 'ZYX')
-    const v = Math.random() * 0.01
-    m.children[0].onBeforeRender = () => {
-      m.rotation.y += v
-      m.rotation.z = Math.cos(panoramaBox.rotation.y * 3) * Math.PI / 4 - Math.PI / 2
-    }
-    group.add(m)
-  }
-
-  viewer.scene.add(group)
-  return group
-}
-
-const panoramaCubeMap = addPanoramaCubeMap()
-
-function removePanorama () {
-  viewer.camera = new THREE.PerspectiveCamera(document.getElementById('options-screen').fov, window.innerWidth / window.innerHeight, 0.1, 1000)
-  viewer.camera.updateProjectionMatrix()
-  viewer.scene.remove(panoramaCubeMap)
-}
+initPanoramaOptions(viewer)
 
 const frameLimit = toNumber(localStorage.frameLimit)
 let interval = frameLimit && 1000 / frameLimit
@@ -178,7 +125,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
 
-const loadingScreen = document.getElementById('loading-screen')
+const loadingScreen = document.getElementById('loading-error-screen')
 
 const hud = document.getElementById('hud')
 const optionsScrn = document.getElementById('options-screen')
@@ -188,8 +135,8 @@ const pauseMenu = document.getElementById('pause-screen')
 function setLoadingScreenStatus (status, isError = false) {
   showModal(loadingScreen)
   if (loadingScreen.hasError) return
-  loadingScreen.status = status
   loadingScreen.hasError = isError
+  loadingScreen.status = status
 }
 
 async function main () {
@@ -204,6 +151,21 @@ async function main () {
 }
 
 async function connect (options) {
+  loadingScreen.maybeRecoverable = true
+  const oldSetInterval = window.setInterval
+  // @ts-ignore
+  window.setInterval = (callback, ms) => {
+    const id = oldSetInterval.call(window, callback, ms)
+    timeouts.push(id)
+    return id
+  }
+  const oldSetTimeout = window.setTimeout
+  //@ts-ignore
+  window.setTimeout = (callback, ms) => {
+    const id = oldSetTimeout.call(window, callback, ms)
+    timeouts.push(id)
+    return id
+  }
   const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
 
   const viewDistance = optionsScrn.renderDistance
@@ -238,21 +200,31 @@ async function connect (options) {
 
   setLoadingScreenStatus('Logging in')
 
-  const bot = mineflayer.createBot({
-    host,
-    port,
-    version: options.botVersion === '' ? false : options.botVersion,
-    username,
-    password,
-    viewDistance: 'tiny',
-    checkTimeoutInterval: 240 * 1000,
-    noPongTimeout: 240 * 1000,
-    closeTimeout: 240 * 1000
-  })
-  hud.preload(bot)
-
-  bot.on('error', (err) => {
+  /** @type {mineflayer.Bot} */
+  let bot
+  const destroy = () => {
+    // simple variant, still buggy
+    postRenderFrameFn = () => { }
+    if (bot) {
+      bot.removeAllListeners()
+      bot._client.removeAllListeners()
+      bot._client = undefined
+      bot = undefined
+    }
+    removeAllListeners()
+    for (const timeout of timeouts) {
+      clearTimeout(timeout)
+    }
+    timeouts = []
+    for (const interval of intervals) {
+      clearInterval(interval)
+    }
+    intervals = []
+  }
+  const handleError = (err) => {
     console.log('Encountered error!', err)
+
+    // #region rejoin key
     const controller = new AbortController()
     window.addEventListener('keydown', (e) => {
       if (e.code !== 'KeyR') return
@@ -260,17 +232,46 @@ async function connect (options) {
       connect(options)
       loadingScreen.hasError = false
     }, { signal: controller.signal })
-    setLoadingScreenStatus(`Error encountered. Error message: ${err}. Please reload the page`, true)
-  })
+    // #endregion
+
+    setLoadingScreenStatus(`Error encountered. Error message: ${err}`, true)
+    destroy()
+  }
+
+  try {
+    bot = mineflayer.createBot({
+      host,
+      port,
+      version: options.botVersion === '' ? false : options.botVersion,
+      username,
+      password,
+      viewDistance: 'tiny',
+      checkTimeoutInterval: 240 * 1000,
+      noPongTimeout: 240 * 1000,
+      closeTimeout: 240 * 1000
+    })
+  } catch (err) {
+    handleError(err)
+  }
+  if (!bot) return
+  hud.preload(bot)
+
+  // bot.on('inject_allowed', () => {
+  //   loadingScreen.maybeRecoverable = false
+  // })
+
+  bot.on('error', handleError)
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
-    setLoadingScreenStatus(`The Minecraft server kicked you. Kick reason: ${kickReason}. Please reload the page to rejoin`, true)
+    setLoadingScreenStatus(`The Minecraft server kicked you. Kick reason: ${kickReason}`, true)
+    destroy()
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
-    setLoadingScreenStatus(`You have been disconnected from the server. End reason: ${endReason}. Please reload the page to rejoin`, true)
+    destroy()
+    setLoadingScreenStatus(`You have been disconnected from the server. End reason: ${endReason}`, true)
   })
 
   bot.once('login', () => {
@@ -370,11 +371,11 @@ async function connect (options) {
       }
     }
 
-    window.addEventListener('mousemove', moveCallback, { capture: true })
-    document.addEventListener('pointerlockchange', changeCallback, false)
+    registerListener(window, 'mousemove', moveCallback, { capture: true })
+    registerListener(document, 'pointerlockchange', changeCallback, false)
 
     let lastTouch
-    document.addEventListener('touchmove', (e) => {
+    registerListener(document, 'touchmove', (e) => {
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
@@ -384,17 +385,17 @@ async function connect (options) {
       lastTouch = e.touches[0]
     }, { passive: false })
 
-    document.addEventListener('touchend', (e) => {
+    registerListener(document, 'touchend', (e) => {
       lastTouch = undefined
     }, { passive: false })
 
-    document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
+    registerListener(document, 'contextmenu', (e) => e.preventDefault(), false)
 
-    window.addEventListener('blur', (e) => {
+    registerListener(document, 'blur', (e) => {
       bot.clearControlStates()
     }, false)
 
-    document.addEventListener('keydown', (e) => {
+    registerListener(document, 'keydown', (e) => {
       if (activeModalStack.length) return
 
       keyBindScrn.keymaps.forEach(km => {
@@ -429,7 +430,7 @@ async function connect (options) {
       })
     }, false)
 
-    document.addEventListener('keyup', (e) => {
+    registerListener(document, 'keyup', (e) => {
       keyBindScrn.keymaps.forEach(km => {
         if (e.code === km.key) {
           switch (km.defaultKey) {
@@ -468,8 +469,8 @@ async function connect (options) {
     setTimeout(function () {
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
-      loadingScreen.style.display = 'none'
-      activeModalStack.splice(0, activeModalStack.length)
+      activeModalStacks['main-menu'] = activeModalStack
+      replaceActiveModalStack('', [])
     }, 2500)
   })
 }
@@ -508,5 +509,6 @@ window.addEventListener('keydown', (e) => {
   // }
 })
 
+addPanoramaCubeMap()
 showModal(document.getElementById('title-screen'))
 main()
