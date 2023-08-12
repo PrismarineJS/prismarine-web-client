@@ -29,7 +29,9 @@ const Stats = require('stats.js')
 process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
-const { WorldView, Viewer } = require('prismarine-viewer/viewer')
+const { WorldView, Viewer, MapControls } = require('prismarine-viewer/viewer')
+const PrismarineWorld = require('prismarine-world')
+const nbt = require('prismarine-nbt')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 
@@ -38,7 +40,7 @@ const Cursor = require('./lib/cursor')
 global.THREE = require('three')
 const { initVR } = require('./lib/vr')
 const { activeModalStack, showModal, hideModal, hideCurrentModal } = require('./lib/globalState')
-const { pointerLock } = require('./lib/utils')
+const { pointerLock, goFullscreen, toNumber } = require('./lib/utils')
 const { notification } = require('./lib/menus/notification')
 
 if ('serviceWorker' in navigator) {
@@ -60,6 +62,15 @@ stats2.showPanel(2)
 document.body.appendChild(stats.dom)
 stats2.dom.style.left = '80px'
 document.body.appendChild(stats2.dom)
+// const debugPitch = document.createElement('span')
+// debugPitch.style.cssText = `
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   z-index: 100;
+//   color:white;
+// `
+// document.body.appendChild(debugPitch)
 
 const maxPitch = 0.5 * Math.PI
 const minPitch = -0.5 * Math.PI
@@ -128,18 +139,38 @@ function removePanorama () {
   viewer.scene.remove(panoramaCubeMap)
 }
 
+const frameLimit = toNumber(localStorage.frameLimit)
+let interval = frameLimit && 1000 / frameLimit
+window.addEventListener('option-change', (/** @type {any} */{ detail }) => {
+  if (detail.name === 'frameLimit') interval = toNumber(detail.value) && 1000 / toNumber(detail.value)
+})
+
 let postRenderFrameFn = () => { }
-let animate = () => {
+let delta = 0
+let lastTime = performance.now()
+const renderFrame = (/** @type {DOMHighResTimeStamp} */ time) => {
+  if (window.stopLoop) return
+  window.requestAnimationFrame(renderFrame)
+  if (window.stopRender) return
+  if (interval) {
+    delta += time - lastTime
+    lastTime = time
+    if (delta > interval) {
+      delta = delta % interval
+      // continue rendering
+    } else {
+      return
+    }
+  }
   stats.begin()
   stats2.begin()
-  window.requestAnimationFrame(animate)
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
   stats.end()
   stats2.end()
 }
-animate()
+renderFrame(performance.now())
 
 window.addEventListener('resize', () => {
   viewer.camera.aspect = window.innerWidth / window.innerHeight
@@ -182,7 +213,7 @@ const goFullscreen = async (doToggle = false) => {
     navigator.keyboard?.lock?.(['Escape', 'KeyW'])
   } else if (doToggle) {
     await document.exitFullscreen().catch(() => { })
-  }
+    }
 }
 
 async function connect (options) {
@@ -301,6 +332,7 @@ async function connect (options) {
     const cursor = new Cursor(viewer, renderer, bot)
     postRenderFrameFn = () => {
       debugMenu.cursorBlock = cursor.cursorBlock
+      viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
       cursor.update(bot)
     }
 
@@ -319,6 +351,7 @@ async function connect (options) {
 
     // Bot position callback
     function botPosition () {
+      // this might cause lag, but not sure
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
     }
@@ -327,15 +360,29 @@ async function connect (options) {
 
     setLoadingScreenStatus('Setting callbacks')
 
+    let yaw
+    let moveCallsPerSec = 0
+    setInterval(() => {
+      console.log('mouse frequency', moveCallsPerSec)
+      moveCallsPerSec = 0
+    }, 1000)
+    let lastCall
     function moveCallback (e) {
       if (!pointerLock.hasPointerLock) return
+      e.stopPropagation?.()
+      const now = performance.now()
+      if (now - lastCall < 5) return
+      lastCall = now
+      moveCallsPerSec++
       let { mouseSensX, mouseSensY } = optionsScrn
       if (mouseSensY === true) mouseSensY = mouseSensX
-      bot.entity.pitch -= e.movementY * mouseSensX
+      yaw ??= bot.entity.yaw
+      bot.entity.pitch -= e.movementY * mouseSensX * 0.0001
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      bot.entity.yaw -= e.movementX * mouseSensY
-
-      viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
+      const diff = e.movementX * mouseSensY * 0.0001
+      bot.entity.yaw -= diff
+      yaw -= diff
+      // debugPitch.innerText = +debugPitch.innerText + e.movementX
     }
 
     function changeCallback () {
@@ -345,10 +392,8 @@ async function connect (options) {
       }
     }
 
-    document.addEventListener('mousemove', moveCallback, false)
+    window.addEventListener('mousemove', moveCallback, { capture: true })
     document.addEventListener('pointerlockchange', changeCallback, false)
-    document.addEventListener('mozpointerlockchange', changeCallback, false)
-    document.addEventListener('webkitpointerlockchange', changeCallback, false)
 
     let lastTouch
     document.addEventListener('touchmove', (e) => {
@@ -364,42 +409,6 @@ async function connect (options) {
     document.addEventListener('touchend', (e) => {
       lastTouch = undefined
     }, { passive: false })
-
-    const requestPointerLock = renderer.domElement.requestPointerLock ||
-      renderer.domElement['mozRequestPointerLock'] ||
-      renderer.domElement['webkitRequestPointerLock']
-    renderer.domElement.requestPointerLock = async () => {
-      if (hud.style.display === 'none' || activeModalStack.length) return
-      const autoFullScreen = window.localStorage.getItem('autoFullscreen') === 'true'
-      if (autoFullScreen) {
-        await goFullscreen()
-      }
-      const displayBrowserProblem = () => {
-        notification.show = true
-        // todo use notification stack
-        notification.autoHide = true
-        notification.message = navigator['keyboard'] ? 'Browser Limitation: Click on screen, enable Auto Fullscreen or F11' : 'Browser Limitation: Click on screen or use fullscreen in Chrome'
-      }
-      if (!(document.fullscreenElement && navigator['keyboard']) && justHitEscape) {
-        displayBrowserProblem()
-      } else {
-        const promise = requestPointerLock.apply(renderer.domElement, {
-          unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
-        })
-        promise?.catch((error) => {
-          if (error.name === "NotSupportedError") {
-            // Some platforms may not support unadjusted movement, request again a regular pointer lock.
-            requestPointerLock.apply(renderer.domElement)
-          } else if (error.name === 'SecurityError') {
-            // cause: https://discourse.threejs.org/t/how-to-avoid-pointerlockcontrols-error/33017/4
-            displayBrowserProblem()
-          } else {
-            console.error(error)
-          }
-        })
-      }
-      justHitEscape = false
-    }
 
     document.addEventListener('contextmenu', (e) => e.preventDefault(), false)
 
@@ -488,9 +497,7 @@ async function connect (options) {
 }
 
 window.addEventListener('mousedown', (e) => {
-  // todo remove this code duplication somehow
-  if (hud.style.display === 'none' || activeModalStack.length) return
-  renderer.domElement.requestPointerLock()
+  pointerLock.requestPointerLock()
 })
 
 window.addEventListener('keydown', (e) => {
@@ -498,7 +505,7 @@ window.addEventListener('keydown', (e) => {
   if (activeModalStack.length) {
     hideCurrentModal(undefined, () => {
       if (!activeModalStack.length) {
-        justHitEscape = true
+        pointerLock.justHitEscape = true
       }
     })
   } else {
@@ -518,6 +525,9 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'KeyL') {
     console.clear()
   }
+  // if (e.code === 'KeyD') {
+  //   debugPitch.innerText = '0'
+  // }
 })
 
 showModal(document.getElementById('title-screen'))
