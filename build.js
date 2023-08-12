@@ -1,14 +1,14 @@
 const fsExtra = require('fs-extra')
 
 exports.copyFiles = () => {
-    fsExtra.copySync('styles.css', 'public/styles.css')
-    fsExtra.copySync('node_modules/prismarine-viewer/public/blocksStates/', 'public/blocksStates/')
-    fsExtra.copySync('node_modules/prismarine-viewer/public/textures/', 'public/textures/')
-    fsExtra.copySync('node_modules/prismarine-viewer/public/worker.js', 'public/worker.js')
-    fsExtra.copySync('node_modules/prismarine-viewer/public/supportedVersions.json', 'public/supportedVersions.json')
-    fsExtra.copySync('assets/', 'public/')
-    fsExtra.copySync('extra-textures/', 'public/extra-textures/')
-    fsExtra.copySync('config.json', 'public/config.json')
+    fsExtra.copySync('./node_modules/prismarine-viewer2/public/blocksStates/', 'public/blocksStates/')
+    fsExtra.copySync('./node_modules/prismarine-viewer2/public/textures/', 'public/textures/')
+    fsExtra.copySync('./node_modules/prismarine-viewer2/public/worker.js', 'public/worker.js')
+    fsExtra.copySync('./node_modules/prismarine-viewer2/public/supportedVersions.json', 'public/supportedVersions.json')
+    fsExtra.copySync('./node_modules/prismarine-viewer2/public/supportedVersions.json', './prismarine-viewer/public/supportedVersions.json')
+    fsExtra.copySync('./assets/', './public/')
+    fsExtra.copySync('./extra-textures/', 'public/extra-textures/')
+    fsExtra.copySync('./config.json', 'public/config.json')
 }
 
 exports.copyFilesDev = () => {

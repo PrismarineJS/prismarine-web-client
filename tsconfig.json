@@ -6,6 +6,7 @@
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "noEmit": true,
+        "strictFunctionTypes": true
         // "strictNullChecks": true
     },
     "include": [
