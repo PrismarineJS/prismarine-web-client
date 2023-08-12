@@ -1,0 +1,57 @@
+{
+  "name": "prismarine-viewer",
+  "version": "1.25.0",
+  "description": "Web based viewer",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose --runInBand --forceExit",
+    "pretest": "npm run lint",
+    "lint": "standard",
+    "postinstall": "node viewer/prerender.js && webpack",
+    "fix": "standard --fix"
+  },
+  "author": "PrismarineJS",
+  "license": "MIT",
+  "standard": {
+    "ignore": [
+      "examples/electron/",
+      "examples/exporter/",
+      "examples/standalone/",
+      "examples/web_client/"
+    ]
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^20.0.3",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "minecraft-data": "^3.0.0",
+    "prismarine-block": "^1.7.3",
+    "prismarine-chunk": "^1.22.0",
+    "prismarine-world": "^3.3.1",
+    "socket.io": "^4.0.0",
+    "socket.io-client": "^4.0.0",
+    "three": "0.128.0",
+    "three.meshline": "^1.3.0",
+    "vec3": "^0.1.7"
+  },
+  "devDependencies": {
+    "assert": "^2.0.0",
+    "buffer": "^6.0.3",
+    "process": "^0.11.10",
+    "minecraft-assets": "^1.9.0",
+    "jest": "^27.0.4",
+    "jest-puppeteer": "^6.0.0",
+    "minecraft-wrap": "^1.3.0",
+    "mineflayer": "^4.0.0",
+    "mineflayer-pathfinder": "^2.0.0",
+    "prismarine-schematic": "^1.2.0",
+    "minecrafthawkeye": "^1.2.5",
+    "prismarine-viewer": "file:./",
+    "puppeteer": "^16.0.0",
+    "standard": "^17.0.0",
+    "webpack": "^5.10.2",
+    "webpack-cli": "^5.1.1",
+    "canvas": "^2.11.2",
+    "fs-extra": "^11.0.0"
+  }
+}
