@@ -202,19 +202,6 @@ async function main () {
     connect(options)
   })
 }
-let justHitEscape = false
-
-const goFullscreen = async (doToggle = false) => {
-  if (!document.fullscreenElement) {
-    // todo display a message or repeat?
-    await document.documentElement.requestFullscreen().catch(() => { })
-    // request full keyboard access
-    //@ts-ignore
-    navigator.keyboard?.lock?.(['Escape', 'KeyW'])
-  } else if (doToggle) {
-    await document.exitFullscreen().catch(() => { })
-    }
-}
 
 async function connect (options) {
   const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
