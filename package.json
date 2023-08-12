@@ -4,7 +4,7 @@
   "description": "A minecraft client running in a browser",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.prod.js --progress && node build.js copyFiles",
+    "build": "node build.js copyFiles && webpack --config webpack.prod.js --progress",
     "build-dev": "node build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "start": "NODE_OPTIONS=--max-old-space-size=8192 pnpm build-dev",
     "prod-start": "node server.js",
@@ -35,11 +35,13 @@
   "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
   "dependencies": {
     "compression": "^1.7.4",
+    "diamond-square": "^1.2.0",
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "ismobilejs": "^1.1.1",
     "lit": "^2.8.0",
     "net-browserify": "github:PrismarineJS/net-browserify",
+    "prismarine-world": "^3.6.2",
     "querystring": "^0.2.1",
     "stats.js": "^0.17.0",
     "url": "^0.11.1",

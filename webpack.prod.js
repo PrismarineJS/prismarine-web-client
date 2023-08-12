@@ -25,9 +25,9 @@ module.exports = merge(common, {
     }),
     new webpack.ProvidePlugin({
       // get from github actions or vercel env
-      'process.env.GITHUB_URL': process.env.VERCEL_GIT_REPO_OWNER
+      'process.env.GITHUB_URL': `"${process.env.VERCEL_GIT_REPO_OWNER
         ? `https://github.com/${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`
-        : process.env.GITHUB_REPOSITORY
+        : process.env.GITHUB_REPOSITORY}"`
     })
   ],
 })
