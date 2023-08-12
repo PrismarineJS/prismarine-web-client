@@ -43,6 +43,7 @@ const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalSta
 const { pointerLock, goFullscreen, toNumber } = require('./lib/utils')
 const { notification } = require('./lib/menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./lib/panorama')
+const { createClient } = require('minecraft-protocol')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -139,6 +140,31 @@ function setLoadingScreenStatus (status, isError = false) {
   loadingScreen.status = status
 }
 
+let mouseMovePostHandle = (e) => { }
+let lastMouseCall
+function onMouseMove (e) {
+  if (!pointerLock.hasPointerLock) return
+  e.stopPropagation?.()
+  const now = performance.now()
+  // todo: limit camera movement for now to avoid unexpected jumps
+  if (now - lastMouseCall < 4) return
+  lastMouseCall = now
+  let { mouseSensX, mouseSensY } = optionsScrn
+  if (mouseSensY === true) mouseSensY = mouseSensX
+  // debugPitch.innerText = +debugPitch.innerText + e.movementX
+  mouseMovePostHandle({
+    x: e.movementX * mouseSensX * 0.0001,
+    y: e.movementY * mouseSensY * 0.0001
+  })
+}
+window.addEventListener('mousemove', onMouseMove, { capture: true })
+
+
+function hideCurrentScreens () {
+  activeModalStacks['main-menu'] = activeModalStack
+  replaceActiveModalStack('', [])
+}
+
 async function main () {
   const menu = document.getElementById('play-screen')
 
@@ -148,6 +174,91 @@ async function main () {
     removePanorama()
     connect(options)
   })
+  document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
+    menu.style = 'display: none;'
+    hideCurrentScreens()
+    removePanorama()
+
+    const version = '1.16.4'
+
+    const viewDistance = 10
+    const center = new Vec3(0, 90, 0)
+
+    //@ts-ignore
+    const World = PrismarineWorld(version)
+
+    // gen
+    const diamondSquare = require('diamond-square')({ version, seed: Math.floor(Math.random() * Math.pow(2, 31)) })
+
+    const world = new World(diamondSquare)
+    const worldView = new WorldView(world, viewDistance, center)
+
+    // Create viewer
+    const viewer = new Viewer(renderer)
+    viewer.setVersion(version)
+    // Attach controls to viewer
+    const controls = new MapControls(viewer.camera, renderer.domElement)
+
+    // Link WorldView and Viewer
+    viewer.listen(worldView)
+    // Initialize viewer, load chunks
+    worldView.init(center)
+
+    viewer.camera.position.set(center.x, center.y, center.z)
+    controls.update()
+
+    postRenderFrameFn = () => {
+      if (controls) controls.update()
+      worldView.updatePosition(controls.target)
+      viewer.update()
+    }
+    // Browser animation loop
+    const animate = () => {
+      window.requestAnimationFrame(animate)
+      renderer.render(viewer.scene, viewer.camera)
+    }
+    animate()
+
+    hud.style.display = 'block'
+    class FakeBot extends EventTarget {
+      on (...args) {
+        //@ts-ignore
+        super.addEventListener(...args)
+      }
+      once (...args) {
+        //@ts-ignore
+        super.addEventListener(...args, { once: true })
+      }
+    }
+    const fakeBot = new FakeBot()
+    hud.init(renderer, fakeBot)
+
+    let pitch = 0
+    let yaw = 0
+    mouseMovePostHandle = ({ x, y }) => {
+      pitch -= y
+      yaw -= x
+      pitch = Math.max(minPitch, Math.min(maxPitch, pitch))
+      viewer.setFirstPersonCamera(null, pitch, yaw)
+    }
+  })
+}
+
+let listeners = []
+let timeouts = []
+let intervals = []
+// only for dom listeners (no removeAllListeners)
+// todo refactor them out of connect fn instead
+/** @type {import('./lib/utilsTs').RegisterListener} */
+const registerListener = (target, event, callback) => {
+  target.addEventListener(event, callback)
+  listeners.push({ target, event, callback })
+}
+const removeAllListeners = () => {
+  listeners.forEach(({ target, event, callback }) => {
+    target.removeEventListener(event, callback)
+  })
+  listeners = []
 }
 
 async function connect (options) {
@@ -348,20 +459,10 @@ async function connect (options) {
 
     setLoadingScreenStatus('Setting callbacks')
 
-    let lastMouseCall
-    function moveCallback (e) {
-      if (!pointerLock.hasPointerLock) return
-      e.stopPropagation?.()
-      const now = performance.now()
-      // todo: limit camera movement for now to avoid unexpected jumps
-      if (now - lastMouseCall < 4) return
-      lastMouseCall = now
-      let { mouseSensX, mouseSensY } = optionsScrn
-      if (mouseSensY === true) mouseSensY = mouseSensX
-      bot.entity.pitch -= e.movementY * mouseSensX * 0.0001
+    mouseMovePostHandle = ({ x, y }) => {
+      bot.entity.pitch -= y
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      bot.entity.yaw -= e.movementX * mouseSensY * 0.0001
-      // debugPitch.innerText = +debugPitch.innerText + e.movementX
+      bot.entity.yaw -= x
     }
 
     function changeCallback () {
@@ -371,7 +472,6 @@ async function connect (options) {
       }
     }
 
-    registerListener(window, 'mousemove', moveCallback, { capture: true })
     registerListener(document, 'pointerlockchange', changeCallback, false)
 
     let lastTouch
@@ -380,9 +480,8 @@ async function connect (options) {
       e.preventDefault()
       e.stopPropagation()
       if (lastTouch !== undefined) {
-        moveCallback({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
+        onMouseMove({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
       }
-      lastTouch = e.touches[0]
     }, { passive: false })
 
     registerListener(document, 'touchend', (e) => {
@@ -463,14 +562,13 @@ async function connect (options) {
     setLoadingScreenStatus('Done!')
     console.log('Done!')
 
-    hud.init(renderer, bot, host)
+    // hud.init(renderer, bot, host)
     hud.style.display = 'block'
 
     setTimeout(function () {
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
-      activeModalStacks['main-menu'] = activeModalStack
-      replaceActiveModalStack('', [])
+      hideCurrentScreens()
     }, 2500)
   })
 }
