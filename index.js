@@ -347,28 +347,19 @@ async function connect (options) {
 
     setLoadingScreenStatus('Setting callbacks')
 
-    let yaw
-    let moveCallsPerSec = 0
-    setInterval(() => {
-      console.log('mouse frequency', moveCallsPerSec)
-      moveCallsPerSec = 0
-    }, 1000)
-    let lastCall
+    let lastMouseCall
     function moveCallback (e) {
       if (!pointerLock.hasPointerLock) return
       e.stopPropagation?.()
       const now = performance.now()
-      if (now - lastCall < 5) return
-      lastCall = now
-      moveCallsPerSec++
+      // todo: limit camera movement for now to avoid unexpected jumps
+      if (now - lastMouseCall < 4) return
+      lastMouseCall = now
       let { mouseSensX, mouseSensY } = optionsScrn
       if (mouseSensY === true) mouseSensY = mouseSensX
-      yaw ??= bot.entity.yaw
       bot.entity.pitch -= e.movementY * mouseSensX * 0.0001
       bot.entity.pitch = Math.max(minPitch, Math.min(maxPitch, bot.entity.pitch))
-      const diff = e.movementX * mouseSensY * 0.0001
-      bot.entity.yaw -= diff
-      yaw -= diff
+      bot.entity.yaw -= e.movementX * mouseSensY * 0.0001
       // debugPitch.innerText = +debugPitch.innerText + e.movementX
     }
 
