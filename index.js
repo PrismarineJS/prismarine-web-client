@@ -562,7 +562,7 @@ async function connect (options) {
     setLoadingScreenStatus('Done!')
     console.log('Done!')
 
-    // hud.init(renderer, bot, host)
+    hud.init(renderer, bot, host)
     hud.style.display = 'block'
 
     setTimeout(function () {
