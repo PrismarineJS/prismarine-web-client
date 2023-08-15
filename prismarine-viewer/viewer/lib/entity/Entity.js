@@ -200,8 +200,19 @@ function getMesh (texture, jsonModel) {
   return mesh
 }
 
+// TODO!
+const entitiesMap = {
+  item: null,
+  'glow_squid': 'squid'
+}
+
 class Entity {
   constructor (version, type, scene) {
+    let mappedValue = entitiesMap[type]
+    // todo is it okay?
+    if (mappedValue === null) return
+    else if (mappedValue) type = mappedValue
+
     const e = entities[type]
     if (!e) throw new Error(`Unknown entity ${type}`)
 
