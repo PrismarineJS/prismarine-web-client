@@ -2,6 +2,13 @@ node_modules/
 package-lock.json
 .vscode
 public
+*.log
+.env.local
+Thumbs.db
+build
+dist
 .DS_Store
 .idea/
+world
+out
 *.iml
