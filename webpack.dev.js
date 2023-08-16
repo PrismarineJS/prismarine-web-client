@@ -26,6 +26,12 @@ module.exports = merge(common,
         maxAsyncRequests: 10,
         maxInitialRequests: 10,
         cacheGroups: {
+          minecraftData: {
+            test: /[\\/]node_modules[\\/]minecraft-data[\\/]/,
+            name: "minecraftData",
+            priority: 15,
+            chunks: 'all'
+          },
           vendors: {
             test: /[\\/]node_modules[\\/]/,
             name: "vendors",

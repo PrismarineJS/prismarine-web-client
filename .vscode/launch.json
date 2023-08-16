@@ -1,17 +1,39 @@
 {
     "configurations": [
+        // recommended as much faster
         {
+            // to launch "C:\Program Files\Google\Chrome Beta\Application\chrome.exe" --remote-debugging-port=9222
+            "type": "chrome",
+            "address": "localhost",
+            "name": "Attach Chrome",
+            "request": "attach",
+            "outFiles": [
+                "${workspaceFolder}/public/**/*.js",
+                // "!${workspaceFolder}/public/**/*vendors*",
+                "!${workspaceFolder}/public/**/*minecraftData*",
+                "!**/node_modules/**"
+            ],
+            "skipFiles": [
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
+            ],
+            "port": 9222,
+        },
+        {
+            // not recommended as in most cases it will slower as it launches from extension host so it slows down extension host, not sure why
             "type": "msedge",
-            "name": "http://localhost:8080/",
+            "name": "Launch Edge",
             "request": "launch",
             "url": "http://localhost:8080/",
             "outFiles": [
                 "${workspaceFolder}/public/**/*.js",
-                "!${workspaceFolder}/public/**/*vendors*",
+                // "!${workspaceFolder}/public/**/*vendors*",
+                "!${workspaceFolder}/public/**/*minecraftData*",
                 "!**/node_modules/**"
             ],
             "skipFiles": [
-                "<node_internals>/**/*vendors-*"
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
             ],
         },
     ]
