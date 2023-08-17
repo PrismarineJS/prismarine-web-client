@@ -22,6 +22,9 @@ require('./lib/menus/advanced_options_screen')
 require('./lib/menus/notification')
 require('./lib/menus/title_screen')
 
+// @ts-ignore
+require('crypto').createPublicKey = () => { }
+
 const { promisify } = require('util')
 const browserfs = require('browserfs')
 browserfs.install(window)
@@ -624,6 +627,14 @@ window.addEventListener('keydown', (e) => {
   // if (e.code === 'KeyD') {
   //   debugPitch.innerText = '0'
   // }
+})
+
+window.addEventListener('unhandledrejection', (e) => {
+  // todo
+  if (e.reason.message.includes('Unable to decode audio data')) {
+    console.warn(e.reason)
+    return
+  }
 })
 
 addPanoramaCubeMap()
