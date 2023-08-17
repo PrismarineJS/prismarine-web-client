@@ -3,10 +3,28 @@
 it('Renders menu (options button)', () => {
     // todo use <button match text selectors
     cy.visit('/')
+    cy.window().then((win) => {
+        win['cypress'] = true
+        win['hideStats']()
+    })
     window.localStorage.server = 'localhost'
     window.localStorage.setItem('renderDistance', '2')
-    cy.get('#title-screen').find('.menu > pmui-button:nth-child(1)', {includeShadowDom: true,}).click()
+    window.localStorage.setItem('localServerOptions', JSON.stringify({
+        generation: {
+            name: 'superflat',
+            options: { seed: 250869072 }
+        }
+    }))
+    cy.get('#title-screen').find('.menu > pmui-button:nth-child(2)', { includeShadowDom: true, }).click()
+    // todo implement load event
+    cy.wait(6000)
+    //@ts-ignore
+    cy.get('body').toMatchImageSnapshot({
+        // imageConfig: {
+        //   threshold: 0.001,
+        // },
+    })
+
     // config load TODO remove
-    // cy.wait(500)
-    cy.get('#play-screen').find('pmui-button', {includeShadowDom: true,}).contains('Connect', {includeShadowDom: true, }).click()
+    // cy.get('#play-screen').find('pmui-button', {includeShadowDom: true,}).contains('Connect', {includeShadowDom: true, }).click()
 })

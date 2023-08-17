@@ -21,8 +21,6 @@ require('./lib/menus/options_screen')
 require('./lib/menus/advanced_options_screen')
 require('./lib/menus/notification')
 require('./lib/menus/title_screen')
-require('./lib/menus/contextmenu')
-require('./lib/advancedSettings')
 
 const { promisify } = require('util')
 const browserfs = require('browserfs')
@@ -94,13 +92,22 @@ if ('serviceWorker' in navigator) {
 
 // ACTUAL CODE
 
-const stats = new Stats()
-const stats2 = new Stats()
+let stats
+let stats2
+stats = new Stats()
+stats2 = new Stats()
 stats2.showPanel(2)
 
 document.body.appendChild(stats.dom)
 stats2.dom.style.left = '80px'
 document.body.appendChild(stats2.dom)
+
+window.hideStats = () => {
+  stats.dom.style.display = 'none'
+  stats2.dom.style.display = 'none'
+}
+if (localStorage.hideStats) window.hideStats()
+
 // const debugPitch = document.createElement('span')
 // debugPitch.style.cssText = `
 //   position: absolute;
@@ -147,13 +154,13 @@ const renderFrame = (/** @type {DOMHighResTimeStamp} */ time) => {
       return
     }
   }
-  stats.begin()
-  stats2.begin()
+  stats?.begin()
+  stats2?.begin()
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
-  stats.end()
-  stats2.end()
+  stats?.end()
+  stats2?.end()
 }
 renderFrame(performance.now())
 
@@ -338,7 +345,7 @@ async function connect (options) {
     if (singeplayer) {
       window.worldLoaded = false
       //@ts-ignore TODO
-      Object.assign(serverOptions, _.defaultsDeep(JSON.stringify(localStorage.localServerOptions || '{}'), serverOptions))
+      Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
       const server = startLocalServer()
       // init world, todo: do it for any async plugins
       if (!server.worldsReady) {
