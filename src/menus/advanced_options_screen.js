@@ -12,7 +12,7 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
   constructor () {
     super()
     this.defineOptions({
-      forceMobileControls: { defaultValue: false, convertFn: (v) => v === 'true' },
+      alwaysShowMobileControls: { defaultValue: false, convertFn: (v) => v === 'true' },
       frameLimit: { defaultValue: false, convertFn: (v) => toNumber(v) ?? false },
     })
   }
@@ -54,9 +54,9 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
       <p class="title">Advanced Options</p>
       <main>
         <div class="wrapper">
-          <pmui-button pmui-width="150px" pmui-label=${'Force Mobile Controls: ' + (this.forceMobileControls ? 'ON' : 'OFF')} @pmui-click=${() => {
-        this.forceMobileControls = !this.forceMobileControls
-        if (this.forceMobileControls || isMobile()) {
+          <pmui-button pmui-width="150px" pmui-label=${`Always Show Mobile Controls: ${this.alwaysShowMobileControls ? 'ON' : 'OFF'}`} @pmui-click=${() => {
+        this.alwaysShowMobileControls = !this.alwaysShowMobileControls
+        if (this.alwaysShowMobileControls || isMobile()) {
           document.getElementById('hud').showMobileControls(true)
         } else {
           document.getElementById('hud').showMobileControls(false)

@@ -105,9 +105,7 @@ class Cursor {
     // Start break
     if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || cursorChanged)) {
       this.breakStartTime = performance.now()
-      try {
-        bot.dig(cursorBlock, 'ignore')
-      } catch (e) { } // we don't care if its aborted
+      bot.dig(cursorBlock, 'ignore')
     }
 
     // Stop break
