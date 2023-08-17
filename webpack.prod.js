@@ -2,7 +2,6 @@ const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const webpack = require('webpack')
 
@@ -13,7 +12,6 @@ module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',
   plugins: [
-    new CleanWebpackPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new LodashModuleReplacementPlugin(),
     new WorkboxPlugin.GenerateSW({
