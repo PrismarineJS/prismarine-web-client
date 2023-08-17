@@ -5,14 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_OPTIONS=--max-old-space-size=8192 run-p watch prod-start",
-    "build": "NODE_OPTIONS=--max-old-space-size=8192 node build.js copyFiles && webpack --config webpack.prod.js --progress",
-    "watch": "node build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
+    "build": "NODE_OPTIONS=--max-old-space-size=8192 node scripts/build.js copyFiles && webpack --config webpack.prod.js --progress",
+    "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
+    "postinstall": "node scripts/patchPackages.js",
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
     "prepublishOnly": "npm run build",
-    "lint": "standard",
-    "fix": "standard --fix",
     "test": "npm run lint && mocha"
   },
   "repository": {
