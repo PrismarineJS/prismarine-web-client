@@ -9,17 +9,25 @@ const config = {
   output: {
     path: path.resolve(__dirname, './public'),
     filename: './[name].js',
-    publicPath: './'
+    publicPath: './',
+    hotUpdateChunkFilename: 'hot/hot-update.[name].js',
+    hotUpdateMainFilename: 'hot/hot-update.json'
   },
   resolve: {
     alias: {
-      'minecraft-protocol': path.resolve(
+      'fs': 'browserfs/dist/shims/fs.js',
+      'buffer': 'browserfs/dist/shims/buffer.js',
+      'path': 'browserfs/dist/shims/path.js',
+      'processGlobal': 'browserfs/dist/shims/process.js',
+      'bufferGlobal': 'browserfs/dist/shims/bufferGlobal.js',
+      'bfsGlobal': require.resolve('browserfs'),
+
+      'minecraft-protocol$': path.resolve(
         __dirname,
         'node_modules/minecraft-protocol/src/index.js'
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
-      fs: false,
       jose: false
     },
     fallback: {
@@ -36,7 +44,6 @@ const config = {
       http: require.resolve('http-browserify'),
       https: require.resolve('https-browserify'),
       timers: require.resolve('timers-browserify'),
-      // fs: require.resolve("fs-memory/singleton"),
       child_process: false,
       tls: false,
       perf_hooks: path.resolve(__dirname, 'lib/perf_hooks_replacement.js'),
@@ -50,16 +57,20 @@ const config = {
       minify: false,
       chunks: ['main', 'vendors'],
     }),
-    // fix "process is not defined" error:
+    new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', /* process: 'processGlobal', */ Buffer: 'bufferGlobal' }),
     new webpack.ProvidePlugin({
       process: 'process/browser'
     }),
-    new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer']
-    }),
+    // new webpack.ProvidePlugin({
+    //   Buffer: ['buffer', 'Buffer']
+    // }),
     new webpack.NormalModuleReplacementPlugin(
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
+    ),
+    new webpack.NormalModuleReplacementPlugin(
+      /minecraft-protocol[/|\\]src[/|\\]client.js/,
+      require.resolve('./lib/customClient.js')
     ),
     new CopyPlugin({
       patterns: [

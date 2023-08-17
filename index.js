@@ -21,6 +21,42 @@ require('./lib/menus/options_screen')
 require('./lib/menus/advanced_options_screen')
 require('./lib/menus/notification')
 require('./lib/menus/title_screen')
+require('./lib/menus/contextmenu')
+require('./lib/advancedSettings')
+
+const { promisify } = require('util')
+const browserfs = require('browserfs')
+browserfs.install(window)
+browserfs.configure({
+  // todo change to localstorage: mkdir doesnt work for some reason
+  fs: 'MountableFileSystem',
+  options: {
+    "/world": { fs: "LocalStorage" }
+  },
+}, (e) => {
+  if (e) throw e
+})
+const _fs = require('fs')
+//@ts-ignore
+_fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat'].map(key => [key, promisify(_fs[key])])), {
+  get (target, p, receiver) {
+    //@ts-ignore
+    if (!target[p]) throw new Error(`Not implemented fs.promises.${p}`)
+    return Reflect.get(target, p, receiver)
+  }
+})
+//@ts-ignore
+_fs.promises.open = async (...args) => {
+  const fd = await promisify(_fs.open)(...args)
+  return Object.fromEntries(['read', 'write', 'close'].map(x => [x, async (...args) => {
+    return await new Promise(resolve => {
+      _fs[x](fd, ...args, (err, bytesRead, buffer) => {
+        if (err) throw err
+        resolve({ buffer, bytesRead })
+      })
+    })
+  }]))
+}
 
 const net = require('net')
 const Stats = require('stats.js')
@@ -44,6 +80,7 @@ const { pointerLock, goFullscreen, toNumber } = require('./lib/utils')
 const { notification } = require('./lib/menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./lib/panorama')
 const { createClient } = require('minecraft-protocol')
+const { serverOptions, startLocalServer } = require('./lib/createLocalServer')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -176,71 +213,9 @@ async function main () {
   })
   document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
     menu.style = 'display: none;'
-    hideCurrentScreens()
     removePanorama()
-
-    const version = '1.16.4'
-
-    const viewDistance = 10
-    const center = new Vec3(0, 90, 0)
-
-    //@ts-ignore
-    const World = PrismarineWorld(version)
-
-    // gen
-    const diamondSquare = require('diamond-square')({ version, seed: Math.floor(Math.random() * Math.pow(2, 31)) })
-
-    const world = new World(diamondSquare)
-    const worldView = new WorldView(world, viewDistance, center)
-
-    // Create viewer
-    const viewer = new Viewer(renderer)
-    viewer.setVersion(version)
-    // Attach controls to viewer
-    const controls = new MapControls(viewer.camera, renderer.domElement)
-
-    // Link WorldView and Viewer
-    viewer.listen(worldView)
-    // Initialize viewer, load chunks
-    worldView.init(center)
-
-    viewer.camera.position.set(center.x, center.y, center.z)
-    controls.update()
-
-    postRenderFrameFn = () => {
-      if (controls) controls.update()
-      worldView.updatePosition(controls.target)
-      viewer.update()
-    }
-    // Browser animation loop
-    const animate = () => {
-      window.requestAnimationFrame(animate)
-      renderer.render(viewer.scene, viewer.camera)
-    }
-    animate()
-
-    hud.style.display = 'block'
-    class FakeBot extends EventTarget {
-      on (...args) {
-        //@ts-ignore
-        super.addEventListener(...args)
-      }
-      once (...args) {
-        //@ts-ignore
-        super.addEventListener(...args, { once: true })
-      }
-    }
-    const fakeBot = new FakeBot()
-    hud.init(renderer, fakeBot)
-
-    let pitch = 0
-    let yaw = 0
-    mouseMovePostHandle = ({ x, y }) => {
-      pitch -= y
-      yaw -= x
-      pitch = Math.max(minPitch, Math.min(maxPitch, pitch))
-      viewer.setFirstPersonCamera(null, pitch, yaw)
-    }
+    // todo clean
+    connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '' })
   })
 }
 
@@ -261,7 +236,11 @@ const removeAllListeners = () => {
   listeners = []
 }
 
+/**
+ * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; }} options
+ */
 async function connect (options) {
+  const singeplayer = options.singleplayer
   loadingScreen.maybeRecoverable = true
   const oldSetInterval = window.setInterval
   // @ts-ignore
@@ -349,11 +328,33 @@ async function connect (options) {
     destroy()
   }
 
+  const errorAbortController = new AbortController()
+  window.addEventListener('unhandledrejection', (e) => {
+    handleError(e.reason)
+  }, {
+    signal: errorAbortController.signal
+  })
   try {
+    if (singeplayer) {
+      window.worldLoaded = false
+      const server = startLocalServer()
+      // init world, todo: do it for any async plugins
+      if (!server.worldsReady) {
+        await new Promise(resolve => {
+          server.once('worldsReady', resolve)
+        })
+      }
+    }
+
     bot = mineflayer.createBot({
       host,
       port,
       version: options.botVersion === '' ? false : options.botVersion,
+      ...singeplayer ? {
+        customPackets: true,
+        version: serverOptions.version,
+        connect () { },
+      } : {},
       username,
       password,
       viewDistance: 'tiny',
@@ -361,12 +362,20 @@ async function connect (options) {
       noPongTimeout: 240 * 1000,
       closeTimeout: 240 * 1000
     })
+    if (singeplayer) {
+      bot.emit('inject_allowed')
+      bot._client.emit('connect')
+    }
   } catch (err) {
     handleError(err)
   }
   if (!bot) return
   hud.preload(bot)
 
+  if (singeplayer) {
+    // todo
+    loadingScreen.maybeRecoverable = false
+  }
   // bot.on('inject_allowed', () => {
   //   loadingScreen.maybeRecoverable = false
   // })
@@ -396,6 +405,8 @@ async function connect (options) {
   })
 
   bot.once('spawn', () => {
+    // todo display notification if not critical
+    errorAbortController.abort()
     const mcData = require('minecraft-data')(bot.version)
 
     setLoadingScreenStatus('Placing blocks (starting viewer)')
@@ -569,7 +580,7 @@ async function connect (options) {
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
       hideCurrentScreens()
-    }, 2500)
+    }, singeplayer ? 0 : 2500)
   })
 }
 
