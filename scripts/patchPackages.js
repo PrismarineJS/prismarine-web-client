@@ -8,6 +8,7 @@ const lines = fs.readFileSync(dataPath, 'utf8').split('\n')
 
 function removeLinesBetween (start, end) {
   let startIndex = lines.findIndex(line => line === start)
+  if (startIndex === -1) return
   let endIndex = startIndex + lines.slice(startIndex).findIndex(line => line === end)
   const linesToRemove = endIndex - startIndex + 1
   lines.splice(startIndex, linesToRemove)

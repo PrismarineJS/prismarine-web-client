@@ -4,6 +4,8 @@ const { CommonOptionsScreen } = require('./options_store')
 const { commonCss, isMobile, openURL } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
 const { toNumber, getScreenRefreshRate } = require('../utils')
+const { subscribe } = require('valtio')
+const { options } = require('../optionsStorage')
 
 class AdvancedOptionsScreen extends CommonOptionsScreen {
   /** @type {null | number} */
@@ -12,8 +14,10 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
   constructor () {
     super()
     this.defineOptions({
-      alwaysShowMobileControls: { defaultValue: false, convertFn: (v) => v === 'true' },
       frameLimit: { defaultValue: false, convertFn: (v) => toNumber(v) ?? false },
+    })
+    subscribe(options, () => {
+      this.requestUpdate()
     })
   }
 
@@ -54,14 +58,8 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
       <p class="title">Advanced Options</p>
       <main>
         <div class="wrapper">
-          <pmui-button pmui-width="150px" pmui-label=${`Always Show Mobile Controls: ${this.alwaysShowMobileControls ? 'ON' : 'OFF'}`} @pmui-click=${() => {
-        this.alwaysShowMobileControls = !this.alwaysShowMobileControls
-        if (this.alwaysShowMobileControls || isMobile()) {
-          document.getElementById('hud').showMobileControls(true)
-        } else {
-          document.getElementById('hud').showMobileControls(false)
-        }
-        this.requestUpdate()
+          <pmui-button pmui-width="150px" pmui-label=${`Always Show Mobile Controls: ${options.alwaysShowMobileControls ? 'ON' : 'OFF'}`} @pmui-click=${() => {
+        options.alwaysShowMobileControls = !options.alwaysShowMobileControls
       }
       }></pmui-button>
       <!-- todo rename button, also might be unstable -->
