@@ -225,7 +225,7 @@ class Hud extends LitElement {
     if (bot._client) {
       hotbar.init()
       chat.init(bot._client)
-      bot.on('spawn', () => playerList.init(bot, host))
+      playerList.init(bot, host)
     }
 
     bot.on('entityHurt', (entity) => {
@@ -265,7 +265,6 @@ class Hud extends LitElement {
     //   breathbar.updateOxygen(bot.oxygenLevel)
     // })
 
-    bot.on('spawn', () => {
       this.shadowRoot.querySelector('#xp-bar-bg').style.display = bot.player.gamemode === 1 ? 'none' : 'block'
       this.shadowRoot.querySelector('#xp-bar-bg').firstElementChild.style.width = `${182 * bot.experience.progress}px`
       xpLabel.innerHTML = bot.experience.level

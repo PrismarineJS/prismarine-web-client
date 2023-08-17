@@ -1,4 +1,5 @@
 const { LitElement, html, css } = require('lit')
+const { isGameActive } = require('../../globalState')
 
 const MAX_ROWS_PER_COL = 10
 
@@ -44,7 +45,7 @@ class PlayerListOverlay extends LitElement {
         color: rgb(42, 204, 237);
         text-shadow: 1px 1px 0px rgb(4, 44, 67);
       }
-      
+
       .playerlist-ping {
         text-align: right;
         float: right;
@@ -114,7 +115,7 @@ class PlayerListOverlay extends LitElement {
     }
 
     document.addEventListener('keydown', e => {
-      e ??= window.event
+      if (!isGameActive(true)) return
       if (e.key === 'Tab') {
         showList(true)
         e.preventDefault()
@@ -123,7 +124,6 @@ class PlayerListOverlay extends LitElement {
 
     document.addEventListener('keyup', e => {
       if (!this.isOpen) return
-      e ??= window.event
       if (e.key === 'Tab') {
         showList(false)
         e.preventDefault()
