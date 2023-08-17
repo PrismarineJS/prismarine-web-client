@@ -13,6 +13,7 @@ jobs:
         run: npm i -g pnpm
       - run: pnpm install
       - run: pnpm build
+      - run: pnpm prod-start & pnpm test:cypress
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
