@@ -243,44 +243,46 @@ class Hud extends LitElement {
       healthbar.effectEnded(effect)
     })
 
-    bot.on('game', () => {
-      healthbar.gameModeChanged(bot.player.gamemode, bot.game.hardcore)
-      foodbar.gameModeChanged(bot.player.gamemode)
-      // breathbar.gameModeChanged(bot.player.gamemode)
-      this.shadowRoot.querySelector('#xp-bar-bg').style.display = bot.player.gamemode === 1 ? 'none' : 'block'
-    })
+    const onGameModeChange = () => {
+      const gamemode = (() => {
+        switch (bot.game.gameMode) {
+          case 'survival': return 0
+          case 'creative': return 1
+          case 'adventure': return 2
+          case 'spectator': return 3
+          default: return -1
+        }
+      })()
+      healthbar.gameModeChanged(gamemode, bot.game.hardcore)
+      foodbar.gameModeChanged(gamemode)
+      // breathbar.gameModeChanged(gamemode)
+      this.shadowRoot.querySelector('#xp-bar-bg').style.display = gamemode === 1 ? 'none' : 'block'
+    }
+    bot.on('game', onGameModeChange)
+    onGameModeChange()
 
-    bot.on('health', () => {
+    const onHealthUpdate = () => {
       healthbar.updateHealth(bot.health, true)
       foodbar.updateHunger(bot.food, true)
-    })
+    }
+    bot.on('health', onHealthUpdate)
+    onHealthUpdate()
 
-    bot.on('experience', () => {
+    const onXpUpdate = () => {
+      // @ts-ignore
       this.shadowRoot.querySelector('#xp-bar-bg').firstElementChild.style.width = `${182 * bot.experience.progress}px`
-      xpLabel.innerHTML = bot.experience.level
+      xpLabel.innerHTML = String(bot.experience.level)
       xpLabel.style.display = bot.experience.level > 0 ? 'block' : 'none'
-    })
+    }
+    bot.on('experience', onXpUpdate)
+    onXpUpdate()
 
     // bot.on('breath', () => {
     //   breathbar.updateOxygen(bot.oxygenLevel)
     // })
 
-      this.shadowRoot.querySelector('#xp-bar-bg').style.display = bot.player.gamemode === 1 ? 'none' : 'block'
-      this.shadowRoot.querySelector('#xp-bar-bg').firstElementChild.style.width = `${182 * bot.experience.progress}px`
-      xpLabel.innerHTML = bot.experience.level
-      xpLabel.style.display = bot.experience.level > 0 ? 'block' : 'none'
-      healthbar.gameModeChanged(bot.player.gamemode, bot.game.hardcore)
-      healthbar.updateHealth(bot.health)
-      foodbar.updateHunger(bot.food)
-      // TODO
-      // breathbar.updateOxygen(bot.oxygenLevel ?? 20)
-    })
-
-    if (document.getElementById('options-screen').alwaysShowMobileControls || isMobile()) {
-      this.showMobileControls(true)
-    } else {
-      this.showMobileControls(false)
-    }
+    // TODO
+    // breathbar.updateOxygen(bot.oxygenLevel ?? 20)
   }
 
   /** @param {boolean} bl */

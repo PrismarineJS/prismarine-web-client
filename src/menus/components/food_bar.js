@@ -49,6 +49,10 @@ class FoodBar extends LitElement {
         animation: updatedAnim 0.3s steps(2, end) 2;
       }
 
+      .creative {
+        display: none;
+      }
+
       @keyframes lowHungerAnim {
         to { transform: translateY(1px); }
       }
