@@ -91,7 +91,8 @@
   },
   "pnpm": {
     "overrides": {
-      "minecraft-data": "latest"
+      "minecraft-data": "latest",
+      "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client"
     }
   }
 }
