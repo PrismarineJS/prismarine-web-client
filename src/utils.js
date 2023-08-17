@@ -1,5 +1,5 @@
 //@ts-check
-import { activeModalStack } from './globalState'
+import { activeModalStack, miscUiState } from './globalState'
 import { notification } from './menus/notification'
 
 export const goFullscreen = async (doToggle = false) => {
@@ -25,7 +25,9 @@ export const pointerLock = {
   },
   justHitEscape: false,
   async requestPointerLock () {
-    if (document.getElementById('hud').style.display === 'none' || activeModalStack.length || !document.documentElement.requestPointerLock) return
+    if (document.getElementById('hud').style.display === 'none' || activeModalStack.length || !document.documentElement.requestPointerLock || miscUiState.currentTouch) {
+      return
+    }
     const autoFullScreen = window.localStorage.getItem('autoFullscreen') === 'true'
     if (autoFullScreen) {
       await goFullscreen()

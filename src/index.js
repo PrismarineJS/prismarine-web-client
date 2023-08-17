@@ -216,19 +216,24 @@ function hideCurrentScreens () {
 
 async function main () {
   const menu = document.getElementById('play-screen')
-
   menu.addEventListener('connect', e => {
     const options = e.detail
-    menu.style = 'display: none;'
-    removePanorama()
     connect(options)
   })
-  document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
-    menu.style = 'display: none;'
-    removePanorama()
+  const connectSingleplayer = () => {
     // todo clean
     connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '' })
+  }
+  document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
+    connectSingleplayer()
   })
+  const qs = new URLSearchParams(window.location.search)
+  if (qs.get('singleplayer') === '1') {
+    // todo
+    setTimeout(() => {
+      connectSingleplayer()
+    })
+  }
 }
 
 let listeners = []
@@ -252,8 +257,11 @@ const removeAllListeners = () => {
  * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; }} options
  */
 async function connect (options) {
+  const menu = document.getElementById('play-screen')
+  menu.style = 'display: none;'
+  removePanorama()
+
   const singeplayer = options.singleplayer
-  loadingScreen.maybeRecoverable = true
   const oldSetInterval = window.setInterval
   // @ts-ignore
   window.setInterval = (callback, ms) => {
@@ -353,6 +361,8 @@ async function connect (options) {
       //@ts-ignore TODO
       Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
       const server = startLocalServer()
+      // todo need just to call quit if started
+      loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
       if (!server.worldsReady) {
         await new Promise(resolve => {
@@ -381,8 +391,6 @@ async function connect (options) {
     if (singeplayer) {
       bot.emit('inject_allowed')
       bot._client.emit('connect')
-      // todo need just to call quit if started
-      loadingScreen.maybeRecoverable = false
     }
   } catch (err) {
     handleError(err)
@@ -420,7 +428,6 @@ async function connect (options) {
 
   bot.once('spawn', () => {
     // todo display notification if not critical
-    errorAbortController.abort()
     const mcData = require('minecraft-data')(bot.version)
 
     setLoadingScreenStatus('Placing blocks (starting viewer)')
@@ -596,6 +603,7 @@ async function connect (options) {
     hud.style.display = 'block'
 
     setTimeout(function () {
+      errorAbortController.abort()
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
       hideCurrentScreens()
