@@ -180,7 +180,7 @@ function setLoadingScreenStatus (status, isError = false) {
 let mouseMovePostHandle = (e) => { }
 let lastMouseCall
 function onMouseMove (e) {
-  if (!pointerLock.hasPointerLock) return
+  if (e.type !== 'touchmove' && !pointerLock.hasPointerLock) return
   e.stopPropagation?.()
   const now = performance.now()
   // todo: limit camera movement for now to avoid unexpected jumps
@@ -365,6 +365,8 @@ async function connect (options) {
     if (singeplayer) {
       bot.emit('inject_allowed')
       bot._client.emit('connect')
+      // todo need just to call quit if started
+      loadingScreen.maybeRecoverable = false
     }
   } catch (err) {
     handleError(err)
@@ -372,10 +374,6 @@ async function connect (options) {
   if (!bot) return
   hud.preload(bot)
 
-  if (singeplayer) {
-    // todo
-    loadingScreen.maybeRecoverable = false
-  }
   // bot.on('inject_allowed', () => {
   //   loadingScreen.maybeRecoverable = false
   // })
@@ -491,8 +489,9 @@ async function connect (options) {
       e.preventDefault()
       e.stopPropagation()
       if (lastTouch !== undefined) {
-        onMouseMove({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY })
+        onMouseMove({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY, type: 'touchmove' })
       }
+      lastTouch = e.touches[0]
     }, { passive: false })
 
     registerListener(document, 'touchend', (e) => {
