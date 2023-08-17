@@ -86,6 +86,12 @@ class Hud extends LitElement {
       .chat-btn {
         background-position-y: -82px;
       }
+      .debug-btn {
+        background: #9c8c86;
+        font-size: 8px;
+        /* todo make other buttons centered */
+        margin-right: 5px;
+      }
 
       .mobile-control-forward,
       .mobile-control-back,
@@ -199,7 +205,7 @@ class Hud extends LitElement {
    * @param {import('mineflayer').Bot} bot
    */
   preload (bot) {
-    const bossBars = this.shadowRoot.querySelector('#bossbars-overlay')
+    const bossBars = this.shadowRoot.getElementById('bossbars-overlay')
     bossBars.bot = bot
 
     bossBars.init()
@@ -300,7 +306,7 @@ class Hud extends LitElement {
   }
 
   /**
-   * @param {string} id
+   * @param {any} id
    * @param {boolean} action
    */
   mobileControl (e, id, action) {
@@ -311,6 +317,9 @@ class Hud extends LitElement {
   render () {
     return html`
       <div class="mobile-top-btns" id="mobile-top">
+        <button class="debug-btn" @click=${(e) => {
+        this.shadowRoot.getElementById('debug-overlay').showOverlay = !this.shadowRoot.getElementById('debug-overlay').showOverlay
+      }}>F3</button>
         <button class="chat-btn" @click=${(e) => {
         e.stopPropagation()
         this.shadowRoot.querySelector('#chat').enableChat()

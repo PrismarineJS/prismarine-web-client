@@ -9,6 +9,7 @@ class DebugOverlay extends LitElement {
         display: flex;
         flex-direction: column;
         z-index: 40;
+        pointer-events: none;
       }
 
       .debug-left-side {
@@ -64,8 +65,7 @@ class DebugOverlay extends LitElement {
 
   firstUpdated () {
     document.addEventListener('keydown', e => {
-      e ??= window.event
-      if (e.key === 'F3') {
+      if (e.code === 'F3') {
         this.showOverlay = !this.showOverlay
         e.preventDefault()
       }
