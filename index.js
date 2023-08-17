@@ -337,6 +337,8 @@ async function connect (options) {
   try {
     if (singeplayer) {
       window.worldLoaded = false
+      //@ts-ignore TODO
+      Object.assign(serverOptions, _.defaultsDeep(JSON.stringify(localStorage.localServerOptions || '{}'), serverOptions))
       const server = startLocalServer()
       // init world, todo: do it for any async plugins
       if (!server.worldsReady) {
