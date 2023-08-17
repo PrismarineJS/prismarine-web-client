@@ -69,7 +69,7 @@ export const hideModal = (modal = activeModalStack.slice(-1)[0], data = undefine
 export const hideCurrentModal = (_data = undefined, preActions = undefined) => {
   if (hideModal(undefined, undefined)) {
     preActions?.()
-    if (document.getElementById('hud').style.display === 'none') {
+    if (!isGameActive()) {
       showModal(document.getElementById('title-screen'))
     } else {
       pointerLock.requestPointerLock() // will work only if no modals left
@@ -88,3 +88,16 @@ export const showContextmenu = (/** @type {ContextMenuItem[]} */items, { clientX
     y: clientY,
   })
 }
+
+// ---
+
+export const isGameActive = (foregroundCheck = false) => {
+  if (foregroundCheck && activeModalStack.length) return false
+  return document.getElementById('hud').style.display !== 'none'
+}
+
+export const miscUiState = proxy({
+  currentTouch: null
+})
+
+window.miscUiState = miscUiState
