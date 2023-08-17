@@ -1,26 +1,26 @@
 //@ts-check
 /* global THREE */
-require('./lib/chat')
+require('./chat')
 
-require('./lib/menus/components/button')
-require('./lib/menus/components/edit_box')
-require('./lib/menus/components/slider')
-require('./lib/menus/components/hotbar')
-require('./lib/menus/components/health_bar')
-require('./lib/menus/components/food_bar')
-require('./lib/menus/components/breath_bar')
-require('./lib/menus/components/debug_overlay')
-require('./lib/menus/components/playerlist_overlay')
-require('./lib/menus/components/bossbars_overlay')
-require('./lib/menus/hud')
-require('./lib/menus/play_screen')
-require('./lib/menus/pause_screen')
-require('./lib/menus/loading_or_error_screen')
-require('./lib/menus/keybinds_screen')
-require('./lib/menus/options_screen')
-require('./lib/menus/advanced_options_screen')
-require('./lib/menus/notification')
-require('./lib/menus/title_screen')
+require('./menus/components/button')
+require('./menus/components/edit_box')
+require('./menus/components/slider')
+require('./menus/components/hotbar')
+require('./menus/components/health_bar')
+require('./menus/components/food_bar')
+require('./menus/components/breath_bar')
+require('./menus/components/debug_overlay')
+require('./menus/components/playerlist_overlay')
+require('./menus/components/bossbars_overlay')
+require('./menus/hud')
+require('./menus/play_screen')
+require('./menus/pause_screen')
+require('./menus/loading_or_error_screen')
+require('./menus/keybinds_screen')
+require('./menus/options_screen')
+require('./menus/advanced_options_screen')
+require('./menus/notification')
+require('./menus/title_screen')
 
 // @ts-ignore
 require('crypto').createPublicKey = () => { }
@@ -72,17 +72,17 @@ const nbt = require('prismarine-nbt')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 
-const Cursor = require('./lib/cursor')
+const Cursor = require('./cursor')
 //@ts-ignore
 global.THREE = require('three')
-const { initVR } = require('./lib/vr')
-const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack } = require('./lib/globalState')
-const { pointerLock, goFullscreen, toNumber } = require('./lib/utils')
-const { notification } = require('./lib/menus/notification')
-const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./lib/panorama')
+const { initVR } = require('./vr')
+const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack } = require('./globalState')
+const { pointerLock, goFullscreen, toNumber } = require('./utils')
+const { notification } = require('./menus/notification')
+const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
 const { createClient } = require('minecraft-protocol')
-const { serverOptions, startLocalServer } = require('./lib/createLocalServer')
-const { customCommunication } = require('./lib/customServer')
+const { serverOptions, startLocalServer } = require('./createLocalServer')
+const { customCommunication } = require('./customServer')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -235,7 +235,7 @@ let timeouts = []
 let intervals = []
 // only for dom listeners (no removeAllListeners)
 // todo refactor them out of connect fn instead
-/** @type {import('./lib/utilsTs').RegisterListener} */
+/** @type {import('./utilsTs').RegisterListener} */
 const registerListener = (target, event, callback) => {
   target.addEventListener(event, callback)
   listeners.push({ target, event, callback })
@@ -498,15 +498,19 @@ async function connect (options) {
 
     registerListener(document, 'pointerlockchange', changeCallback, false)
 
+    /** @type {Touch?} */
     let lastTouch
     registerListener(document, 'touchmove', (e) => {
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
+      const touch = e.touches[0]
+      const allowedJitter = 10
+      console.log(touch.pageX - lastTouch.pageX, touch.pageX - lastTouch.pageX > allowedJitter)
       if (lastTouch !== undefined) {
-        onMouseMove({ movementX: e.touches[0].pageX - lastTouch.pageX, movementY: e.touches[0].pageY - lastTouch.pageY, type: 'touchmove' })
+        onMouseMove({ movementX: touch.pageX - lastTouch.pageX, movementY: touch.pageY - lastTouch.pageY, type: 'touchmove' })
       }
-      lastTouch = e.touches[0]
+      lastTouch = touch
     }, { passive: false })
 
     registerListener(document, 'touchend', (e) => {

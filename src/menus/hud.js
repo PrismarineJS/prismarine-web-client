@@ -277,7 +277,7 @@ class Hud extends LitElement {
       // breathbar.updateOxygen(bot.oxygenLevel ?? 20)
     })
 
-    if (document.getElementById('options-screen').forceMobileControls || isMobile()) {
+    if (document.getElementById('options-screen').alwaysShowMobileControls || isMobile()) {
       this.showMobileControls(true)
     } else {
       this.showMobileControls(false)

@@ -10,8 +10,6 @@
         // "strictNullChecks": true
     },
     "include": [
-        "index.js",
-        "globals.d.ts",
-        "lib"
+        "src"
     ]
 }

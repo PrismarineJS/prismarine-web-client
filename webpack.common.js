@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
 const config = {
-  entry: path.resolve(__dirname, './index.js'),
+  entry: path.resolve(__dirname, './src/index.js'),
   output: {
     path: path.resolve(__dirname, './public'),
     filename: './[name].js',
@@ -46,8 +46,8 @@ const config = {
       timers: require.resolve('timers-browserify'),
       child_process: false,
       tls: false,
-      perf_hooks: path.resolve(__dirname, 'lib/perf_hooks_replacement.js'),
-      dns: path.resolve(__dirname, 'lib/dns.js')
+      perf_hooks: path.resolve(__dirname, 'src/perf_hooks_replacement.js'),
+      dns: path.resolve(__dirname, 'src/dns.js')
     }
   },
   plugins: [
@@ -68,13 +68,9 @@ const config = {
       /prismarine-viewer[/|\\]viewer[/|\\]lib[/|\\]utils/,
       './utils.web.js'
     ),
-    new webpack.NormalModuleReplacementPlugin(
-      /minecraft-protocol[/|\\]src[/|\\]client.js/,
-      require.resolve('./lib/customClient.js')
-    ),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, '/styles.css'), to: './styles.css' },
+        { from: path.join(__dirname, 'src/styles.css'), to: './styles.css' },
       ]
     })
   ]
