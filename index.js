@@ -82,6 +82,7 @@ const { notification } = require('./lib/menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./lib/panorama')
 const { createClient } = require('minecraft-protocol')
 const { serverOptions, startLocalServer } = require('./lib/createLocalServer')
+const { customCommunication } = require('./lib/customServer')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -346,6 +347,7 @@ async function connect (options) {
   })
   try {
     if (singeplayer) {
+      window.serverDataChannel ??= {}
       window.worldLoaded = false
       //@ts-ignore TODO
       Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
@@ -363,9 +365,10 @@ async function connect (options) {
       port,
       version: options.botVersion === '' ? false : options.botVersion,
       ...singeplayer ? {
-        customPackets: true,
         version: serverOptions.version,
         connect () { },
+        keepAlive: false,
+        customCommunication
       } : {},
       username,
       password,
