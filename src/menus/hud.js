@@ -1,6 +1,8 @@
+//@ts-check
 const { LitElement, html, css } = require('lit')
 const { isMobile } = require('./components/common')
-const { showModal } = require('../globalState')
+const { showModal, miscUiState } = require('../globalState')
+const { options, watchValue } = require('../optionsStorage')
 
 class Hud extends LitElement {
   static get styles () {
@@ -283,6 +285,11 @@ class Hud extends LitElement {
 
     // TODO
     // breathbar.updateOxygen(bot.oxygenLevel ?? 20)
+
+    watchValue(options, (o) => {
+      miscUiState.currentTouch = o.alwaysShowMobileControls || isMobile()
+      this.showMobileControls(miscUiState.currentTouch)
+    })
   }
 
   /** @param {boolean} bl */

@@ -21,6 +21,7 @@ require('./menus/options_screen')
 require('./menus/advanced_options_screen')
 require('./menus/notification')
 require('./menus/title_screen')
+require('./optionsStorage')
 
 // @ts-ignore
 require('crypto').createPublicKey = () => { }
