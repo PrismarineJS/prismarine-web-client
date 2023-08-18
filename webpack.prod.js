@@ -23,8 +23,9 @@ module.exports = merge(common, {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
-      // include: ['index.html', 'manifest.json', 'styles.css', /\.js$/], // todo
-      exclude: [/\.map$/, /^manifest.*\.js$/, 'version.txt']
+      include: ['index.html', 'manifest.json', 'styles.css', /\.js$/, /\.woff$/, /\.ttf$/], // todo
+      maximumFileSizeToCacheInBytes: 35_000_000, // todo will be lowered
+      exclude: [/\.map$/, 'version.txt']
     }),
     new webpack.DefinePlugin({
       // get from github actions or vercel env
