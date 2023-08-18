@@ -4,6 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // https://webpack.js.org/guides/production/
 
+/** @type {import('webpack').Configuration} */
 const config = {
   entry: path.resolve(__dirname, './src/index.js'),
   output: {
@@ -48,7 +49,27 @@ const config = {
       tls: false,
       perf_hooks: path.resolve(__dirname, 'src/perf_hooks_replacement.js'),
       dns: path.resolve(__dirname, 'src/dns.js')
-    }
+    },
+    extensions: [
+      '.js',
+      '.ts',
+      '.json'
+    ],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
