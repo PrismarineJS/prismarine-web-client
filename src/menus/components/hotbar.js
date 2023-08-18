@@ -1,5 +1,6 @@
 const { LitElement, html, css } = require('lit')
 const invsprite = require('../../invsprite.json')
+const { isGameActive } = require('../../globalState')
 
 class Hotbar extends LitElement {
   static get styles () {
@@ -111,11 +112,13 @@ class Hotbar extends LitElement {
     this.reloadHotbarSelected(0)
 
     document.addEventListener('wheel', (e) => {
+      if (!isGameActive(true)) return
       const newSlot = ((this.bot.quickBarSlot + Math.sign(e.deltaY)) % 9 + 9) % 9
       this.reloadHotbarSelected(newSlot)
     })
 
     document.addEventListener('keydown', (e) => {
+      if (!isGameActive(true)) return
       const numPressed = +(e.code.match(/Digit(\d)/)?.[1] ?? -1)
       if (numPressed < 1 || numPressed > 9) return
       this.reloadHotbarSelected(numPressed - 1)
