@@ -59,15 +59,12 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              transpileOnly: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        loader: 'esbuild-loader',
+        // options: {
+        //   // JavaScript version to compile to
+        //   target: 'es2015'
+        // }
       },
     ],
   },

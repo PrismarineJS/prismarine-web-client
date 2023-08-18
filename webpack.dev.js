@@ -9,6 +9,9 @@ module.exports = merge(common,
     mode: 'development',
     devtool: 'inline-source-map',
     cache: true,
+    // experiments: {
+    //   cacheUnaffected: true,
+    // },
     devServer: {
       // contentBase: path.resolve(__dirname, './public'),
       compress: true,
@@ -23,6 +26,7 @@ module.exports = merge(common,
     },
     optimization: {
       splitChunks: {
+        chunks: 'all',
         maxAsyncRequests: 10,
         maxInitialRequests: 10,
         cacheGroups: {
