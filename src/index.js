@@ -143,6 +143,7 @@ window.addEventListener('option-change', (/** @type {any} */{ detail }) => {
   if (detail.name === 'frameLimit') interval = toNumber(detail.value) && 1000 / toNumber(detail.value)
 })
 
+let nextFrameFn = []
 let postRenderFrameFn = () => { }
 let delta = 0
 let lastTime = performance.now()
@@ -165,6 +166,12 @@ const renderFrame = (/** @type {DOMHighResTimeStamp} */ time) => {
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
+  if (nextFrameFn.length) {
+    for (const fn of nextFrameFn) {
+      fn()
+    }
+    nextFrameFn = []
+  }
   stats?.end()
   stats2?.end()
 }
@@ -509,16 +516,38 @@ async function connect (options) {
 
     registerListener(document, 'pointerlockchange', changeCallback, false)
 
+    // after what time of holding the finger start breaking the block
+    const touchBreakBlockMs = 500
+    let firstTouchAppeared
+    let virtualTouchPressed = false
+    let virtualTouchPressTimeout
     /** @type {Touch?} */
     let lastTouch
+    let firstTouch
+    registerListener(document, 'touchstart', (e) => {
+      const touch = e.touches[0]
+      virtualTouchPressTimeout ??= setTimeout(() => {
+        virtualTouchPressed = true
+        document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
+      }, touchBreakBlockMs)
+      firstTouchAppeared ??= new Date()
+      firstTouch ??= touch
+    })
     registerListener(document, 'touchmove', (e) => {
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
+
       const touch = e.touches[0]
-      const allowedJitter = 10
-      console.log(touch.pageX - lastTouch.pageX, touch.pageX - lastTouch.pageX > allowedJitter)
+
+      const allowedJitter = 1.1
+      // todo support touch.pressure (3d touch)
+      const xDiff = Math.abs(touch.pageX - firstTouch.pageX) > allowedJitter
+      const yDiff = Math.abs(touch.pageY - firstTouch.pageY) > allowedJitter
       if (lastTouch !== undefined) {
+        if (xDiff && yDiff) {
+          clearTimeout(virtualTouchPressTimeout)
+        }
         onMouseMove({ movementX: touch.pageX - lastTouch.pageX, movementY: touch.pageY - lastTouch.pageY, type: 'touchmove' })
       }
       lastTouch = touch
@@ -526,6 +555,19 @@ async function connect (options) {
 
     registerListener(document, 'touchend', (e) => {
       lastTouch = undefined
+      firstTouch = undefined
+      clearTimeout(virtualTouchPressTimeout)
+      virtualTouchPressTimeout = undefined
+      if (virtualTouchPressed) {
+        document.dispatchEvent(new MouseEvent('mouseup', { button: 0 }))
+        virtualTouchPressed = false
+      } else if (Date.now() - firstTouchAppeared < touchBreakBlockMs) {
+        document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
+        nextFrameFn.push(() => {
+          document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
+        })
+      }
+      firstTouchAppeared = undefined
     }, { passive: false })
 
     registerListener(document, 'contextmenu', (e) => e.preventDefault(), false)
