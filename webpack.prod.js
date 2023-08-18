@@ -1,5 +1,6 @@
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
+const { EsbuildPlugin } = require('esbuild-loader')
 
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
@@ -14,6 +15,14 @@ module.exports = merge(common, {
     filename: './[name].js',
   },
   mode: 'production',
+  optimization: {
+    minimizer: [
+      new EsbuildPlugin({
+        // would be better to use 2019 with polyfilling bigints (disabling them?)
+        target: 'es2021'  // Syntax to transpile to (see options below for possible values)
+      })
+    ]
+  },
   devtool: 'source-map',
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
@@ -27,11 +36,13 @@ module.exports = merge(common, {
       maximumFileSizeToCacheInBytes: 35_000_000, // todo will be lowered
       exclude: [/\.map$/, 'version.txt']
     }),
-    new webpack.DefinePlugin({
-      // get from github actions or vercel env
-      'process.env.BUILD_VERSION': JSON.stringify(buildingVersion),
-      'process.env.GITHUB_URL':
-        JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
+    new EsbuildPlugin({
+      define: {
+        // get from github actions or vercel env
+        'process.env.BUILD_VERSION': JSON.stringify(buildingVersion),
+        'process.env.GITHUB_URL':
+          JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
+      }
     })
   ],
 })
