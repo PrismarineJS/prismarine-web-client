@@ -8,7 +8,7 @@ export const serverOptions = {
   'port': 25565,
   'max-players': 10,
   'online-mode': false,
-  'gameMode': 1,
+  'gameMode': 0,
   'difficulty': 0,
   'worldFolder': 'world',
   // todo set sid, disable entities auto-spawn
