@@ -12,7 +12,7 @@ function getViewDirection (pitch, yaw) {
 }
 
 class Cursor {
-  constructor (viewer, renderer, bot) {
+  constructor (viewer, renderer, /** @type {import('mineflayer').Bot} */bot) {
     // Init state
     this.buttons = [false, false, false]
     this.lastButtons = [false, false, false]
@@ -54,7 +54,7 @@ class Cursor {
       this.buttons[e.button] = true
 
       const entity = bot.nearestEntity((e) => {
-        if (e.position.distanceTo(bot.entity.position) <= (bot.player.gamemode === 1 ? 5 : 3)) {
+        if (e.position.distanceTo(bot.entity.position) <= (bot.game.gameMode === 'creative' ? 5 : 3)) {
           const dir = getViewDirection(bot.entity.pitch, bot.entity.yaw)
           const { width, height } = e
           const { x: eX, y: eY, z: eZ } = e.position
@@ -104,7 +104,7 @@ class Cursor {
 
     // Start break
     // todo last check doesnt work as cursorChanged happens once (after that check is false)
-    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 500))) {
+    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 100))) {
       this.breakStartTime = performance.now()
       bot.dig(cursorBlock, 'ignore').catch((err) => {
         if (err.message === 'Digging aborted') return
