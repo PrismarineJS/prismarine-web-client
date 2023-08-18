@@ -3,6 +3,7 @@ const { LitElement, html, css } = require('lit')
 const { isMobile } = require('./components/common')
 const { showModal, miscUiState } = require('../globalState')
 const { options, watchValue } = require('../optionsStorage')
+const { getGamemodeNumber } = require('../utils')
 
 class Hud extends LitElement {
   static get styles () {
@@ -252,15 +253,7 @@ class Hud extends LitElement {
     })
 
     const onGameModeChange = () => {
-      const gamemode = (() => {
-        switch (bot.game.gameMode) {
-          case 'survival': return 0
-          case 'creative': return 1
-          case 'adventure': return 2
-          case 'spectator': return 3
-          default: return -1
-        }
-      })()
+      const gamemode = getGamemodeNumber(bot)
       healthbar.gameModeChanged(gamemode, bot.game.hardcore)
       foodbar.gameModeChanged(gamemode)
       // breathbar.gameModeChanged(gamemode)

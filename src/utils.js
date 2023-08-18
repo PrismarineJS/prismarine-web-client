@@ -102,3 +102,13 @@ export function getScreenRefreshRate () {
     resolve = _resolve
   })
 }
+
+export const getGamemodeNumber = (bot) => {
+  switch (bot.game.gameMode) {
+    case 'survival': return 0
+    case 'creative': return 1
+    case 'adventure': return 2
+    case 'spectator': return 3
+    default: return -1
+  }
+}
