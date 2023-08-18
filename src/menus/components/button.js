@@ -135,12 +135,12 @@ class Button extends LitElement {
   }
 
   onBtnClick () {
-    playSound('click_stereo.ogg')
+    playSound('click_stereo.mp3')
     this.dispatchEvent(new window.CustomEvent('pmui-click'))
   }
 }
 
-loadSound('click_stereo.ogg')
+loadSound('click_stereo.mp3')
 window.customElements.define('pmui-button', Button)
 const _playSound = playSound
 export { _playSound as playSound }
