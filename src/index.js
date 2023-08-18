@@ -84,6 +84,7 @@ const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./p
 const { createClient } = require('minecraft-protocol')
 const { serverOptions, startLocalServer } = require('./createLocalServer')
 const { customCommunication } = require('./customServer')
+const { default: updateTime } = require('./updateTime')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -479,6 +480,8 @@ async function connect (options) {
     viewer.listen(worldView)
     worldView.listenToBot(bot)
     worldView.init(bot.entity.position)
+
+    updateTime(bot)
 
     // Bot position callback
     function botPosition () {
