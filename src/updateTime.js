@@ -31,8 +31,10 @@ export default (/** @type {import('mineflayer').Bot} */bot) => {
     // todo need to think wisely how to set these values & also move directional light around!
     const colorInt = Math.max(int, 0.1)
     window.viewer.scene.background = new THREE.Color(dayColor.r * colorInt, dayColor.g * colorInt, dayColor.b * colorInt)
-    // and these too!
+    // todo and these too!
+    // ambient light
     window.viewer.scene.children[0].intensity = Math.max(int, 0.25)
-    window.viewer.scene.children[1].intensity = int
+    // directional light
+    window.viewer.scene.children[1].intensity = Math.min(int, 0.5)
   })
 }

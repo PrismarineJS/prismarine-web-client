@@ -4,6 +4,10 @@ const common = require('./webpack.common.js')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const webpack = require('webpack')
+const fs = require('fs')
+
+const buildingVersion = new Date().toISOString().split(':')[0]
+fs.writeFileSync('public/version.txt', buildingVersion, 'utf-8')
 
 module.exports = merge(common, {
   output: {
@@ -19,13 +23,14 @@ module.exports = merge(common, {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
-      include: ['index.html', 'manifest.json'] // not caching a lot as anyway this works only online
+      // include: ['index.html', 'manifest.json', 'styles.css', /\.js$/], // todo
+      exclude: [/\.map$/, /^manifest.*\.js$/, 'version.txt']
     }),
     new webpack.DefinePlugin({
       // get from github actions or vercel env
-      'process.env.GITHUB_URL': JSON.stringify(process.env.VERCEL_GIT_REPO_OWNER
-        ? `https://github.com/${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`
-        : process.env.GITHUB_REPOSITORY)
+      'process.env.BUILD_VERSION': JSON.stringify(buildingVersion),
+      'process.env.GITHUB_URL':
+        JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
     })
   ],
 })

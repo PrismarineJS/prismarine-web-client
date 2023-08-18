@@ -1,6 +1,6 @@
 const { LitElement, html, css } = require('lit')
 const { commonCss, isMobile } = require('./components/common')
-const { showModal, hideCurrentModal } = require('../globalState')
+const { showModal, hideCurrentModal, isGameActive } = require('../globalState')
 const { CommonOptionsScreen } = require('./options_store')
 const { toNumber } = require('../utils')
 
@@ -37,7 +37,6 @@ class OptionsScreen extends CommonOptionsScreen {
 
   static get properties () {
     return {
-      isInsideWorld: { type: Boolean },
       mouseSensX: { type: Number },
       mouseSensY: { type: Number },
       chatWidth: { type: Number },
@@ -52,7 +51,6 @@ class OptionsScreen extends CommonOptionsScreen {
 
   constructor () {
     super()
-    this.isInsideWorld = false
 
     this.defineOptions({
       mouseSensX: { defaultValue: 50, convertFn: (v) => Math.floor(toNumber(v)) },
@@ -76,7 +74,7 @@ class OptionsScreen extends CommonOptionsScreen {
 
   render () {
     return html`
-      <div class="${this.isInsideWorld ? 'bg' : 'dirt-bg'}"></div>
+      <div class="${isGameActive() ? 'bg' : 'dirt-bg'}"></div>
 
       <p class="title">Options</p>
 
