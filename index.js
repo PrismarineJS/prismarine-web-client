@@ -200,7 +200,7 @@ async function connect (options) {
     loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
     loadingScreen.style = 'display: block;'
     loadingScreen.hasError = true
-  };
+  }
   bot.on('error', handleError)
 
   bot.on('kicked', (kickReason) => {
