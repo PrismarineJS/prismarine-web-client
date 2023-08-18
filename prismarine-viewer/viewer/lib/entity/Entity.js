@@ -202,9 +202,11 @@ function getMesh (texture, jsonModel) {
 
 // TODO!
 const entitiesMap = {
-  item: null,
+  // item: null,
   'glow_squid': 'squid'
 }
+
+// const unknownEntitiesSet = new Set()
 
 class Entity {
   constructor (version, type, scene) {
@@ -214,7 +216,11 @@ class Entity {
     else if (mappedValue) type = mappedValue
 
     const e = entities[type]
-    if (!e) throw new Error(`Unknown entity ${type}`)
+    if (!e) {
+      // if (unknownEntitiesSet.has(type)) throw new Error('ignore...')
+      // unknownEntitiesSet.add(type)
+      throw new Error(`Unknown entity ${type}`)
+    }
 
     this.mesh = new THREE.Object3D()
     for (const [name, jsonModel] of Object.entries(e.geometry)) {
