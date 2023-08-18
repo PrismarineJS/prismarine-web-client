@@ -1,6 +1,7 @@
 /* global THREE performance */
 
 const { Vec3 } = require('vec3')
+const { isGameActive } = require('./globalState')
 
 function getViewDirection (pitch, yaw) {
   const csPitch = Math.cos(pitch)
@@ -46,8 +47,10 @@ class Cursor {
       this.buttons[e.button] = false
     })
 
+    this.lastBlockPlaced = 4 // ticks since last placed
     document.addEventListener('mousedown', (e) => {
-      if (document.pointerLockElement !== renderer.domElement) return
+      if (e.isTrusted && !document.pointerLockElement) return
+      if (!isGameActive(true)) return
       this.buttons[e.button] = true
 
       const entity = bot.nearestEntity((e) => {
@@ -76,11 +79,12 @@ class Cursor {
         bot.attack(entity)
       }
     })
-    this.lastPlaced = 4 // ticks since last placed
-    bot.on('physicsTick', () => { if (this.lastPlaced < 4) this.lastPlaced++ })
+    bot.on('physicsTick', () => { if (this.lastBlockPlaced < 4) this.lastBlockPlaced++ })
   }
 
+  // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags
   update (/** @type {import('mineflayer').Bot} */bot) {
+    /** diggable block */
     let cursorBlock = bot.blockAtCursor(6)
     if (!bot.canDigBlock(cursorBlock)) cursorBlock = null
 
@@ -90,22 +94,23 @@ class Cursor {
     }
 
     // Place
-    if (cursorBlock && this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastPlaced >= 4) {
+    if (cursorBlock && this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastBlockPlaced >= 4) {
       const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
       const delta = cursorBlock.intersect.minus(cursorBlock.position)
       // check instead?
-      try {
-        bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' })
-        bot.lastPlaced = 0
-      } catch (err) {
-        console.warn(err)
-      }
+      bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
+      // this.lastBlockPlaced = 0
     }
 
     // Start break
-    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || cursorChanged)) {
+    // todo last check doesnt work as cursorChanged happens once (after that check is false)
+    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 500))) {
       this.breakStartTime = performance.now()
-      bot.dig(cursorBlock, 'ignore')
+      bot.dig(cursorBlock, 'ignore').catch((err) => {
+        if (err.message === 'Digging aborted') return
+        throw err
+      })
+      this.lastDigged = Date.now()
     }
 
     // Stop break
