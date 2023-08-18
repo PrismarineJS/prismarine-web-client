@@ -77,7 +77,7 @@ const Cursor = require('./cursor')
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./vr')
-const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack } = require('./globalState')
+const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive } = require('./globalState')
 const { pointerLock, goFullscreen, toNumber } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
@@ -448,7 +448,6 @@ async function connect (options) {
 
     const worldView = new WorldView(bot.world, viewDistance, center)
 
-    optionsScrn.isInsideWorld = true
     optionsScrn.addEventListener('fov_changed', (e) => {
       viewer.camera.fov = e.detail.fov
       viewer.camera.updateProjectionMatrix()
@@ -525,6 +524,7 @@ async function connect (options) {
     let lastTouch
     let firstTouch
     registerListener(document, 'touchstart', (e) => {
+      if (!isGameActive(true)) return
       const touch = e.touches[0]
       virtualTouchPressTimeout ??= setTimeout(() => {
         virtualTouchPressed = true
@@ -534,6 +534,7 @@ async function connect (options) {
       firstTouch ??= touch
     })
     registerListener(document, 'touchmove', (e) => {
+      if (!firstTouch) return
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
