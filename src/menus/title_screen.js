@@ -5,13 +5,13 @@ const { LitElement, html, css } = require('lit')
 class TitleScreen extends LitElement {
   static get styles () {
     return css`
-      .minecraft {
+      .game-title {
         position: absolute;
         top: 30px;
         left: calc(50% - 137px);
       }
 
-      .minecraft .minec {
+      .game-title .minec {
         display: block;
         position: absolute;
         top: 0;
@@ -22,7 +22,7 @@ class TitleScreen extends LitElement {
         height: 44px;
       }
 
-      .minecraft .raft {
+      .game-title .raft {
         display: block;
         position: absolute;
         top: 0;
@@ -34,7 +34,7 @@ class TitleScreen extends LitElement {
         background-position-y: -45px;
       }
 
-      .minecraft .edition {
+      .game-title .edition {
         display: block;
         position: absolute;
         top: 37px;
@@ -96,9 +96,41 @@ class TitleScreen extends LitElement {
     `
   }
 
+  static get properties () {
+    return {
+      versionStatus: {
+        type: String
+      },
+      versionTitle: {
+        type: String
+      }
+    }
+  }
+
+  reload () {
+    navigator.serviceWorker.getRegistration().then(registration => {
+      registration.unregister().then(() => {
+        window.location.reload()
+      })
+    })
+  }
+
+  constructor () {
+    super()
+    this.versionStatus = ''
+    this.versionTitle = ''
+    if (process.env.NODE_ENV !== 'development') {
+      fetch('/version.txt').then(async (f) => {
+        const contents = await f.text()
+        this.versionStatus = `(${contents === process.env.BUILD_VERSION ? 'latest' : 'outdated'})`
+        this.versionTitle = `Loaded: ${process.env.BUILD_VERSION}. Remote: ${contents}`
+      }, () => { })
+    }
+  }
+
   render () {
     return html`
-      <div class="minecraft">
+      <div class="game-title">
         <div class="minec"></div>
         <div class="raft"></div>
         <div class="edition"></div>
@@ -119,7 +151,7 @@ class TitleScreen extends LitElement {
       </div>
 
       <div class="bottom-info">
-        <span>Prismarine Web Client</span>
+        <span title="${this.versionTitle} (click to reload)" @click=${this.reload}>Prismarine Web Client ${this.versionStatus}</span>
         <span>A Minecraft client in the browser!</span>
       </div>
     `
