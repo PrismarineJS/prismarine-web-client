@@ -71,7 +71,8 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
-      hash: true,
+      // adding hash will make stop service worker from caching!
+      hash: process.argv.includes('webpack.prod.js') ? false : true,
       minify: false,
       chunks: ['main', 'vendors'],
     }),

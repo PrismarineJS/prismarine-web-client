@@ -6,6 +6,8 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const webpack = require('webpack')
 const fs = require('fs')
+const CopyPlugin = require('copy-webpack-plugin')
+const { webpackFilesToCopy, getSwAdditionalEntries } = require('./scripts/build.js')
 
 const buildingVersion = new Date().toISOString().split(':')[0]
 fs.writeFileSync('public/version.txt', buildingVersion, 'utf-8')
@@ -32,17 +34,18 @@ module.exports = merge(common, {
       // and not allow any straggling "old" SWs to hang around
       clientsClaim: true,
       skipWaiting: true,
-      include: ['index.html', 'manifest.json', 'styles.css', /\.js$/, /\.woff$/, /\.ttf$/], // todo
       maximumFileSizeToCacheInBytes: 35_000_000, // todo will be lowered
+      additionalManifestEntries: getSwAdditionalEntries(),
       exclude: [/\.map$/, 'version.txt']
     }),
-    new EsbuildPlugin({
-      define: {
-        // get from github actions or vercel env
-        'process.env.BUILD_VERSION': JSON.stringify(buildingVersion),
-        'process.env.GITHUB_URL':
-          JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
-      }
+    // new CopyPlugin({
+    //   patterns: webpackFilesToCopy
+    // }),
+    new webpack.DefinePlugin({
+      // get from github actions or vercel env
+      'process.env.BUILD_VERSION': JSON.stringify(buildingVersion),
+      'process.env.GITHUB_URL':
+        JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
     })
   ],
 })

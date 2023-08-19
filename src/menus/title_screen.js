@@ -103,6 +103,9 @@ class TitleScreen extends LitElement {
       },
       versionTitle: {
         type: String
+      },
+      isOutdated: {
+        type: Boolean
       }
     }
   }
@@ -119,10 +122,13 @@ class TitleScreen extends LitElement {
     super()
     this.versionStatus = ''
     this.versionTitle = ''
+    this.isOutdated = false
     if (process.env.NODE_ENV !== 'development') {
-      fetch('/version.txt').then(async (f) => {
+      fetch('./version.txt').then(async (f) => {
+        if (f.status === 404) return
         const contents = await f.text()
-        this.versionStatus = `(${contents === process.env.BUILD_VERSION ? 'latest' : 'outdated'})`
+        this.isOutdated = contents === process.env.BUILD_VERSION
+        this.versionStatus = `(${this.isOutdated ? 'latest' : 'new version available'})`
         this.versionTitle = `Loaded: ${process.env.BUILD_VERSION}. Remote: ${contents}`
       }, () => { })
     }
