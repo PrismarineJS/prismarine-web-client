@@ -82,13 +82,14 @@ const { pointerLock, goFullscreen, toNumber } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
 const { createClient } = require('minecraft-protocol')
-const { serverOptions, startLocalServer } = require('./createLocalServer')
+const { startLocalServer } = require('./createLocalServer')
+const serverOptions = require('./defaultLocalServerOptions')
 const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js').then(registration => {
+    navigator.serviceWorker.register('./service-worker.js').then(registration => {
       console.log('SW registered: ', registration)
     }).catch(registrationError => {
       console.log('SW registration failed: ', registrationError)
