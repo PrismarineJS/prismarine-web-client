@@ -4,6 +4,7 @@
         "moduleResolution": "Node",
         "module": "CommonJS",
         "allowJs": true,
+        "jsx": "react-jsx",
         "allowSyntheticDefaultImports": true,
         "noEmit": true,
         "strictFunctionTypes": true

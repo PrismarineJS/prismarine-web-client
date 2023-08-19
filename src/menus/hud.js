@@ -294,8 +294,8 @@ class Hud extends LitElement {
   /** @param {boolean} bl */
   showMobileControls (bl) {
     this.shadowRoot.querySelector('#mobile-top').style.display = bl ? 'flex' : 'none'
-    this.shadowRoot.querySelector('#mobile-left').style.display = bl ? 'block' : 'none'
-    this.shadowRoot.querySelector('#mobile-right').style.display = bl ? 'flex' : 'none'
+    // this.shadowRoot.querySelector('#mobile-left').style.display = bl ? 'block' : 'none'
+    // this.shadowRoot.querySelector('#mobile-right').style.display = bl ? 'flex' : 'none'
   }
 
   /**
@@ -322,30 +322,30 @@ class Hud extends LitElement {
         showModal(document.getElementById('pause-screen'))
       }}></button>
       </div>
-      <div class="mobile-controls-left" id="mobile-left">
+      <!-- <div class="mobile-controls-left" id="mobile-left">
         <button
           class="mobile-control-forward"
-          @touchstart=${(e) => this.mobileControl(e, 'forward', true)}
-          @touchend=${(e) => this.mobileControl(e, 'forward', false)}
+          @pointerenter=${(e) => this.mobileControl(e, 'forward', true)}
+          @pointerleave=${(e) => this.mobileControl(e, 'forward', false)}
           @mousedown=${(e) => this.mobileControl(e, 'forward', true)}
           @mouseup=${(e) => this.mobileControl(e, 'forward', false)}
         ></button>
         <button
           class="mobile-control-back"
-          @touchstart=${(e) => this.mobileControl(e, 'back', true)}
-          @touchend=${(e) => this.mobileControl(e, 'back', false)}
+          @pointerenter=${(e) => this.mobileControl(e, 'back', true)}
+          @pointerleave=${(e) => this.mobileControl(e, 'back', false)}
           @mousedown=${(e) => this.mobileControl(e, 'back', true)}
           @mouseup=${(e) => this.mobileControl(e, 'back', false)}
         ></button>
         <button class="mobile-control-left"
-          @touchstart=${(e) => this.mobileControl(e, 'left', true)}
-          @touchend=${(e) => this.mobileControl(e, 'left', false)}
+          @pointerenter=${(e) => this.mobileControl(e, 'left', true)}
+          @pointerleave=${(e) => this.mobileControl(e, 'left', false)}
           @mousedown=${(e) => this.mobileControl(e, 'left', true)}
           @mouseup=${(e) => this.mobileControl(e, 'left', false)}
         ></button>
         <button class="mobile-control-right"
-          @touchstart=${(e) => this.mobileControl(e, 'right', true)}
-          @touchend=${(e) => this.mobileControl(e, 'right', false)}
+          @pointerenter=${(e) => this.mobileControl(e, 'right', true)}
+          @pointerleave=${(e) => this.mobileControl(e, 'right', false)}
           @mousedown=${(e) => this.mobileControl(e, 'right', true)}
           @mouseup=${(e) => this.mobileControl(e, 'right', false)}
         ></button>
@@ -362,7 +362,7 @@ class Hud extends LitElement {
           @mousedown=${(e) => this.mobileControl(e, 'jump', true)}
           @mouseup=${(e) => this.mobileControl(e, 'jump', false)}
         ></button>
-      </div>
+      </div> -->
 
       <pmui-debug-overlay id="debug-overlay"></pmui-debug-overlay>
       <pmui-playerlist-overlay id="playerlist-overlay"></pmui-playerlist-overlay>

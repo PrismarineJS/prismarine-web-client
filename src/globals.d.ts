@@ -1,4 +1,6 @@
 declare const THREE: typeof import('three');
+// todo
+declare const bot: import('mineflayer').Bot
 
 declare interface Document {
     getElementById(id): any

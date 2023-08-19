@@ -22,6 +22,7 @@ require('./menus/advanced_options_screen')
 require('./menus/notification')
 require('./menus/title_screen')
 require('./optionsStorage')
+require('./reactUi.jsx')
 
 // @ts-ignore
 require('crypto').createPublicKey = () => { }
