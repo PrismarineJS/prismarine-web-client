@@ -59,7 +59,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx?)|(jsx)$/,
         loader: 'esbuild-loader',
         // options: {
         //   // JavaScript version to compile to
