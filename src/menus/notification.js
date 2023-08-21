@@ -20,21 +20,39 @@ export const showNotification = (/** @type {typeof notification} */newNotificati
 window.notification = notification
 
 class Notification extends LitElement {
+  static get properties () {
+    return {
+      renderHtml: { type: Boolean },
+    }
+  }
+
   render () {
+    if (!this.renderHtml) return
     const show = notification.show && notification.message
     return html`
-      <div class="notification notification-${notification.type} ${show ? 'notification-show' : ''}">
+      <div @transitionend=${this.ontransitionend} class="notification notification-${notification.type} ${show ? 'notification-show' : ''}">
         ${notification.message}
       </div>
     `
   }
 
+  ontransitionend = (event) => {
+    if (event.propertyName !== 'opacity') return
+
+    if (!notification.show) {
+      this.renderHtml = false
+    }
+  }
+
   constructor () {
     super()
+    this.renderHtml = false
     let timeout
     subscribe(notification, () => {
       if (timeout) clearTimeout(timeout)
       this.requestUpdate()
+      if (!notification.show) return
+      this.renderHtml = true
       if (!notification.autoHide) return
       timeout = setTimeout(() => {
         notification.show = false
