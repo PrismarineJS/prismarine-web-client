@@ -1,6 +1,12 @@
 const { LitElement, html, css } = require('lit')
 const { commonCss } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
+const mcAssets = require("minecraft-assets")
+const data = require('minecraft-data')
+const mineflayer = require('mineflayer')
+
+const fullySupporedVersions = mcAssets.versions
+const partialSupportVersions = mineflayer.supportedVersions
 
 class PlayScreen extends LitElement {
   static get styles () {
@@ -76,6 +82,8 @@ class PlayScreen extends LitElement {
 
   constructor () {
     super()
+    this.version = ''
+    // todo set them sooner add indicator
     window.fetch('config.json').then(res => res.json()).then(c => c, (error) => {
       console.error('Failed to load config.json', error)
       return {}
@@ -167,6 +175,8 @@ class PlayScreen extends LitElement {
             pmui-id="botversion"
             pmui-value="${this.version}"
             pmui-inputmode="decimal"
+            state="${this.version && (fullySupporedVersions.includes(this.version) ? '' : /* TODO improve check: check exact including all */ partialSupportVersions.some(v => this.version.startsWith(v)) ? 'warning' : 'invalid')}"
+            .autocompleteValues=${mcAssets.versions}
             @input=${e => { this.version = e.target.value }}
           ></pmui-editbox>
         </div>

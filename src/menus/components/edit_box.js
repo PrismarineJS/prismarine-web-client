@@ -11,6 +11,22 @@ class EditBox extends LitElement {
         background: black;
         border: 1px solid grey;
       }
+      .edit-container.invalid {
+        border: 1px solid #c70000;
+      }
+
+      .edit-container.warning {
+        border: 1px solid rgb(159, 151, 0);
+      }
+
+      .edit-container.invalid:hover,
+      .edit-container.invalid:focus-within {
+        border-color: red;
+      }
+      .edit-container.warning:hover,
+      .edit-container.warning:focus-within {
+        border-color: yellow;
+      }
 
       .edit-container:hover,
       .edit-container:focus-within {
@@ -97,6 +113,10 @@ class EditBox extends LitElement {
       required: {
         type: Boolean,
         attribute: 'pmui-required'
+      },
+      state: {
+        type: String,
+        attribute: true
       }
     }
   }
@@ -104,7 +124,7 @@ class EditBox extends LitElement {
   render () {
     return html`
       <div
-        class="edit-container"
+        class="edit-container ${this.state ?? ''}"
         style="width: ${this.width};"
       >
         <label for="${this.id}">${this.label}</label>

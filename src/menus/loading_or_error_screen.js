@@ -40,7 +40,7 @@ class LoadingErrorScreen extends LitElement {
   constructor () {
     super()
     this.hasError = false
-    this.maybeRecoverable = false
+    this.maybeRecoverable = true
     this.status = 'Waiting for JS load'
     this._loadingDots = ''
   }
