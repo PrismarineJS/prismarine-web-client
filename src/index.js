@@ -2,6 +2,9 @@
 /* global THREE */
 require('./chat')
 
+// workaround for mineflayer
+process.versions.node = '14.0.0'
+
 require('./menus/components/button')
 require('./menus/components/edit_box')
 require('./menus/components/slider')
@@ -63,9 +66,6 @@ _fs.promises.open = async (...args) => {
 
 const net = require('net')
 const Stats = require('stats.js')
-
-// workaround for mineflayer
-process.versions.node = '14.0.0'
 
 const mineflayer = require('mineflayer')
 const { WorldView, Viewer, MapControls } = require('prismarine-viewer/viewer')
