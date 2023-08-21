@@ -2,7 +2,6 @@
   "name": "prismarine-web-client",
   "version": "1.5.0",
   "description": "A minecraft client running in a browser",
-  "main": "index.js",
   "scripts": {
     "start": "NODE_OPTIONS=--max-old-space-size=8192 run-p watch prod-start",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 rimraf public && node scripts/build.js copyFiles && webpack --config webpack.prod.js --progress",
@@ -14,10 +13,6 @@
     "prepublishOnly": "npm run build",
     "test": "npm run lint && mocha"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PrismarineJS/prismarine-web-client.git"
-  },
   "keywords": [
     "prismarine",
     "web",
@@ -25,13 +20,6 @@
   ],
   "author": "PrismarineJS",
   "license": "MIT",
-  "bin": {
-    "prismarine-web-client": "./server.js"
-  },
-  "bugs": {
-    "url": "https://github.com/PrismarineJS/prismarine-web-client/issues"
-  },
-  "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@types/react": "^18.2.20",
