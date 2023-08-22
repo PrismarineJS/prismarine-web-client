@@ -1,6 +1,6 @@
 //@ts-check
 
-import { proxy, ref } from 'valtio'
+import { proxy, ref, subscribe } from 'valtio'
 import { pointerLock } from './utils'
 
 // todo: refactor structure with support of hideNext=false
@@ -109,5 +109,16 @@ export const isGameActive = (foregroundCheck) => {
 export const miscUiState = proxy({
   currentTouch: null
 })
+
+window.addEventListener('beforeunload', (event) => {
+  // todo-low maybe exclude chat?
+  if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
+  // For major browsers doning only this is enough
+  event.preventDefault()
+
+  // Display a confirmation prompt
+  event.returnValue = '' // Required for some browsers
+  return 'The game is running. Are you sure you want to close this page?'
+});
 
 window.miscUiState = miscUiState
