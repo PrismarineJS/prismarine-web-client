@@ -450,10 +450,18 @@ async function connect (options) {
 
     const worldView = new WorldView(bot.world, viewDistance, center)
 
-    optionsScrn.addEventListener('fov_changed', (e) => {
-      viewer.camera.fov = e.detail.fov
+    let fovSetting = optionsScrn.fov
+    const updateFov = () => {
+      fovSetting = optionsScrn.fov
+      if (bot.controlState.sprint && !bot.controlState.sneak) {
+        // todo check value and add transition
+        fovSetting *= 5
+      }
+      viewer.camera.fov = fovSetting
       viewer.camera.updateProjectionMatrix()
-    })
+    }
+    updateFov()
+    optionsScrn.addEventListener('fov_changed', updateFov)
 
     viewer.setVersion(version)
 
@@ -590,6 +598,7 @@ async function connect (options) {
               break
             case 'ControlLeft':
               bot.setControlState('sprint', true)
+              updateFov()
               break
             case 'ShiftLeft':
               bot.setControlState('sneak', true)
@@ -620,6 +629,7 @@ async function connect (options) {
           switch (km.defaultKey) {
             case 'ControlLeft':
               bot.setControlState('sprint', false)
+              updateFov()
               break
             case 'ShiftLeft':
               bot.setControlState('sneak', false)
