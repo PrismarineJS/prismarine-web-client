@@ -1,7 +1,7 @@
 //@ts-check
 const { LitElement, html, css } = require('lit')
 const { isMobile } = require('./menus/components/common')
-const { activeModalStack, hideCurrentModal } = require('./globalState')
+const { activeModalStack, hideCurrentModal, showModal } = require('./globalState')
 import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 
@@ -168,7 +168,7 @@ class ChatBox extends LitElement {
     this.shadowRoot.getElementById('chat-wrapper2').classList.toggle('input-mobile', isMobile())
     this.shadowRoot.getElementById('chat-wrapper').classList.toggle('display-mobile', isMobile())
 
-    activeModalStack.push(this)
+    showModal(this)
 
     // Exit the pointer lock
     document.exitPointerLock()
@@ -187,7 +187,7 @@ class ChatBox extends LitElement {
   }
 
   get inChat () {
-    return activeModalStack.includes(this)
+    return activeModalStack.find(m => m.elem === this) !== undefined
   }
 
   /**

@@ -1,17 +1,17 @@
 //@ts-check
 
-import { proxy } from 'valtio'
+import { proxy, ref } from 'valtio'
 import { pointerLock } from './utils'
 
 // todo: refactor structure with support of hideNext=false
 
 /**
- * @typedef {(HTMLElement & Record<string, any>)} Modal
+ * @typedef {({elem?: HTMLElement & Record<string, any>} & {reactType?: string})} Modal
  * @typedef {{callback, label}} ContextMenuItem
  */
 
 /** @type {Modal[]} */
-export const activeModalStack = []
+export const activeModalStack = proxy([])
 
 export const replaceActiveModalStack = (name, newModalStack = activeModalStacks[name]) => {
   hideModal(undefined, undefined, { restorePrevious: false, force: true, })
@@ -26,18 +26,28 @@ window.activeModalStack = activeModalStack
 
 export const customDisplayManageKeyword = 'custom'
 
+const defaultModalActions = {
+  show (/** @type {Modal} */modal) {
+    if (modal.elem) modal.elem.style.display = 'block'
+  },
+  hide (/** @type {Modal} */modal) {
+    if (modal.elem) modal.elem.style.display = 'none'
+  }
+}
+
 const showModalInner = (/** @type {Modal} */ modal) => {
-  const cancel = modal.show?.()
+  const cancel = modal.elem?.show?.()
   if (cancel && cancel !== customDisplayManageKeyword) return false
-  if (cancel !== 'custom') modal.style.display = 'block'
+  if (cancel !== 'custom') defaultModalActions.show(modal)
   return true
 }
 
-export const showModal = (/** @type {Modal} */ modal) => {
+export const showModal = (/** @type {HTMLElement & Record<string, any> | {reactType: string}} */ elem) => {
+  const resolved = elem instanceof HTMLElement ? { elem: ref(elem) } : elem
   const curModal = activeModalStack.slice(-1)[0]
-  if (modal === curModal || !showModalInner(modal)) return
-  if (curModal) curModal.style.display = 'none'
-  activeModalStack.push(modal)
+  if (elem === curModal?.elem || !showModalInner(resolved)) return
+  if (curModal) defaultModalActions.hide(curModal)
+  activeModalStack.push(resolved)
 }
 
 /**
@@ -49,13 +59,13 @@ export const showModal = (/** @type {Modal} */ modal) => {
 export const hideModal = (modal = activeModalStack.slice(-1)[0], data = undefined, options = {}) => {
   const { force = false, restorePrevious = true } = options
   if (!modal) return
-  let cancel = modal.hide?.(data)
+  let cancel = modal.elem?.hide?.(data)
   if (force && cancel !== customDisplayManageKeyword) {
     cancel = undefined
   }
 
   if (!cancel || cancel === customDisplayManageKeyword) {
-    if (cancel !== customDisplayManageKeyword) modal.style.display = 'none'
+    if (cancel !== customDisplayManageKeyword) defaultModalActions.hide(modal)
     activeModalStack.pop()
     const newModal = activeModalStack.slice(-1)[0]
     if (newModal && restorePrevious) {
@@ -91,7 +101,7 @@ export const showContextmenu = (/** @type {ContextMenuItem[]} */items, { clientX
 
 // ---
 
-export const isGameActive = (foregroundCheck = false) => {
+export const isGameActive = (foregroundCheck) => {
   if (foregroundCheck && activeModalStack.length) return false
   return document.getElementById('hud').style.display !== 'none'
 }
