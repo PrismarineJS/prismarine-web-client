@@ -144,7 +144,7 @@ class TitleScreen extends LitElement {
       </div>
 
       <div class="menu">
-        <pmui-button pmui-width="200px" pmui-label="Play" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
+        <pmui-button pmui-width="200px" pmui-label="Connect to server" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
         <pmui-button pmui-width="200px" pmui-label="Singleplayer" @pmui-click=${() => {
         this.style.display = 'none'
         this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
