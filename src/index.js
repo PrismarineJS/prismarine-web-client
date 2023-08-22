@@ -26,6 +26,7 @@ require('./menus/notification')
 require('./menus/title_screen')
 require('./optionsStorage')
 require('./reactUi.jsx')
+require('./botControls')
 
 // @ts-ignore
 require('crypto').createPublicKey = () => { }
@@ -78,7 +79,7 @@ const Cursor = require('./cursor')
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./vr')
-const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive } = require('./globalState')
+const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive, miscUiState, gameAdditionalState } = require('./globalState')
 const { pointerLock, goFullscreen, toNumber } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
@@ -87,6 +88,9 @@ const { startLocalServer } = require('./createLocalServer')
 const serverOptions = require('./defaultLocalServerOptions')
 const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
+const { options } = require('./optionsStorage')
+const { subscribe } = require('valtio')
+const { subscribeKey } = require('valtio/utils')
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -189,7 +193,6 @@ const loadingScreen = document.getElementById('loading-error-screen')
 
 const hud = document.getElementById('hud')
 const optionsScrn = document.getElementById('options-screen')
-const keyBindScrn = document.getElementById('keybinds-screen')
 const pauseMenu = document.getElementById('pause-screen')
 
 function setLoadingScreenStatus (status, isError = false) {
@@ -247,6 +250,7 @@ async function main () {
 }
 
 let listeners = []
+let disposables = []
 let timeouts = []
 let intervals = []
 // only for dom listeners (no removeAllListeners)
@@ -261,17 +265,22 @@ const removeAllListeners = () => {
     target.removeEventListener(event, callback)
   })
   listeners = []
+  for (const disposable of disposables) {
+    disposable()
+  }
+  disposables = []
 }
 
 /**
- * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; }} options
+ * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; }} connectOptions
  */
-async function connect (options) {
+async function connect (connectOptions) {
   const menu = document.getElementById('play-screen')
   menu.style = 'display: none;'
   removePanorama()
 
-  const singeplayer = options.singleplayer
+  const singeplayer = connectOptions.singleplayer
+  miscUiState.singleplayer = singeplayer
   const oldSetInterval = window.setInterval
   // @ts-ignore
   window.setInterval = (callback, ms) => {
@@ -288,11 +297,11 @@ async function connect (options) {
   }
   const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
 
-  const viewDistance = optionsScrn.renderDistance
-  const hostprompt = options.server
-  const proxyprompt = options.proxy
-  const username = options.username
-  const password = options.password
+  const { renderDistance, maxMultiplayerRenderDistance } = options
+  const hostprompt = connectOptions.server
+  const proxyprompt = connectOptions.proxy
+  const username = connectOptions.username
+  const password = connectOptions.password
 
   let host, port, proxy, proxyport
   if (!hostprompt.includes(':')) {
@@ -349,7 +358,7 @@ async function connect (options) {
     window.addEventListener('keydown', (e) => {
       if (e.code !== 'KeyR') return
       controller.abort()
-      connect(options)
+      connect(connectOptions)
       loadingScreen.hasError = false
     }, { signal: controller.signal })
     // #endregion
@@ -364,19 +373,20 @@ async function connect (options) {
   }, {
     signal: errorAbortController.signal
   })
+  let singlePlayerServer
   try {
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
       //@ts-ignore TODO
       Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
-      const server = startLocalServer()
+      singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
-      if (!server.worldsReady) {
+      if (!singlePlayerServer.worldsReady) {
         await new Promise(resolve => {
-          server.once('worldsReady', resolve)
+          singlePlayerServer.once('worldsReady', resolve)
         })
       }
     }
@@ -384,7 +394,7 @@ async function connect (options) {
     bot = mineflayer.createBot({
       host,
       port,
-      version: options.botVersion === '' ? false : options.botVersion,
+      version: connectOptions.botVersion === '' ? false : connectOptions.botVersion,
       ...singeplayer ? {
         version: serverOptions.version,
         connect () { },
@@ -430,7 +440,7 @@ async function connect (options) {
     // server is ok, add it to the history
     /** @type {string[]} */
     const serverHistory = JSON.parse(localStorage.getItem('serverHistory') || '[]')
-    serverHistory.unshift(options.server)
+    serverHistory.unshift(connectOptions.server)
     localStorage.setItem('serverHistory', JSON.stringify([...new Set(serverHistory)]))
 
     setLoadingScreenStatus('Loading world')
@@ -448,19 +458,34 @@ async function connect (options) {
 
     const center = bot.entity.position
 
-    const worldView = new WorldView(bot.world, viewDistance, center)
+    const worldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
+    if (singeplayer) {
+      const d = subscribeKey(options, 'renderDistance', () => {
+        singlePlayerServer.options['view-distance'] = options.renderDistance
+        worldView.viewDistance = options.renderDistance
+        if (miscUiState.singleplayer) {
+          window.onPlayerChangeRenderDistance?.(options.renderDistance)
+        }
+      })
+      disposables.push(d)
+    }
 
     let fovSetting = optionsScrn.fov
     const updateFov = () => {
       fovSetting = optionsScrn.fov
+      // todo check values and add transition
       if (bot.controlState.sprint && !bot.controlState.sneak) {
-        // todo check value and add transition
-        fovSetting *= 5
+        fovSetting += 5
+      }
+      if (gameAdditionalState.isFlying) {
+        fovSetting += 5
       }
       viewer.camera.fov = fovSetting
       viewer.camera.updateProjectionMatrix()
     }
     updateFov()
+    subscribeKey(gameAdditionalState, 'isFlying', updateFov)
+    subscribeKey(gameAdditionalState, 'isSprinting', updateFov)
     optionsScrn.addEventListener('fov_changed', updateFov)
 
     viewer.setVersion(version)
@@ -585,81 +610,6 @@ async function connect (options) {
 
     registerListener(document, 'blur', (e) => {
       bot.clearControlStates()
-    }, false)
-
-    registerListener(document, 'keydown', (e) => {
-      if (activeModalStack.length) return
-
-      keyBindScrn.keymaps.forEach(km => {
-        if (e.code === km.key) {
-          switch (km.defaultKey) {
-            case 'KeyE':
-              showModal({ reactType: 'inventory', })
-              // todo seems to be workaround
-              // avoid calling inner keybinding listener, but should be handled there
-              e.stopImmediatePropagation()
-              break
-            case 'KeyQ':
-              if (bot.heldItem) bot.tossStack(bot.heldItem)
-              break
-            case 'ControlLeft':
-              bot.setControlState('sprint', true)
-              updateFov()
-              break
-            case 'ShiftLeft':
-              bot.setControlState('sneak', true)
-              break
-            case 'Space':
-              bot.setControlState('jump', true)
-              break
-            case 'KeyD':
-              bot.setControlState('right', true)
-              break
-            case 'KeyA':
-              bot.setControlState('left', true)
-              break
-            case 'KeyS':
-              bot.setControlState('back', true)
-              break
-            case 'KeyW':
-              bot.setControlState('forward', true)
-              break
-          }
-        }
-      })
-    }, {
-      capture: true,
-    })
-
-    registerListener(document, 'keyup', (e) => {
-      keyBindScrn.keymaps.forEach(km => {
-        if (e.code === km.key) {
-          switch (km.defaultKey) {
-            case 'ControlLeft':
-              bot.setControlState('sprint', false)
-              updateFov()
-              break
-            case 'ShiftLeft':
-              bot.setControlState('sneak', false)
-              break
-            case 'Space':
-              bot.setControlState('jump', false)
-              break
-            case 'KeyD':
-              bot.setControlState('right', false)
-              break
-            case 'KeyA':
-              bot.setControlState('left', false)
-              break
-            case 'KeyS':
-              bot.setControlState('back', false)
-              break
-            case 'KeyW':
-              bot.setControlState('forward', false)
-              break
-          }
-        }
-      })
     }, false)
 
     setLoadingScreenStatus('Done!')
