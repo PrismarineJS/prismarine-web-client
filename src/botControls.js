@@ -107,9 +107,11 @@ document.addEventListener('keydown', (e) => {
           break
         case 'KeyD':
           bot.setControlState('right', true)
+          e.preventDefault()
           break
         case 'KeyA':
           bot.setControlState('left', true)
+          e.preventDefault()
           break
         case 'KeyS':
           bot.setControlState('back', true)
@@ -120,8 +122,6 @@ document.addEventListener('keydown', (e) => {
       }
     }
   })
-
-  e.preventDefault()
 }, {
   capture: true,
 })
