@@ -98,7 +98,6 @@ function InventoryWrapper() {
         window['mcAssets'] = require('minecraft-assets')(bot.version)
     }, [])
 
-    console.log('isInventoryOpen', isInventoryOpen)
     if (!isInventoryOpen) return null
 
     return <div className={css`
