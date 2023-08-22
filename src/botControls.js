@@ -62,7 +62,7 @@ const patchedSetControlState = (action, state) => {
 }
 
 const toggleFly = () => {
-  if (bot.game.gameMode !== 'creative') return
+  if (bot.game.gameMode !== 'creative' && bot.game.gameMode !== 'spectator') return
   if (bot.setControlState !== patchedSetControlState) {
     originalSetControlState = bot.setControlState
     bot.setControlState = patchedSetControlState
