@@ -21,7 +21,9 @@
   "author": "PrismarineJS",
   "license": "MIT",
   "dependencies": {
+    "@dimaka/interface": "0.0.0-dev",
     "@emotion/css": "^11.11.2",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@zardoy/react-util": "^0.2.0",
@@ -38,9 +40,9 @@
     "net-browserify": "github:PrismarineJS/net-browserify",
     "prismarine-world": "^3.6.2",
     "querystring": "^0.2.1",
-    "@dimaka/interface": "0.0.0-dev",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-refresh": "^0.14.0",
     "space-squid": "github:zardoy/space-squid",
     "speed-measure-webpack-plugin": "^1.5.0",
     "stats.js": "^0.17.0",
@@ -77,6 +79,7 @@
     "stream-browserify": "^3.0.0",
     "three": "0.128.0",
     "timers-browserify": "^2.0.12",
+    "use-typed-event-listener": "^4.0.2",
     "vite": "^4.4.9",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
@@ -88,7 +91,9 @@
   "pnpm": {
     "overrides": {
       "minecraft-data": "latest",
-      "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client"
+      "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client",
+      "space-squid": "file:../space-squid",
+      "@dimaka/interface": "file:../interface"
     }
   }
 }
