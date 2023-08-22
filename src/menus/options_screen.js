@@ -1,8 +1,11 @@
 const { LitElement, html, css } = require('lit')
 const { commonCss, isMobile } = require('./components/common')
-const { showModal, hideCurrentModal, isGameActive } = require('../globalState')
+const { showModal, hideCurrentModal, isGameActive, miscUiState } = require('../globalState')
 const { CommonOptionsScreen } = require('./options_store')
 const { toNumber } = require('../utils')
+const { options } = require('../optionsStorage')
+const { subscribe } = require('valtio')
+const { subscribeKey } = require('valtio/utils')
 
 class OptionsScreen extends CommonOptionsScreen {
   static get styles () {
@@ -43,7 +46,6 @@ class OptionsScreen extends CommonOptionsScreen {
       chatHeight: { type: Number },
       chatScale: { type: Number },
       sound: { type: Number },
-      renderDistance: { type: Number },
       fov: { type: Number },
       guiScale: { type: Number }
     }
@@ -59,7 +61,6 @@ class OptionsScreen extends CommonOptionsScreen {
       chatHeight: { defaultValue: 180, convertFn: (v) => toNumber(v) },
       chatScale: { defaultValue: 100, convertFn: (v) => toNumber(v) },
       sound: { defaultValue: 50, convertFn: (v) => toNumber(v) },
-      renderDistance: { defaultValue: 6, convertFn: (v) => toNumber(v) },
       fov: { defaultValue: 75, convertFn: (v) => toNumber(v) },
       guiScale: { defaultValue: 3, convertFn: (v) => toNumber(v) },
       mouseRawInput: { defaultValue: false, convertFn: (v) => v === 'true' },
@@ -70,6 +71,13 @@ class OptionsScreen extends CommonOptionsScreen {
     document.documentElement.style.setProperty('--chatWidth', `${this.chatWidth}px`)
     document.documentElement.style.setProperty('--chatHeight', `${this.chatHeight}px`)
     document.documentElement.style.setProperty('--guiScale', `${this.guiScale}`)
+
+    subscribe(options, () => {
+      this.requestUpdate()
+    })
+    subscribeKey(miscUiState, 'singleplayer', () => {
+      this.requestUpdate()
+    })
   }
 
   render () {
@@ -114,8 +122,8 @@ class OptionsScreen extends CommonOptionsScreen {
       }}></pmui-slider>
         </div>
         <div class="wrapper">
-          <pmui-slider pmui-label="Render Distance" pmui-value="${this.renderDistance}" .disabled="${this.isInsideWorld ? 'Can be changed only from main menu for now' : undefined}" pmui-min="2" pmui-max="6" pmui-type=" chunks" @input=${(e) => {
-        this.changeOption('renderDistance', e.target.value)
+          <pmui-slider pmui-label="Render Distance" pmui-value="${options.renderDistance}" .disabled="${isGameActive(false) && !miscUiState.singleplayer ? 'Can be changed only from main menu for now' : undefined}" pmui-min="2" pmui-max="${miscUiState.singleplayer ? 16 : 6}" pmui-type=" chunks" @change=${(e) => {
+        options.renderDistance = +e.target.value
       }}></pmui-slider>
         <pmui-slider pmui-label="Field of View" pmui-value="${this.fov}" pmui-min="30" pmui-max="110" pmui-type="" @input=${(e) => {
         this.changeOption('fov', e.target.value)
