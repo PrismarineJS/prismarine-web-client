@@ -593,6 +593,12 @@ async function connect (options) {
       keyBindScrn.keymaps.forEach(km => {
         if (e.code === km.key) {
           switch (km.defaultKey) {
+            case 'KeyE':
+              showModal({ reactType: 'inventory', })
+              // todo seems to be workaround
+              // avoid calling inner keybinding listener, but should be handled there
+              e.stopImmediatePropagation()
+              break
             case 'KeyQ':
               if (bot.heldItem) bot.tossStack(bot.heldItem)
               break
@@ -621,7 +627,9 @@ async function connect (options) {
           }
         }
       })
-    }, false)
+    }, {
+      capture: true,
+    })
 
     registerListener(document, 'keyup', (e) => {
       keyBindScrn.keymaps.forEach(km => {

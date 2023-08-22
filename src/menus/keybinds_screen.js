@@ -104,7 +104,7 @@ class KeyBindsScreen extends LitElement {
       { defaultKey: 'Slash', key: 'Slash', name: 'Open Command' },
       // { defaultKey: '0', key: '0', name: 'Attack/Destroy' },
       // { defaultKey: '1', key: '1', name: 'Place Block' },
-      { defaultKey: 'KeyQ', key: 'KeyQ', name: 'Drop Item' }
+      { defaultKey: 'KeyQ', key: 'KeyQ', name: 'Drop Item' },
       // { defaultKey: 'Digit1', key: 'Digit1', name: 'Hotbar Slot 1' },
       // { defaultKey: 'Digit2', key: 'Digit2', name: 'Hotbar Slot 2' },
       // { defaultKey: 'Digit3', key: 'Digit3', name: 'Hotbar Slot 3' },
@@ -114,7 +114,7 @@ class KeyBindsScreen extends LitElement {
       // { defaultKey: 'Digit7', key: 'Digit7', name: 'Hotbar Slot 7' },
       // { defaultKey: 'Digit8', key: 'Digit8', name: 'Hotbar Slot 8' },
       // { defaultKey: 'Digit9', key: 'Digit9', name: 'Hotbar Slot 9' },
-      // { defaultKey: 'KeyE', key: 'KeyE', name: 'Open Inventory' }
+      { defaultKey: 'KeyE', key: 'KeyE', name: 'Open Inventory' },
     ]
 
     document.addEventListener('keydown', (e) => {
