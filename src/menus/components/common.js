@@ -45,8 +45,7 @@ const commonCss = css`
 
 /** @returns {boolean} */
 function isMobile () {
-  const m = require('ismobilejs').default()
-  return m.any
+  return window.matchMedia('(pointer: coarse)').matches
 }
 
 /**

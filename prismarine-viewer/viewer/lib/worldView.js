@@ -90,6 +90,7 @@ class WorldView extends EventEmitter {
     if (dx < this.viewDistance && dz < this.viewDistance) {
       const column = await this.world.getColumnAt(pos)
       if (column) {
+        // todo optimize toJson data, make it clear why it is used
         const chunk = column.toJson()
         this.emitter.emit('loadChunk', { x: pos.x, z: pos.z, chunk })
         this.loadedChunks[`${pos.x},${pos.z}`] = true
