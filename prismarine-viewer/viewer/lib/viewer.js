@@ -8,7 +8,7 @@ const { getVersion } = require('./version')
 const { Vec3 } = require('vec3')
 
 class Viewer {
-  constructor (renderer) {
+  constructor (renderer, numWorkers = undefined) {
     this.scene = new THREE.Scene()
     this.scene.background = new THREE.Color('lightblue')
 
@@ -23,7 +23,7 @@ class Viewer {
     const size = renderer.getSize(new THREE.Vector2())
     this.camera = new THREE.PerspectiveCamera(75, size.x / size.y, 0.1, 1000)
 
-    this.world = new WorldRenderer(this.scene)
+    this.world = new WorldRenderer(this.scene, numWorkers)
     this.entities = new Entities(this.scene)
     this.primitives = new Primitives(this.scene, this.camera)
 

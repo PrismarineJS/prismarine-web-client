@@ -140,7 +140,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 // Create viewer
-const viewer = new Viewer(renderer)
+const viewer = new Viewer(renderer, options.numWorkers)
 initPanoramaOptions(viewer)
 
 const frameLimit = toNumber(localStorage.frameLimit)
