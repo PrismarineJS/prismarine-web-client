@@ -72,8 +72,7 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
         this.changeOption('frameLimit', newVal > this.frameLimitMax ? false : newVal)
         this.requestUpdate()
       }}></pmui-slider>
-        <!-- todo replace with icon -->
-        <pmui-button pmui-width="20px" pmui-label="R" @click=${async () => {
+        <pmui-button pmui-width="20px" pmui-icon="pixelarticons:lock-open" @click=${async () => {
         const rate = await getScreenRefreshRate()
         this.frameLimitMax = rate
         this.requestUpdate()

@@ -1,5 +1,6 @@
 //@ts-check
 /* global THREE */
+require('iconify-icon')
 require('./chat')
 
 // workaround for mineflayer

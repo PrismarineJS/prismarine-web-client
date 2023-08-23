@@ -50,6 +50,9 @@ class Button extends LitElement {
         border: none;
         z-index: 1;
         outline: none;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .button:hover,
@@ -91,6 +94,13 @@ class Button extends LitElement {
         background-position-y: calc(var(--txrV) * -1);
         z-index: -1;
       }
+
+      .icon {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        font-size: 14px;
+      }
     `
   }
 
@@ -110,6 +120,10 @@ class Button extends LitElement {
       onPress: {
         type: Function,
         attribute: 'pmui-click'
+      },
+      icon: {
+        type: Function,
+        attribute: 'pmui-icon'
       }
     }
   }
@@ -130,6 +144,8 @@ class Button extends LitElement {
       @click=${this.onBtnClick}
       style="width: ${this.width};"
     >
+    <!-- todo self host icons -->
+      ${this.icon ? html`<iconify-icon class="icon" icon="${this.icon}"></iconify-icon>` : ''}
       ${this.label}
     </button>`
   }
