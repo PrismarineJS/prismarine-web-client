@@ -27,6 +27,7 @@ require('./menus/title_screen')
 require('./optionsStorage')
 require('./reactUi.jsx')
 require('./botControls')
+require('./dragndrop')
 
 // @ts-ignore
 require('crypto').createPublicKey = () => { }
@@ -45,11 +46,16 @@ browserfs.configure({
 })
 const _fs = require('fs')
 //@ts-ignore
-_fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat'].map(key => [key, promisify(_fs[key])])), {
+_fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir'].map(key => [key, promisify(_fs[key])])), {
   get (target, p, receiver) {
     //@ts-ignore
     if (!target[p]) throw new Error(`Not implemented fs.promises.${p}`)
-    return Reflect.get(target, p, receiver)
+    return (...args) => {
+      // browser fs bug: if path doesn't start with / dirname will return . which would cause infinite loop, so we need to normalize paths
+      if (typeof args[0] === 'string' && !args[0].startsWith('/')) args[0] = '/' + args[0]
+      //@ts-ignore
+      return target[p](...args)
+    }
   }
 })
 //@ts-ignore
@@ -83,13 +89,11 @@ const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalSta
 const { pointerLock, goFullscreen, toNumber } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
-const { createClient } = require('minecraft-protocol')
 const { startLocalServer } = require('./createLocalServer')
 const serverOptions = require('./defaultLocalServerOptions')
 const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
 const { options } = require('./optionsStorage')
-const { subscribe } = require('valtio')
 const { subscribeKey } = require('valtio/utils')
 
 if ('serviceWorker' in navigator) {
@@ -331,7 +335,9 @@ async function connect (connectOptions) {
 
   /** @type {mineflayer.Bot} */
   let bot
-  const destroy = () => {
+  const destroyAll = () => {
+    window.singlePlayerServer = undefined
+
     // simple variant, still buggy
     postRenderFrameFn = () => { }
     if (bot) {
@@ -364,7 +370,7 @@ async function connect (connectOptions) {
     // #endregion
 
     setLoadingScreenStatus(`Error encountered. Error message: ${err}`, true)
-    destroy()
+    destroyAll()
   }
 
   const errorAbortController = new AbortController()
@@ -380,7 +386,7 @@ async function connect (connectOptions) {
       window.worldLoaded = false
       //@ts-ignore TODO
       Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
-      singlePlayerServer = startLocalServer()
+      singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
@@ -427,12 +433,12 @@ async function connect (connectOptions) {
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
     setLoadingScreenStatus(`The Minecraft server kicked you. Kick reason: ${kickReason}`, true)
-    destroy()
+    destroyAll()
   })
 
   bot.on('end', (endReason) => {
     console.log('disconnected for', endReason)
-    destroy()
+    destroyAll()
     setLoadingScreenStatus(`You have been disconnected from the server. End reason: ${endReason}`, true)
   })
 

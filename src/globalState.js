@@ -131,11 +131,20 @@ console.info = (...args) => {
   info.apply(console, args)
 }
 
+window.addEventListener('unload', (e) => {
+  if (window.singlePlayerServer) {
+    for (const player of window.singlePlayerServer.players) {
+      player.save()
+    }
+  }
+})
+
 // todo move from global state
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
   if (forceDisableLeaveWarning && options.preventDevReloadWhilePlaying === false) return
+
   // For major browsers doning only this is enough
   event.preventDefault()
 

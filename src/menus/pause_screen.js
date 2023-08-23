@@ -62,8 +62,9 @@ class PauseScreen extends LitElement {
         </div>
         <pmui-button pmui-width="204px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <pmui-button pmui-width="204px" pmui-label="Disconnect" @pmui-click=${() => {
-        window.location.search = ''
-        window.location.reload()
+      bot._client.emit('end')
+        // window.location.search = ''
+        // window.location.reload()
       }}></pmui-button>
       </main>
     `
