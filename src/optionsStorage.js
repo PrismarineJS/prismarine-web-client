@@ -10,7 +10,8 @@ const defaultOptions = {
   alwaysShowMobileControls: false,
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
-  preventDevReloadWhilePlaying: false
+  preventDevReloadWhilePlaying: false,
+  numWorkers: 4
 }
 
 export const options = proxy(
