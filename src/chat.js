@@ -144,7 +144,7 @@ class ChatBox extends LitElement {
   constructor () {
     super()
     this.chatHistoryPos = 0
-    this.chatHistory = []
+    this.chatHistory = JSON.parse(window.sessionStorage.chatHistory || '[]')
     this.messagesLimit = 200
     /** @type {Message[]} */
     this.messages = [{
@@ -204,7 +204,7 @@ class ChatBox extends LitElement {
 
     // Chat events
     document.addEventListener('keydown', e => {
-      if (activeModalStack.slice(-1)[0] !== this) return
+      if (activeModalStack.slice(-1)[0]?.elem !== this) return
       if (e.code === 'ArrowUp') {
         if (this.chatHistoryPos === 0) return
         chatInput.value = this.chatHistory[--this.chatHistoryPos] !== undefined ? this.chatHistory[this.chatHistoryPos] : ''
@@ -242,6 +242,7 @@ class ChatBox extends LitElement {
 
       if (e.code === 'Enter') {
         this.chatHistory.push(chatInput.value)
+        window.sessionStorage.chatHistory = JSON.stringify(this.chatHistory)
         client.write('chat', { message: chatInput.value })
         hideCurrentModal()
       }
