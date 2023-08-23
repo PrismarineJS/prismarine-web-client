@@ -65,6 +65,10 @@ _fs.promises.open = async (...args) => {
     return await new Promise(resolve => {
       _fs[x](fd, ...args, (err, bytesRead, buffer) => {
         if (err) throw err
+        if (x === 'write') {
+          // flush data, though alternatively we can rely on close in unload
+          _fs.fsync(fd, () => { })
+        }
         resolve({ buffer, bytesRead })
       })
     })
