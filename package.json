@@ -94,8 +94,7 @@
     "overrides": {
       "minecraft-data": "latest",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra",
-      "space-squid": "file:../space-squid",
-      "@dimaka/interface": "file:../interface"
+      "space-squid": "file:../space-squid"
     }
   }
 }

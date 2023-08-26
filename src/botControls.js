@@ -87,7 +87,8 @@ document.addEventListener('keydown', (e) => {
     if (e.code === km.key) {
       switch (km.defaultKey) {
         case 'KeyE':
-          showModal({ reactType: 'inventory', })
+          // todo reenable
+          // showModal({ reactType: 'inventory', })
           // todo seems to be workaround
           // avoid calling inner keybinding listener, but should be handled there
           e.stopImmediatePropagation()
