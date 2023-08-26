@@ -8,7 +8,7 @@
 | ----------------------- | -------------------------- | ---------------------------- |
 
 A Minecraft client running in a web page. **Live demo at https://prismarinejs.github.io/prismarine-web-client/**
-
+ 
 
 ## How it Works
 prismarine-web-client runs mineflayer and prismarine-viewer in the browser, which connects over WebSocket to a proxy 
