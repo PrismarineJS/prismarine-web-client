@@ -1,5 +1,10 @@
 //@ts-check
 /* global THREE */
+// todo cant ignore fs thus doesnt work in browser
+// const soureMapSupport = require('source-map-support')
+// soureMapSupport.install({
+//   environment: 'browser',
+// })
 require('iconify-icon')
 require('./chat')
 
@@ -201,12 +206,13 @@ async function main () {
     const options = e.detail
     connect(options)
   })
-  const connectSingleplayer = () => {
+  const connectSingleplayer = (serverOverrides = {}) => {
     // todo clean
-    connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '' })
+    connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '', serverOverrides })
   }
   document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
-    connectSingleplayer()
+    //@ts-ignore
+    connectSingleplayer(e.detail)
   })
   const qs = new URLSearchParams(window.location.search)
   if (qs.get('singleplayer') === '1') {
@@ -240,7 +246,7 @@ const removeAllListeners = () => {
 }
 
 /**
- * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; }} connectOptions
+ * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; serverOverrides? }} connectOptions
  */
 async function connect (connectOptions) {
   const menu = document.getElementById('play-screen')
@@ -349,10 +355,10 @@ async function connect (connectOptions) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
       //@ts-ignore TODO
-      Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), serverOptions))
+      Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), connectOptions.serverOverrides, serverOptions))
       singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
-      loadingScreen.maybeRecoverable = false
+      // loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
       if (!singlePlayerServer.worldsReady) {
         await new Promise(resolve => {

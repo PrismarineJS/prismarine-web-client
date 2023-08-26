@@ -61,10 +61,18 @@ class PauseScreen extends LitElement {
           <pmui-button pmui-width="98px" pmui-label="Discord" @pmui-click=${() => openURL('https://discord.gg/4Ucm684Fq3')}></pmui-button>
         </div>
         <pmui-button pmui-width="204px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
-        <pmui-button pmui-width="204px" pmui-label="Disconnect" @pmui-click=${() => {
-      bot._client.emit('end')
-        // window.location.search = ''
-        // window.location.reload()
+        <pmui-button pmui-width="204px" pmui-label="Disconnect" @pmui-click=${async () => {
+        if (window.singlePlayerServer) {
+          for (const player of window.singlePlayerServer.players) {
+            const worlds = [singlePlayerServer.overworld]
+            for (const world of worlds) {
+              await world.storageProvider.close()
+            }
+            await player.save()
+            singlePlayerServer.quit()
+          }
+        }
+        bot._client.emit('end')
       }}></pmui-button>
       </main>
     `

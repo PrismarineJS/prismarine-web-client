@@ -16,12 +16,12 @@ const config = {
   },
   resolve: {
     alias: {
+      'browserfs$': 'browserfs/dist/browserfs.mjs',
+      'bfsGlobal': 'browserfs',
       'fs': 'browserfs/dist/shims/fs.js',
       'buffer': 'browserfs/dist/shims/buffer.js',
       'path': 'browserfs/dist/shims/path.js',
-      'processGlobal': 'browserfs/dist/shims/process.js',
-      'bufferGlobal': 'browserfs/dist/shims/bufferGlobal.js',
-      'bfsGlobal': require.resolve('browserfs'),
+      buffer: require.resolve('buffer/'),
 
       'minecraft-protocol$': path.resolve(
         __dirname,
@@ -76,9 +76,10 @@ const config = {
       minify: false,
       chunks: ['main', 'vendors'],
     }),
-    new webpack.ProvidePlugin({ BrowserFS: 'bfsGlobal', /* process: 'processGlobal', */ Buffer: 'bufferGlobal' }),
     new webpack.ProvidePlugin({
-      process: 'process/browser'
+      process: 'process/browser.js',
+      BrowserFS: 'bfsGlobal',
+      Buffer: ['buffer', 'Buffer']
     }),
     // new webpack.ProvidePlugin({
     //   Buffer: ['buffer', 'Buffer']

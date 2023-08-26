@@ -26,8 +26,10 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
+    "@types/wicg-file-system-access": "^2020.9.6",
     "@zardoy/react-util": "^0.2.0",
-    "browserfs": "^1.4.3",
+    "@zardoy/utils": "^0.0.11",
+    "browserfs": "github:zardoy/browserfs#build",
     "compression": "^1.7.4",
     "cypress-plugin-snapshots": "^1.4.4",
     "diamond-square": "^1.2.0",
@@ -91,7 +93,7 @@
   "pnpm": {
     "overrides": {
       "minecraft-data": "latest",
-      "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client",
+      "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra",
       "space-squid": "file:../space-squid",
       "@dimaka/interface": "file:../interface"
     }

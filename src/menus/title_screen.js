@@ -1,4 +1,6 @@
+const { openWorldDirectory } = require('../browserfs')
 const { showModal } = require('../globalState')
+const { fsState } = require('../loadFolder')
 const { openURL } = require('./components/common')
 const { LitElement, html, css } = require('lit')
 
@@ -145,10 +147,19 @@ class TitleScreen extends LitElement {
 
       <div class="menu">
         <pmui-button pmui-width="200px" pmui-label="Connect to server" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
-        <pmui-button pmui-width="200px" pmui-label="Singleplayer" @pmui-click=${() => {
+        <div style="display:flex;justify-content: space-between;">
+          <pmui-button pmui-width="${window['showDirectoryPicker'] ? '170px' : '200px'}" pmui-label="Singleplayer" @pmui-click=${() => {
         this.style.display = 'none'
+      Object.assign(fsState, {
+        isReadonly: false,
+        syncFs: true,
+      })
         this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
       }}></pmui-button>
+          ${window['showDirectoryPicker'] ? html`<pmui-button pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${() => {
+        openWorldDirectory()
+      }}></pmui-button>` : ''}
+        </div>
         <pmui-button pmui-width="200px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <div class="menu-row">
           <pmui-button pmui-width="98px" pmui-label="Github" @pmui-click=${() => openURL(process.env.GITHUB_URL)}></pmui-button>

@@ -134,10 +134,6 @@ console.info = (...args) => {
 window.addEventListener('unload', (e) => {
   if (window.singlePlayerServer) {
     for (const player of window.singlePlayerServer.players) {
-      // const worlds = [singlePlayerServer.overworld]
-      // for (const world of worlds) {
-      //   world.storageProvider.close()
-      // }
       player.save()
     }
   }

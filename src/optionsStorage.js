@@ -7,6 +7,8 @@ import { mergeAny } from './optionsStorageTypes'
 
 const defaultOptions = {
   renderDistance: 4,
+  /** @type {boolean | undefined | null} */
+  alwaysBackupWorldBeforeLoading: undefined,
   alwaysShowMobileControls: false,
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
