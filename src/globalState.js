@@ -2,6 +2,7 @@
 
 import { proxy, ref, subscribe } from 'valtio'
 import { pointerLock } from './utils'
+import { options } from './optionsStorage'
 
 // todo: refactor structure with support of hideNext=false
 
@@ -107,12 +108,43 @@ export const isGameActive = (foregroundCheck) => {
 }
 
 export const miscUiState = proxy({
-  currentTouch: null
+  currentTouch: null,
+  singleplayer: false
 })
 
+// state that is not possible to get via bot
+export const gameAdditionalState = proxy({
+  isFlying: false,
+  isSprinting: false,
+})
+
+window.gameAdditionalState = gameAdditionalState
+
+// todo thats weird workaround, probably we can do better?
+let forceDisableLeaveWarning = false
+const info = console.info
+console.info = (...args) => {
+  const message = args[0]
+  if (message === '[webpack-dev-server] App updated. Recompiling...') {
+    forceDisableLeaveWarning = true
+  }
+  info.apply(console, args)
+}
+
+window.addEventListener('unload', (e) => {
+  if (window.singlePlayerServer) {
+    for (const player of window.singlePlayerServer.players) {
+      player.save()
+    }
+  }
+})
+
+// todo move from global state
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
+  if (forceDisableLeaveWarning && options.preventDevReloadWhilePlaying === false) return
+
   // For major browsers doning only this is enough
   event.preventDefault()
 

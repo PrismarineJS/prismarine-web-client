@@ -5,10 +5,19 @@ import { proxy, subscribe } from 'valtio/vanilla'
 import { subscribeKey } from 'valtio/utils'
 import { mergeAny } from './optionsStorageTypes'
 
+const defaultOptions = {
+  renderDistance: 4,
+  /** @type {boolean | undefined | null} */
+  alwaysBackupWorldBeforeLoading: undefined,
+  alwaysShowMobileControls: false,
+  maxMultiplayerRenderDistance: 6,
+  excludeCommunicationDebugEvents: [],
+  preventDevReloadWhilePlaying: false,
+  numWorkers: 4
+}
+
 export const options = proxy(
-  mergeAny({
-    alwaysShowMobileControls: false
-  }, JSON.parse(localStorage.options || '{}'))
+  mergeAny(defaultOptions, JSON.parse(localStorage.options || '{}'))
 )
 
 window.options = options
@@ -32,6 +41,10 @@ export const watchValue = (proxy, callback) => {
     })
   })
 }
+
+watchValue(options, o => {
+  globalThis.excludeCommunicationDebugEvents = o.excludeCommunicationDebugEvents
+})
 
 export const useOptionValue = (setting, valueCallback) => {
   valueCallback(setting)

@@ -92,6 +92,14 @@ canvas {
   font-family: minecraft, mojangles, monospace;
 }
 
+/* todo I guess the best solution would be to render it on canvas */
+.BlockModel {
+  scale: 0.5;
+  width: 183%;
+  height: 190%;
+  transform: translate(-50%, -50%);
+}
+
 @media only screen and (max-width: 971px) {
   #ui-root {
     transform: scale(2);

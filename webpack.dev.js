@@ -1,6 +1,6 @@
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
-const path = require('path')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 /** @type {import('webpack-dev-server').Configuration['rel']} */
 module.exports = merge(common,
@@ -17,8 +17,8 @@ module.exports = merge(common,
       compress: true,
       // inline: true,
       // open: true,
-      // hot: true,
-      liveReload: true,
+      hot: true,
+      // liveReload: true,
       devMiddleware: {
         writeToDisk: true,
       },
@@ -44,5 +44,8 @@ module.exports = merge(common,
           }
         }
       }
-    }
+    },
+    plugins: [
+      new ReactRefreshWebpackPlugin()
+    ],
   })
