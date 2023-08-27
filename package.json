@@ -10,8 +10,7 @@
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
-    "prepublishOnly": "npm run build",
-    "test": "npm run lint && mocha"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "prismarine",
@@ -71,7 +70,6 @@
     "memfs": "^3.5.3",
     "mineflayer": "^4.11.0",
     "mineflayer-pathfinder": "^2.4.4",
-    "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",

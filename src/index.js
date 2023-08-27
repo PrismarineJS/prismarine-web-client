@@ -55,7 +55,7 @@ const Cursor = require('./cursor')
 global.THREE = require('three')
 const { initVR } = require('./vr')
 const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive, miscUiState, gameAdditionalState } = require('./globalState')
-const { pointerLock, goFullscreen, toNumber } = require('./utils')
+const { pointerLock, goFullscreen, toNumber, isCypress } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
 const { startLocalServer } = require('./createLocalServer')
@@ -65,7 +65,7 @@ const { default: updateTime } = require('./updateTime')
 const { options } = require('./optionsStorage')
 const { subscribeKey } = require('valtio/utils')
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && !isCypress()) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {
       console.log('SW registered: ', registration)
@@ -87,11 +87,10 @@ document.body.appendChild(stats.dom)
 stats2.dom.style.left = '80px'
 document.body.appendChild(stats2.dom)
 
-window.hideStats = () => {
+if (localStorage.hideStats || isCypress()) {
   stats.dom.style.display = 'none'
   stats2.dom.style.display = 'none'
 }
-if (localStorage.hideStats) window.hideStats()
 
 // const debugPitch = document.createElement('span')
 // debugPitch.style.cssText = `

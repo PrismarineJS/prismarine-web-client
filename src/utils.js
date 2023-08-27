@@ -112,3 +112,7 @@ export const getGamemodeNumber = (bot) => {
     default: return -1
   }
 }
+
+export const isCypress = () => {
+  return localStorage.cypress === 'true'
+}

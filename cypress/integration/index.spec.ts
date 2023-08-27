@@ -1,11 +1,10 @@
 /// <reference types="cypress" />
 
-it('Renders menu (options button)', () => {
+it('Loads & renders singleplayer', () => {
     // todo use <button match text selectors
     cy.visit('/')
+    window.localStorage.cypress = 'true'
     cy.window().then((win) => {
-        win['cypress'] = true
-        win['hideStats']()
     })
     window.localStorage.server = 'localhost'
     window.localStorage.setItem('renderDistance', '2')
@@ -15,7 +14,8 @@ it('Renders menu (options button)', () => {
             options: { seed: 250869072 }
         }
     }))
-    cy.get('#title-screen').find('.menu > pmui-button:nth-child(2)', { includeShadowDom: true, }).click()
+    // todo replace with data-test
+    cy.get('#title-screen').find('.menu > div:nth-child(2) > pmui-button:nth-child(1)', { includeShadowDom: true, }).click()
     // todo implement load event
     cy.wait(6000)
     //@ts-ignore
