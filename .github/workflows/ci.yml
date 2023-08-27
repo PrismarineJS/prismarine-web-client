@@ -12,5 +12,12 @@ jobs:
         run: npm i -g pnpm
       - run: pnpm install
       - run: pnpm build
-        # todo use nohup and official action?
-      # - run: pnpm prod-start & pnpm test:cypress
+      - uses: cypress-io/github-action@v5
+        with:
+          start: pnpm prod-start
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-images
+          path: cypress/integration/__image_snapshots__/
+          if-no-files-found: ignore
