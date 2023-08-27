@@ -2,8 +2,18 @@
 // todo implement async options storage
 
 import { proxy, subscribe } from 'valtio/vanilla'
-import { subscribeKey } from 'valtio/utils'
 import { mergeAny } from './optionsStorageTypes'
+
+// really weird webpack configuration bug: cant import valtio/utils in this file
+function subscribeKey (proxyObject, key, callback, notifyInSync) {
+  let prevValue = proxyObject[key]
+  return subscribe(proxyObject, function () {
+    var nextValue = proxyObject[key]
+    if (!Object.is(prevValue, nextValue)) {
+      callback(prevValue = nextValue)
+    }
+  }, notifyInSync)
+}
 
 const defaultOptions = {
   renderDistance: 4,

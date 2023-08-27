@@ -29,6 +29,7 @@ const config = {
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
+      'valtio/utils$': require.resolve('valtio/vanilla/utils'),
       jose: false
     },
     fallback: {
