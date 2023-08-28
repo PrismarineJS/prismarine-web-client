@@ -11,22 +11,25 @@ const filesAlwaysToCopy = [
 ]
 // these files could be copied at build time eg with copy plugin, but copy plugin slows down the config (2x in my testing, sometimes with too many open files error) is slow so we also copy them there
 const webpackFilesToCopy = [
-    { from: './node_modules/prismarine-viewer2/public/blocksStates/', to: 'public/blocksStates/' },
-    { from: './node_modules/prismarine-viewer2/public/textures/', to: 'public/textures/' },
-    { from: './node_modules/prismarine-viewer2/public/worker.js', to: 'public/worker.js' },
-    { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: 'public/supportedVersions.json' },
-    { from: './assets/', to: './public/' },
-    { from: './config.json', to: 'public/config.json' }
+    { from: './node_modules/prismarine-viewer2/public/blocksStates/', to: 'dist/blocksStates/' },
+    { from: './node_modules/prismarine-viewer2/public/textures/', to: 'dist/textures/' },
+    { from: './node_modules/prismarine-viewer2/public/worker.js', to: 'dist/worker.js' },
+    { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: 'dist/supportedVersions.json' },
+    { from: './assets/', to: './dist/' },
+    { from: './config.json', to: 'dist/config.json' }
 ]
 exports.webpackFilesToCopy = webpackFilesToCopy
 exports.copyFiles = (isDev = false) => {
+    console.time('copy files');
     [...filesAlwaysToCopy, ...webpackFilesToCopy].forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
+
+    console.timeEnd('copy files')
 }
 
 exports.copyFilesDev = () => {
-    if (fsExtra.existsSync('public/config.json')) return
+    if (fsExtra.existsSync('dist/config.json')) return
     exports.copyFiles(true)
 }
 
@@ -34,6 +37,9 @@ exports.getSwAdditionalEntries = () => {
     // need to be careful with this
     const singlePlayerVersion = defaultLocalServerOptions.version
     const filesToCachePatterns = [
+        'index.js',
+        'index.css',
+        'favicon.ico',
         `blocksStates/${singlePlayerVersion}.json`,
         'extra-textures/**',
         // todo-low copy from assets
@@ -59,9 +65,9 @@ exports.getSwAdditionalEntries = () => {
     const output = []
     console.log('Generating sw additional entries...')
     for (const pattern of filesToCachePatterns) {
-        const files = glob.sync(pattern, { cwd: 'public' })
+        const files = glob.sync(pattern, { cwd: 'dist' })
         for (const file of files) {
-            const fullPath = path.join('public', file)
+            const fullPath = path.join('dist', file)
             if (!fs.lstatSync(fullPath).isFile()) continue
             let revision = null
             const url = './' + file.replace(/\\/g, '/')

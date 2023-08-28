@@ -10,11 +10,13 @@ function removeLinesBetween (start, end) {
   let startIndex = lines.findIndex(line => line === start)
   if (startIndex === -1) return
   let endIndex = startIndex + lines.slice(startIndex).findIndex(line => line === end)
-  const linesToRemove = endIndex - startIndex + 1
-  lines.splice(startIndex, linesToRemove)
+  // insert block comments
+  lines.splice(startIndex, 0, `/*`)
+  lines.splice(endIndex + 2, 0, `*/`)
 }
 
 // todo removing bedrock support for now, will optiimze in future instead
 removeLinesBetween("  'bedrock': {", '  }')
 
+// fs.writeFileSync(path.join(dataPath, '../dataGlobal.js'), newContents, 'utf8')
 fs.writeFileSync(dataPath, lines.join('\n'), 'utf8')

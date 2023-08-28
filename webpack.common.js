@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const config = {
   entry: path.resolve(__dirname, './src/index.js'),
   output: {
-    path: path.resolve(__dirname, './public'),
+    path: path.resolve(__dirname, './dist'),
     filename: './[name].js',
     publicPath: './',
     hotUpdateChunkFilename: 'hot/hot-update.[name].js',
@@ -91,7 +91,7 @@ const config = {
     ),
     new CopyPlugin({
       patterns: [
-        { from: path.join(__dirname, 'src/styles.css'), to: './styles.css' },
+        { from: path.join(__dirname, 'src/styles.css'), to: './index.css' },
       ]
     })
   ]

@@ -5,6 +5,7 @@
 // soureMapSupport.install({
 //   environment: 'browser',
 // })
+require('./styles.css')
 require('iconify-icon')
 require('./chat')
 
@@ -37,9 +38,6 @@ require('./botControls')
 require('./dragndrop')
 require('./browserfs')
 
-// @ts-ignore
-require('crypto').createPublicKey = () => { }
-
 const net = require('net')
 const Stats = require('stats.js')
 
@@ -64,6 +62,7 @@ const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
 const { options } = require('./optionsStorage')
 const { subscribeKey } = require('valtio/utils')
+const _ = require('lodash')
 
 if ('serviceWorker' in navigator && !isCypress()) {
   window.addEventListener('load', () => {
