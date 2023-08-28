@@ -130,7 +130,8 @@ class DebugOverlay extends LitElement {
         <p>Facing (viewer): ${rot[0].toFixed(3)} ${rot[1].toFixed(3)}</p>
         <p>Facing (minecraft): ${quadsDescription[minecraftQuad]} (${minecraftYaw.toFixed(1)} ${(rot[1] * -180 / Math.PI).toFixed(1)})</p>
         <p>Light: ${skyL} (${skyL} sky)</p>
-        <p>Biome: minecraft:${window.mcData.biomesArray[biomeId]?.name}</p>
+        <!-- todo fix biome -->
+        <p>Biome: minecraft:${window.mcData.biomesArray[biomeId]?.name ?? 'unknown biome'}</p>
         <p>Day: ${this.bot.time.day}</p>
         <div class="empty"></div>
         ${Object.entries(this.customEntries).map(([name, value]) => html`<p>${name}: ${value}</p>`)}

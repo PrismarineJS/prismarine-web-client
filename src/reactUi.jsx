@@ -11,6 +11,9 @@ import useTypedEventListener from 'use-typed-event-listener'
 // todo
 useInterfaceState.setState({
     isFlying: false,
+    uiCustomization: {
+        touchButtonSize: 40,
+    },
     updateCoord: ([coord, state]) => {
         const coordToAction = [
             ['z', -1, 'forward'],
@@ -21,7 +24,6 @@ useInterfaceState.setState({
         ]
         // todo refactor
         const actionAndState = state !== 0 ? coordToAction.find(([axis, value]) => axis === coord && value === state) : coordToAction.filter(([axis]) => axis === coord)
-        console.log(actionAndState)
         if (!bot) return
         if (state === 0) {
             for (const action of actionAndState) {
@@ -42,7 +44,6 @@ const TouchControls = () => {
     if (!usingTouch) return null
     return (
         <div
-            onTouchMove={() => console.log('test')}
             className={css`
                 position: fixed;
                 inset: 0;
@@ -51,6 +52,11 @@ const TouchControls = () => {
                 width: 100%;
                 justify-content: space-between;
                 align-items: flex-end;
+                pointer-events: none;
+                touch-action: none;
+                & > div {
+                    pointer-events: auto;
+                }
             `}
         >
             <LeftTouchArea />

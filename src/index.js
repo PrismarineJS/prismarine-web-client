@@ -83,7 +83,12 @@ stats2 = new Stats()
 stats2.showPanel(2)
 
 document.body.appendChild(stats.dom)
-stats2.dom.style.left = '80px'
+stats.dom.style.left = ''
+stats.dom.style.right = '0px'
+stats.dom.style.width = '80px'
+stats2.dom.style.width = '80px'
+stats2.dom.style.right = '80px'
+stats2.dom.style.left = ''
 document.body.appendChild(stats2.dom)
 
 if (localStorage.hideStats || isCypress()) {
@@ -524,60 +529,71 @@ async function connect (connectOptions) {
 
     registerListener(document, 'pointerlockchange', changeCallback, false)
 
+    const cameraControlEl = hud
+
     // after what time of holding the finger start breaking the block
     const touchBreakBlockMs = 500
-    let firstTouchAppeared
-    let virtualTouchPressed = false
-    let virtualTouchPressTimeout
-    /** @type {Touch?} */
-    let lastTouch
-    let firstTouch
-    registerListener(document, 'touchstart', (e) => {
-      if (!isGameActive(true)) return
-      const touch = e.touches[0]
-      virtualTouchPressTimeout ??= setTimeout(() => {
-        virtualTouchPressed = true
+    let virtualClickActive = false
+    let virtualClickTimeout
+    /** @type {{id,x,y,sourceX,sourceY,jittered,time}?} */
+    let capturedPointer
+    registerListener(document, 'pointerdown', (e) => {
+      const clickedEl = e.composedPath()[0]
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer) {
+        return
+      }
+      cameraControlEl.setPointerCapture(e.pointerId)
+      capturedPointer = {
+        id: e.pointerId,
+        x: e.clientX,
+        y: e.clientY,
+        sourceX: e.clientX,
+        sourceY: e.clientY,
+        jittered: false,
+        time: new Date()
+      }
+      virtualClickTimeout ??= setTimeout(() => {
+        virtualClickActive = true
         document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
       }, touchBreakBlockMs)
-      firstTouchAppeared ??= new Date()
-      firstTouch ??= touch
+    }, {
+
     })
-    registerListener(document, 'touchmove', (e) => {
-      if (!firstTouch) return
+    registerListener(document, 'pointermove', (e) => {
+      if (e.pointerId !== capturedPointer?.id) return
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
 
-      const touch = e.touches[0]
-
       const allowedJitter = 1.1
-      // todo support touch.pressure (3d touch)
-      const xDiff = Math.abs(touch.pageX - firstTouch.pageX) > allowedJitter
-      const yDiff = Math.abs(touch.pageY - firstTouch.pageY) > allowedJitter
-      if (lastTouch !== undefined) {
-        if (xDiff && yDiff) {
-          clearTimeout(virtualTouchPressTimeout)
-        }
-        onMouseMove({ movementX: touch.pageX - lastTouch.pageX, movementY: touch.pageY - lastTouch.pageY, type: 'touchmove' })
+      // todo support .pressure (3d touch)
+      const xDiff = Math.abs(e.pageX - capturedPointer.sourceX) > allowedJitter
+      const yDiff = Math.abs(e.pageY - capturedPointer.sourceY) > allowedJitter
+      if (!capturedPointer.jittered && (xDiff || yDiff)) capturedPointer.jittered = true
+      if (capturedPointer.jittered) {
+        clearTimeout(virtualClickTimeout)
       }
-      lastTouch = touch
+      onMouseMove({ movementX: e.pageX - capturedPointer.x, movementY: e.pageY - capturedPointer.y, type: 'touchmove' })
+      capturedPointer.x = e.pageX
+      capturedPointer.y = e.pageY
     }, { passive: false })
 
-    registerListener(document, 'touchend', (e) => {
-      lastTouch = undefined
-      firstTouch = undefined
-      clearTimeout(virtualTouchPressTimeout)
-      virtualTouchPressTimeout = undefined
-      if (virtualTouchPressed) {
+    registerListener(document, 'lostpointercapture', (e) => {
+      if (e.pointerId !== capturedPointer?.id) return
+      clearTimeout(virtualClickTimeout)
+      virtualClickTimeout = undefined
+
+      if (virtualClickActive) {
+        // button 0 is left click
         document.dispatchEvent(new MouseEvent('mouseup', { button: 0 }))
-        virtualTouchPressed = false
-      } else if (Date.now() - firstTouchAppeared < touchBreakBlockMs) {
+        virtualClickActive = false
+      } else if (!capturedPointer.jittered && (Date.now() - capturedPointer.time < touchBreakBlockMs)) {
         document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
         nextFrameFn.push(() => {
           document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
         })
       }
-      firstTouchAppeared = undefined
+      capturedPointer = undefined
     }, { passive: false })
 
     registerListener(document, 'contextmenu', (e) => e.preventDefault(), false)

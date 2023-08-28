@@ -1,7 +1,7 @@
 //@ts-check
-const { LitElement, html, css } = require('lit')
+const { html, css } = require('lit')
 const { CommonOptionsScreen } = require('./options_store')
-const { commonCss, isMobile, openURL } = require('./components/common')
+const { commonCss, openURL } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
 const { toNumber, getScreenRefreshRate } = require('../utils')
 const { subscribe } = require('valtio')
