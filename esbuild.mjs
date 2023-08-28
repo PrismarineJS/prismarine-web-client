@@ -35,16 +35,16 @@ let baseConfig = {}
 fs.copyFileSync('index.html', 'dist/index.html')
 fs.writeFileSync('dist/index.html', fs.readFileSync('dist/index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
 
+const dev = process.argv.includes('--watch') || process.argv.includes('-w')
+const prod = process.argv.includes('--prod')
+
 const banner = [
   'window.global = globalThis;',
   // auto-reload
-  '(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => {const data = JSON.parse(_data);if (!data.update)return;sessionStorage.lastReload = JSON.stringify({buildTime:data.update.time, reloadStart:Date.now()});location.reload()})();'
-]
+  dev && '(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => {const data = JSON.parse(_data);if (!data.update)return;sessionStorage.lastReload = JSON.stringify({buildTime:data.update.time, reloadStart:Date.now()});location.reload()})();'
+].filter(Boolean)
 
 const buildingVersion = new Date().toISOString().split(':')[0]
-
-const dev = process.argv.includes('--watch') || process.argv.includes('-w')
-const prod = process.argv.includes('--prod')
 
 const ctx = await esbuild.context({
   bundle: true,
