@@ -3,15 +3,15 @@
   "version": "1.5.0",
   "description": "A minecraft client running in a browser",
   "scripts": {
-    "start": "NODE_OPTIONS=--max-old-space-size=8192 run-p watch prod-start",
-    "build": "NODE_OPTIONS=--max-old-space-size=8192 rimraf public && node scripts/build.js copyFiles && webpack --config webpack.prod.js --progress",
+    "start": "node scripts/build.js copyFilesDev && node esbuild.mjs --minify --watch",
+    "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
+    "build": "node scripts/build.js copyFiles && node esbuild.mjs --minify --build-only",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "postinstall": "node scripts/patchPackages.js",
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
-    "prepublishOnly": "npm run build",
-    "test": "npm run lint && mocha"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "prismarine",
@@ -33,12 +33,14 @@
     "compression": "^1.7.4",
     "cypress-plugin-snapshots": "^1.4.4",
     "diamond-square": "^1.2.0",
+    "esbuild": "^0.19.2",
     "esbuild-loader": "^4.0.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "express": "^4.18.2",
     "fs-extra": "^11.1.1",
     "iconify-icon": "^1.0.8",
     "lit": "^2.8.0",
+    "minecraft-data": "^3.0.0",
     "net-browserify": "github:PrismarineJS/net-browserify",
     "prismarine-world": "^3.6.2",
     "querystring": "^0.2.1",
@@ -49,7 +51,8 @@
     "speed-measure-webpack-plugin": "^1.5.0",
     "stats.js": "^0.17.0",
     "url": "^0.11.1",
-    "valtio": "^1.11.1"
+    "valtio": "^1.11.1",
+    "workbox-build": "^7.0.0"
   },
   "devDependencies": {
     "@types/three": "0.128.0",
@@ -63,6 +66,7 @@
     "cypress": "^9.5.4",
     "cypress-esbuild-preprocessor": "^1.0.2",
     "events": "^3.3.0",
+    "filesize": "^10.0.12",
     "html-webpack-plugin": "^5.5.3",
     "http-browserify": "^1.7.0",
     "http-server": "^14.1.1",
@@ -71,7 +75,6 @@
     "memfs": "^3.5.3",
     "mineflayer": "^4.11.0",
     "mineflayer-pathfinder": "^2.4.4",
-    "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",

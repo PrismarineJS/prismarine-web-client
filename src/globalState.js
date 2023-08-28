@@ -131,12 +131,20 @@ console.info = (...args) => {
   info.apply(console, args)
 }
 
-window.addEventListener('unload', (e) => {
-  if (window.singlePlayerServer) {
-    for (const player of window.singlePlayerServer.players) {
-      player.save()
-    }
+const savePlayers = () => {
+  if (!window.singlePlayerServer) return
+  for (const player of window.singlePlayerServer.players) {
+    player.save()
   }
+}
+
+setInterval(() => {
+  savePlayers()
+  // todo investigate unload failures instead
+}, 1000)
+
+window.addEventListener('unload', (e) => {
+  savePlayers()
 })
 
 // todo move from global state

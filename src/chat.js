@@ -4,6 +4,7 @@ const { isMobile } = require('./menus/components/common')
 const { activeModalStack, hideCurrentModal, showModal } = require('./globalState')
 import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
+import { isCypress } from './utils'
 
 const styles = {
   black: 'color:#000000',
@@ -400,13 +401,12 @@ class ChatBox extends LitElement {
   }
 
   render () {
-    // todo just to hide player joined at random timings
-    if (window.cypress) return html``
 
     return html`
     <div id="chat-wrapper" class="chat-wrapper chat-messages-wrapper">
       <div class="chat ${this.inChat ? 'opened' : ''}" id="chat-messages">
-        ${repeat(this.messages, (m) => m.id, (m) => this.renderMessage(m))}
+        <!-- its to hide player joined at random timings, todo add chat tests as well -->
+        ${repeat(isCypress() ? [] : this.messages, (m) => m.id, (m) => this.renderMessage(m))}
       </div>
     </div>
     <div id="chat-wrapper2" class="chat-wrapper chat-input-wrapper">

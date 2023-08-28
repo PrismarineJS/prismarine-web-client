@@ -8,9 +8,9 @@
             "name": "Attach Chrome",
             "request": "attach",
             "outFiles": [
-                "${workspaceFolder}/public/**/*.js",
-                // "!${workspaceFolder}/public/**/*vendors*",
-                "!${workspaceFolder}/public/**/*minecraftData*",
+                "${workspaceFolder}/dist/**/*.js",
+                // "!${workspaceFolder}/dist/**/*vendors*",
+                "!${workspaceFolder}/dist/**/*minecraftData*",
                 "!**/node_modules/**"
             ],
             "skipFiles": [
@@ -26,9 +26,9 @@
             "request": "launch",
             "url": "http://localhost:8080/",
             "outFiles": [
-                "${workspaceFolder}/public/**/*.js",
-                // "!${workspaceFolder}/public/**/*vendors*",
-                "!${workspaceFolder}/public/**/*minecraftData*",
+                "${workspaceFolder}/dist/**/*.js",
+                // "!${workspaceFolder}/dist/**/*vendors*",
+                "!${workspaceFolder}/dist/**/*minecraftData*",
                 "!**/node_modules/**"
             ],
             "skipFiles": [
