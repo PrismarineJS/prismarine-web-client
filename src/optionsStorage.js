@@ -3,17 +3,8 @@
 
 import { proxy, subscribe } from 'valtio/vanilla'
 import { mergeAny } from './optionsStorageTypes'
-
-// really weird webpack configuration bug: cant import valtio/utils in this file
-function subscribeKey (proxyObject, key, callback, notifyInSync) {
-  let prevValue = proxyObject[key]
-  return subscribe(proxyObject, function () {
-    var nextValue = proxyObject[key]
-    if (!Object.is(prevValue, nextValue)) {
-      callback(prevValue = nextValue)
-    }
-  }, notifyInSync)
-}
+// weird webpack configuration bug: it cant import valtio/utils in this file
+import { subscribeKey } from 'valtio/utils'
 
 const defaultOptions = {
   renderDistance: 4,

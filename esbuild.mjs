@@ -123,6 +123,8 @@ if (dev) {
     const { count, size, warnings } = await generateSW({
       // dontCacheBustURLsMatching: [new RegExp('...')],
       globDirectory: 'dist',
+      skipWaiting: true,
+      clientsClaim: true,
       additionalManifestEntries: getSwAdditionalEntries(),
       swDest: 'dist/service-worker.js',
     })

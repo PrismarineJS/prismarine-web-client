@@ -7,6 +7,9 @@
             "address": "localhost",
             "name": "Attach Chrome",
             "request": "attach",
+            "pathMapping": {
+                "/": "${workspaceFolder}/dist"
+            },
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js",
                 // "!${workspaceFolder}/dist/**/*vendors*",
