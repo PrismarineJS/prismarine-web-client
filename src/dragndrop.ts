@@ -3,6 +3,7 @@ import { promisify } from 'util'
 import { showNotification } from './menus/notification'
 
 const parseNbt = promisify(nbt.parse);
+window.nbt = nbt;
 
 // todo display drop zone
 ["drag", "dragstart", "dragend", "dragover", "dragenter", "dragleave", "drop"].forEach(event => {
