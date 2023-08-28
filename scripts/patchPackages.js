@@ -1,4 +1,4 @@
-//@ts-check
+// @ts-check
 const path = require('path')
 const dataPath = path.join(require.resolve('minecraft-data'), '../data.js')
 
@@ -15,8 +15,8 @@ function removeLinesBetween (start, end) {
   if (startIndex === -1) return
   const endIndex = startIndex + lines.slice(startIndex).findIndex(line => line === end)
   // insert block comments
-  lines.splice(startIndex, 0, `/*`)
-  lines.splice(endIndex + 2, 0, `*/`)
+  lines.splice(startIndex, 0, '/*')
+  lines.splice(endIndex + 2, 0, '*/')
 }
 
 removeLinesBetween("  'bedrock': {", '  }')
