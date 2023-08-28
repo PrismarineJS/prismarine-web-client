@@ -48,7 +48,7 @@ const ctx = await esbuild.context({
   entryPoints: ['src/index.js'],
   logLevel: 'info',
   platform: 'browser',
-  sourcemap: true,
+  sourcemap: process.argv.includes('--watch'),
   outdir: 'dist',
   mainFields: [
     'browser', 'module', 'main'
