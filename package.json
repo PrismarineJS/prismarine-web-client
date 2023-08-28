@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node scripts/build.js copyFilesDev && node esbuild.mjs --minify --watch",
     "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
-    "build": "node scripts/build.js copyFiles && node esbuild.mjs --minify --build-only",
+    "build": "node scripts/build.js copyFiles && node esbuild.mjs --minify --prod",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "postinstall": "node scripts/patchPackages.js",
     "test:cypress": "cypress run",

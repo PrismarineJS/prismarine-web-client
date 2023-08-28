@@ -30,7 +30,7 @@ if (process.argv[3] === 'dev') {
 }
 
 // Start the server
-const server = process.argv.includes('--build-only') ? undefined : app.listen(require.main !== module || process.argv[2] === undefined ? 8080 : process.argv[2], function () {
+const server = process.argv.includes('--prod') ? undefined : app.listen(require.main !== module || process.argv[2] === undefined ? 8080 : process.argv[2], function () {
   console.log('Server listening on port ' + server.address().port)
 })
 

@@ -43,12 +43,16 @@ const banner = [
 
 const buildingVersion = new Date().toISOString().split(':')[0]
 
+const dev = process.argv.includes('--watch') || process.argv.includes('-w')
+const prod = process.argv.includes('--prod')
+
 const ctx = await esbuild.context({
   bundle: true,
   entryPoints: ['src/index.js'],
+  // logLevel: 'debug',
   logLevel: 'info',
   platform: 'browser',
-  sourcemap: process.argv.includes('--watch'),
+  sourcemap: dev,
   outdir: 'dist',
   mainFields: [
     'browser', 'module', 'main'
@@ -79,14 +83,14 @@ const ctx = await esbuild.context({
   ],
   minify: process.argv.includes('--minify'),
   define: {
-    'process.env.BUILD_VERSION': process.argv.includes('--watch') ? undefined : JSON.stringify(buildingVersion),
+    'process.env.BUILD_VERSION': JSON.stringify(dev ? buildingVersion : 'undefined'),
     'process.env.GITHUB_URL':
       JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
   },
   // chunkNames: '[name]',
 })
 
-if (process.argv.includes('--watch')) {
+if (dev) {
   await ctx.watch()
   server.app.get('/esbuild', (req, res, next) => {
     res.writeHead(200, {
@@ -110,16 +114,19 @@ if (process.argv.includes('--watch')) {
     })
   })
 } else {
-  fs.writeFileSync('dist/version.txt', buildingVersion, 'utf-8')
   const result = await ctx.rebuild()
   // console.log(await analyzeMetafile(result.metafile))
 
-  const { count, size, warnings } = await generateSW({
-    // dontCacheBustURLsMatching: [new RegExp('...')],
-    globDirectory: 'dist',
-    additionalManifestEntries: getSwAdditionalEntries(),
-    swDest: 'dist/service-worker.js',
-  })
+  if (prod) {
+    fs.writeFileSync('dist/version.txt', buildingVersion, 'utf-8')
+
+    const { count, size, warnings } = await generateSW({
+      // dontCacheBustURLsMatching: [new RegExp('...')],
+      globDirectory: 'dist',
+      additionalManifestEntries: getSwAdditionalEntries(),
+      swDest: 'dist/service-worker.js',
+    })
+  }
 
   await ctx.dispose()
 }
