@@ -14,7 +14,8 @@ const defaultOptions = {
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
   preventDevReloadWhilePlaying: false,
-  numWorkers: 4
+  numWorkers: 4,
+  localServerOptions: {}
 }
 
 export const options = proxy(
