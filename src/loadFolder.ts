@@ -3,14 +3,15 @@ import { supportedVersions } from 'space-squid/src/lib/version'
 import * as nbt from 'prismarine-nbt'
 import { promisify } from 'util'
 import { options } from './optionsStorage'
+import { proxy } from 'valtio'
 
 const parseNbt = promisify(nbt.parse)
 
 // additional fs metadata
-export const fsState = {
+export const fsState = proxy({
   isReadonly: false,
   syncFs: false,
-}
+})
 
 const PROPOSE_BACKUP = true
 
