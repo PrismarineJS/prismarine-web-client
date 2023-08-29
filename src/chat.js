@@ -71,6 +71,7 @@ class ChatBox extends LitElement {
             box-sizing: border-box;
             overflow: hidden;
             background-color: rgba(0, 0, 0, 0);
+            pointer-events: none;
         }
 
         .input-mobile {
@@ -91,6 +92,10 @@ class ChatBox extends LitElement {
             font-family: mojangles, minecraft, monospace;
             width: 100%;
             max-height: var(--chatHeight);
+            pointer-events: none;
+        }
+        .chat.opened {
+            pointer-events: auto;
         }
 
         input[type=text], #chatinput {
@@ -98,6 +103,7 @@ class ChatBox extends LitElement {
             border: 1px solid rgba(0, 0, 0, 0);
             display: none;
             outline: none;
+            pointer-events: auto;
         }
 
         #chatinput:focus {
@@ -161,18 +167,20 @@ class ChatBox extends LitElement {
   }
 
   enableChat (initialText = '') {
+    if (this.inChat) {
+      hideCurrentModal()
+      return
+    }
+
     const chat = this.shadowRoot.getElementById('chat-messages')
     /** @type {HTMLInputElement} */
     // @ts-ignore
     const chatInput = this.shadowRoot.getElementById('chatinput')
 
-    this.shadowRoot.getElementById('chat-wrapper2').classList.toggle('input-mobile', miscUiState.currentTouch)
-    this.shadowRoot.getElementById('chat-wrapper').classList.toggle('display-mobile', miscUiState.currentTouch)
-
     showModal(this)
 
     // Exit the pointer lock
-    document.exitPointerLock()
+    document.exitPointerLock?.()
     // Show chat input
     chatInput.style.display = 'block'
     // Show extended chat history
@@ -403,13 +411,13 @@ class ChatBox extends LitElement {
   render () {
 
     return html`
-    <div id="chat-wrapper" class="chat-wrapper chat-messages-wrapper">
+    <div class="chat-wrapper chat-messages-wrapper ${miscUiState.currentTouch ? 'display-mobile' : ''}">
       <div class="chat ${this.inChat ? 'opened' : ''}" id="chat-messages">
         <!-- its to hide player joined at random timings, todo add chat tests as well -->
         ${repeat(isCypress() ? [] : this.messages, (m) => m.id, (m) => this.renderMessage(m))}
       </div>
     </div>
-    <div id="chat-wrapper2" class="chat-wrapper chat-input-wrapper">
+    <div class="chat-wrapper chat-input-wrapper ${miscUiState.currentTouch ? 'input-mobile' : ''}">
       <div class="chat" id="chat-input">
         <input type="text" class="chat" id="chatinput" spellcheck="false" autocomplete="off"></input>
       </div>

@@ -84,7 +84,7 @@ function InventoryWrapper() {
 
     useEffect(() => {
         if (isInventoryOpen) {
-            document.exitPointerLock()
+            document.exitPointerLock?.()
         }
     }, [isInventoryOpen])
 
