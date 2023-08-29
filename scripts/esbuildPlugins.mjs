@@ -76,10 +76,19 @@ const plugins = [
         }
       })
       build.onEnd(({ metafile, outputFiles }) => {
-        // top 5 biggest deps
-        //@ts-ignore
+        const prod = process.argv.includes('--prod')
+        if (!prod) return
         // const deps = Object.entries(metafile.inputs).sort(([, a], [, b]) => b.bytes - a.bytes).map(([x, { bytes }]) => [x, filesize(bytes)]).slice(0, 5)
-        // console.log(deps)
+        //@ts-ignore
+        const sizeByExt = {}
+        //@ts-ignore
+        Object.entries(metafile.inputs).sort(([, a], [, b]) => b.bytes - a.bytes).forEach(([x, { bytes }]) => {
+          const ext = x.slice(x.lastIndexOf('.'))
+          sizeByExt[ext] ??= 0
+          sizeByExt[ext] += bytes
+        })
+        console.log('Input size by ext:')
+        console.log(Object.fromEntries(Object.entries(sizeByExt).map(x => [x[0], filesize(x[1])])))
       })
     },
   },
@@ -173,6 +182,7 @@ const plugins = [
         namespace: 'esbuild-import-glob',
       }, async ({ pluginData, path }) => {
         const { resolveDir } = pluginData
+        //@ts-ignore
         const [, userPath, skipFiles] = /^esbuild-import-glob\(path:(.+),skipFiles:(.+)\)+$/g.exec(path)
         const files = (await fs.promises.readdir(join(resolveDir, userPath))).filter(f => !skipFiles.includes(f))
         return {
