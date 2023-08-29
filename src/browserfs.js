@@ -3,7 +3,7 @@ import { fsState, loadFolder } from './loadFolder'
 import { oneOf } from '@zardoy/utils'
 const { promisify } = require('util')
 const browserfs = require('browserfs')
-const _fs = require('fs')
+const fs = require('fs')
 
 browserfs.install(window)
 // todo migrate to StorageManager API for localsave as localstorage has only 5mb limit, when localstorage is fallback test limit warning on 4mb
@@ -16,8 +16,9 @@ browserfs.configure({
 }, (e) => {
   if (e) throw e
 })
+
 //@ts-ignore
-_fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir', 'rename', /* 'copyFile',  */'readdir'].map(key => [key, promisify(_fs[key])])), {
+fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir', 'rename', /* 'copyFile',  */'readdir'].map(key => [key, promisify(fs[key])])), {
   get (target, p, receiver) {
     //@ts-ignore
     if (!target[p]) throw new Error(`Not implemented fs.promises.${p}`)
@@ -33,17 +34,17 @@ _fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'm
   }
 })
 //@ts-ignore
-_fs.promises.open = async (...args) => {
-  const fd = await promisify(_fs.open)(...args)
+fs.promises.open = async (...args) => {
+  const fd = await promisify(fs.open)(...args)
   return {
     ...Object.fromEntries(['read', 'write', 'close'].map(x => [x, async (...args) => {
       return await new Promise(resolve => {
-        _fs[x](fd, ...args, (err, bytesRead, buffer) => {
+        fs[x](fd, ...args, (err, bytesRead, buffer) => {
           if (err) throw err
           // todo if readonly probably there is no need to open at all (return some mocked version - check reload)?
           if (x === 'write' && !fsState.isReadonly && fsState.syncFs) {
             // flush data, though alternatively we can rely on close in unload
-            _fs.fsync(fd, () => { })
+            fs.fsync(fd, () => { })
           }
           resolve({ buffer, bytesRead })
         })
@@ -54,7 +55,7 @@ _fs.promises.open = async (...args) => {
     filename: args[0],
     close: () => {
       return new Promise(resolve => {
-        _fs.close(fd, (err) => {
+        fs.close(fd, (err) => {
           if (err) {
             throw err
           } else {

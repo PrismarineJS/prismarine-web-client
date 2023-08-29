@@ -531,10 +531,10 @@ async function connect (connectOptions) {
     const cameraControlEl = hud
 
     // after what time of holding the finger start breaking the block
-    const touchBreakBlockMs = 500
+    const touchStartBreakingBlockMs = 500
     let virtualClickActive = false
     let virtualClickTimeout
-    /** @type {{id,x,y,sourceX,sourceY,jittered,time}?} */
+    /** @type {{id,x,y,sourceX,sourceY,activateCameraMove,time}?} */
     let capturedPointer
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
@@ -548,15 +548,13 @@ async function connect (connectOptions) {
         y: e.clientY,
         sourceX: e.clientX,
         sourceY: e.clientY,
-        jittered: false,
+        activateCameraMove: false,
         time: new Date()
       }
       virtualClickTimeout ??= setTimeout(() => {
         virtualClickActive = true
         document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
-      }, touchBreakBlockMs)
-    }, {
-
+      }, touchStartBreakingBlockMs)
     })
     registerListener(document, 'pointermove', (e) => {
       if (e.pointerId !== capturedPointer?.id) return
@@ -568,8 +566,8 @@ async function connect (connectOptions) {
       // todo support .pressure (3d touch)
       const xDiff = Math.abs(e.pageX - capturedPointer.sourceX) > allowedJitter
       const yDiff = Math.abs(e.pageY - capturedPointer.sourceY) > allowedJitter
-      if (!capturedPointer.jittered && (xDiff || yDiff)) capturedPointer.jittered = true
-      if (capturedPointer.jittered) {
+      if (!capturedPointer.activateCameraMove && (xDiff || yDiff)) capturedPointer.activateCameraMove = true
+      if (capturedPointer.activateCameraMove) {
         clearTimeout(virtualClickTimeout)
       }
       onMouseMove({ movementX: e.pageX - capturedPointer.x, movementY: e.pageY - capturedPointer.y, type: 'touchmove' })
@@ -586,7 +584,7 @@ async function connect (connectOptions) {
         // button 0 is left click
         document.dispatchEvent(new MouseEvent('mouseup', { button: 0 }))
         virtualClickActive = false
-      } else if (!capturedPointer.jittered && (Date.now() - capturedPointer.time < touchBreakBlockMs)) {
+      } else if (!capturedPointer.activateCameraMove && (Date.now() - capturedPointer.time < touchStartBreakingBlockMs)) {
         document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
         nextFrameFn.push(() => {
           document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
