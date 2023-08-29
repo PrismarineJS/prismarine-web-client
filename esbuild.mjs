@@ -50,6 +50,7 @@ const buildingVersion = new Date().toISOString().split(':')[0]
 const ctx = await esbuild.context({
   bundle: true,
   entryPoints: ['src/index.js'],
+  target: ['es2020'],
   // logLevel: 'debug',
   logLevel: 'info',
   platform: 'browser',
