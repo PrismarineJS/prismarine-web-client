@@ -112,7 +112,9 @@ export const miscUiState = proxy({
   singleplayer: false
 })
 
-// state that is not possible to get via bot
+window.miscUiState = miscUiState
+
+// state that is not possible to get via bot and in-game specific
 export const gameAdditionalState = proxy({
   isFlying: false,
   isSprinting: false,
@@ -149,5 +151,3 @@ window.addEventListener('beforeunload', (event) => {
   event.returnValue = '' // Required for some browsers
   return 'The game is running. Are you sure you want to close this page?'
 })
-
-window.miscUiState = miscUiState

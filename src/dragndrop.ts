@@ -1,10 +1,10 @@
 import * as nbt from 'prismarine-nbt'
 import { promisify } from 'util'
 import { showNotification } from './menus/notification'
-import { openWorldDirectory, openWorldZip } from './browserfs';
-import { isGameActive } from './globalState';
+import { openWorldDirectory, openWorldZip } from './browserfs'
+import { isGameActive } from './globalState'
 
-const parseNbt = promisify(nbt.parse);
+const parseNbt = promisify(nbt.parse)
 window.nbt = nbt;
 
 // todo display drop zone
@@ -37,7 +37,7 @@ window.addEventListener("drop", async e => {
       message: `${file.name} data available in browser console`,
     })
     console.log('raw', parsed)
-    console.log('simplified', nbt.simplify(parsed).Data)
+    console.log('simplified', nbt.simplify(parsed))
   } else {
     if (isGameActive(false)) {
       alert('Exit current world first, before loading a new one.')

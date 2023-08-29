@@ -1,8 +1,11 @@
+//@ts-check
 const { LitElement, html, css } = require('lit')
 const { openURL } = require('./components/common')
 const { hideCurrentModal, showModal } = require('../globalState')
 const { fsState } = require('../loadFolder')
 const { subscribe } = require('valtio')
+const { saveWorld } = require('../builtinCommands')
+const { notification } = require('./notification')
 
 class PauseScreen extends LitElement {
   static get styles () {
@@ -69,14 +72,8 @@ class PauseScreen extends LitElement {
         <pmui-button pmui-width="204px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <pmui-button pmui-width="204px" pmui-label="${!fsState.syncFs && !fsState.isReadonly ? 'Save & Quit' : 'Disconnect'}" @pmui-click=${async () => {
         if (window.singlePlayerServer) {
-          for (const player of window.singlePlayerServer.players) {
-            const worlds = [singlePlayerServer.overworld]
-            for (const world of worlds) {
-              await world.storageProvider.close()
-            }
-            await player.save()
-            singlePlayerServer.quit()
-          }
+          await saveWorld()
+          singlePlayerServer.quit()
         }
         bot._client.emit('end')
       }}></pmui-button>

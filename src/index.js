@@ -10,7 +10,7 @@ require('iconify-icon')
 require('./chat')
 
 // workaround for mineflayer
-process.versions.node = '14.0.0'
+process.versions.node = '18.0.0'
 
 require('./menus/components/button')
 require('./menus/components/edit_box')

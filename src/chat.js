@@ -5,6 +5,8 @@ const { activeModalStack, hideCurrentModal, showModal, miscUiState } = require('
 import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { isCypress } from './utils'
+import { tryHandleBuiltinCommand } from './builtinCommands'
+import { notification } from './menus/notification'
 
 const styles = {
   black: 'color:#000000',
@@ -172,6 +174,7 @@ class ChatBox extends LitElement {
       return
     }
 
+    notification.show = false
     const chat = this.shadowRoot.getElementById('chat-messages')
     /** @type {HTMLInputElement} */
     // @ts-ignore
@@ -250,9 +253,15 @@ class ChatBox extends LitElement {
       e.stopPropagation()
 
       if (e.code === 'Enter') {
-        this.chatHistory.push(chatInput.value)
-        window.sessionStorage.chatHistory = JSON.stringify(this.chatHistory)
-        client.write('chat', { message: chatInput.value })
+        const message = chatInput.value
+        if (message) {
+          this.chatHistory.push(message)
+          window.sessionStorage.chatHistory = JSON.stringify(this.chatHistory)
+          const builtinHandled = tryHandleBuiltinCommand(message)
+          if (!builtinHandled) {
+            client.write('chat', { message })
+          }
+        }
         hideCurrentModal()
       }
     })
