@@ -69,14 +69,18 @@ fs.promises.open = async (...args) => {
 
 const SUPPORT_WRITE = true
 
-export const openWorldDirectory = async (dragndropData) => {
+export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} */dragndropHandle = undefined) => {
   /** @type {FileSystemDirectoryHandle} */
   let _directoryHandle
-  try {
-    _directoryHandle = await window.showDirectoryPicker()
-  } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') return
-    throw err
+  if (dragndropHandle) {
+    _directoryHandle = dragndropHandle
+  } else {
+    try {
+      _directoryHandle = await window.showDirectoryPicker()
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return
+      throw err
+    }
   }
   const directoryHandle = _directoryHandle
 
