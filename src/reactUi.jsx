@@ -97,7 +97,7 @@ function InventoryWrapper() {
 
     useEffect(() => {
         bot.inventory.on('updateSlot', () => {
-            setSlots(bot.inventory.slots)
+            setSlots([...bot.inventory.slots])
         })
         // todo need to think of better solution
         window['mcData'] = require('minecraft-data')(bot.version)
@@ -119,8 +119,6 @@ function InventoryWrapper() {
         `}>
         <InventoryNew slots={slots} action={(oldSlot, newSlotIndex) => {
             bot.moveSlotItem(oldSlot, newSlotIndex)
-            // bot.inventory.selectedItem
-            // bot.inventory.updateSlot(oldSlot, )
         } } />
     </div>
 }

@@ -15,7 +15,8 @@ const defaultOptions = {
   excludeCommunicationDebugEvents: [],
   preventDevReloadWhilePlaying: false,
   numWorkers: 4,
-  localServerOptions: {}
+  localServerOptions: {},
+  localUsername: 'wanderer',
 }
 
 export const options = proxy(

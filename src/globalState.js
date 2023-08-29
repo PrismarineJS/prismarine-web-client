@@ -138,6 +138,8 @@ window.addEventListener('unload', (e) => {
   savePlayers()
 })
 
+window.inspectPlayer = () => require('fs').promises.readFile('/world/playerdata/9e487d23-2ffc-365a-b1f8-f38203f59233.dat').then(window.nbt.parse).then(console.log)
+
 // todo move from global state
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?

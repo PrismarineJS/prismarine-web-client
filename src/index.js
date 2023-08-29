@@ -56,7 +56,7 @@ const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalSta
 const { pointerLock, goFullscreen, toNumber, isCypress } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
-const { startLocalServer } = require('./createLocalServer')
+const { startLocalServer, unsupportedLocalServerFeatures } = require('./createLocalServer')
 const serverOptions = require('./defaultLocalServerOptions')
 const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
@@ -211,7 +211,7 @@ async function main () {
   })
   const connectSingleplayer = (serverOverrides = {}) => {
     // todo clean
-    connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '', serverOverrides })
+    connect({ server: '', port: '', proxy: '', singleplayer: true, username: options.localUsername, password: '', serverOverrides })
   }
   document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
     //@ts-ignore
@@ -387,6 +387,14 @@ async function connect (connectOptions) {
       closeTimeout: 240 * 1000
     })
     if (singeplayer) {
+      const _supportFeature = bot.supportFeature
+      bot.supportFeature = (feature) => {
+        if (unsupportedLocalServerFeatures.includes(feature)) {
+          return false
+        }
+        return _supportFeature(feature)
+      }
+
       bot.emit('inject_allowed')
       bot._client.emit('connect')
     }
@@ -538,7 +546,7 @@ async function connect (connectOptions) {
     let capturedPointer
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
-      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer) {
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer || e.pointerId === undefined) {
         return
       }
       cameraControlEl.setPointerCapture(e.pointerId)
@@ -557,7 +565,7 @@ async function connect (connectOptions) {
       }, touchStartBreakingBlockMs)
     })
     registerListener(document, 'pointermove', (e) => {
-      if (e.pointerId !== capturedPointer?.id) return
+      if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
@@ -576,7 +584,7 @@ async function connect (connectOptions) {
     }, { passive: false })
 
     registerListener(document, 'lostpointercapture', (e) => {
-      if (e.pointerId !== capturedPointer?.id) return
+      if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return
       clearTimeout(virtualClickTimeout)
       virtualClickTimeout = undefined
 

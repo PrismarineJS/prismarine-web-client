@@ -128,7 +128,9 @@ class TitleScreen extends LitElement {
     this.versionStatus = ''
     this.versionTitle = ''
     this.isOutdated = false
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV === 'development') {
+      this.versionStatus = '(dev)'
+    } else {
       fetch('./version.txt').then(async (f) => {
         if (f.status === 404) return
         const contents = await f.text()
