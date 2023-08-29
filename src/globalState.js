@@ -120,17 +120,6 @@ export const gameAdditionalState = proxy({
 
 window.gameAdditionalState = gameAdditionalState
 
-// todo thats weird workaround, probably we can do better?
-let forceDisableLeaveWarning = false
-const info = console.info
-console.info = (...args) => {
-  const message = args[0]
-  if (message === '[webpack-dev-server] App updated. Recompiling...') {
-    forceDisableLeaveWarning = true
-  }
-  info.apply(console, args)
-}
-
 const savePlayers = () => {
   if (!window.singlePlayerServer) return
   for (const player of window.singlePlayerServer.players) {
@@ -151,7 +140,7 @@ window.addEventListener('unload', (e) => {
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
-  if (forceDisableLeaveWarning && options.preventDevReloadWhilePlaying === false) return
+  if (sessionStorage.lastReload && options.preventDevReloadWhilePlaying === false) return
 
   // For major browsers doning only this is enough
   event.preventDefault()
@@ -159,6 +148,6 @@ window.addEventListener('beforeunload', (event) => {
   // Display a confirmation prompt
   event.returnValue = '' // Required for some browsers
   return 'The game is running. Are you sure you want to close this page?'
-});
+})
 
 window.miscUiState = miscUiState

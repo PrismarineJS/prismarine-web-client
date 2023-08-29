@@ -3,7 +3,6 @@ import * as esbuild from 'esbuild'
 import fs from 'fs'
 // import htmlPlugin from '@chialab/esbuild-plugin-html'
 import server from './server.js'
-import { analyzeMetafile } from 'esbuild'
 import { clients, plugins } from './scripts/esbuildPlugins.mjs'
 import { generateSW } from 'workbox-build'
 import { getSwAdditionalEntries } from './scripts/build.js'
@@ -40,8 +39,10 @@ const prod = process.argv.includes('--prod')
 
 const banner = [
   'window.global = globalThis;',
+  // report reload time
+  dev && 'if (sessionStorage.lastReload) { const [rebuild, reloadStart] = sessionStorage.lastReload.split(","); const now = Date.now(); console.log(`rebuild + reload:`, rebuild, "+", now - reloadStart, "=", ((rebuild + (now - reloadStart)) / 1000).toFixed(1) + "s");sessionStorage.lastReload = ""; }',
   // auto-reload
-  dev && '(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => {const data = JSON.parse(_data);if (!data.update)return;sessionStorage.lastReload = JSON.stringify({buildTime:data.update.time, reloadStart:Date.now()});location.reload()})();'
+  dev && ';(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => { if (!_data) return; const data = JSON.parse(_data); if (!data.update) return; sessionStorage.lastReload = `${data.update.time},${Date.now()}`; location.reload() })();'
 ].filter(Boolean)
 
 const buildingVersion = new Date().toISOString().split(':')[0]
@@ -115,7 +116,7 @@ if (dev) {
   })
 } else {
   const result = await ctx.rebuild()
-  // console.log(await analyzeMetafile(result.metafile))
+  // console.log(await esbuild.analyzeMetafile(result.metafile))
 
   if (prod) {
     fs.writeFileSync('dist/version.txt', buildingVersion, 'utf-8')
