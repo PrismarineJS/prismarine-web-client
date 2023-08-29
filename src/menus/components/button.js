@@ -150,9 +150,9 @@ class Button extends LitElement {
     </button>`
   }
 
-  onBtnClick () {
+  onBtnClick (e) {
     playSound('click_stereo.mp3')
-    this.dispatchEvent(new window.CustomEvent('pmui-click'))
+    this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e, }))
   }
 }
 

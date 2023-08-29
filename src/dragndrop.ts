@@ -1,7 +1,7 @@
 import * as nbt from 'prismarine-nbt'
 import { promisify } from 'util'
 import { showNotification } from './menus/notification'
-import { openWorldDirectory } from './browserfs';
+import { openWorldDirectory, openWorldZip } from './browserfs';
 import { isGameActive } from './globalState';
 
 const parseNbt = promisify(nbt.parse);
@@ -22,12 +22,16 @@ window.addEventListener("drop", async e => {
   // todo support drop save folder
   const { items } = e.dataTransfer
   const item = items[0]
-  const filehandle = await item.getAsFileSystemHandle()
+  const filehandle = await item.getAsFileSystemHandle() as FileSystemFileHandle | FileSystemDirectoryHandle
   if (filehandle.kind === 'file') {
-    console.log(filehandle)
-    const file = item.getAsFile();
-    const buffer = await file.arrayBuffer()
+    const file = await filehandle.getFile()
 
+    if (file.name.endsWith('.zip')) {
+      openWorldZip(file)
+      return
+    }
+
+    const buffer = await file.arrayBuffer()
     const parsed = await parseNbt(Buffer.from(buffer))
     showNotification({
       message: `${file.name} data available in browser console`,

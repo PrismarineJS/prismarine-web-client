@@ -1,8 +1,11 @@
-const { openWorldDirectory } = require('../browserfs')
+const { openWorldDirectory, openWorldZip } = require('../browserfs')
 const { showModal } = require('../globalState')
 const { fsState } = require('../loadFolder')
 const { openURL } = require('./components/common')
 const { LitElement, html, css } = require('lit')
+
+// const SUPPORT_WORLD_LOADING = !!window.showDirectoryPicker
+const SUPPORT_WORLD_LOADING = true
 
 class TitleScreen extends LitElement {
   static get styles () {
@@ -148,16 +151,42 @@ class TitleScreen extends LitElement {
       <div class="menu">
         <pmui-button pmui-width="200px" pmui-label="Connect to server" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
         <div style="display:flex;justify-content: space-between;">
-          <pmui-button pmui-width="${window['showDirectoryPicker'] ? '170px' : '200px'}" pmui-label="Singleplayer" @pmui-click=${() => {
+          <pmui-button pmui-width="${SUPPORT_WORLD_LOADING ? '170px' : '200px'}" pmui-label="Singleplayer" @pmui-click=${() => {
         this.style.display = 'none'
-      Object.assign(fsState, {
-        isReadonly: false,
-        syncFs: true,
-      })
+        Object.assign(fsState, {
+          isReadonly: false,
+          syncFs: true,
+        })
         this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
       }}></pmui-button>
-          ${window['showDirectoryPicker'] ? html`<pmui-button pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${() => {
-        openWorldDirectory()
+          ${SUPPORT_WORLD_LOADING ? html`<pmui-button pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${({ detail: e }) => {
+        if (!!window.showDirectoryPicker && !e.shiftKey) {
+          openWorldDirectory()
+        } else {
+          // create and show input picker
+          /** @type {HTMLInputElement} */
+          let picker = document.body.querySelector('input#file-zip-picker')
+          if (!picker) {
+            picker = document.createElement('input')
+            picker.type = 'file'
+            picker.accept = '.zip'
+
+            picker.addEventListener('change', () => {
+              const file = picker.files[0]
+              picker.value = ''
+              if (!file) return
+              if (!file.name.endsWith('.zip')) {
+                const doContinue = confirm(`Are you sure ${file.name.slice(-20)} is .zip file? Only .zip files are supported. Continue?`)
+                if (!doContinue) return
+              }
+              openWorldZip(file)
+            })
+            picker.hidden = true
+            document.body.appendChild(picker)
+          }
+
+          picker.click()
+        }
       }}></pmui-button>` : ''}
         </div>
         <pmui-button pmui-width="200px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>

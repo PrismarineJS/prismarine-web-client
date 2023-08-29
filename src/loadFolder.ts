@@ -15,12 +15,12 @@ export const fsState = proxy({
 
 const PROPOSE_BACKUP = true
 
-export const loadFolder = async () => {
+export const loadFolder = async (root = '/world') => {
   // todo-low cache reading
   const warnings: string[] = []
   let levelDatContent
   try {
-    levelDatContent = await fs.promises.readFile('/world/level.dat')
+    levelDatContent = await fs.promises.readFile(`${root}/level.dat`)
   } catch (err) {
     if (err.code === 'ENOENT') {
       if (!fsState.isReadonly) {
@@ -97,7 +97,10 @@ export const loadFolder = async () => {
   document.querySelector('#title-screen').dispatchEvent(new CustomEvent('singleplayer', {
     // todo check gamemode level.dat data etc
     detail: {
-      version
+      version,
+      ...root !== '/world' ? {
+        'worldFolder': root
+      } : {}
     },
   }))
 }

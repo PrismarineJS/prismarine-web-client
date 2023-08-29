@@ -1,6 +1,8 @@
 //@ts-check
 import { fsState, loadFolder } from './loadFolder'
 import { oneOf } from '@zardoy/utils'
+import JSZip from 'jszip'
+
 const { promisify } = require('util')
 const browserfs = require('browserfs')
 const fs = require('fs')
@@ -28,6 +30,9 @@ fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mk
       // Write methods
       // todo issue one-time warning (in chat I guess)
       if (oneOf(p, 'writeFile', 'mkdir', 'rename') && fsState.isReadonly) return
+      if (p === 'open' && fsState.isReadonly) {
+        args[1] = 'r' // read-only, zipfs throw otherwise
+      }
       //@ts-ignore
       return target[p](...args)
     }
@@ -39,6 +44,11 @@ fs.promises.open = async (...args) => {
   return {
     ...Object.fromEntries(['read', 'write', 'close'].map(x => [x, async (...args) => {
       return await new Promise(resolve => {
+        // todo it results in world corruption on interactions eg block placements
+        if (x === 'write' && fsState.isReadonly) {
+          return resolve({ buffer: Buffer.from([]), bytesRead: 0 })
+        }
+
         fs[x](fd, ...args, (err, bytesRead, buffer) => {
           if (err) throw err
           // todo if readonly probably there is no need to open at all (return some mocked version - check reload)?
@@ -110,4 +120,71 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
   fsState.isReadonly = !writeAccess
   fsState.syncFs = false
   loadFolder()
+}
+
+export const openWorldZip = async (/** @type {File} */file) => {
+  await new Promise(async resolve => {
+    browserfs.configure({
+      // todo
+      fs: 'MountableFileSystem',
+      options: {
+        "/world": {
+          fs: "ZipFS",
+          options: {
+            zipData: Buffer.from(await file.arrayBuffer()),
+            name: file.name
+          }
+        }
+      },
+    }, (e) => {
+      if (e) throw e
+      resolve()
+    })
+  })
+
+  fsState.isReadonly = true
+  fsState.syncFs = true
+
+  if (fs.existsSync('/world/level.dat')) {
+    loadFolder()
+  } else {
+    const dirs = fs.readdirSync('/world')
+    let availableWorlds = []
+    for (const dir of dirs) {
+      if (fs.existsSync(`/world/${dir}/level.dat`)) {
+        availableWorlds.push(dir)
+      }
+    }
+
+    if (availableWorlds.length === 0) {
+      alert('No worlds found in the zip')
+      return
+    }
+
+    if (availableWorlds.length === 1) {
+      loadFolder(`/world/${availableWorlds[0]}`)
+    }
+
+    alert(`${availableWorlds.length} worlds found in the zip, please select one!`)
+    // todo prompt picker
+    // const selectWorld
+  }
+}
+
+export async function generateZipAndWorld () {
+  const zip = new JSZip()
+
+  zip.folder('world')
+
+  // Generate the ZIP archive content
+  const zipContent = await zip.generateAsync({ type: "blob" })
+
+  // Create a download link and trigger the download
+  const downloadLink = document.createElement("a")
+  downloadLink.href = URL.createObjectURL(zipContent)
+  downloadLink.download = "prismarine-world.zip"
+  downloadLink.click()
+
+  // Clean up the URL object after download
+  URL.revokeObjectURL(downloadLink.href)
 }
