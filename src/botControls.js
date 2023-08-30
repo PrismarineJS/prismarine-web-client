@@ -128,7 +128,7 @@ document.addEventListener('keydown', (e) => {
 })
 
 document.addEventListener('keyup', (e) => {
-  if (!isGameActive(true)) return
+  // if (!isGameActive(true)) return
 
   keyBindScrn.keymaps.forEach(km => {
     if (e.code === km.key) {
