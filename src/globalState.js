@@ -132,7 +132,7 @@ const savePlayers = () => {
 setInterval(() => {
   savePlayers()
   // todo investigate unload failures instead
-}, 1000)
+}, 2000)
 
 window.addEventListener('unload', (e) => {
   savePlayers()

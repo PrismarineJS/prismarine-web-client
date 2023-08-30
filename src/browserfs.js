@@ -20,6 +20,8 @@ browserfs.configure({
   if (e) throw e
 })
 
+export const forceCachedDataPaths = {}
+
 //@ts-ignore
 fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir', 'rename', /* 'copyFile',  */'readdir'].map(key => [key, promisify(fs[key])])), {
   get (target, p, receiver) {
@@ -30,7 +32,17 @@ fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mk
       if (typeof args[0] === 'string' && !args[0].startsWith('/')) args[0] = '/' + args[0]
       // Write methods
       // todo issue one-time warning (in chat I guess)
-      if (oneOf(p, 'writeFile', 'mkdir', 'rename') && fsState.isReadonly) return
+      if (fsState.isReadonly) {
+        if (oneOf(p, 'readFile', 'writeFile') && forceCachedDataPaths[args[0]]) {
+          if (p === 'readFile') {
+            return Promise.resolve(forceCachedDataPaths[args[0]])
+          } else if (p === 'writeFile') {
+            forceCachedDataPaths[args[0]] = args[1]
+            return Promise.resolve()
+          }
+        }
+        if (oneOf(p, 'writeFile', 'mkdir', 'rename')) return
+      }
       if (p === 'open' && fsState.isReadonly) {
         args[1] = 'r' // read-only, zipfs throw otherwise
       }
@@ -183,7 +195,7 @@ export const openWorldZip = async (/** @type {File} */file) => {
       loadFolder(`/world/${availableWorlds[0]}`)
     }
 
-    alert(`${availableWorlds.length} worlds found in the zip, please select one!`)
+    alert(`Many (${availableWorlds.length}) worlds found in the zip!`)
     // todo prompt picker
     // const selectWorld
   }
