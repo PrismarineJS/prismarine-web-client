@@ -28,28 +28,32 @@ async function addFolderToZip(folderPath, zip, relativePath) {
 
 
 // todo include in help
+const exportWorld = async () => {
+  // todo issue into chat warning if fs is writable!
+  const zip = new JSZip()
+  let worldFolder: string = singlePlayerServer.options.worldFolder
+  if (!worldFolder.startsWith('/')) worldFolder = `/${worldFolder}`
+  await addFolderToZip(worldFolder, zip, '')
+
+  // Generate the ZIP archive content
+  const zipContent = await zip.generateAsync({ type: "blob" })
+
+  // Create a download link and trigger the download
+  const downloadLink = document.createElement("a")
+  downloadLink.href = URL.createObjectURL(zipContent)
+  downloadLink.download = "world-exported.zip"
+  downloadLink.click()
+
+  // Clean up the URL object after download
+  URL.revokeObjectURL(downloadLink.href)
+}
+
+window.exportWorld = exportWorld
+
 const commands = [
   {
     command: ['/download', '/export'],
-    invoke: async () => {
-      // todo issue into chat warning if fs is writable!
-      const zip = new JSZip()
-      let worldFolder: string = singlePlayerServer.options.worldFolder
-      if (!worldFolder.startsWith('/')) worldFolder = `/${worldFolder}`
-      await addFolderToZip(worldFolder, zip, '')
-
-      // Generate the ZIP archive content
-      const zipContent = await zip.generateAsync({ type: "blob" })
-
-      // Create a download link and trigger the download
-      const downloadLink = document.createElement("a")
-      downloadLink.href = URL.createObjectURL(zipContent)
-      downloadLink.download = "world-exported.zip"
-      downloadLink.click()
-
-      // Clean up the URL object after download
-      URL.revokeObjectURL(downloadLink.href)
-    }
+    invoke: exportWorld
   },
   {
     command: ['/publish'],

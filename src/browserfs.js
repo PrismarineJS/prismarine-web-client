@@ -2,6 +2,7 @@
 import { fsState, loadFolder } from './loadFolder'
 import { oneOf } from '@zardoy/utils'
 import JSZip from 'jszip'
+import { join } from 'path'
 
 const { promisify } = require('util')
 const browserfs = require('browserfs')
@@ -76,6 +77,23 @@ fs.promises.open = async (...args) => {
     }
   }
 }
+
+// for testing purposes, todo move it to core patch
+const removeFileRecursiveSync = (path) => {
+  fs.readdirSync(path).forEach((file) => {
+    const curPath = join(path, file)
+    if (fs.lstatSync(curPath).isDirectory()) {
+      // recurse
+      removeFileRecursiveSync(curPath)
+      fs.rmdirSync(curPath)
+    } else {
+      // delete file
+      fs.unlinkSync(curPath)
+    }
+  })
+}
+
+window.removeFileRecursiveSync = removeFileRecursiveSync
 
 const SUPPORT_WRITE = true
 

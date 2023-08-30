@@ -48,7 +48,7 @@ const nbt = require('prismarine-nbt')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 
-const Cursor = require('./cursor')
+const Cursor = require('./cursor').default
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./vr')
@@ -449,9 +449,7 @@ async function connect (connectOptions) {
       const d = subscribeKey(options, 'renderDistance', () => {
         singlePlayerServer.options['view-distance'] = options.renderDistance
         worldView.viewDistance = options.renderDistance
-        if (miscUiState.singleplayer) {
-          window.onPlayerChangeRenderDistance?.(options.renderDistance)
-        }
+        window.onPlayerChangeRenderDistance?.(options.renderDistance)
       })
       disposables.push(d)
     }
