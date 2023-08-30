@@ -1,6 +1,6 @@
 /// <reference types="wicg-file-system-access" />
 
-declare const THREE: typeof import('three');
+declare const THREE: typeof import('three')
 // todo
 declare const bot: import('mineflayer').Bot
 declare const singlePlayerServer: any
@@ -30,9 +30,10 @@ interface ObjectConstructor {
 }
 
 declare module '*.css' {
-    /**
-     * @deprecated Use `import style from './style.css?inline'` instead.
-     */
     const css: string
     export default css
+}
+declare module '*.png' {
+    const png: string
+    export default png
 }

@@ -88,7 +88,7 @@ document.addEventListener('keydown', (e) => {
       switch (km.defaultKey) {
         case 'KeyE':
           // todo reenable
-          // showModal({ reactType: 'inventory', })
+          showModal({ reactType: 'inventory', })
           // todo seems to be workaround
           // avoid calling inner keybinding listener, but should be handled there
           e.stopImmediatePropagation()
@@ -128,7 +128,7 @@ document.addEventListener('keydown', (e) => {
 })
 
 document.addEventListener('keyup', (e) => {
-  if (!isGameActive(true)) return
+  // if (!isGameActive(true)) return
 
   keyBindScrn.keymaps.forEach(km => {
     if (e.code === km.key) {

@@ -26,7 +26,7 @@ html {
   position: absolute;
   top: 0;
   left: 0;
-  background: url('textures/1.17.1/gui/options_background.png'), rgba(0, 0, 0, 0.7);
+  background: url('minecraft-assets/minecraft-assets/data/1.17.1/gui/options_background.png'), rgba(0, 0, 0, 0.7);
   background-size: 16px;
   background-repeat: repeat;
   width: 100%;

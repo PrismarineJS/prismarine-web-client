@@ -4,6 +4,9 @@ import * as nbt from 'prismarine-nbt'
 import { promisify } from 'util'
 import { options } from './optionsStorage'
 import { proxy } from 'valtio'
+import { nameToMcOfflineUUID } from './utils'
+import { forceCachedDataPaths } from './browserfs'
+import { gzip } from 'node-gzip'
 
 const parseNbt = promisify(nbt.parse)
 
@@ -15,12 +18,17 @@ export const fsState = proxy({
 
 const PROPOSE_BACKUP = true
 
-export const loadFolder = async () => {
-  // todo-low cache reading
+export const loadFolder = async (root = '/world') => {
+  // todo do it in singleplayer as well
+  for (const key in forceCachedDataPaths) {
+    delete forceCachedDataPaths[key]
+  }
+
   const warnings: string[] = []
   let levelDatContent
   try {
-    levelDatContent = await fs.promises.readFile('/world/level.dat')
+    // todo-low cache reading
+    levelDatContent = await fs.promises.readFile(`${root}/level.dat`)
   } catch (err) {
     if (err.code === 'ENOENT') {
       if (!fsState.isReadonly) {
@@ -33,11 +41,12 @@ export const loadFolder = async () => {
     }
   }
 
-
   let version: string | undefined
+  let isFlat = false
   if (levelDatContent) {
     const parsedRaw = await parseNbt(Buffer.from(levelDatContent))
     const levelDat: import('./mcTypes').LevelDat = nbt.simplify(parsedRaw).Data
+
     version = levelDat.Version?.Name
     if (!version) {
       const newVersion = prompt(`In 1.8 and before world save doesn\'t contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
@@ -48,7 +57,6 @@ export const loadFolder = async () => {
       warnings.push(`Version ${version} is not supported, supported versions ${supportedVersions.join(', ')}, 1.16.1 will be used`)
       version = '1.16.1'
     }
-    let isFlat = false
     if (levelDat.WorldGenSettings) {
       for (const [key, value] of Object.entries(levelDat.WorldGenSettings.dimensions)) {
         if (key.slice(10) === 'overworld') {
@@ -64,6 +72,20 @@ export const loadFolder = async () => {
     if (!isFlat) {
       warnings.push(`Generator ${levelDat.generatorName} is not supported yet`)
     }
+
+    const playerUuid = nameToMcOfflineUUID(options.localUsername)
+    const playerDatPath = `${root}/playerdata/${playerUuid}.dat`
+    try {
+      await fs.promises.stat(playerDatPath)
+    } catch (err) {
+      const playerDat = await gzip(nbt.writeUncompressed({ name: '', ...(parsedRaw.value.Data.value as Record<string, any>).Player }))
+      if (fsState.isReadonly) {
+        forceCachedDataPaths[playerDatPath] = playerDat
+      } else {
+        await fs.promises.writeFile(playerDatPath, playerDat)
+      }
+    }
+
   }
 
   if (warnings.length) {
@@ -97,7 +119,15 @@ export const loadFolder = async () => {
   document.querySelector('#title-screen').dispatchEvent(new CustomEvent('singleplayer', {
     // todo check gamemode level.dat data etc
     detail: {
-      version
+      version,
+      ...isFlat ? {
+        generation: {
+          name: 'superflat'
+        }
+      } : {},
+      ...root !== '/world' ? {
+        'worldFolder': root
+      } : {}
     },
   }))
 }

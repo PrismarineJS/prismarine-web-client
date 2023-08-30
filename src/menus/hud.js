@@ -1,9 +1,12 @@
 //@ts-check
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
 const { isMobile } = require('./components/common')
 const { showModal, miscUiState } = require('../globalState')
 const { options, watchValue } = require('../optionsStorage')
 const { getGamemodeNumber } = require('../utils')
+
+export const guiIcons1_17_1 = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/icons.png')
+export const guiIcons1_16_4 = require('minecraft-assets/minecraft-assets/data/1.16.4/gui/icons.png')
 
 class Hud extends LitElement {
   static get styles () {
@@ -21,7 +24,7 @@ class Hud extends LitElement {
       .crosshair {
         width: 16px;
         height: 16px;
-        background: url('textures/1.17.1/gui/icons.png');
+        background: url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px;
         position: absolute;
         top: 50%;
@@ -49,7 +52,7 @@ class Hud extends LitElement {
         transform: translate(-50%);
         width: 182px;
         height: 5px;
-        background-image: url('textures/1.16.4/gui/icons.png');
+        background-image: url('${unsafeCSS(guiIcons1_16_4)}');
         background-size: 256px;
         background-position-y: -64px;
       }
@@ -57,7 +60,7 @@ class Hud extends LitElement {
       .xp-bar {
         width: 182px;
         height: 5px;
-        background-image: url('textures/1.17.1/gui/icons.png');
+        background-image: url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px;
         background-position-y: -69px;
       }

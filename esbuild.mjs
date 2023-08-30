@@ -3,7 +3,6 @@ import * as esbuild from 'esbuild'
 import fs from 'fs'
 // import htmlPlugin from '@chialab/esbuild-plugin-html'
 import server from './server.js'
-import { analyzeMetafile } from 'esbuild'
 import { clients, plugins } from './scripts/esbuildPlugins.mjs'
 import { generateSW } from 'workbox-build'
 import { getSwAdditionalEntries } from './scripts/build.js'
@@ -32,23 +31,33 @@ let baseConfig = {}
 //   outdir: undefined,
 // }
 
+try {
+  await import('./localSettings.mjs')
+} catch { }
+
 fs.copyFileSync('index.html', 'dist/index.html')
 fs.writeFileSync('dist/index.html', fs.readFileSync('dist/index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
 
+const watch = process.argv.includes('--watch') || process.argv.includes('-w')
+const prod = process.argv.includes('--prod')
+const dev = !prod
+
 const banner = [
   'window.global = globalThis;',
+  // report reload time
+  dev && 'if (sessionStorage.lastReload) { const [rebuild, reloadStart] = sessionStorage.lastReload.split(","); const now = Date.now(); console.log(`rebuild + reload:`, +rebuild, "+", now - reloadStart, "=", ((+rebuild + (now - reloadStart)) / 1000).toFixed(1) + "s");sessionStorage.lastReload = ""; }',
   // auto-reload
-  '(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => {const data = JSON.parse(_data);if (!data.update)return;sessionStorage.lastReload = JSON.stringify({buildTime:data.update.time, reloadStart:Date.now()});location.reload()})();'
-]
+  dev && ';(() => new EventSource("/esbuild").onmessage = ({ data: _data }) => { if (!_data) return; const data = JSON.parse(_data); if (!data.update) return; sessionStorage.lastReload = `${data.update.time},${Date.now()}`; location.reload() })();'
+].filter(Boolean)
 
 const buildingVersion = new Date().toISOString().split(':')[0]
-
-const dev = process.argv.includes('--watch') || process.argv.includes('-w')
-const prod = process.argv.includes('--prod')
 
 const ctx = await esbuild.context({
   bundle: true,
   entryPoints: ['src/index.js'],
+  target: ['es2020'],
+  jsx: 'automatic',
+  jsxDev: dev,
   // logLevel: 'debug',
   logLevel: 'info',
   platform: 'browser',
@@ -60,7 +69,7 @@ const ctx = await esbuild.context({
   keepNames: true,
   ...baseConfig,
   banner: {
-    js: banner.join('\n')
+    js: banner.join('\n'),
   },
   alias: {
     events: 'events', // make explicit
@@ -83,14 +92,21 @@ const ctx = await esbuild.context({
   ],
   minify: process.argv.includes('--minify'),
   define: {
+    'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production'),
     'process.env.BUILD_VERSION': JSON.stringify(!dev ? buildingVersion : 'undefined'),
     'process.env.GITHUB_URL':
       JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
   },
-  // chunkNames: '[name]',
+  loader: {
+    // todo use external or resolve issues with duplicating
+    '.png': 'dataurl'
+  },
+  write: false,
+  // todo would be better to enable?
+  // preserveSymlinks: true,
 })
 
-if (dev) {
+if (watch) {
   await ctx.watch()
   server.app.get('/esbuild', (req, res, next) => {
     res.writeHead(200, {
@@ -115,7 +131,7 @@ if (dev) {
   })
 } else {
   const result = await ctx.rebuild()
-  // console.log(await analyzeMetafile(result.metafile))
+  // console.log(await esbuild.analyzeMetafile(result.metafile))
 
   if (prod) {
     fs.writeFileSync('dist/version.txt', buildingVersion, 'utf-8')

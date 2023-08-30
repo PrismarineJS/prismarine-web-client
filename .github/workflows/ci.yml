@@ -21,4 +21,3 @@ jobs:
         with:
           name: cypress-images
           path: cypress/integration/__image_snapshots__/
-          if-no-files-found: ignore

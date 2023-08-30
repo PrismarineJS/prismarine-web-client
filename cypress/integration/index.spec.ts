@@ -3,15 +3,18 @@
 it('Loads & renders singleplayer', () => {
     // todo use <button match text selectors
     cy.visit('/')
+    window.localStorage.clear()
     window.localStorage.cypress = 'true'
     cy.window().then((win) => {
     })
     window.localStorage.server = 'localhost'
     window.localStorage.setItem('renderDistance', '2')
-    window.localStorage.setItem('localServerOptions', JSON.stringify({
-        generation: {
-            name: 'superflat',
-            options: { seed: 250869072 }
+    window.localStorage.setItem('options', JSON.stringify({
+        localServerOptions: {
+            generation: {
+                name: 'superflat',
+                options: { seed: 250869072 }
+            }
         }
     }))
     // todo replace with data-test

@@ -10,7 +10,7 @@ require('iconify-icon')
 require('./chat')
 
 // workaround for mineflayer
-process.versions.node = '14.0.0'
+process.versions.node = '18.0.0'
 
 require('./menus/components/button')
 require('./menus/components/edit_box')
@@ -48,7 +48,7 @@ const nbt = require('prismarine-nbt')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 
-const Cursor = require('./cursor')
+const Cursor = require('./cursor').default
 //@ts-ignore
 global.THREE = require('three')
 const { initVR } = require('./vr')
@@ -56,7 +56,7 @@ const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalSta
 const { pointerLock, goFullscreen, toNumber, isCypress } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
-const { startLocalServer } = require('./createLocalServer')
+const { startLocalServer, unsupportedLocalServerFeatures } = require('./createLocalServer')
 const serverOptions = require('./defaultLocalServerOptions')
 const { customCommunication } = require('./customServer')
 const { default: updateTime } = require('./updateTime')
@@ -211,7 +211,7 @@ async function main () {
   })
   const connectSingleplayer = (serverOverrides = {}) => {
     // todo clean
-    connect({ server: '', port: '', proxy: '', singleplayer: true, username: 'wanderer', password: '', serverOverrides })
+    connect({ server: '', port: '', proxy: '', singleplayer: true, username: options.localUsername, password: '', serverOverrides })
   }
   document.querySelector('#title-screen').addEventListener('singleplayer', (e) => {
     //@ts-ignore
@@ -357,8 +357,7 @@ async function connect (connectOptions) {
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
-      //@ts-ignore TODO
-      Object.assign(serverOptions, _.defaultsDeep(JSON.parse(localStorage.localServerOptions || '{}'), connectOptions.serverOverrides, serverOptions))
+      Object.assign(serverOptions, _.defaultsDeep({}, options.localServerOptions, connectOptions.serverOverrides, serverOptions))
       singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
@@ -388,6 +387,14 @@ async function connect (connectOptions) {
       closeTimeout: 240 * 1000
     })
     if (singeplayer) {
+      const _supportFeature = bot.supportFeature
+      bot.supportFeature = (feature) => {
+        if (unsupportedLocalServerFeatures.includes(feature)) {
+          return false
+        }
+        return _supportFeature(feature)
+      }
+
       bot.emit('inject_allowed')
       bot._client.emit('connect')
     }
@@ -442,9 +449,7 @@ async function connect (connectOptions) {
       const d = subscribeKey(options, 'renderDistance', () => {
         singlePlayerServer.options['view-distance'] = options.renderDistance
         worldView.viewDistance = options.renderDistance
-        if (miscUiState.singleplayer) {
-          window.onPlayerChangeRenderDistance?.(options.renderDistance)
-        }
+        window.onPlayerChangeRenderDistance?.(options.renderDistance)
       })
       disposables.push(d)
     }
@@ -532,14 +537,14 @@ async function connect (connectOptions) {
     const cameraControlEl = hud
 
     // after what time of holding the finger start breaking the block
-    const touchBreakBlockMs = 500
+    const touchStartBreakingBlockMs = 500
     let virtualClickActive = false
     let virtualClickTimeout
-    /** @type {{id,x,y,sourceX,sourceY,jittered,time}?} */
+    /** @type {{id,x,y,sourceX,sourceY,activateCameraMove,time}?} */
     let capturedPointer
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
-      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer) {
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer || e.pointerId === undefined) {
         return
       }
       cameraControlEl.setPointerCapture(e.pointerId)
@@ -549,18 +554,16 @@ async function connect (connectOptions) {
         y: e.clientY,
         sourceX: e.clientX,
         sourceY: e.clientY,
-        jittered: false,
+        activateCameraMove: false,
         time: new Date()
       }
       virtualClickTimeout ??= setTimeout(() => {
         virtualClickActive = true
         document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
-      }, touchBreakBlockMs)
-    }, {
-
+      }, touchStartBreakingBlockMs)
     })
     registerListener(document, 'pointermove', (e) => {
-      if (e.pointerId !== capturedPointer?.id) return
+      if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return
       window.scrollTo(0, 0)
       e.preventDefault()
       e.stopPropagation()
@@ -569,8 +572,8 @@ async function connect (connectOptions) {
       // todo support .pressure (3d touch)
       const xDiff = Math.abs(e.pageX - capturedPointer.sourceX) > allowedJitter
       const yDiff = Math.abs(e.pageY - capturedPointer.sourceY) > allowedJitter
-      if (!capturedPointer.jittered && (xDiff || yDiff)) capturedPointer.jittered = true
-      if (capturedPointer.jittered) {
+      if (!capturedPointer.activateCameraMove && (xDiff || yDiff)) capturedPointer.activateCameraMove = true
+      if (capturedPointer.activateCameraMove) {
         clearTimeout(virtualClickTimeout)
       }
       onMouseMove({ movementX: e.pageX - capturedPointer.x, movementY: e.pageY - capturedPointer.y, type: 'touchmove' })
@@ -579,7 +582,7 @@ async function connect (connectOptions) {
     }, { passive: false })
 
     registerListener(document, 'lostpointercapture', (e) => {
-      if (e.pointerId !== capturedPointer?.id) return
+      if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return
       clearTimeout(virtualClickTimeout)
       virtualClickTimeout = undefined
 
@@ -587,7 +590,7 @@ async function connect (connectOptions) {
         // button 0 is left click
         document.dispatchEvent(new MouseEvent('mouseup', { button: 0 }))
         virtualClickActive = false
-      } else if (!capturedPointer.jittered && (Date.now() - capturedPointer.time < touchBreakBlockMs)) {
+      } else if (!capturedPointer.activateCameraMove && (Date.now() - capturedPointer.time < touchStartBreakingBlockMs)) {
         document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
         nextFrameFn.push(() => {
           document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))

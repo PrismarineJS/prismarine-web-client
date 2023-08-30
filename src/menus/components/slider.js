@@ -1,4 +1,6 @@
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
+
+const widgetsGui = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/widgets.png')
 
 class Slider extends LitElement {
   static get styles () {
@@ -39,7 +41,7 @@ class Slider extends LitElement {
         left: 0;
         width: 50%;
         height: 20px;
-        background: url('textures/1.17.1/gui/widgets.png');
+        background: url('${unsafeCSS(widgetsGui)}');
         background-size: 256px;
         background-position-y: var(--txrV);
         z-index: -1;
@@ -54,7 +56,7 @@ class Slider extends LitElement {
         left: 50%;
         width: 50%;
         height: 20px;
-        background: url('textures/1.17.1/gui/widgets.png');
+        background: url('${unsafeCSS(widgetsGui)}');
         background-size: 256px;
         background-position-x: calc(-200px + 100%);
         background-position-y: var(--txrV);

@@ -7,6 +7,7 @@
             "address": "localhost",
             "name": "Attach Chrome",
             "request": "attach",
+            // comment if using webpack
             "pathMapping": {
                 "/": "${workspaceFolder}/dist"
             },
@@ -24,10 +25,13 @@
         },
         {
             // not recommended as in most cases it will slower as it launches from extension host so it slows down extension host, not sure why
-            "type": "msedge",
-            "name": "Launch Edge",
+            "type": "chrome",
+            "name": "Launch Chrome",
             "request": "launch",
             "url": "http://localhost:8080/",
+            "pathMapping": {
+                "/": "${workspaceFolder}/dist"
+            },
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js",
                 // "!${workspaceFolder}/dist/**/*vendors*",

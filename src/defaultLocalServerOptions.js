@@ -1,7 +1,6 @@
 module.exports = {
   'motd': 'A Minecraft Server \nRunning flying-squid',
   // host: '',
-  customPackets: true,
   'port': 25565,
   'max-players': 10,
   'online-mode': false,

@@ -1,6 +1,8 @@
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
 const invsprite = require('../../invsprite.json')
 const { isGameActive } = require('../../globalState')
+
+const widgetsTexture = require('minecraft-assets/minecraft-assets/data/1.16.4/gui/widgets.png')
 
 class Hotbar extends LitElement {
   static get styles () {
@@ -12,7 +14,7 @@ class Hotbar extends LitElement {
         transform: translate(-50%);
         width: 182px;
         height: 22px;
-        background: url("textures/1.16.4/gui/widgets.png");
+        background: url("${unsafeCSS(widgetsTexture)}");
         background-size: 256px;
       }
 
@@ -22,7 +24,7 @@ class Hotbar extends LitElement {
         top: -1px;
         width: 24px;
         height: 24px;
-        background: url("textures/1.16.4/gui/widgets.png");
+        background: url("${unsafeCSS(widgetsTexture)}");
         background-size: 256px;
         background-position-y: -22px;
       }

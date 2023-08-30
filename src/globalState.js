@@ -112,24 +112,15 @@ export const miscUiState = proxy({
   singleplayer: false
 })
 
-// state that is not possible to get via bot
+window.miscUiState = miscUiState
+
+// state that is not possible to get via bot and in-game specific
 export const gameAdditionalState = proxy({
   isFlying: false,
   isSprinting: false,
 })
 
 window.gameAdditionalState = gameAdditionalState
-
-// todo thats weird workaround, probably we can do better?
-let forceDisableLeaveWarning = false
-const info = console.info
-console.info = (...args) => {
-  const message = args[0]
-  if (message === '[webpack-dev-server] App updated. Recompiling...') {
-    forceDisableLeaveWarning = true
-  }
-  info.apply(console, args)
-}
 
 const savePlayers = () => {
   if (!window.singlePlayerServer) return
@@ -141,17 +132,19 @@ const savePlayers = () => {
 setInterval(() => {
   savePlayers()
   // todo investigate unload failures instead
-}, 1000)
+}, 2000)
 
 window.addEventListener('unload', (e) => {
   savePlayers()
 })
 
+window.inspectPlayer = () => require('fs').promises.readFile('/world/playerdata/9e487d23-2ffc-365a-b1f8-f38203f59233.dat').then(window.nbt.parse).then(console.log)
+
 // todo move from global state
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
-  if (forceDisableLeaveWarning && options.preventDevReloadWhilePlaying === false) return
+  if (sessionStorage.lastReload && options.preventDevReloadWhilePlaying === false) return
 
   // For major browsers doning only this is enough
   event.preventDefault()
@@ -159,6 +152,4 @@ window.addEventListener('beforeunload', (event) => {
   // Display a confirmation prompt
   event.returnValue = '' // Required for some browsers
   return 'The game is running. Are you sure you want to close this page?'
-});
-
-window.miscUiState = miscUiState
+})

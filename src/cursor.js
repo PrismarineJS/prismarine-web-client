@@ -1,7 +1,20 @@
+//@ts-check
 /* global THREE performance */
 
-const { Vec3 } = require('vec3')
-const { isGameActive } = require('./globalState')
+// wouldn't better to create atlas instead?
+import destroyStage0 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_0.png'
+import destroyStage1 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_1.png'
+import destroyStage2 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_2.png'
+import destroyStage3 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_3.png'
+import destroyStage4 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_4.png'
+import destroyStage5 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_5.png'
+import destroyStage6 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_6.png'
+import destroyStage7 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_7.png'
+import destroyStage8 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_8.png'
+import destroyStage9 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_9.png'
+
+import { Vec3 } from 'vec3'
+import { isGameActive } from './globalState'
 
 function getViewDirection (pitch, yaw) {
   const csPitch = Math.cos(pitch)
@@ -27,8 +40,20 @@ class Cursor {
 
     const loader = new THREE.TextureLoader()
     this.breakTextures = []
+    const destroyStagesImages = [
+      destroyStage0,
+      destroyStage1,
+      destroyStage2,
+      destroyStage3,
+      destroyStage4,
+      destroyStage5,
+      destroyStage6,
+      destroyStage7,
+      destroyStage8,
+      destroyStage9
+    ]
     for (let i = 0; i < 10; i++) {
-      const texture = loader.load('textures/' + viewer.version + '/blocks/destroy_stage_' + i + '.png')
+      const texture = loader.load(destroyStagesImages[i])
       texture.magFilter = THREE.NearestFilter
       texture.minFilter = THREE.NearestFilter
       this.breakTextures.push(texture)
@@ -96,8 +121,10 @@ class Cursor {
     // Place
     if (cursorBlock && this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastBlockPlaced >= 4) {
       const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
+      //@ts-ignore
       const delta = cursorBlock.intersect.minus(cursorBlock.position)
       // check instead?
+      //@ts-ignore
       bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
       // this.lastBlockPlaced = 0
     }
@@ -148,4 +175,4 @@ class Cursor {
   }
 }
 
-module.exports = Cursor
+export default Cursor

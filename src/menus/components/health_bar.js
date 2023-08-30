@@ -1,4 +1,5 @@
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
+const { guiIcons1_17_1 } = require('../hud')
 
 function getEffectClass (effect) {
   switch (effect.id) {
@@ -49,7 +50,7 @@ class HealthBar extends LitElement {
       .heart {
         width: 9px;
         height: 9px;
-        background-image: url('textures/1.17.1/gui/icons.png'), url('textures/1.17.1/gui/icons.png');
+        background-image: url('${unsafeCSS(guiIcons1_17_1)}'), url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px, 256px;
         background-position: var(--bg-x) var(--bg-y), var(--bg-x) var(--bg-y);
         margin-left: -1px;

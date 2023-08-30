@@ -1,4 +1,6 @@
-const { LitElement, html, css } = require('lit')
+//@ts-check
+const widgetsGui = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/widgets.png')
+const { LitElement, html, css, unsafeCSS } = require('lit')
 
 const audioContext = new window.AudioContext()
 const sounds = {}
@@ -74,7 +76,7 @@ class Button extends LitElement {
         left: 0;
         width: calc(50% + 1px);
         height: 20px;
-        background: url('textures/1.17.1/gui/widgets.png');
+        background: url('${unsafeCSS(widgetsGui)}');
         background-size: 256px;
         background-position-y: calc(var(--txrV) * -1);
         z-index: -1;
@@ -88,7 +90,7 @@ class Button extends LitElement {
         left: 50%;
         width: 50%;
         height: 20px;
-        background: url('textures/1.17.1/gui/widgets.png');
+        background: url('${unsafeCSS(widgetsGui)}');
         background-size: 256px;
         background-position-x: calc(-200px + 100%);
         background-position-y: calc(var(--txrV) * -1);
@@ -131,6 +133,7 @@ class Button extends LitElement {
   constructor () {
     super()
     this.label = ''
+    this.icon = undefined
     this.disabled = false
     this.width = '200px'
     this.onPress = () => { }
@@ -150,9 +153,9 @@ class Button extends LitElement {
     </button>`
   }
 
-  onBtnClick () {
+  onBtnClick (e) {
     playSound('click_stereo.mp3')
-    this.dispatchEvent(new window.CustomEvent('pmui-click'))
+    this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e, }))
   }
 }
 
