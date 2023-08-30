@@ -357,7 +357,7 @@ async function connect (connectOptions) {
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
-      Object.assign(serverOptions, _.defaultsDeep({}, options.localServerOptions, connectOptions.serverOverrides, serverOptions))
+      Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
       singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
