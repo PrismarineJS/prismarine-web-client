@@ -6,6 +6,7 @@ public
 .env.local
 Thumbs.db
 build
+localSettings.mjs
 dist
 .DS_Store
 .idea/

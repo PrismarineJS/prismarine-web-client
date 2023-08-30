@@ -31,11 +31,16 @@ let baseConfig = {}
 //   outdir: undefined,
 // }
 
+try {
+  await import('./localSettings.mjs')
+} catch { }
+
 fs.copyFileSync('index.html', 'dist/index.html')
 fs.writeFileSync('dist/index.html', fs.readFileSync('dist/index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
 
-const dev = process.argv.includes('--watch') || process.argv.includes('-w')
+const watch = process.argv.includes('--watch') || process.argv.includes('-w')
 const prod = process.argv.includes('--prod')
+const dev = !prod
 
 const banner = [
   'window.global = globalThis;',
@@ -64,7 +69,7 @@ const ctx = await esbuild.context({
   keepNames: true,
   ...baseConfig,
   banner: {
-    js: banner.join('\n')
+    js: banner.join('\n'),
   },
   alias: {
     events: 'events', // make explicit
@@ -92,10 +97,15 @@ const ctx = await esbuild.context({
     'process.env.GITHUB_URL':
       JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
   },
-  // chunkNames: '[name]',
+  loader: {
+    '.png': 'dataurl'
+  },
+  write: false,
+  // todo would be better to enable?
+  // preserveSymlinks: true,
 })
 
-if (dev) {
+if (watch) {
   await ctx.watch()
   server.app.get('/esbuild', (req, res, next) => {
     res.writeHead(200, {
