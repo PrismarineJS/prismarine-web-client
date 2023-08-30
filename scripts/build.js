@@ -12,7 +12,7 @@ const filesAlwaysToCopy = [
 // these files could be copied at build time eg with copy plugin, but copy plugin slows down the config (2x in my testing, sometimes with too many open files error) is slow so we also copy them there
 const webpackFilesToCopy = [
     { from: './node_modules/prismarine-viewer2/public/blocksStates/', to: 'dist/blocksStates/' },
-    { from: './node_modules/prismarine-viewer2/public/textures/', to: 'dist/textures/' },
+    // { from: './node_modules/prismarine-viewer2/public/textures/', to: 'dist/textures/' },
     { from: './node_modules/prismarine-viewer2/public/worker.js', to: 'dist/worker.js' },
     { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: 'dist/supportedVersions.json' },
     { from: './assets/', to: './dist/' },
@@ -24,6 +24,13 @@ exports.copyFiles = (isDev = false) => {
     [...filesAlwaysToCopy, ...webpackFilesToCopy].forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
+    const cwd = './node_modules/prismarine-viewer2/public/textures/'
+    const files = glob.sync('{*/entity/**,*.png}', { cwd: cwd, nodir: true, })
+    for (const file of files) {
+        const copyDest = path.join('dist/textures/', file)
+        fs.mkdirSync(path.dirname(copyDest), { recursive: true, })
+        fs.copyFileSync(path.join(cwd, file), copyDest)
+    }
 
     console.timeEnd('copy files')
 }
@@ -48,15 +55,8 @@ exports.getSwAdditionalEntries = () => {
         '*.png',
         '*.woff',
         'worker.js',
-        // todo add gui textures (1.17.1)
-        // todo if we uncomment it it will spam the server with requests for textures on initial page load
-        // we need to put all textures into on file instead!
-        // `textures/${singlePlayerVersion}/**`,
-        `textures/${singlePlayerVersion}/blocks/destroy_stage_0.png.png`,
-        `textures/${singlePlayerVersion}/blocks/destroy_stage_1.png.png`,
+        // todo-low preload entity atlas?
         `textures/${singlePlayerVersion}.png`,
-        `textures/1.16.4/gui/widgets.png`,
-        `textures/1.16.4/gui/icons.png`,
         `textures/1.16.4/entity/squid.png`,
     ]
     const filesNeedsCacheKey = [

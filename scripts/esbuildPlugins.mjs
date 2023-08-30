@@ -76,8 +76,7 @@ const plugins = [
             path
           }
         }
-        if (path.includes('stage')) return
-        if (['.woff', '.woff2', '.ttf', '.png', '.jpg', '.jpeg', '.gif', '.svg'].some(ext => path.endsWith(ext))) {
+        if (['.woff', '.woff2', '.ttf'].some(ext => path.endsWith(ext))) {
           return {
             path,
             namespace: 'assets',

@@ -98,6 +98,7 @@ const ctx = await esbuild.context({
       JSON.stringify(`https://github.com/${process.env.GITHUB_REPOSITORY || `${process.env.VERCEL_GIT_REPO_OWNER}/${process.env.VERCEL_GIT_REPO_SLUG}`}`)
   },
   loader: {
+    // todo use external or resolve issues with duplicating
     '.png': 'dataurl'
   },
   write: false,

@@ -2,7 +2,9 @@ const { openWorldDirectory, openWorldZip } = require('../browserfs')
 const { showModal } = require('../globalState')
 const { fsState } = require('../loadFolder')
 const { openURL } = require('./components/common')
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
+
+const mcImage = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/title/minecraft.png')
 
 // const SUPPORT_WORLD_LOADING = !!window.showDirectoryPicker
 const SUPPORT_WORLD_LOADING = true
@@ -21,7 +23,7 @@ class TitleScreen extends LitElement {
         position: absolute;
         top: 0;
         left: 0;
-        background-image: url('textures/1.17.1/gui/title/minecraft.png');
+        background-image: url('${unsafeCSS(mcImage)}');
         background-size: 256px;
         width: 155px;
         height: 44px;
@@ -32,7 +34,7 @@ class TitleScreen extends LitElement {
         position: absolute;
         top: 0;
         left: 155px;
-        background-image: url('textures/1.17.1/gui/title/minecraft.png');
+        background-image: url('${unsafeCSS(mcImage)}');
         background-size: 256px;
         width: 155px;
         height: 44px;

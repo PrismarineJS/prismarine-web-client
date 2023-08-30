@@ -1,4 +1,5 @@
-const { LitElement, html, css } = require('lit')
+const { LitElement, html, css, unsafeCSS } = require('lit')
+const { guiIcons1_17_1 } = require('../hud')
 
 class BreathBar extends LitElement {
   static get styles () {
@@ -22,13 +23,13 @@ class BreathBar extends LitElement {
       }
 
       .breath.full {
-        background-image: url('textures/1.17.1/gui/icons.png');
+        background-image: url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px;
         background-position: var(--offset) var(--bg-y);
       }
 
       .breath.half {
-        background-image: url('textures/1.17.1/gui/icons.png');
+        background-image: url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px;
         background-position: calc(var(--offset) - 9) var(--bg-y);
       }

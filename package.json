@@ -7,7 +7,6 @@
     "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
     "build": "node scripts/build.js copyFiles && node esbuild.mjs --minify --prod",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
-    "postinstall": "node scripts/patchPackages.js",
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
@@ -74,7 +73,7 @@
     "https-browserify": "^1.0.0",
     "lodash-webpack-plugin": "^0.11.6",
     "memfs": "^3.5.3",
-    "mineflayer": "^4.11.0",
+    "mineflayer": "github:zardoy/mineflayer#custom",
     "mineflayer-pathfinder": "^2.4.4",
     "npm-run-all": "^4.1.5",
     "os-browserify": "^0.3.0",
@@ -97,6 +96,7 @@
   "pnpm": {
     "overrides": {
       "minecraft-data": "latest",
+      "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#chunk-impl-require-fix",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra"
     }
   }
