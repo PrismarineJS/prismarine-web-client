@@ -116,6 +116,7 @@ document.addEventListener('keydown', (e) => {
           break
         case 'KeyS':
           bot.setControlState('back', true)
+          e.preventDefault()
           break
         case 'KeyW':
           bot.setControlState('forward', true)

@@ -111,7 +111,7 @@ const minPitch = -0.5 * Math.PI
 
 // Create three.js context, add to page
 const renderer = new THREE.WebGLRenderer()
-renderer.setPixelRatio(window.devicePixelRatio || 1)
+renderer.setPixelRatio(window.devicePixelRatio || 1) // todo this value is too high on ios, need to check, probably we should use avg, also need to make it configurable
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
@@ -646,7 +646,7 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault()
     goFullscreen(true)
   }
-  if (e.code === 'KeyL') {
+  if (e.code === 'KeyL' && e.altKey) {
     console.clear()
   }
   // if (e.code === 'KeyD') {
