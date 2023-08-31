@@ -54,8 +54,8 @@ export const loadFolder = async (root = '/world') => {
       version = newVersion
     }
     if (!supportedVersions.includes(version)) {
-      warnings.push(`Version ${version} is not supported, supported versions ${supportedVersions.join(', ')}, 1.16.1 will be used`)
-      version = '1.16.1'
+      version = prompt(`Version ${version} is not supported, supported versions ${supportedVersions.join(', ')}, what try to use instead?`, '1.16.1')
+      if (!version) return
     }
     if (levelDat.WorldGenSettings) {
       for (const [key, value] of Object.entries(levelDat.WorldGenSettings.dimensions)) {
@@ -70,7 +70,7 @@ export const loadFolder = async (root = '/world') => {
       isFlat = levelDat.generatorName === 'flat'
     }
     if (!isFlat) {
-      warnings.push(`Generator ${levelDat.generatorName} is not supported yet`)
+      warnings.push(`Generator ${levelDat.generatorName} may not be supported yet`)
     }
 
     const playerUuid = nameToMcOfflineUUID(options.localUsername)
@@ -113,7 +113,7 @@ export const loadFolder = async (root = '/world') => {
 
   if (!fsState.isReadonly) {
     // todo allow also to ctrl+s
-    alert("Note: the world is saved only when you click disconnect!")
+    alert("Note: the world is saved only on /save or disconnect! ENSURE YOU HAVE BACKUP!")
   }
 
   document.querySelector('#title-screen').dispatchEvent(new CustomEvent('singleplayer', {

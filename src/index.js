@@ -8,6 +8,9 @@
 require('./styles.css')
 require('iconify-icon')
 require('./chat')
+require('./inventory')
+//@ts-ignore
+require('./globals.js')
 
 // workaround for mineflayer
 process.versions.node = '18.0.0'
@@ -111,7 +114,7 @@ const minPitch = -0.5 * Math.PI
 
 // Create three.js context, add to page
 const renderer = new THREE.WebGLRenderer()
-renderer.setPixelRatio(window.devicePixelRatio || 1)
+renderer.setPixelRatio(window.devicePixelRatio || 1) // todo this value is too high on ios, need to check, probably we should use avg, also need to make it configurable
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
@@ -172,8 +175,12 @@ const optionsScrn = document.getElementById('options-screen')
 const pauseMenu = document.getElementById('pause-screen')
 
 function setLoadingScreenStatus (status, isError = false) {
+  // todo update in component instead
   showModal(loadingScreen)
-  if (loadingScreen.hasError) return
+  if (loadingScreen.hasError) {
+    miscUiState.gameLoaded = false
+    return
+  }
   loadingScreen.hasError = isError
   loadingScreen.status = status
 }
@@ -348,6 +355,11 @@ async function connect (connectOptions) {
 
   const errorAbortController = new AbortController()
   window.addEventListener('unhandledrejection', (e) => {
+    if (e.reason.name === 'ServerPluginLoadFailure') {
+      if (confirm(`Failed to load server plugin ${e.reason.pluginName} (invoking ${e.reason.pluginMethod}). Continue?`)) {
+        return
+      }
+    }
     handleError(e.reason)
   }, {
     signal: errorAbortController.signal
@@ -357,7 +369,7 @@ async function connect (connectOptions) {
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
-      Object.assign(serverOptions, _.defaultsDeep({}, options.localServerOptions, connectOptions.serverOverrides, serverOptions))
+      Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
       singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
@@ -433,6 +445,7 @@ async function connect (connectOptions) {
   })
 
   bot.once('spawn', () => {
+    miscUiState.gameLoaded = true
     // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 
@@ -646,7 +659,7 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault()
     goFullscreen(true)
   }
-  if (e.code === 'KeyL') {
+  if (e.code === 'KeyL' && e.altKey) {
     console.clear()
   }
   // if (e.code === 'KeyD') {

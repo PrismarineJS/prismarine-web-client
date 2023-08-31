@@ -7,12 +7,13 @@ import { activeModalStack, hideCurrentModal, isGameActive } from './globalState'
 import { useEffect, useState } from 'react'
 import { useProxy } from 'valtio/utils'
 import useTypedEventListener from 'use-typed-event-listener'
+import { isProbablyIphone } from './menus/components/common'
 
 // todo
 useInterfaceState.setState({
     isFlying: false,
     uiCustomization: {
-        touchButtonSize: 40,
+        touchButtonSize: isProbablyIphone() ? 55 : 40,
     },
     updateCoord: ([coord, state]) => {
         const coordToAction = [
@@ -106,21 +107,23 @@ function InventoryWrapper() {
 
     if (!isInventoryOpen) return null
 
-    return <div className={css`
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+    return null
 
-            & > div {
-                scale: 0.6;
-                background: transparent !important;
-            }
-        `}>
-        <InventoryNew slots={slots} action={(oldSlot, newSlotIndex) => {
-            bot.moveSlotItem(oldSlot, newSlotIndex)
-        } } />
-    </div>
+    // return <div className={css`
+    //         position: fixed;
+    //         width: 100%;
+    //         height: 100%;
+    //         background: rgba(0, 0, 0, 0.5);
+
+    //         & > div {
+    //             scale: 0.6;
+    //             background: transparent !important;
+    //         }
+    //     `}>
+    //     <InventoryNew slots={slots} action={(oldSlot, newSlotIndex) => {
+    //         bot.moveSlotItem(oldSlot, newSlotIndex)
+    //     } } />
+    // </div>
 }
 
 const App = () => {

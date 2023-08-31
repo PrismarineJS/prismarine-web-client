@@ -78,6 +78,7 @@ class LoadingErrorScreen extends LitElement {
       ${this.hasError
         ? html`<div class="error-buttons"><pmui-button .hidden=${!this.maybeRecoverable} pmui-width="200px" pmui-label="Back" @pmui-click=${() => {
           this.hasError = false
+          miscUiState.gameLoaded = false
           if (activeModalStacks['main-menu']) {
             replaceActiveModalStack('main-menu')
           } else {

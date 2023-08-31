@@ -193,6 +193,7 @@ export const openWorldZip = async (/** @type {File} */file) => {
 
     if (availableWorlds.length === 1) {
       loadFolder(`/world/${availableWorlds[0]}`)
+      return
     }
 
     alert(`Many (${availableWorlds.length}) worlds found in the zip!`)

@@ -47,6 +47,14 @@ function isMobile () {
   return window.matchMedia('(pointer: coarse)').matches
 }
 
+// todo there are better workarounds and proper way to detect notch
+/** @returns {boolean} */
+function isProbablyIphone () {
+  if (!isMobile()) return false
+  const smallest = window.innerWidth < window.innerHeight ? window.innerWidth : window.innerHeight
+  return smallest < 600
+}
+
 /**
  * @param {string} url
  */
@@ -55,6 +63,7 @@ function openURL (url) {
 }
 
 export {
+  isProbablyIphone,
   commonCss,
   isMobile,
   openURL,
