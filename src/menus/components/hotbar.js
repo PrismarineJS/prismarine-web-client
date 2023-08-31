@@ -1,15 +1,17 @@
 const { LitElement, html, css, unsafeCSS } = require('lit')
 const invsprite = require('../../invsprite.json')
-const { isGameActive } = require('../../globalState')
+const { isGameActive, miscUiState, showModal } = require('../../globalState')
 
 const widgetsTexture = require('minecraft-assets/minecraft-assets/data/1.16.4/gui/widgets.png')
+const { subscribeKey } = require('valtio/utils')
+const { isProbablyIphone } = require('./common')
 
 class Hotbar extends LitElement {
   static get styles () {
     return css`
       .hotbar {
         position: absolute;
-        bottom: 0;
+        bottom: ${unsafeCSS(isProbablyIphone() ? '40px' : '0')};
         left: 50%;
         transform: translate(-50%);
         width: 182px;
@@ -84,6 +86,16 @@ class Hotbar extends LitElement {
         transition: visibility 0s, opacity 1s linear;
         transition-delay: 2s;
       }
+
+      .hotbar-more {
+        display:flex;
+        justify-content: center;
+        border: 1px solid white;
+      }
+      .hotbar-more::before {
+        content: '...';
+        margin-top: -1px;
+      }
     `
   }
 
@@ -97,6 +109,9 @@ class Hotbar extends LitElement {
 
   constructor () {
     super()
+    subscribeKey(miscUiState, 'currentTouch', () => {
+      this.requestUpdate()
+    })
     this.activeItemName = ''
   }
 
@@ -208,6 +223,10 @@ class Hotbar extends LitElement {
           <div class="hotbar-item" id="hotbar-8">
             <div class="item-icon"></div>
             <span class="item-stack"></span>
+          </div>
+          <div class="hotbar-item hotbar-more" ?hidden=${!miscUiState.currentTouch} @click=${() => {
+        showModal({ reactType: 'inventory', })
+      }}>
           </div>
         </div>
       </div>

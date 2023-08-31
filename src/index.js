@@ -8,6 +8,9 @@
 require('./styles.css')
 require('iconify-icon')
 require('./chat')
+require('./inventory')
+//@ts-ignore
+require('./globals.js')
 
 // workaround for mineflayer
 process.versions.node = '18.0.0'
@@ -172,6 +175,8 @@ const optionsScrn = document.getElementById('options-screen')
 const pauseMenu = document.getElementById('pause-screen')
 
 function setLoadingScreenStatus (status, isError = false) {
+  // todo update in component instead
+  miscUiState.gameLoaded = false
   showModal(loadingScreen)
   if (loadingScreen.hasError) return
   loadingScreen.hasError = isError
@@ -348,6 +353,11 @@ async function connect (connectOptions) {
 
   const errorAbortController = new AbortController()
   window.addEventListener('unhandledrejection', (e) => {
+    if (e.reason.name === 'ServerPluginLoadFailure') {
+      if (confirm(`Failed to load server plugin ${e.reason.pluginName} (invoking ${e.reason.pluginMethod}). Continue?`)) {
+        return
+      }
+    }
     handleError(e.reason)
   }, {
     signal: errorAbortController.signal
@@ -433,6 +443,7 @@ async function connect (connectOptions) {
   })
 
   bot.once('spawn', () => {
+    miscUiState.gameLoaded = true
     // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 

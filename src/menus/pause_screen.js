@@ -1,7 +1,7 @@
 //@ts-check
 const { LitElement, html, css } = require('lit')
 const { openURL } = require('./components/common')
-const { hideCurrentModal, showModal } = require('../globalState')
+const { hideCurrentModal, showModal, miscUiState } = require('../globalState')
 const { fsState } = require('../loadFolder')
 const { subscribe } = require('valtio')
 const { saveWorld } = require('../builtinCommands')
@@ -76,6 +76,7 @@ class PauseScreen extends LitElement {
           singlePlayerServer.quit()
         }
         bot._client.emit('end')
+        miscUiState.gameLoaded = false
       }}></pmui-button>
       </main>
     `

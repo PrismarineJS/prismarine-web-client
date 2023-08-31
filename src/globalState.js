@@ -102,15 +102,16 @@ export const showContextmenu = (/** @type {ContextMenuItem[]} */items, { clientX
 
 // ---
 
-export const isGameActive = (foregroundCheck) => {
-  if (foregroundCheck && activeModalStack.length) return false
-  return document.getElementById('hud').style.display !== 'none'
-}
-
 export const miscUiState = proxy({
   currentTouch: null,
-  singleplayer: false
+  singleplayer: false,
+  gameLoaded: false,
 })
+
+export const isGameActive = (foregroundCheck) => {
+  if (foregroundCheck && activeModalStack.length) return false
+  return miscUiState.gameLoaded
+}
 
 window.miscUiState = miscUiState
 
