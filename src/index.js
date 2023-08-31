@@ -176,9 +176,11 @@ const pauseMenu = document.getElementById('pause-screen')
 
 function setLoadingScreenStatus (status, isError = false) {
   // todo update in component instead
-  miscUiState.gameLoaded = false
   showModal(loadingScreen)
-  if (loadingScreen.hasError) return
+  if (loadingScreen.hasError) {
+    miscUiState.gameLoaded = false
+    return
+  }
   loadingScreen.hasError = isError
   loadingScreen.status = status
 }
