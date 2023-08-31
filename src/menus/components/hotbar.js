@@ -115,8 +115,11 @@ class Hotbar extends LitElement {
 
     document.addEventListener('wheel', (e) => {
       if (!isGameActive(true)) return
+      e.preventDefault()
       const newSlot = ((this.bot.quickBarSlot + Math.sign(e.deltaY)) % 9 + 9) % 9
       this.reloadHotbarSelected(newSlot)
+    }, {
+      passive: false,
     })
 
     document.addEventListener('keydown', (e) => {
