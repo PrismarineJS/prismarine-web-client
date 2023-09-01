@@ -16,6 +16,7 @@ const defaultOptions = {
   preventDevReloadWhilePlaying: false,
   autoFullScreen: false,
   mouseRawInput: false,
+  autoExitFullscreen: false,
   numWorkers: 4,
   localServerOptions: {},
   localUsername: 'wanderer',

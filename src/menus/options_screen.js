@@ -145,6 +145,11 @@ class OptionsScreen extends CommonOptionsScreen {
         options.autoFullScreen = !options.autoFullScreen
       }
       }></pmui-button>
+      <!-- todo also allow to remap f11 -->
+          <pmui-button title="Exit fullscreen (not recommended, also you can always do it with F11)" pmui-width="150px" pmui-label=${'Auto Exit Fullscreen: ' + (options.autoExitFullscreen ? 'ON' : 'OFF')} @pmui-click=${() => {
+        options.autoExitFullscreen = !options.autoExitFullscreen
+      }
+      }></pmui-button>
         </div>
 
         <pmui-button pmui-width="200px" pmui-label="Done" @pmui-click=${() => hideCurrentModal()}></pmui-button>
