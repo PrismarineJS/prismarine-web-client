@@ -3,6 +3,7 @@ import { activeModalStack, miscUiState } from './globalState'
 import { notification } from './menus/notification'
 import * as crypto from 'crypto'
 import UUID from 'uuid-1345'
+import { options } from './optionsStorage'
 
 export const goFullscreen = async (doToggle = false) => {
   if (!document.fullscreenElement) {
@@ -30,9 +31,8 @@ export const pointerLock = {
     if (document.getElementById('hud').style.display === 'none' || activeModalStack.length || !document.documentElement.requestPointerLock || miscUiState.currentTouch) {
       return
     }
-    const autoFullScreen = window.localStorage.getItem('autoFullscreen') === 'true'
-    if (autoFullScreen) {
-      await goFullscreen()
+    if (options.autoFullScreen) {
+      void goFullscreen()
     }
     const displayBrowserProblem = () => {
       notification.show = true
@@ -46,7 +46,7 @@ export const pointerLock = {
       /** @type {any} */
       //@ts-ignore
       const promise = document.documentElement.requestPointerLock({
-        unadjustedMovement: window.localStorage.getItem('mouseRawInput') === 'true'
+        unadjustedMovement: options.mouseRawInput
       })
       promise?.catch((error) => {
         if (error.name === "NotSupportedError") {

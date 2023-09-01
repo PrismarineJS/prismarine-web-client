@@ -14,6 +14,8 @@ const defaultOptions = {
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
   preventDevReloadWhilePlaying: false,
+  autoFullScreen: false,
+  mouseRawInput: false,
   numWorkers: 4,
   localServerOptions: {},
   localUsername: 'wanderer',
