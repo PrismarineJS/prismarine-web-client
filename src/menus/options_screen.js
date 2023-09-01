@@ -63,8 +63,6 @@ class OptionsScreen extends CommonOptionsScreen {
       sound: { defaultValue: 50, convertFn: (v) => toNumber(v) },
       fov: { defaultValue: 75, convertFn: (v) => toNumber(v) },
       guiScale: { defaultValue: 3, convertFn: (v) => toNumber(v) },
-      mouseRawInput: { defaultValue: false, convertFn: (v) => v === 'true' },
-      autoFullscreen: { defaultValue: false, convertFn: (v) => v === 'true' }
     })
 
     document.documentElement.style.setProperty('--chatScale', `${this.chatScale / 100}`)
@@ -137,18 +135,19 @@ class OptionsScreen extends CommonOptionsScreen {
         showModal(document.querySelector('pmui-advanced-optionsscreen'))
       }
       }></pmui-button>
-          <pmui-button pmui-width="150px" pmui-label=${'Mouse Raw Input: ' + (this.mouseRawInput ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
-        this.changeOption('mouseRawInput', !this.mouseRawInput)
-
-        this.requestUpdate()
+          <pmui-button pmui-width="150px" pmui-label=${'Mouse Raw Input: ' + (options.mouseRawInput ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
+        options.mouseRawInput = !options.mouseRawInput
       }
       }></pmui-button>
         </div>
         <div class="wrapper">
-          <pmui-button title="Auto Fullscreen allows you to use Ctrl+W and Escape without delays" .disabled="${!navigator['keyboard'] ? "Your browser doesn't support keyboard lock API" : undefined}" pmui-width="150px" pmui-label=${'Auto Fullscreen: ' + (this.autoFullscreen ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
-        this.changeOption('autoFullscreen', !this.autoFullscreen)
-
-        this.requestUpdate()
+          <pmui-button title="Auto Fullscreen allows you to use Ctrl+W and Escape without delays" .disabled="${!navigator['keyboard'] ? "Your browser doesn't support keyboard lock API" : undefined}" pmui-width="150px" pmui-label=${'Auto Fullscreen: ' + (options.autoFullScreen ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
+        options.autoFullScreen = !options.autoFullScreen
+      }
+      }></pmui-button>
+      <!-- todo also allow to remap f11 -->
+          <pmui-button title="Exit fullscreen (not recommended, also you can always do it with F11)" pmui-width="150px" pmui-label=${'Auto Exit Fullscreen: ' + (options.autoExitFullscreen ? 'ON' : 'OFF')} @pmui-click=${() => {
+        options.autoExitFullscreen = !options.autoExitFullscreen
       }
       }></pmui-button>
         </div>

@@ -1,7 +1,8 @@
 //@ts-check
 
 const { Vec3 } = require('vec3')
-const { isGameActive, showModal, gameAdditionalState } = require('./globalState')
+const { isGameActive, showModal, gameAdditionalState, activeModalStack } = require('./globalState')
+const { subscribe } = require('valtio')
 
 const keyBindScrn = document.getElementById('keybinds-screen')
 
@@ -61,6 +62,7 @@ const patchedSetControlState = (action, state) => {
   currentFlyVector.add(toAddVec)
 }
 
+const standardAirborneAcceleration = 0.02
 const toggleFly = () => {
   if (bot.game.gameMode !== 'creative' && bot.game.gameMode !== 'spectator') return
   if (bot.setControlState !== patchedSetControlState) {
@@ -69,15 +71,33 @@ const toggleFly = () => {
   }
 
   if (isFlying()) {
+    bot.physics['airborneAcceleration'] = standardAirborneAcceleration
     bot.creative.stopFlying()
     endFlyLoop?.()
   } else {
+    // window.flyingSpeed will be removed
+    bot.physics['airborneAcceleration'] = window.flyingSpeed ?? 0.1
     bot.entity.velocity = new Vec3(0, 0, 0)
     bot.creative.startFlying()
     startFlyLoop()
   }
   gameAdditionalState.isFlying = isFlying()
 }
+
+/** @type {Set<string>} */
+const pressedKeys = new Set()
+// window.pressedKeys = pressedKeys
+
+// detect pause open, as ANY keyup event is not fired when you exit pointer lock (esc)
+subscribe(activeModalStack, () => {
+  if (activeModalStack.length) {
+    // iterate over pressedKeys
+    for (const key of pressedKeys) {
+      const e = new KeyboardEvent('keyup', { code: key })
+      document.dispatchEvent(e)
+    }
+  }
+})
 
 let lastJumpUsage = 0
 document.addEventListener('keydown', (e) => {
@@ -124,12 +144,16 @@ document.addEventListener('keydown', (e) => {
       }
     }
   })
+  pressedKeys.add(e.code)
 }, {
   capture: true,
 })
 
 document.addEventListener('keyup', (e) => {
-  // if (!isGameActive(true)) return
+  // workaround for pause pressed keys, multiple keyboard
+  if (!isGameActive(false) || !pressedKeys.has(e.code)) {
+    return
+  }
 
   keyBindScrn.keymaps.forEach(km => {
     if (e.code === km.key) {
@@ -165,4 +189,5 @@ document.addEventListener('keyup', (e) => {
       }
     }
   })
+  pressedKeys.delete(e.code)
 }, false)
