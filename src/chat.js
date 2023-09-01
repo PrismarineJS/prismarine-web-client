@@ -240,6 +240,7 @@ class ChatBox extends LitElement {
                 break
               case 'Slash':
                 setTimeout(() => this.enableChat('/'), 0)
+                e.preventDefault()
                 break
             }
           }
