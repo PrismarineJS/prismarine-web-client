@@ -36,10 +36,9 @@ for (const [major, versions] of Object.entries(grouped)) {
   }
   contents += '})'
 
-  build({
+  await build({
     bundle: true,
     outfile: `dist/mc-data/${major}.js`,
-    // entryPoints: ['mcData.js'],
     stdin: {
       contents,
 
@@ -47,33 +46,6 @@ for (const [major, versions] of Object.entries(grouped)) {
       sourcefile: `mcData${major}.js`,
       loader: 'js',
     },
-    plugins: [
-      // {
-      //   name: 'mcData',
-      //   setup (build) {
-      //     build.onResolve({
-      //       filter: /^mcData\.js$/,
-      //     }, ({ path, pluginData }) => {
-      //       return {
-      //         path,
-      //         namespace: 'mc-data',
-      //       }
-      //     })
-      //     build.onLoad({
-      //       filter: /.*/,
-      //       namespace: 'mc-data',
-      //     }, ({ namespace, path }) => {
-      //       const version = path.split('/')[2]
-      //       const data = versions[version]
-      //       if (!data) throw new Error(`No data for ${version}`)
-      //       return {
-      //         contents: `export const data = ${JSON.stringify(data, null, 2)}`,
-      //         loader: 'js',
-      //       }
-      //     })
-      //   }
-      // }
-    ],
   })
 }
 console.log('data prepared')
