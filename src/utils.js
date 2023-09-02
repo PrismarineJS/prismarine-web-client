@@ -1,9 +1,10 @@
 //@ts-check
-import { activeModalStack, miscUiState } from './globalState'
+import { activeModalStack, miscUiState, showModal } from './globalState'
 import { notification } from './menus/notification'
 import * as crypto from 'crypto'
 import UUID from 'uuid-1345'
 import { options } from './optionsStorage'
+import { saveWorld } from './builtinCommands'
 
 export const goFullscreen = async (doToggle = false) => {
   if (!document.fullscreenElement) {
@@ -132,6 +133,30 @@ function javaUUID (s) {
 export function nameToMcOfflineUUID (name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
 }
+
+export const setLoadingScreenStatus = function (/** @type {string} */status, isError = false) {
+  const loadingScreen = document.getElementById('loading-error-screen')
+
+  // todo update in component instead
+  showModal(loadingScreen)
+  if (loadingScreen.hasError) {
+    miscUiState.gameLoaded = false
+    return
+  }
+  loadingScreen.hasError = isError
+  loadingScreen.status = status
+}
+
+
+export const disconnect = async () => {
+  if (window.singlePlayerServer) {
+    await saveWorld()
+    singlePlayerServer.quit()
+  }
+  bot._client.emit('end')
+  miscUiState.gameLoaded = false
+}
+
 export const loadScript = async function (/** @type {string} */ scriptSrc) {
   if (document.querySelector(`script[src="${scriptSrc}"]`)) {
     return
