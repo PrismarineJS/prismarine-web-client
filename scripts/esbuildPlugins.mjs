@@ -20,24 +20,24 @@ const plugins = [
           path: (await build.resolve('minecraft-protocol/src/index.js', { kind, resolveDir })).path,
         }
       })
-      // build.onResolve({
-      //   filter: /^\.\/data.js$/,
-      // }, ({ resolveDir, path }) => {
-      //   if (!resolveDir.endsWith('minecraft-data')) return
-      //   return {
-      //     namespace: 'load-global-minecraft-data',
-      //     path
-      //   }
-      // })
-      // build.onLoad({
-      //   filter: /.+/,
-      //   namespace: 'load-global-minecraft-data',
-      // }, () => {
-      //   return {
-      //     contents: 'module.exports = window.minecraftData',
-      //     loader: 'js',
-      //   }
-      // })
+      build.onResolve({
+        filter: /^\.\/data.js$/,
+      }, ({ resolveDir, path }) => {
+        if (!resolveDir.endsWith('minecraft-data')) return
+        return {
+          namespace: 'load-global-minecraft-data',
+          path
+        }
+      })
+      build.onLoad({
+        filter: /.+/,
+        namespace: 'load-global-minecraft-data',
+      }, () => {
+        return {
+          contents: 'window.mcData ??= {};module.exports = { pc: window.mcData }',
+          loader: 'js',
+        }
+      })
       // build.onResolve({
       //   filter: /^minecraft-assets$/,
       // }, ({ resolveDir, path }) => {
@@ -89,6 +89,7 @@ const plugins = [
         filter: /.*/,
         namespace: customMcDataNs,
       }, async ({ path, ...rest }) => {
+        throw new Error('unreachable')
         const resolvedPath = await build.resolve('minecraft-data/minecraft-data/data/dataPaths.json', { kind: 'require-call', resolveDir: process.cwd() })
         const dataPaths = JSON.parse(await fs.promises.readFile(resolvedPath.path, 'utf8'))
 

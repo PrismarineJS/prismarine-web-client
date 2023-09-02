@@ -366,6 +366,13 @@ async function connect (connectOptions) {
   })
   let singlePlayerServer
   try {
+    Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
+    let version = connectOptions.botVersion ?? serverOptions.version
+    if (version) {
+      setLoadingScreenStatus(`Downloading data for ${version}`)
+      await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
+    }
+
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false

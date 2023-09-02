@@ -132,3 +132,30 @@ function javaUUID (s) {
 export function nameToMcOfflineUUID (name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
 }
+export const loadScript = async function (/** @type {string} */ scriptSrc) {
+  if (document.querySelector(`script[src="${scriptSrc}"]`)) {
+    return
+  }
+
+  return new Promise((resolve, reject) => {
+    const scriptElement = document.createElement('script')
+    scriptElement.src = scriptSrc
+    scriptElement.async = true
+
+    scriptElement.onload = () => {
+      resolve(scriptElement)
+    }
+
+    scriptElement.onerror = (error) => {
+      reject(error)
+    }
+
+    document.head.appendChild(scriptElement)
+  })
+}
+
+// doesn't support snapshots
+export const toMajorVersion = (version) => {
+  const [a, b] = (version + '').split('.')
+  return `${a}.${b}`
+}

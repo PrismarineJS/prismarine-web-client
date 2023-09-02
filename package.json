@@ -3,9 +3,9 @@
   "version": "1.5.0",
   "description": "A minecraft client running in a browser",
   "scripts": {
-    "start": "node scripts/build.js copyFilesDev && node esbuild.mjs --minify --watch",
+    "start": "node scripts/build.js copyFilesDev && node scripts/prepareData.mjs && node esbuild.mjs --minify --watch",
     "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
-    "build": "node scripts/build.js copyFiles && node esbuild.mjs --minify --prod",
+    "build": "node scripts/build.js copyFiles && node scripts/prepareData.mjs && node esbuild.mjs --minify --prod",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
@@ -32,6 +32,7 @@
     "compression": "^1.7.4",
     "cypress-plugin-snapshots": "^1.4.4",
     "diamond-square": "^1.2.0",
+    "eruda": "^3.0.1",
     "esbuild": "^0.19.2",
     "esbuild-loader": "^4.0.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
@@ -73,6 +74,7 @@
     "https-browserify": "^1.0.0",
     "lodash-webpack-plugin": "^0.11.6",
     "memfs": "^3.5.3",
+    "minecraft-inventory-gui": "github:zardoy/minecraft-inventory-gui#next",
     "mineflayer": "github:zardoy/mineflayer#custom",
     "mineflayer-pathfinder": "^2.4.4",
     "npm-run-all": "^4.1.5",
@@ -91,8 +93,7 @@
     "webpack-dev-middleware": "^6.1.1",
     "webpack-dev-server": "^4.15.1",
     "webpack-merge": "^5.9.0",
-    "workbox-webpack-plugin": "^6.6.0",
-    "minecraft-inventory-gui": "github:zardoy/minecraft-inventory-gui#next"
+    "workbox-webpack-plugin": "^6.6.0"
   },
   "pnpm": {
     "overrides": {
