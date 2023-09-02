@@ -40,6 +40,8 @@ require('./reactUi.jsx')
 require('./botControls')
 require('./dragndrop')
 require('./browserfs')
+require('./eruda')
+require('./downloadAndOpenWorld')
 
 const net = require('net')
 const Stats = require('stats.js')
@@ -56,7 +58,7 @@ const Cursor = require('./cursor').default
 global.THREE = require('three')
 const { initVR } = require('./vr')
 const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive, miscUiState, gameAdditionalState } = require('./globalState')
-const { pointerLock, goFullscreen, toNumber, isCypress } = require('./utils')
+const { pointerLock, goFullscreen, toNumber, isCypress, loadScript, toMajorVersion, setLoadingScreenStatus } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
 const { startLocalServer, unsupportedLocalServerFeatures } = require('./createLocalServer')
@@ -173,17 +175,6 @@ const loadingScreen = document.getElementById('loading-error-screen')
 const hud = document.getElementById('hud')
 const optionsScrn = document.getElementById('options-screen')
 const pauseMenu = document.getElementById('pause-screen')
-
-function setLoadingScreenStatus (status, isError = false) {
-  // todo update in component instead
-  showModal(loadingScreen)
-  if (loadingScreen.hasError) {
-    miscUiState.gameLoaded = false
-    return
-  }
-  loadingScreen.hasError = isError
-  loadingScreen.status = status
-}
 
 let mouseMovePostHandle = (e) => { }
 let lastMouseCall
@@ -366,7 +357,7 @@ async function connect (connectOptions) {
   })
   let singlePlayerServer
   try {
-    Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
+    Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
     let version = connectOptions.botVersion ?? serverOptions.version
     if (version) {
       setLoadingScreenStatus(`Downloading data for ${version}`)
@@ -376,7 +367,6 @@ async function connect (connectOptions) {
     if (singeplayer) {
       window.serverDataChannel ??= {}
       window.worldLoaded = false
-      Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
       singlePlayerServer = window.singlePlayerServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false

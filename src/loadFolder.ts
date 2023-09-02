@@ -18,6 +18,7 @@ export const fsState = proxy({
 
 const PROPOSE_BACKUP = true
 
+// todo rename to loadWorld
 export const loadFolder = async (root = '/world') => {
   // todo do it in singleplayer as well
   for (const key in forceCachedDataPaths) {
@@ -47,7 +48,8 @@ export const loadFolder = async (root = '/world') => {
     const parsedRaw = await parseNbt(Buffer.from(levelDatContent))
     const levelDat: import('./mcTypes').LevelDat = nbt.simplify(parsedRaw).Data
 
-    version = levelDat.Version?.Name
+    const qs = new URLSearchParams(window.location.search)
+    version = levelDat.Version?.Name ?? qs.get('version')
     if (!version) {
       const newVersion = prompt(`In 1.8 and before world save doesn\'t contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
       if (!newVersion) return
@@ -69,7 +71,7 @@ export const loadFolder = async (root = '/world') => {
     if (levelDat.generatorName) {
       isFlat = levelDat.generatorName === 'flat'
     }
-    if (!isFlat) {
+    if (!isFlat && levelDat.generatorName !== 'default' && levelDat.generatorName !== 'customized') {
       warnings.push(`Generator ${levelDat.generatorName} may not be supported yet`)
     }
 

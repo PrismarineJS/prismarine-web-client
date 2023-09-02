@@ -152,7 +152,7 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
   loadFolder()
 }
 
-export const openWorldZip = async (/** @type {File} */file) => {
+export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name = file['name']) => {
   await new Promise(async resolve => {
     browserfs.configure({
       // todo
@@ -161,8 +161,8 @@ export const openWorldZip = async (/** @type {File} */file) => {
         "/world": {
           fs: "ZipFS",
           options: {
-            zipData: Buffer.from(await file.arrayBuffer()),
-            name: file.name
+            zipData: Buffer.from(file instanceof File ? (await file.arrayBuffer()) : file),
+            name
           }
         }
       },
