@@ -43,5 +43,18 @@
                 "<node_internals>/**/*minecraftData*"
             ],
         },
+        {
+            // to launch "C:\Program Files\Mozilla Firefox\firefox.exe" -start-debugger-server
+            "type": "firefox",
+            "name": "Attach Firefox",
+            "request": "attach",
+            // comment if using webpack
+            "url": "http://localhost:8080/",
+            "webRoot": "${workspaceFolder}/",
+            "skipFiles": [
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
+            ],
+        },
     ]
 }
