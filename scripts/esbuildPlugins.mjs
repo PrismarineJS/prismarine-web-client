@@ -38,28 +38,11 @@ const plugins = [
           loader: 'js',
         }
       })
-      // build.onResolve({
-      //   filter: /^minecraft-assets$/,
-      // }, ({ resolveDir, path }) => {
-      //   // if (!resolveDir.endsWith('minecraft-data')) return
-      //   return {
-      //     namespace: 'load-global-minecraft-assets',
-      //     path
-      //   }
-      // })
-      // build.onLoad({
-      //   filter: /.+/,
-      //   namespace: 'load-global-minecraft-assets',
-      // }, async () => {
-      //   const resolvedPath = await build.resolve('minecraft-assets/index.js', { kind: 'require-call', resolveDir: process.cwd() })
-      //   let contents = (await fs.promises.readFile(resolvedPath.path, 'utf8'))
-      //   contents = contents.slice(0, contents.indexOf('const data = ')) + 'const data = window.minecraftAssets;' + contents.slice(contents.indexOf('module.exports.versions'))
-      //   return {
-      //     contents,
-      //     loader: 'js',
-      //     resolveDir: dirname(resolvedPath.path),
-      //   }
-      // })
+      build.onResolve({
+        filter: /^minecraft-assets$/,
+      }, () => {
+        throw new Error('hit banned package')
+      })
     }
   },
   {
@@ -71,10 +54,7 @@ const plugins = [
         filter: /.*/,
       }, async ({ path, ...rest }) => {
         if (join(rest.resolveDir, path).replaceAll('\\', '/').endsWith('minecraft-data/data.js')) {
-          return {
-            namespace: customMcDataNs,
-            path
-          }
+          throw new Error('Should not hit')
         }
         if (['.woff', '.woff2', '.ttf'].some(ext => path.endsWith(ext))) {
           return {
@@ -82,52 +62,6 @@ const plugins = [
             namespace: 'assets',
             external: true,
           }
-        }
-      })
-
-      build.onLoad({
-        filter: /.*/,
-        namespace: customMcDataNs,
-      }, async ({ path, ...rest }) => {
-        throw new Error('unreachable')
-        const resolvedPath = await build.resolve('minecraft-data/minecraft-data/data/dataPaths.json', { kind: 'require-call', resolveDir: process.cwd() })
-        const dataPaths = JSON.parse(await fs.promises.readFile(resolvedPath.path, 'utf8'))
-
-        // bedrock unsupported
-        delete dataPaths.bedrock
-
-        const allowOnlyList = process.env.ONLY_MC_DATA?.split(',') ?? []
-
-        // skip data for 0.30c, snapshots and pre-releases
-        const ignoredVersionsRegex = /(^0\.30c$)|w|-pre|-rc/
-
-        const includedVersions = []
-        let contents = 'module.exports =\n{\n'
-        for (const platform of Object.keys(dataPaths)) {
-          contents += `  '${platform}': {\n`
-          for (const version of Object.keys(dataPaths[platform])) {
-            if (allowOnlyList.length && !allowOnlyList.includes(version)) continue
-            if (ignoredVersionsRegex.test(version)) continue
-
-            includedVersions.push(version)
-            contents += `    '${version}': {\n`
-            for (const dataType of Object.keys(dataPaths[platform][version])) {
-              const loc = `minecraft-data/data/${dataPaths[platform][version][dataType]}/`
-              contents += `      get ${dataType} () { return require("./${loc}${dataType}.json") },\n`
-            }
-            contents += '    },\n'
-          }
-          contents += '  },\n'
-        }
-        contents += '}\n'
-
-        if (prod) {
-          console.log('Included mc-data versions:', includedVersions)
-        }
-        return {
-          contents,
-          loader: 'js',
-          resolveDir: join(dirname(resolvedPath.path), '../..'),
         }
       })
 

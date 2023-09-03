@@ -1,12 +1,12 @@
+//@ts-check
 const { LitElement, html, css } = require('lit')
 const { commonCss } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
-const mcAssets = require("minecraft-assets")
-const data = require('minecraft-data')
 const mineflayer = require('mineflayer')
+const viewerSupportedVersions = require('prismarine-viewer/viewer/supportedVersions.json')
 
-const fullySupporedVersions = mcAssets.versions
-const partialSupportVersions = mineflayer.supportedVersions
+const fullySupporedVersions = viewerSupportedVersions
+const partiallySupportVersions = mineflayer.supportedVersions
 
 class PlayScreen extends LitElement {
   static get styles () {
@@ -175,8 +175,8 @@ class PlayScreen extends LitElement {
             pmui-id="botversion"
             pmui-value="${this.version}"
             pmui-inputmode="decimal"
-            state="${this.version && (fullySupporedVersions.includes(this.version) ? '' : /* TODO improve check: check exact including all */ partialSupportVersions.some(v => this.version.startsWith(v)) ? 'warning' : 'invalid')}"
-            .autocompleteValues=${mcAssets.versions}
+            state="${this.version && (fullySupporedVersions.includes(/** @type {any} */(this.version)) ? '' : /* TODO improve check: check exact including all */ partiallySupportVersions.some(v => this.version.startsWith(v)) ? 'warning' : 'invalid')}"
+            .autocompleteValues=${fullySupporedVersions}
             @input=${e => { this.version = e.target.value }}
           ></pmui-editbox>
         </div>
