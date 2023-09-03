@@ -224,9 +224,9 @@ class Hotbar extends LitElement {
             <div class="item-icon"></div>
             <span class="item-stack"></span>
           </div>
-          <div class="hotbar-item hotbar-more" ?hidden=${!miscUiState.currentTouch} @click=${() => {
+          ${miscUiState.currentTouch && html`<div class="hotbar-item hotbar-more" @click=${() => {
         showModal({ reactType: 'inventory', })
-      }}>
+      }}>`}
           </div>
         </div>
       </div>
