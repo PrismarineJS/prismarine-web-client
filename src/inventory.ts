@@ -64,7 +64,7 @@ const getItemSlice = (name) => {
   const invspriteImg = loadedImages.get('invsprite')
   if (!invspriteImg || !invspriteImg.width) return
 
-  const { x, y } = invspriteJson[name]
+  const { x, y } = invspriteJson[name] ?? /* unknown item */ { x: 0, y: 0 }
   const sprite = [x, y, 32, 32]
   return sprite
 }
