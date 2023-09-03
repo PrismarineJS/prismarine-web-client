@@ -24,6 +24,8 @@ for (const [version, data] of Object.entries(dataPaths.pc)) {
 }
 
 console.log('preparing data')
+console.time('data prepared')
+let builds = []
 for (const [major, versions] of Object.entries(grouped)) {
   let contents = 'Object.assign(window.mcData, {\n'
   for (const [version, dataSet] of Object.entries(versions)) {
@@ -36,7 +38,7 @@ for (const [major, versions] of Object.entries(grouped)) {
   }
   contents += '})'
 
-  await build({
+  const promise = build({
     bundle: true,
     outfile: `dist/mc-data/${major}.js`,
     stdin: {
@@ -47,5 +49,7 @@ for (const [major, versions] of Object.entries(grouped)) {
       loader: 'js',
     },
   })
+  builds.push(promise)
 }
-console.log('data prepared')
+await Promise.all(builds)
+console.timeEnd('data prepared')
