@@ -50,7 +50,8 @@ export const contro = new ControMax({
   storeProvider: {
     load: () => customKeymaps,
     save() { },
-  }
+  },
+  gamepadPollingInterval: 10
 })
 export type Command = CommandEventArgument<typeof contro['_commandsRaw']>['command']
 
@@ -135,6 +136,9 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
           setSprinting(pressed)
         }
         break
+      case 'general.attackDestroy':
+        document.dispatchEvent(new MouseEvent(pressed ? 'mousedown' : 'mouseup', { button: 0 }))
+        break
     }
   }
 }
@@ -184,7 +188,13 @@ contro.on('trigger', ({ command }) => {
       case 'general.command':
         document.getElementById('hud').shadowRoot.getElementById('chat').enableChat('/')
         break
-      // todo place / destroy
+      case 'general.interactPlace':
+        document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
+        setTimeout(() => {
+          // todo cleanup
+          document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
+        })
+        break
     }
   }
 })

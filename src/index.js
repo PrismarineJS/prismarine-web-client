@@ -67,6 +67,7 @@ const { default: updateTime } = require('./updateTime')
 const { options } = require('./optionsStorage')
 const { subscribeKey } = require('valtio/utils')
 const _ = require('lodash')
+const { contro } = require('./controls')
 
 if ('serviceWorker' in navigator && !isCypress()) {
   window.addEventListener('load', () => {
@@ -612,6 +613,14 @@ async function connect (connectOptions) {
       capturedPointer.x = e.pageX
       capturedPointer.y = e.pageY
     }, { passive: false })
+
+    contro.on('stickMovement', ({ stick, vector }) => {
+      if (stick !== 'right') return
+      let { x, z } = vector
+      if (Math.abs(x) < 0.18) x = 0
+      if (Math.abs(z) < 0.18) z = 0
+      onMouseMove({ movementX: x * 10, movementY: z * 10, type: 'touchmove' })
+    })
 
     registerListener(document, 'lostpointercapture', (e) => {
       if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return

@@ -134,7 +134,7 @@ export function nameToMcOfflineUUID (name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
 }
 
-export const setLoadingScreenStatus = function (/** @type {string} */status, isError = false) {
+export const setLoadingScreenStatus = function (/** @type {string} */status, isError = false, hideDots = false) {
   const loadingScreen = document.getElementById('loading-error-screen')
 
   // todo update in component instead
@@ -143,6 +143,7 @@ export const setLoadingScreenStatus = function (/** @type {string} */status, isE
     miscUiState.gameLoaded = false
     return
   }
+  loadingScreen.hideDots = hideDots
   loadingScreen.hasError = isError
   loadingScreen.status = status
 }
