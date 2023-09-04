@@ -29,7 +29,9 @@ const config = {
       ), // Hack to allow creating the client in a browser
       express: false,
       net: 'net-browserify',
-      'valtio/utils$': require.resolve('valtio/vanilla/utils'),
+      'valtio$': require.resolve('./valtio.js'),
+      'valtio/vanilla$': require.resolve('./valtio.js'),
+      'valtio/utils$': require.resolve('./valtio.js'),
       jose: false
     },
     fallback: {
@@ -54,7 +56,9 @@ const config = {
     extensions: [
       '.js',
       '.ts',
-      '.json'
+      '.json',
+      '.jsx',
+      '.tsx'
     ],
   },
   module: {
@@ -67,7 +71,30 @@ const config = {
         //   target: 'es2015'
         // }
       },
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: true,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", {
+          loader: 'css-loader',
+          options: { url: false }
+        }],
+      },
     ],
+    parser: {
+      javascript: {
+        commonjsMagicComments: true,
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

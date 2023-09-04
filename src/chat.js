@@ -228,23 +228,8 @@ class ChatBox extends LitElement {
       }
     })
 
-    const keyBindScrn = document.getElementById('keybinds-screen')
-
     document.addEventListener('keypress', e => {
       if (!this.inChat && activeModalStack.length === 0) {
-        keyBindScrn.keymaps.forEach(km => {
-          if (e.code === km.key) {
-            switch (km.defaultKey) {
-              case 'KeyT':
-                setTimeout(() => this.enableChat(), 0)
-                break
-              case 'Slash':
-                setTimeout(() => this.enableChat('/'), 0)
-                break
-            }
-          }
-        })
-
         return false
       }
 

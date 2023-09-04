@@ -20,13 +20,15 @@ const defaultOptions = {
   numWorkers: 4,
   localServerOptions: {},
   localUsername: 'wanderer',
+  preferLoadReadonly: false,
+  disableLoadPrompts: false
 }
 
 export const options = proxy(
   mergeAny(defaultOptions, JSON.parse(localStorage.options || '{}'))
 )
 
-window.options = options
+window.options = window.settings = options
 
 subscribe(options, () => {
   localStorage.options = JSON.stringify(options)

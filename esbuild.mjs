@@ -10,20 +10,6 @@ import { getSwAdditionalEntries } from './scripts/build.js'
 /** @type {import('esbuild').BuildOptions} */
 let baseConfig = {}
 
-// // legacy html config
-// baseConfig = {
-//   entryPoints: ['index.html'],
-//   assetNames: 'assets/[name]',
-//   chunkNames: '[ext]/[name]',
-//   outdir: 'dist',
-//   outfile: undefined,
-//   plugins: [
-//     htmlPlugin({
-//       scriptsTarget: 'esnext',
-//     })
-//   ],
-// }
-
 // // testing config
 // baseConfig = {
 //   entryPoints: ['files/index.js'],
@@ -35,8 +21,7 @@ try {
   await import('./localSettings.mjs')
 } catch { }
 
-fs.copyFileSync('index.html', 'dist/index.html')
-fs.writeFileSync('dist/index.html', fs.readFileSync('dist/index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
+fs.writeFileSync('dist/index.html', fs.readFileSync('index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
 
 const watch = process.argv.includes('--watch') || process.argv.includes('-w')
 const prod = process.argv.includes('--prod')
@@ -142,6 +127,7 @@ if (watch) {
       skipWaiting: true,
       clientsClaim: true,
       additionalManifestEntries: getSwAdditionalEntries(),
+      globPatterns: [],
       swDest: 'dist/service-worker.js',
     })
   }

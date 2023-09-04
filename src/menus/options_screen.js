@@ -113,7 +113,7 @@ class OptionsScreen extends CommonOptionsScreen {
       }}></pmui-slider>
         </div>
         <div class="wrapper">
-          <pmui-button pmui-width="150px" pmui-label="Key Binds" @pmui-click=${() => showModal(document.getElementById('keybinds-screen'))}></pmui-button>
+          <pmui-button .disabled=${true} pmui-width="150px" pmui-label="Key Binds" @pmui-click=${() => showModal(document.getElementById('keybinds-screen'))}></pmui-button>
           <pmui-slider pmui-label="Gui Scale" pmui-value="${this.guiScale}" pmui-min="1" pmui-max="4" pmui-type="" @change=${(e) => {
         this.changeOption('guiScale', e.target.value)
         document.documentElement.style.setProperty('--guiScale', `${this.guiScale}`)

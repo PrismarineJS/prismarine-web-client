@@ -1,9 +1,10 @@
 //@ts-check
-import { activeModalStack, miscUiState } from './globalState'
+import { activeModalStack, miscUiState, showModal } from './globalState'
 import { notification } from './menus/notification'
 import * as crypto from 'crypto'
 import UUID from 'uuid-1345'
 import { options } from './optionsStorage'
+import { saveWorld } from './builtinCommands'
 
 export const goFullscreen = async (doToggle = false) => {
   if (!document.fullscreenElement) {
@@ -131,4 +132,66 @@ function javaUUID (s) {
 
 export function nameToMcOfflineUUID (name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
+}
+
+export const setLoadingScreenStatus = function (/** @type {string} */status, isError = false, hideDots = false) {
+  const loadingScreen = document.getElementById('loading-error-screen')
+
+  // todo update in component instead
+  showModal(loadingScreen)
+  if (loadingScreen.hasError) {
+    miscUiState.gameLoaded = false
+    return
+  }
+  loadingScreen.hideDots = hideDots
+  loadingScreen.hasError = isError
+  loadingScreen.status = status
+}
+
+
+export const disconnect = async () => {
+  if (window.localServer) {
+    await saveWorld()
+    localServer.quit()
+  }
+  bot._client.emit('end')
+  miscUiState.gameLoaded = false
+}
+
+export const loadScript = async function (/** @type {string} */ scriptSrc) {
+  if (document.querySelector(`script[src="${scriptSrc}"]`)) {
+    return
+  }
+
+  return new Promise((resolve, reject) => {
+    const scriptElement = document.createElement('script')
+    scriptElement.src = scriptSrc
+    scriptElement.async = true
+
+    scriptElement.onload = () => {
+      resolve(scriptElement)
+    }
+
+    scriptElement.onerror = (error) => {
+      reject(error)
+    }
+
+    document.head.appendChild(scriptElement)
+  })
+}
+
+// doesn't support snapshots
+export const toMajorVersion = (version) => {
+  const [a, b] = (version + '').split('.')
+  return `${a}.${b}`
+}
+
+let prevRenderDistance = options.renderDistance
+export const reloadChunks = () => {
+  if (!worldView || !localServer) return
+  localServer.options['view-distance'] = options.renderDistance
+  worldView.viewDistance = options.renderDistance
+  localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
+  worldView.updatePosition(bot.entity.position, true)
+  prevRenderDistance = options.renderDistance
 }

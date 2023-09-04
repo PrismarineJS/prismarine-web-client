@@ -148,7 +148,7 @@ class Hotbar extends LitElement {
       if (slot >= this.bot.inventory.hotbarStart + 9) return
       if (slot < this.bot.inventory.hotbarStart) return
 
-      const sprite = newItem ? invsprite[newItem.name] : invsprite.air
+      const sprite = newItem ? invsprite[newItem.name] ?? { x: 0, y: 0 } : invsprite.air
       const slotEl = this.shadowRoot.getElementById('hotbar-' + (slot - this.bot.inventory.hotbarStart))
       const slotIcon = slotEl.children[0]
       const slotStack = slotEl.children[1]
@@ -161,7 +161,7 @@ class Hotbar extends LitElement {
   async reloadHotbar () {
     for (let i = 0; i < 9; i++) {
       const item = this.bot.inventory.slots[this.bot.inventory.hotbarStart + i]
-      const sprite = item ? invsprite[item.name] : invsprite.air
+      const sprite = item ? invsprite[item.name] ?? { x: 0, y: 0 } : invsprite.air
       const slotEl = this.shadowRoot.getElementById('hotbar-' + i)
       const slotIcon = slotEl.children[0]
       const slotStack = slotEl.children[1]
@@ -224,9 +224,9 @@ class Hotbar extends LitElement {
             <div class="item-icon"></div>
             <span class="item-stack"></span>
           </div>
-          <div class="hotbar-item hotbar-more" ?hidden=${!miscUiState.currentTouch} @click=${() => {
+          ${miscUiState.currentTouch ? html`<div class="hotbar-item hotbar-more" @click=${() => {
         showModal({ reactType: 'inventory', })
-      }}>
+      }}>` : undefined}
           </div>
         </div>
       </div>

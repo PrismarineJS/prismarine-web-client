@@ -1,8 +1,9 @@
 //@ts-check
-import { fsState, loadFolder } from './loadFolder'
+import { fsState, loadSave } from './loadSave'
 import { oneOf } from '@zardoy/utils'
 import JSZip from 'jszip'
 import { join } from 'path'
+import { options } from './optionsStorage'
 
 const { promisify } = require('util')
 const browserfs = require('browserfs')
@@ -124,10 +125,10 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
   }
   const directoryHandle = _directoryHandle
 
-  const requestResult = SUPPORT_WRITE ? await directoryHandle.requestPermission?.({ mode: 'readwrite' }) : undefined
+  const requestResult = SUPPORT_WRITE && !options.preferLoadReadonly ? await directoryHandle.requestPermission?.({ mode: 'readwrite' }) : undefined
   const writeAccess = requestResult === 'granted'
 
-  const doContinue = writeAccess || !SUPPORT_WRITE || confirm('Continue in readonly mode?')
+  const doContinue = writeAccess || !SUPPORT_WRITE || options.disableLoadPrompts || confirm('Continue in readonly mode?')
   if (!doContinue) return
   await new Promise(resolve => {
     browserfs.configure({
@@ -149,10 +150,10 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   fsState.isReadonly = !writeAccess
   fsState.syncFs = false
-  loadFolder()
+  loadSave()
 }
 
-export const openWorldZip = async (/** @type {File} */file) => {
+export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name = file['name']) => {
   await new Promise(async resolve => {
     browserfs.configure({
       // todo
@@ -161,8 +162,8 @@ export const openWorldZip = async (/** @type {File} */file) => {
         "/world": {
           fs: "ZipFS",
           options: {
-            zipData: Buffer.from(await file.arrayBuffer()),
-            name: file.name
+            zipData: Buffer.from(file instanceof File ? (await file.arrayBuffer()) : file),
+            name
           }
         }
       },
@@ -176,7 +177,7 @@ export const openWorldZip = async (/** @type {File} */file) => {
   fsState.syncFs = true
 
   if (fs.existsSync('/world/level.dat')) {
-    loadFolder()
+    loadSave()
   } else {
     const dirs = fs.readdirSync('/world')
     let availableWorlds = []
@@ -192,7 +193,7 @@ export const openWorldZip = async (/** @type {File} */file) => {
     }
 
     if (availableWorlds.length === 1) {
-      loadFolder(`/world/${availableWorlds[0]}`)
+      loadSave(`/world/${availableWorlds[0]}`)
       return
     }
 

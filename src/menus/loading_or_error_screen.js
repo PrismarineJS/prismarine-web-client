@@ -4,7 +4,7 @@ const { commonCss } = require('./components/common')
 const { addPanoramaCubeMap } = require('../panorama')
 const { hideModal, activeModalStacks, activeModalStack, replaceActiveModalStack, miscUiState } = require('../globalState')
 const { guessProblem } = require('../guessProblem')
-const { fsState } = require('../loadFolder')
+const { fsState } = require('../loadSave')
 
 class LoadingErrorScreen extends LitElement {
   static get styles () {
@@ -40,6 +40,7 @@ class LoadingErrorScreen extends LitElement {
 
   constructor () {
     super()
+    this.hideDots = false
     this.hasError = false
     this.maybeRecoverable = true
     this.status = 'Waiting for JS load'
@@ -73,7 +74,7 @@ class LoadingErrorScreen extends LitElement {
     return html`
       <div class="dirt-bg"></div>
 
-      <div class="title">${this.status}${this.hasError ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
+      <div class="title">${this.status}${this.hasError && !this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
 
       ${this.hasError
         ? html`<div class="error-buttons"><pmui-button .hidden=${!this.maybeRecoverable} pmui-width="200px" pmui-label="Back" @pmui-click=${() => {

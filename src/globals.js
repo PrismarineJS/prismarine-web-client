@@ -2,4 +2,7 @@
 
 window.bot = undefined
 window.THREE = undefined
-window.singlePlayerServer = undefined
+window.localServer = undefined
+window.worldView = undefined
+window.viewer = undefined
+window.loadedData = undefined

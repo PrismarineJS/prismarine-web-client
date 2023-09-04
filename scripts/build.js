@@ -7,14 +7,15 @@ const path = require('path')
 
 // these files need to be copied before build for now
 const filesAlwaysToCopy = [
-    { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: './prismarine-viewer/public/supportedVersions.json' },
+    // { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: './prismarine-viewer/public/supportedVersions.json' },
 ]
 // these files could be copied at build time eg with copy plugin, but copy plugin slows down the config (2x in my testing, sometimes with too many open files error) is slow so we also copy them there
 const webpackFilesToCopy = [
-    { from: './node_modules/prismarine-viewer2/public/blocksStates/', to: 'dist/blocksStates/' },
-    // { from: './node_modules/prismarine-viewer2/public/textures/', to: 'dist/textures/' },
-    { from: './node_modules/prismarine-viewer2/public/worker.js', to: 'dist/worker.js' },
-    { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: 'dist/supportedVersions.json' },
+    { from: './prismarine-viewer/public/blocksStates/', to: 'dist/blocksStates/' },
+    // { from: './prismarine-viewer/public/textures/', to: 'dist/textures/' },
+    // { from: './prismarine-viewer/public/textures/1.17.1/gui', to: 'dist/gui' },
+    { from: './prismarine-viewer/public/worker.js', to: 'dist/worker.js' },
+    // { from: './prismarine-viewer/public/supportedVersions.json', to: 'dist/supportedVersions.json' },
     { from: './assets/', to: './dist/' },
     { from: './config.json', to: 'dist/config.json' }
 ]
@@ -24,7 +25,8 @@ exports.copyFiles = (isDev = false) => {
     [...filesAlwaysToCopy, ...webpackFilesToCopy].forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
-    const cwd = './node_modules/prismarine-viewer2/public/textures/'
+    // todo copy directly only needed
+    const cwd = './prismarine-viewer/public/textures/'
     const files = glob.sync('{*/entity/**,*.png}', { cwd: cwd, nodir: true, })
     for (const file of files) {
         const copyDest = path.join('dist/textures/', file)
@@ -47,6 +49,7 @@ exports.getSwAdditionalEntries = () => {
         'index.js',
         'index.css',
         'favicon.ico',
+        `mc-data/${defaultLocalServerOptions.versionMajor}.js`,
         `blocksStates/${singlePlayerVersion}.json`,
         'extra-textures/**',
         // todo-low copy from assets
@@ -60,6 +63,8 @@ exports.getSwAdditionalEntries = () => {
         `textures/1.16.4/entity/squid.png`,
     ]
     const filesNeedsCacheKey = [
+        'index.js',
+        'index.css',
         'worker.js',
     ]
     const output = []

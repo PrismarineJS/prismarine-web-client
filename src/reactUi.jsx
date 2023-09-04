@@ -1,13 +1,13 @@
 //@ts-check
 import { renderToDom } from '@zardoy/react-util'
 
-import { LeftTouchArea, InventoryNew, RightTouchArea, useUsingTouch, useInterfaceState } from '@dimaka/interface'
+import { LeftTouchArea, RightTouchArea, useUsingTouch, useInterfaceState } from '@dimaka/interface'
 import { css } from '@emotion/css'
-import { activeModalStack, hideCurrentModal, isGameActive } from './globalState'
-import { useEffect, useState } from 'react'
-import { useProxy } from 'valtio/utils'
-import useTypedEventListener from 'use-typed-event-listener'
+import { activeModalStack, isGameActive } from './globalState'
 import { isProbablyIphone } from './menus/components/common'
+// import DeathScreen from './react/DeathScreen'
+import { useSnapshot } from 'valtio'
+import { contro } from './controls'
 
 // todo
 useInterfaceState.setState({
@@ -17,23 +17,23 @@ useInterfaceState.setState({
     },
     updateCoord: ([coord, state]) => {
         const coordToAction = [
-            ['z', -1, 'forward'],
-            ['z', 1, 'back'],
-            ['x', -1, 'left'],
-            ['x', 1, 'right'],
-            ['y', 1, 'jump'],
+            ['z', -1, 'KeyW'],
+            ['z', 1, 'KeyS'],
+            ['x', -1, 'KeyA'],
+            ['x', 1, 'KeyD'],
+            ['y', 1, 'Space'], // todo jump
+            ['y', -1, 'ShiftLeft'], // todo jump
         ]
         // todo refactor
         const actionAndState = state !== 0 ? coordToAction.find(([axis, value]) => axis === coord && value === state) : coordToAction.filter(([axis]) => axis === coord)
         if (!bot) return
         if (state === 0) {
             for (const action of actionAndState) {
-                //@ts-ignore
-                bot.setControlState(action[2], false)
+                contro.pressedKeyOrButtonChanged({code: action[2],}, false)
             }
         } else {
             //@ts-ignore
-            bot.setControlState(actionAndState[2], true)
+            contro.pressedKeyOrButtonChanged({code: actionAndState[2],}, true)
         }
     }
 })
@@ -67,63 +67,10 @@ const TouchControls = () => {
     )
 }
 
-const useActivateModal = (/** @type {string} */search, onlyLast = true) => {
-    const stack = useProxy(activeModalStack)
-
-    return onlyLast ? stack.at(-1)?.reactType === search : stack.some((modal) => modal.reactType === search)
-}
-
 function useIsBotAvailable() {
-    const stack = useProxy(activeModalStack)
+    const stack = useSnapshot(activeModalStack)
 
     return isGameActive(false)
-}
-
-function InventoryWrapper() {
-    const isInventoryOpen = useActivateModal('inventory', false)
-    const [slots, setSlots] = useState(bot.inventory.slots)
-
-    useEffect(() => {
-        if (isInventoryOpen) {
-            document.exitPointerLock?.()
-        }
-    }, [isInventoryOpen])
-
-    useTypedEventListener(document, 'keydown', (e) => {
-        // todo use refactored keymap
-        if (e.code === 'KeyE' && activeModalStack.at(-1)?.reactType === 'inventory') {
-            hideCurrentModal()
-        }
-    })
-
-    useEffect(() => {
-        bot.inventory.on('updateSlot', () => {
-            setSlots([...bot.inventory.slots])
-        })
-        // todo need to think of better solution
-        window['mcData'] = require('minecraft-data')(bot.version)
-        window['mcAssets'] = require('minecraft-assets')(bot.version)
-    }, [])
-
-    if (!isInventoryOpen) return null
-
-    return null
-
-    // return <div className={css`
-    //         position: fixed;
-    //         width: 100%;
-    //         height: 100%;
-    //         background: rgba(0, 0, 0, 0.5);
-
-    //         & > div {
-    //             scale: 0.6;
-    //             background: transparent !important;
-    //         }
-    //     `}>
-    //     <InventoryNew slots={slots} action={(oldSlot, newSlotIndex) => {
-    //         bot.moveSlotItem(oldSlot, newSlotIndex)
-    //     } } />
-    // </div>
 }
 
 const App = () => {
@@ -131,7 +78,6 @@ const App = () => {
     if (!isBotAvailable) return null
 
     return <div>
-        <InventoryWrapper />
         <TouchControls />
     </div>
 }

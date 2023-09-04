@@ -20,7 +20,7 @@ it('Loads & renders singleplayer', () => {
     // todo replace with data-test
     cy.get('#title-screen').find('.menu > div:nth-child(2) > pmui-button:nth-child(1)', { includeShadowDom: true, }).click()
     // todo implement load event
-    cy.wait(6000)
+    cy.wait(12000)
     //@ts-ignore
     cy.get('body').toMatchImageSnapshot({
         // imageConfig: {

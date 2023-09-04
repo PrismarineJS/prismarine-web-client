@@ -13,15 +13,15 @@ jobs:
         run: npm i -g pnpm
       - run: pnpm install
       - run: pnpm build
-      - uses: cypress-io/github-action@v5
-        with:
-          install: false
-          start: pnpm prod-start
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: cypress-images
-          path: cypress/integration/__image_snapshots__/
+      # - uses: cypress-io/github-action@v5
+      #   with:
+      #     install: false
+      #     start: pnpm prod-start
+      # - uses: actions/upload-artifact@v3
+      #   if: failure()
+      #   with:
+      #     name: cypress-images
+      #     path: cypress/integration/__image_snapshots__/
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

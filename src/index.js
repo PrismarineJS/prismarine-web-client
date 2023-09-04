@@ -11,6 +11,7 @@ require('./chat')
 require('./inventory')
 //@ts-ignore
 require('./globals.js')
+require('./watchOptions')
 
 // workaround for mineflayer
 process.versions.node = '18.0.0'
@@ -37,17 +38,17 @@ require('./menus/title_screen')
 
 require('./optionsStorage')
 require('./reactUi.jsx')
-require('./botControls')
+require('./controls')
 require('./dragndrop')
 require('./browserfs')
+require('./eruda')
+require('./downloadAndOpenWorld')
 
 const net = require('net')
 const Stats = require('stats.js')
 
 const mineflayer = require('mineflayer')
-const { WorldView, Viewer, MapControls } = require('prismarine-viewer/viewer')
-const PrismarineWorld = require('prismarine-world')
-const nbt = require('prismarine-nbt')
+const { WorldView, Viewer } = require('prismarine-viewer/viewer')
 const pathfinder = require('mineflayer-pathfinder')
 const { Vec3 } = require('vec3')
 
@@ -56,7 +57,7 @@ const Cursor = require('./cursor').default
 global.THREE = require('three')
 const { initVR } = require('./vr')
 const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive, miscUiState, gameAdditionalState } = require('./globalState')
-const { pointerLock, goFullscreen, toNumber, isCypress } = require('./utils')
+const { pointerLock, goFullscreen, toNumber, isCypress, loadScript, toMajorVersion, setLoadingScreenStatus } = require('./utils')
 const { notification } = require('./menus/notification')
 const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
 const { startLocalServer, unsupportedLocalServerFeatures } = require('./createLocalServer')
@@ -66,6 +67,7 @@ const { default: updateTime } = require('./updateTime')
 const { options } = require('./optionsStorage')
 const { subscribeKey } = require('valtio/utils')
 const _ = require('lodash')
+const { contro } = require('./controls')
 
 if ('serviceWorker' in navigator && !isCypress()) {
   window.addEventListener('load', () => {
@@ -119,6 +121,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 // Create viewer
+/** @type {import('../prismarine-viewer/viewer/lib/viewer').Viewer} */
 const viewer = new Viewer(renderer, options.numWorkers)
 initPanoramaOptions(viewer)
 
@@ -173,17 +176,6 @@ const loadingScreen = document.getElementById('loading-error-screen')
 const hud = document.getElementById('hud')
 const optionsScrn = document.getElementById('options-screen')
 const pauseMenu = document.getElementById('pause-screen')
-
-function setLoadingScreenStatus (status, isError = false) {
-  // todo update in component instead
-  showModal(loadingScreen)
-  if (loadingScreen.hasError) {
-    miscUiState.gameLoaded = false
-    return
-  }
-  loadingScreen.hasError = isError
-  loadingScreen.status = status
-}
 
 let mouseMovePostHandle = (e) => { }
 let lastMouseCall
@@ -316,7 +308,8 @@ async function connect (connectOptions) {
   /** @type {mineflayer.Bot} */
   let bot
   const destroyAll = () => {
-    window.singlePlayerServer = undefined
+    viewer.resetAll()
+    window.localServer = undefined
 
     // simple variant, still buggy
     postRenderFrameFn = () => { }
@@ -364,23 +357,50 @@ async function connect (connectOptions) {
   }, {
     signal: errorAbortController.signal
   })
-  let singlePlayerServer
+  window.addEventListener('error', (e) => {
+    handleError(e.message)
+  }, {
+    signal: errorAbortController.signal
+  })
+  let localServer
   try {
+    Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
+    const downloadMcData = async (version) => {
+      setLoadingScreenStatus(`Downloading data for ${version}`)
+      await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
+    }
+
+    const version = connectOptions.botVersion ?? serverOptions.version
+    if (version) {
+      await downloadMcData(version)
+    }
+
     if (singeplayer) {
+      // SINGLEPLAYER EXPLAINER:
+      // Note 1: here we have custom sync communication between server Client (flying-squid) and game client (mineflayer)
+      // Note 2: custom Server class is used which simplifies communication & Client creation on it's side
+      // local server started
+      // mineflayer.createBot (see source def)
+      // bot._client = bot._client ?? mc.createClient(options) <-- mc-protocol package
+      // tcpDns() skipped since we define connect option
+      // in setProtocol: we emit 'connect' here below so in that file we send set_protocol and login_start (onLogin handler)
+      // Client (class) of flying-squid (in server/login.js of mc-protocol): onLogin handler: skip most logic & go to loginClient() which assigns uuid and sends 'success' back to client (onLogin handler) and emits 'login' on the server (login.js in flying-squid handler)
+      // flying-squid: 'login' -> player.login -> now sends 'login' event to the client (handled in many plugins in mineflayer) -> then 'update_health' is sent which emits 'spawn'
+
+      setLoadingScreenStatus('Starting local server')
       window.serverDataChannel ??= {}
-      window.worldLoaded = false
-      Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides, options.localServerOptions, serverOptions))
-      singlePlayerServer = window.singlePlayerServer = startLocalServer()
+      localServer = window.localServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
-      if (!singlePlayerServer.worldsReady) {
+      if (!localServer.worldsReady) {
         await new Promise(resolve => {
-          singlePlayerServer.once('worldsReady', resolve)
+          localServer.once('worldsReady', resolve)
         })
       }
     }
 
+    setLoadingScreenStatus('Creating mineflayer bot')
     bot = mineflayer.createBot({
       host,
       port,
@@ -396,7 +416,10 @@ async function connect (connectOptions) {
       viewDistance: 'tiny',
       checkTimeoutInterval: 240 * 1000,
       noPongTimeout: 240 * 1000,
-      closeTimeout: 240 * 1000
+      closeTimeout: 240 * 1000,
+      async versionSelectedHook (client) {
+        await downloadMcData(client.version)
+      }
     })
     if (singeplayer) {
       const _supportFeature = bot.supportFeature
@@ -457,15 +480,8 @@ async function connect (connectOptions) {
 
     const center = bot.entity.position
 
+    /** @type {import('../prismarine-viewer/viewer/lib/worldView').WorldView} */
     const worldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
-    if (singeplayer) {
-      const d = subscribeKey(options, 'renderDistance', () => {
-        singlePlayerServer.options['view-distance'] = options.renderDistance
-        worldView.viewDistance = options.renderDistance
-        window.onPlayerChangeRenderDistance?.(options.renderDistance)
-      })
-      disposables.push(d)
-    }
 
     let fovSetting = optionsScrn.fov
     const updateFov = () => {
@@ -483,18 +499,22 @@ async function connect (connectOptions) {
     updateFov()
     subscribeKey(gameAdditionalState, 'isFlying', updateFov)
     subscribeKey(gameAdditionalState, 'isSprinting', updateFov)
+    const defaultPlayerHeight = viewer.playerHeight
+    subscribeKey(gameAdditionalState, 'isSneaking', () => {
+      viewer.playerHeight = gameAdditionalState.isSneaking ? defaultPlayerHeight - 0.3 : defaultPlayerHeight
+      viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
+    })
     optionsScrn.addEventListener('fov_changed', updateFov)
 
     viewer.setVersion(version)
 
+    window.viewer = viewer
+    window.loadedData = mcData
     window.worldView = worldView
     window.bot = bot
-    window.mcData = mcData
-    window.viewer = viewer
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
-    window.settings = optionsScrn
     window.renderer = renderer
 
     initVR(bot, renderer, viewer)
@@ -594,6 +614,14 @@ async function connect (connectOptions) {
       capturedPointer.y = e.pageY
     }, { passive: false })
 
+    contro.on('stickMovement', ({ stick, vector }) => {
+      if (stick !== 'right') return
+      let { x, z } = vector
+      if (Math.abs(x) < 0.18) x = 0
+      if (Math.abs(z) < 0.18) z = 0
+      onMouseMove({ movementX: x * 10, movementY: z * 10, type: 'touchmove' })
+    })
+
     registerListener(document, 'lostpointercapture', (e) => {
       if (e.pointerId === undefined || e.pointerId !== capturedPointer?.id) return
       clearTimeout(virtualClickTimeout)
@@ -664,17 +692,6 @@ window.addEventListener('keydown', (e) => {
   }
   if (e.code === 'KeyL' && e.altKey) {
     console.clear()
-  }
-  // if (e.code === 'KeyD') {
-  //   debugPitch.innerText = '0'
-  // }
-})
-
-window.addEventListener('unhandledrejection', (e) => {
-  // todo
-  if (e.reason.message.includes('Unable to decode audio data')) {
-    console.warn(e.reason)
-    return
   }
 })
 

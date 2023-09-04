@@ -119,13 +119,14 @@ window.miscUiState = miscUiState
 export const gameAdditionalState = proxy({
   isFlying: false,
   isSprinting: false,
+  isSneaking: false,
 })
 
 window.gameAdditionalState = gameAdditionalState
 
 const savePlayers = () => {
-  if (!window.singlePlayerServer) return
-  for (const player of window.singlePlayerServer.players) {
+  if (!window.localServer) return
+  for (const player of window.localServer.players) {
     player.save()
   }
 }
