@@ -354,6 +354,11 @@ async function connect (connectOptions) {
   }, {
     signal: errorAbortController.signal
   })
+  window.addEventListener('error', (e) => {
+    handleError(e.message)
+  }, {
+    signal: errorAbortController.signal
+  })
   let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
