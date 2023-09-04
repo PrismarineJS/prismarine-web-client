@@ -20,6 +20,8 @@ const defaultOptions = {
   numWorkers: 4,
   localServerOptions: {},
   localUsername: 'wanderer',
+  preferLoadReadonly: false,
+  disableLoadPrompts: false
 }
 
 export const options = proxy(

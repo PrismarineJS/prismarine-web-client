@@ -384,7 +384,6 @@ async function connect (connectOptions) {
 
       setLoadingScreenStatus('Starting local server')
       window.serverDataChannel ??= {}
-      window.worldLoaded = false
       localServer = window.localServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false

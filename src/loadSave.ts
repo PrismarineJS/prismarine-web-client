@@ -19,6 +19,8 @@ export const fsState = proxy({
 const PROPOSE_BACKUP = true
 
 export const loadSave = async (root = '/world') => {
+  const disablePrompts = options.disableLoadPrompts
+
   // todo do it in singleplayer as well
   for (const key in forceCachedDataPaths) {
     delete forceCachedDataPaths[key]
@@ -50,7 +52,7 @@ export const loadSave = async (root = '/world') => {
     const qs = new URLSearchParams(window.location.search)
     version = levelDat.Version?.Name ?? qs.get('version')
     if (!version) {
-      const newVersion = prompt(`In 1.8 and before world save doesn\'t contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
+      const newVersion = disablePrompts ? '1.8.8' : prompt(`In 1.8 and before world save doesn\'t contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
       if (!newVersion) return
       version = newVersion
     }
@@ -89,7 +91,7 @@ export const loadSave = async (root = '/world') => {
 
   }
 
-  if (warnings.length) {
+  if (warnings.length && !disablePrompts) {
     const doContinue = confirm(`Continue with following warnings?\n${warnings.join('\n')}`)
     if (!doContinue) return
   }

@@ -3,6 +3,7 @@ import { fsState, loadSave } from './loadSave'
 import { oneOf } from '@zardoy/utils'
 import JSZip from 'jszip'
 import { join } from 'path'
+import { options } from './optionsStorage'
 
 const { promisify } = require('util')
 const browserfs = require('browserfs')
@@ -124,10 +125,10 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
   }
   const directoryHandle = _directoryHandle
 
-  const requestResult = SUPPORT_WRITE ? await directoryHandle.requestPermission?.({ mode: 'readwrite' }) : undefined
+  const requestResult = SUPPORT_WRITE && !options.preferLoadReadonly ? await directoryHandle.requestPermission?.({ mode: 'readwrite' }) : undefined
   const writeAccess = requestResult === 'granted'
 
-  const doContinue = writeAccess || !SUPPORT_WRITE || confirm('Continue in readonly mode?')
+  const doContinue = writeAccess || !SUPPORT_WRITE || options.disableLoadPrompts || confirm('Continue in readonly mode?')
   if (!doContinue) return
   await new Promise(resolve => {
     browserfs.configure({
