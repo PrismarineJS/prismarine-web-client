@@ -15,21 +15,36 @@ window.addEventListener('load', async (e) => {
   const response = await fetch(mapUrl)
   const contentLength = +response.headers.get('Content-Length')
   setLoadingScreenStatus(`Downloading world ${name}: have to download ${filesize(contentLength)}...`)
-  // const reader = response.body!.getReader()
-  // let doneValue
-  // while (true) {
-  //   // done is true for the last chunk
-  //   // value is Uint8Array of the chunk bytes
-  //   const { done, value } = await reader.read()
 
-  //   if (done) {
-  //     doneValue = value
-  //     break
-  //   }
+  let downloadedBytes = 0
+  const buffer = await new Response(
+    new ReadableStream({
+      async start(controller) {
+        const reader = response.body.getReader()
 
-  //   setLoadingScreenStatus(`Downloading world ${name}: ${filesize(value.length)} / ${filesize(contentLength)}MB...`)
-  // }
-  await openWorldZip(await response.arrayBuffer())
+        while (true) {
+          const { done, value } = await reader.read()
+
+          if (done) {
+            controller.close()
+            break
+          }
+
+          downloadedBytes += value.byteLength
+
+          // Calculate download progress as a percentage
+          const progress = (downloadedBytes / contentLength) * 100
+
+          // Update your progress bar or display the progress value as needed
+          setLoadingScreenStatus(`Download Progress: ${Math.floor(progress)}% (${filesize(downloadedBytes, { round: 2, })} / ${filesize(contentLength, { round: 2, })}))`, false, true)
+
+          // Pass the received data to the controller
+          controller.enqueue(value)
+        }
+      },
+    })
+  ).arrayBuffer()
+  await openWorldZip(buffer)
 })
 
 export default async () => {
