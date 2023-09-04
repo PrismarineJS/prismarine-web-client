@@ -393,9 +393,9 @@ async function connect (connectOptions) {
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
-      if (!localServer.worldsReady) {
+      if (!localServer.pluginsReady) {
         await new Promise(resolve => {
-          localServer.once('worldsReady', resolve)
+          localServer.once('pluginsReady', resolve)
         })
       }
     }
