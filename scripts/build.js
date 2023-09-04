@@ -47,6 +47,7 @@ exports.getSwAdditionalEntries = () => {
         'index.js',
         'index.css',
         'favicon.ico',
+        `mc-data/${defaultLocalServerOptions.versionMajor}.js`,
         `blocksStates/${singlePlayerVersion}.json`,
         'extra-textures/**',
         // todo-low copy from assets
@@ -60,6 +61,8 @@ exports.getSwAdditionalEntries = () => {
         `textures/1.16.4/entity/squid.png`,
     ]
     const filesNeedsCacheKey = [
+        'index.js',
+        'index.css',
         'worker.js',
     ]
     const output = []
