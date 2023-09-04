@@ -182,6 +182,11 @@ async function connect (options) {
   }, {
     signal: errorAbortController
   })
+  window.addEventListener('error', (e) => {
+    handleError(e.message)
+  }, {
+    signal: errorAbortController.signal
+  })
   const bot = mineflayer.createBot({
     host,
     port,
