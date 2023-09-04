@@ -305,6 +305,7 @@ async function connect (connectOptions) {
   /** @type {mineflayer.Bot} */
   let bot
   const destroyAll = () => {
+    viewer.resetAll()
     window.singlePlayerServer = undefined
 
     // simple variant, still buggy
