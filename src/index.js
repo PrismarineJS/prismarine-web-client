@@ -371,7 +371,7 @@ async function connect (connectOptions) {
 
     const version = connectOptions.botVersion ?? serverOptions.version
     if (version) {
-      downloadMcData(version)
+      await downloadMcData(version)
     }
 
     if (singeplayer) {
