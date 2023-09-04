@@ -46,7 +46,7 @@ const ctx = await esbuild.context({
   // logLevel: 'debug',
   logLevel: 'info',
   platform: 'browser',
-  sourcemap: dev,
+  sourcemap: true,
   outdir: 'dist',
   mainFields: [
     'browser', 'module', 'main'
