@@ -124,8 +124,8 @@ export const gameAdditionalState = proxy({
 window.gameAdditionalState = gameAdditionalState
 
 const savePlayers = () => {
-  if (!window.singlePlayerServer) return
-  for (const player of window.singlePlayerServer.players) {
+  if (!window.localServer) return
+  for (const player of window.localServer.players) {
     player.save()
   }
 }

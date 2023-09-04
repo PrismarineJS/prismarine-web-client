@@ -306,7 +306,7 @@ async function connect (connectOptions) {
   let bot
   const destroyAll = () => {
     viewer.resetAll()
-    window.singlePlayerServer = undefined
+    window.localServer = undefined
 
     // simple variant, still buggy
     postRenderFrameFn = () => { }
@@ -354,7 +354,7 @@ async function connect (connectOptions) {
   }, {
     signal: errorAbortController.signal
   })
-  let singlePlayerServer
+  let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
     let version = connectOptions.botVersion ?? serverOptions.version
@@ -378,13 +378,13 @@ async function connect (connectOptions) {
       setLoadingScreenStatus('Starting local server')
       window.serverDataChannel ??= {}
       window.worldLoaded = false
-      singlePlayerServer = window.singlePlayerServer = startLocalServer()
+      localServer = window.localServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
       // init world, todo: do it for any async plugins
-      if (!singlePlayerServer.worldsReady) {
+      if (!localServer.worldsReady) {
         await new Promise(resolve => {
-          singlePlayerServer.once('worldsReady', resolve)
+          localServer.once('worldsReady', resolve)
         })
       }
     }
@@ -466,10 +466,12 @@ async function connect (connectOptions) {
 
     const center = bot.entity.position
 
+    /** @type {import('../prismarine-viewer/viewer/lib/worldView').WorldView} */
     const worldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
     if (singeplayer) {
+      let prevRenderDistance = renderDistance
       const d = subscribeKey(options, 'renderDistance', () => {
-        singlePlayerServer.options['view-distance'] = options.renderDistance
+        localServer.options['view-distance'] = options.renderDistance
         worldView.viewDistance = options.renderDistance
         window.onPlayerChangeRenderDistance?.(options.renderDistance)
       })

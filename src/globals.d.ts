@@ -3,7 +3,7 @@
 declare const THREE: typeof import('three')
 // todo
 declare const bot: import('mineflayer').Bot
-declare const singlePlayerServer: any
+declare const localServer: any
 
 declare interface Document {
     getElementById(id): any

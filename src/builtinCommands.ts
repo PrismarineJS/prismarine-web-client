@@ -31,7 +31,7 @@ async function addFolderToZip(folderPath, zip, relativePath) {
 const exportWorld = async () => {
   // todo issue into chat warning if fs is writable!
   const zip = new JSZip()
-  let worldFolder: string = singlePlayerServer.options.worldFolder
+  let worldFolder: string = localServer.options.worldFolder
   if (!worldFolder.startsWith('/')) worldFolder = `/${worldFolder}`
   await addFolderToZip(worldFolder, zip, '')
 
@@ -66,9 +66,9 @@ const commands = [
       if (fsState.isReadonly || !fsState.syncFs) return
       // todo for testing purposes
       sessionStorage.oldData = localStorage
-      singlePlayerServer.quit()
+      localServer.quit()
       // todo browserfs bug
-      fs.rmdirSync(singlePlayerServer.options.worldFolder, { recursive: true })
+      fs.rmdirSync(localServer.options.worldFolder, { recursive: true })
     }
   },
   {
@@ -80,7 +80,7 @@ const commands = [
 ]
 
 export const tryHandleBuiltinCommand = (message) => {
-  if (!singlePlayerServer) return
+  if (!localServer) return
 
   for (const command of commands) {
     if (command.command.includes(message)) {
@@ -91,10 +91,10 @@ export const tryHandleBuiltinCommand = (message) => {
 }
 
 export const saveWorld = async () => {
-  for (const player of window.singlePlayerServer.players) {
+  for (const player of localServer.players) {
     await player.save()
   }
-  const worlds = [singlePlayerServer.overworld]
+  const worlds = [localServer.overworld]
   for (const world of worlds) {
     await world.storageProvider.close()
   }

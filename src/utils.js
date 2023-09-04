@@ -149,9 +149,9 @@ export const setLoadingScreenStatus = function (/** @type {string} */status, isE
 
 
 export const disconnect = async () => {
-  if (window.singlePlayerServer) {
+  if (window.localServer) {
     await saveWorld()
-    singlePlayerServer.quit()
+    localServer.quit()
   }
   bot._client.emit('end')
   miscUiState.gameLoaded = false
