@@ -46,6 +46,7 @@ exports.getSwAdditionalEntries = () => {
     // need to be careful with this
     const singlePlayerVersion = defaultLocalServerOptions.version
     const filesToCachePatterns = [
+        'index.html',
         'index.js',
         'index.css',
         'favicon.ico',

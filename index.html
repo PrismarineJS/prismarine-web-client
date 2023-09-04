@@ -5,13 +5,19 @@
       window.startLoad = Date.now()
     </script>
     <script type="module">
-      window.addEventListener('hashchange', (e) => {
-        if (e.newURL.endsWith('#dev')) {
+      const checkLoadEruda = () => {
+        if (window.location.hash === '#dev') {
           // todo precache (check offline)?
           import('https://cdn.skypack.dev/eruda').then(({ default: eruda }) => {
             eruda.init()
           })
         }
+      }
+      checkLoadEruda()
+      window.addEventListener('hashchange', (e) => {
+        setTimeout(() => {
+          checkLoadEruda()
+        })
       })
     </script>
     <title>Prismarine Web Client</title>
