@@ -473,7 +473,9 @@ async function connect (connectOptions) {
       const d = subscribeKey(options, 'renderDistance', () => {
         localServer.options['view-distance'] = options.renderDistance
         worldView.viewDistance = options.renderDistance
-        window.onPlayerChangeRenderDistance?.(options.renderDistance)
+        localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
+        worldView.updatePosition(bot.entity.position)
+        prevRenderDistance = options.renderDistance
       })
       disposables.push(d)
     }
