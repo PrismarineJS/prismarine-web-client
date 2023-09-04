@@ -11,6 +11,7 @@ require('./chat')
 require('./inventory')
 //@ts-ignore
 require('./globals.js')
+require('./watchOptions')
 
 // workaround for mineflayer
 process.versions.node = '18.0.0'
@@ -474,17 +475,6 @@ async function connect (connectOptions) {
 
     /** @type {import('../prismarine-viewer/viewer/lib/worldView').WorldView} */
     const worldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
-    if (singeplayer) {
-      let prevRenderDistance = renderDistance
-      const d = subscribeKey(options, 'renderDistance', () => {
-        localServer.options['view-distance'] = options.renderDistance
-        worldView.viewDistance = options.renderDistance
-        localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
-        worldView.updatePosition(bot.entity.position)
-        prevRenderDistance = options.renderDistance
-      })
-      disposables.push(d)
-    }
 
     let fovSetting = optionsScrn.fov
     const updateFov = () => {
@@ -511,14 +501,13 @@ async function connect (connectOptions) {
 
     viewer.setVersion(version)
 
+    window.viewer = viewer
+    window.loadedData = mcData
     window.worldView = worldView
     window.bot = bot
-    window.mcData = mcData
-    window.viewer = viewer
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
-    window.settings = optionsScrn
     window.renderer = renderer
 
     initVR(bot, renderer, viewer)
@@ -689,9 +678,6 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'KeyL' && e.altKey) {
     console.clear()
   }
-  // if (e.code === 'KeyD') {
-  //   debugPitch.innerText = '0'
-  // }
 })
 
 addPanoramaCubeMap()

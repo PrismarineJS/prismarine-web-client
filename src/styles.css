@@ -92,12 +92,6 @@ canvas {
   font-family: minecraft, mojangles, monospace;
 }
 
-/* todo move this fix to lib */
-.TouchMovementArea {
-  grid-template-columns: "c ."
-  "d .";
-}
-
 @media only screen and (max-width: 971px) {
   #ui-root {
     transform: scale(2);

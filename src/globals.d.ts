@@ -3,10 +3,18 @@
 declare const THREE: typeof import('three')
 // todo
 declare const bot: import('mineflayer').Bot
+declare const viewer: import('../prismarine-viewer/viewer/lib/viewer').Viewer | undefined
+declare const worldView: import('../prismarine-viewer/viewer/lib/worldView').WorldView | undefined
 declare const localServer: any
 
 declare interface Document {
     getElementById(id): any
+}
+
+declare namespace JSX {
+    interface IntrinsicElements {
+        [elemName: string]: any
+    }
 }
 
 declare interface DocumentFragment {

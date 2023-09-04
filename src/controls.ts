@@ -7,6 +7,7 @@ import { proxy, subscribe } from 'valtio'
 import { ControMax } from 'contro-max/build/controMax'
 import { CommandEventArgument, SchemaCommandInput } from 'contro-max/build/types'
 import { stringStartsWith } from 'contro-max/build/stringUtils'
+import { reloadChunks } from './utils'
 
 // doesnt seem to work for now
 const customKeymaps = proxy(JSON.parse(localStorage.keymap || '{}'))
@@ -154,8 +155,8 @@ contro.on('trigger', ({ command }) => {
 
   const secondActionCommand = secondActionCommands[command]
   if (secondActionCommand) {
-    const commandToTrigger = secondActionCommands[lastCommandTrigger?.command]
-    if (commandToTrigger && Date.now() - lastCommandTrigger.time < secondActionActivationTimeout) {
+    if (command === lastCommandTrigger?.command && Date.now() - lastCommandTrigger.time < secondActionActivationTimeout) {
+      const commandToTrigger = secondActionCommands[lastCommandTrigger.command]
       commandToTrigger()
       lastCommandTrigger = null
     } else {
@@ -190,6 +191,29 @@ contro.on('trigger', ({ command }) => {
 
 contro.on('release', ({ command }) => {
   onTriggerOrReleased(command, false)
+})
+
+// hard-coded keybindings
+
+const hardcodedPressedKeys = new Set<string>()
+document.addEventListener('keydown', (e) => {
+  if (hardcodedPressedKeys.has('F3')) {
+    // reload chunks
+    if (e.code === 'KeyA') {
+      //@ts-ignore
+      const loadedChunks = Object.entries(worldView.loadedChunks).filter(([, v]) => v).map(([key]) => key.split(',').map(Number))
+      for (const [x, z] of loadedChunks) {
+        worldView.unloadChunk({ x, z })
+      }
+      reloadChunks()
+    }
+  }
+
+  if (hardcodedPressedKeys.has(e.code)) return
+  hardcodedPressedKeys.add(e.code)
+})
+document.addEventListener('keyup', (e) => {
+  hardcodedPressedKeys.delete(e.code)
 })
 
 // #region creative fly

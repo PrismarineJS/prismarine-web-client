@@ -184,3 +184,13 @@ export const toMajorVersion = (version) => {
   const [a, b] = (version + '').split('.')
   return `${a}.${b}`
 }
+
+let prevRenderDistance = options.renderDistance
+export const reloadChunks = () => {
+  if (!worldView || !localServer) return
+  localServer.options['view-distance'] = options.renderDistance
+  worldView.viewDistance = options.renderDistance
+  localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
+  worldView.updatePosition(bot.entity.position, true)
+  prevRenderDistance = options.renderDistance
+}

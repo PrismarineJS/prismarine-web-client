@@ -26,7 +26,7 @@ export const options = proxy(
   mergeAny(defaultOptions, JSON.parse(localStorage.options || '{}'))
 )
 
-window.options = options
+window.options = window.settings = options
 
 subscribe(options, () => {
   localStorage.options = JSON.stringify(options)
