@@ -2,7 +2,7 @@
 const { LitElement, html, css } = require('lit')
 const { openURL } = require('./components/common')
 const { hideCurrentModal, showModal, miscUiState } = require('../globalState')
-const { fsState } = require('../loadFolder')
+const { fsState } = require('../loadSave')
 const { subscribe } = require('valtio')
 const { saveWorld } = require('../builtinCommands')
 const { notification } = require('./notification')

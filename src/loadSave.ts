@@ -18,8 +18,7 @@ export const fsState = proxy({
 
 const PROPOSE_BACKUP = true
 
-// todo rename to loadWorld
-export const loadFolder = async (root = '/world') => {
+export const loadSave = async (root = '/world') => {
   // todo do it in singleplayer as well
   for (const key in forceCachedDataPaths) {
     delete forceCachedDataPaths[key]

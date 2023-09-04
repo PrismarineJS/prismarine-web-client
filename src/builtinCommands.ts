@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
 import fs from 'fs'
 import { join } from 'path'
-import { fsState } from './loadFolder'
+import { fsState } from './loadSave'
 
 const notImplemented = () => {
   return 'Not implemented yet'

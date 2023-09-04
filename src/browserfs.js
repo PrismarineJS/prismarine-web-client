@@ -1,5 +1,5 @@
 //@ts-check
-import { fsState, loadFolder } from './loadFolder'
+import { fsState, loadSave } from './loadSave'
 import { oneOf } from '@zardoy/utils'
 import JSZip from 'jszip'
 import { join } from 'path'
@@ -149,7 +149,7 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   fsState.isReadonly = !writeAccess
   fsState.syncFs = false
-  loadFolder()
+  loadSave()
 }
 
 export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name = file['name']) => {
@@ -176,7 +176,7 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
   fsState.syncFs = true
 
   if (fs.existsSync('/world/level.dat')) {
-    loadFolder()
+    loadSave()
   } else {
     const dirs = fs.readdirSync('/world')
     let availableWorlds = []
@@ -192,7 +192,7 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
     }
 
     if (availableWorlds.length === 1) {
-      loadFolder(`/world/${availableWorlds[0]}`)
+      loadSave(`/world/${availableWorlds[0]}`)
       return
     }
 

@@ -1,6 +1,6 @@
 const { openWorldDirectory, openWorldZip } = require('../browserfs')
 const { showModal } = require('../globalState')
-const { fsState } = require('../loadFolder')
+const { fsState } = require('../loadSave')
 const { openURL } = require('./components/common')
 const { LitElement, html, css, unsafeCSS } = require('lit')
 const fs = require('fs')

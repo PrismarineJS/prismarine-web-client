@@ -4,7 +4,7 @@ const { commonCss } = require('./components/common')
 const { addPanoramaCubeMap } = require('../panorama')
 const { hideModal, activeModalStacks, activeModalStack, replaceActiveModalStack, miscUiState } = require('../globalState')
 const { guessProblem } = require('../guessProblem')
-const { fsState } = require('../loadFolder')
+const { fsState } = require('../loadSave')
 
 class LoadingErrorScreen extends LitElement {
   static get styles () {
