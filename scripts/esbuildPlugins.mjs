@@ -26,15 +26,29 @@ const plugins = [
         if (!resolveDir.endsWith('minecraft-data')) return
         return {
           namespace: 'load-global-minecraft-data',
-          path
+          path,
+          pluginData: {
+            resolveDir
+          },
         }
       })
       build.onLoad({
         filter: /.+/,
         namespace: 'load-global-minecraft-data',
-      }, () => {
+      }, ({ pluginData: { resolveDir } }) => {
+        const defaultVersionsObj = {
+          // default protocol data, needed for auto-select
+          "1.20.1": {
+            version: {
+              "minecraftVersion": "1.20.1",
+              "version": 763,
+              "majorVersion": "1.20"
+            },
+            protocol: JSON.parse(fs.readFileSync(join(resolveDir, 'minecraft-data/data/pc/1.20/protocol.json'), 'utf8')),
+          }
+        }
         return {
-          contents: 'window.mcData ??= {};module.exports = { pc: window.mcData }',
+          contents: `window.mcData ??= ${JSON.stringify(defaultVersionsObj)};module.exports = { pc: window.mcData }`,
           loader: 'js',
         }
       })
@@ -230,6 +244,7 @@ const plugins = [
   polyfillNode({
     polyfills: {
       fs: false,
+      dns: false,
       crypto: false,
       events: false,
       http: false,

@@ -364,10 +364,14 @@ async function connect (connectOptions) {
   let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
-    let version = connectOptions.botVersion ?? serverOptions.version
-    if (version) {
+    const downloadMcData = async (version) => {
       setLoadingScreenStatus(`Downloading data for ${version}`)
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
+    }
+
+    const version = connectOptions.botVersion ?? serverOptions.version
+    if (version) {
+      downloadMcData(version)
     }
 
     if (singeplayer) {
@@ -411,7 +415,10 @@ async function connect (connectOptions) {
       viewDistance: 'tiny',
       checkTimeoutInterval: 240 * 1000,
       noPongTimeout: 240 * 1000,
-      closeTimeout: 240 * 1000
+      closeTimeout: 240 * 1000,
+      async versionSelectedHook (client) {
+        await downloadMcData(client.version)
+      }
     })
     if (singeplayer) {
       const _supportFeature = bot.supportFeature
