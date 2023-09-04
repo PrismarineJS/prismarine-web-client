@@ -128,7 +128,10 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
         bot.setControlState('sneak', pressed)
         break
       case 'general.sprint':
-        setSprinting(pressed)
+        // todo add setting to change behavior
+        if (pressed) {
+          setSprinting(pressed)
+        }
         break
     }
   }

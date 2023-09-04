@@ -74,7 +74,7 @@ function useIsBotAvailable() {
 
 const App = () => {
     const isBotAvailable = useIsBotAvailable()
-    // if (!isBotAvailable) return <DeathScreen />
+    if (!isBotAvailable) return null
 
     return <div>
         <TouchControls />
