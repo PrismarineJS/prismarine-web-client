@@ -1,3 +1,6 @@
 {
-    "github": false
+    "github": {
+        "enabled": false,
+        "silent": true
+    }
 }
