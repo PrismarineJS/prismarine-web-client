@@ -3,8 +3,11 @@ const { showModal } = require('../globalState')
 const { fsState } = require('../loadFolder')
 const { openURL } = require('./components/common')
 const { LitElement, html, css, unsafeCSS } = require('lit')
+const fs = require('fs')
 
 const mcImage = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/title/minecraft.png')
+const { options } = require('../optionsStorage')
+const defaultLocalServerOptions = require('../defaultLocalServerOptions')
 
 // const SUPPORT_WORLD_LOADING = !!window.showDirectoryPicker
 const SUPPORT_WORLD_LOADING = true
@@ -161,6 +164,12 @@ class TitleScreen extends LitElement {
           isReadonly: false,
           syncFs: true,
         })
+        const notFirstTime = fs.existsSync('./world/level.dat')
+        if (notFirstTime && !options.localServerOptions.version) {
+          options.localServerOptions.version = '1.16.1' // legacy version, now we use 1.8.8
+        } else {
+          options.localServerOptions.version ??= defaultLocalServerOptions.version
+        }
         this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
       }}></pmui-button>
           ${SUPPORT_WORLD_LOADING ? html`<pmui-button pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${({ detail: e }) => {
