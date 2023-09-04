@@ -8,7 +8,8 @@
         "allowSyntheticDefaultImports": true,
         "noEmit": true,
         "strictFunctionTypes": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "noFallthroughCasesInSwitch": true
         // "strictNullChecks": true
     },
     "include": [

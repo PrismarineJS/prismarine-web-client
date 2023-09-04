@@ -1,5 +1,6 @@
 {
     "configurations": [
+        // UPDATED: all configs below are misconfigured and will crash vscode, open dist/index.html and use live preview debug instead
         // recommended as much faster
         {
             // to launch "C:\Program Files\Google\Chrome Beta\Application\chrome.exe" --remote-debugging-port=9222

@@ -1,7 +1,7 @@
 node_modules/
 package-lock.json
 .vscode
-public
+**/public
 *.log
 .env.local
 Thumbs.db
@@ -13,3 +13,4 @@ dist
 world
 out
 *.iml
+.vercel
