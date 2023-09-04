@@ -125,6 +125,7 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
         bot.setControlState('jump', pressed)
         break
       case 'general.sneak':
+        gameAdditionalState.isSneaking = pressed
         bot.setControlState('sneak', pressed)
         break
       case 'general.sprint':

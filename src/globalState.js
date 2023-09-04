@@ -119,6 +119,7 @@ window.miscUiState = miscUiState
 export const gameAdditionalState = proxy({
   isFlying: false,
   isSprinting: false,
+  isSneaking: false,
 })
 
 window.gameAdditionalState = gameAdditionalState

@@ -22,6 +22,7 @@ useInterfaceState.setState({
             ['x', -1, 'KeyA'],
             ['x', 1, 'KeyD'],
             ['y', 1, 'Space'], // todo jump
+            ['y', -1, 'ShiftLeft'], // todo jump
         ]
         // todo refactor
         const actionAndState = state !== 0 ? coordToAction.find(([axis, value]) => axis === coord && value === state) : coordToAction.filter(([axis]) => axis === coord)

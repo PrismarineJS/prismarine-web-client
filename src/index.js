@@ -119,6 +119,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 // Create viewer
+/** @type {import('../prismarine-viewer/viewer/lib/viewer').Viewer} */
 const viewer = new Viewer(renderer, options.numWorkers)
 initPanoramaOptions(viewer)
 
@@ -501,6 +502,11 @@ async function connect (connectOptions) {
     updateFov()
     subscribeKey(gameAdditionalState, 'isFlying', updateFov)
     subscribeKey(gameAdditionalState, 'isSprinting', updateFov)
+    const defaultPlayerHeight = viewer.playerHeight
+    subscribeKey(gameAdditionalState, 'isSneaking', () => {
+      viewer.playerHeight = gameAdditionalState.isSneaking ? defaultPlayerHeight - 0.3 : defaultPlayerHeight
+      viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
+    })
     optionsScrn.addEventListener('fov_changed', updateFov)
 
     viewer.setVersion(version)
@@ -686,14 +692,6 @@ window.addEventListener('keydown', (e) => {
   // if (e.code === 'KeyD') {
   //   debugPitch.innerText = '0'
   // }
-})
-
-window.addEventListener('unhandledrejection', (e) => {
-  // todo
-  if (e.reason.message.includes('Unable to decode audio data')) {
-    console.warn(e.reason)
-    return
-  }
 })
 
 addPanoramaCubeMap()
