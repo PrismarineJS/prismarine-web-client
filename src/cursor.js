@@ -110,6 +110,7 @@ class Cursor {
   update (/** @type {import('mineflayer').Bot} */bot) {
     /** diggable block */
     let cursorBlock = bot.blockAtCursor(6)
+    let cursorBlockOriginal = cursorBlock
     if (!bot.canDigBlock(cursorBlock)) cursorBlock = null
 
     let cursorChanged = !cursorBlock !== !this.cursorBlock
@@ -146,24 +147,38 @@ class Cursor {
       } catch (e) { } // to be reworked in mineflayer, then remove the try here
     }
 
+    // Show cursor
+    if (!cursorBlock) {
+      this.cursorMesh.visible = false
+    } else {
+      for (const collisionData of cursorBlockOriginal.shapes.slice(0, 1) ?? []) {
+        const width = collisionData[3] - collisionData[0]
+        const height = collisionData[4] - collisionData[1]
+        const depth = collisionData[5] - collisionData[2]
+
+        const initialSize = 1.001
+        this.cursorMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
+        this.blockBreakMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
+        // this.cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
+        const centerX = (collisionData[3] + collisionData[0]) / 2
+        const centerY = (collisionData[4] + collisionData[1]) / 2
+        const centerZ = (collisionData[5] + collisionData[2]) / 2
+        this.cursorMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
+        this.blockBreakMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
+      }
+      this.cursorMesh.visible = true
+      // change
+    }
+
     // Show break animation
     if (cursorBlock && this.buttons[0]) {
       const elapsed = performance.now() - this.breakStartTime
       const time = bot.digTime(cursorBlock)
       const state = Math.floor((elapsed / time) * 10)
-      this.blockBreakMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
       this.blockBreakMesh.material.map = this.breakTextures[state]
       this.blockBreakMesh.visible = true
     } else {
       this.blockBreakMesh.visible = false
-    }
-
-    // Show cursor
-    if (!cursorBlock) {
-      this.cursorMesh.visible = false
-    } else {
-      this.cursorMesh.visible = true
-      this.cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
     }
 
     // Update state
