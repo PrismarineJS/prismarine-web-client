@@ -160,10 +160,9 @@ class TitleScreen extends LitElement {
         <div style="display:flex;justify-content: space-between;">
           <pmui-button pmui-width="${SUPPORT_WORLD_LOADING ? '170px' : '200px'}" pmui-label="Singleplayer" @pmui-click=${() => {
         this.style.display = 'none'
-        Object.assign(fsState, {
-          isReadonly: false,
-          syncFs: true,
-        })
+        fsState.isReadonly = false
+        fsState.syncFs = true
+        fsState.inMemorySave = true
         const notFirstTime = fs.existsSync('./world/level.dat')
         if (notFirstTime && !options.localServerOptions.version) {
           options.localServerOptions.version = '1.16.1' // legacy version, now we use 1.8.8

@@ -14,6 +14,7 @@ const parseNbt = promisify(nbt.parse)
 export const fsState = proxy({
   isReadonly: false,
   syncFs: false,
+  inMemorySave: false,
 })
 
 const PROPOSE_BACKUP = true

@@ -63,9 +63,10 @@ const commands = [
   {
     command: '/reset-world -y',
     invoke: async () => {
-      if (fsState.isReadonly || !fsState.syncFs) return
+      if (fsState.inMemorySave) return
       // todo for testing purposes
       sessionStorage.oldData = localStorage
+      console.log('World removed. Old data saved to sessionStorage.oldData')
       localServer.quit()
       // todo browserfs bug
       fs.rmdirSync(localServer.options.worldFolder, { recursive: true })

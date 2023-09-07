@@ -150,6 +150,7 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   fsState.isReadonly = !writeAccess
   fsState.syncFs = false
+  fsState.inMemorySave = false
   loadSave()
 }
 
@@ -175,6 +176,7 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
 
   fsState.isReadonly = true
   fsState.syncFs = true
+  fsState.inMemorySave = false
 
   if (fs.existsSync('/world/level.dat')) {
     loadSave()
