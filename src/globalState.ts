@@ -6,32 +6,29 @@ import { options } from './optionsStorage'
 
 // todo: refactor structure with support of hideNext=false
 
-/**
- * @typedef {({elem?: HTMLElement & Record<string, any>} & {reactType?: string})} Modal
- * @typedef {{callback, label}} ContextMenuItem
- */
+type Modal = ({ elem?: HTMLElement & Record<string, any> } & { reactType?: string })
 
-/** @type {Modal[]} */
-export const activeModalStack = proxy([])
+type ContextMenuItem = { callback; label }
 
-export const replaceActiveModalStack = (name, newModalStack = activeModalStacks[name]) => {
+export const activeModalStack: Modal[] = proxy([])
+
+export const replaceActiveModalStack = (name: string, newModalStack = activeModalStacks[name]) => {
   hideModal(undefined, undefined, { restorePrevious: false, force: true, })
   activeModalStack.splice(0, activeModalStack.length, ...newModalStack)
   // todo restore previous
 }
 
-/** @type {Record<string, Modal[]>} */
-export const activeModalStacks = {}
+export const activeModalStacks: Record<string, Modal[]> = {}
 
 window.activeModalStack = activeModalStack
 
 export const customDisplayManageKeyword = 'custom'
 
 const defaultModalActions = {
-  show (/** @type {Modal} */modal) {
+  show(modal: Modal) {
     if (modal.elem) modal.elem.style.display = 'block'
   },
-  hide (/** @type {Modal} */modal) {
+  hide(modal: Modal) {
     if (modal.elem) modal.elem.style.display = 'none'
   }
 }
@@ -39,14 +36,14 @@ const defaultModalActions = {
 /**
  * @returns true if operation was successful
  */
-const showModalInner = (/** @type {Modal} */ modal) => {
+const showModalInner = (modal: Modal) => {
   const cancel = modal.elem?.show?.()
   if (cancel && cancel !== customDisplayManageKeyword) return false
   if (cancel !== 'custom') defaultModalActions.show(modal)
   return true
 }
 
-export const showModal = (/** @type {HTMLElement & Record<string, any> | {reactType: string}} */ elem) => {
+export const showModal = (elem: (HTMLElement & Record<string, any>) | { reactType: string }) => {
   const resolved = elem instanceof HTMLElement ? { elem: ref(elem) } : elem
   const curModal = activeModalStack.slice(-1)[0]
   if (elem === curModal?.elem || !showModalInner(resolved)) return
@@ -56,11 +53,9 @@ export const showModal = (/** @type {HTMLElement & Record<string, any> | {reactT
 
 /**
  *
- * @param {*} data
- * @param {{ force?: boolean, restorePrevious?: boolean }} options
  * @returns true if previous modal was restored
  */
-export const hideModal = (modal = activeModalStack.slice(-1)[0], data = undefined, options = {}) => {
+export const hideModal = (modal = activeModalStack.slice(-1)[0], data: any = undefined, options: { force?: boolean; restorePrevious?: boolean } = {}) => {
   const { force = false, restorePrevious = true } = options
   if (!modal) return
   let cancel = modal.elem?.hide?.(data)
@@ -84,7 +79,7 @@ export const hideCurrentModal = (_data = undefined, restoredActions = undefined)
   if (hideModal(undefined, undefined)) {
     restoredActions?.()
     if (activeModalStack.length === 0) {
-      if (!isGameActive()) {
+      if (!isGameActive(false)) {
         showModal(document.getElementById('title-screen'))
       } else {
         pointerLock.requestPointerLock()
@@ -95,9 +90,9 @@ export const hideCurrentModal = (_data = undefined, restoredActions = undefined)
 
 // ---
 
-export const currentContextMenu = proxy({ items: /** @type {ContextMenuItem[] | null} */[], x: 0, y: 0, })
+export const currentContextMenu = proxy({ items: [] as ContextMenuItem[] | null, x: 0, y: 0, })
 
-export const showContextmenu = (/** @type {ContextMenuItem[]} */items, { clientX, clientY }) => {
+export const showContextmenu = (items: ContextMenuItem[], { clientX, clientY }) => {
   Object.assign(currentContextMenu, {
     items,
     x: clientX,
@@ -108,12 +103,12 @@ export const showContextmenu = (/** @type {ContextMenuItem[]} */items, { clientX
 // ---
 
 export const miscUiState = proxy({
-  currentTouch: null,
+  currentTouch: null as boolean | null,
   singleplayer: false,
   gameLoaded: false,
 })
 
-export const isGameActive = (foregroundCheck) => {
+export const isGameActive = (foregroundCheck: boolean) => {
   if (foregroundCheck && activeModalStack.length) return false
   return miscUiState.gameLoaded
 }

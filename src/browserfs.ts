@@ -78,7 +78,7 @@ fs.promises.open = async (...args) => {
     fd,
     filename: args[0],
     close: () => {
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         fs.close(fd, (err) => {
           if (err) {
             throw err
@@ -110,9 +110,8 @@ window.removeFileRecursiveSync = removeFileRecursiveSync
 
 const SUPPORT_WRITE = true
 
-export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} */dragndropHandle = undefined) => {
-  /** @type {FileSystemDirectoryHandle} */
-  let _directoryHandle
+export const openWorldDirectory = async (dragndropHandle?: FileSystemDirectoryHandle) => {
+  let _directoryHandle: FileSystemDirectoryHandle
   if (dragndropHandle) {
     _directoryHandle = dragndropHandle
   } else {
@@ -130,7 +129,7 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   const doContinue = writeAccess || !SUPPORT_WRITE || options.disableLoadPrompts || confirm('Continue in readonly mode?')
   if (!doContinue) return
-  await new Promise(resolve => {
+  await new Promise<void>(resolve => {
     browserfs.configure({
       // todo
       fs: 'MountableFileSystem',
@@ -154,8 +153,8 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
   loadSave()
 }
 
-export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name = file['name']) => {
-  await new Promise(async resolve => {
+export const openWorldZip = async (file: File | ArrayBuffer, name = file['name']) => {
+  await new Promise<void>(async resolve => {
     browserfs.configure({
       // todo
       fs: 'MountableFileSystem',
@@ -205,7 +204,7 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
   }
 }
 
-export async function generateZipAndWorld () {
+export async function generateZipAndWorld() {
   const zip = new JSZip()
 
   zip.folder('world')

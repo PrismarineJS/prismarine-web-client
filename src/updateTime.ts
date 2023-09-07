@@ -1,5 +1,4 @@
-//@ts-check
-export default (/** @type {import('mineflayer').Bot} */bot) => {
+export default (bot: import('mineflayer').Bot) => {
   bot.on('time', () => {
     // 0 morning
     const dayTotal = 24_000

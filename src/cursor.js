@@ -1,4 +1,3 @@
-//@ts-check
 /* global THREE performance */
 
 // wouldn't better to create atlas instead?

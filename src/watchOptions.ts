@@ -1,4 +1,3 @@
-//@ts-check
 // not all options are watched here
 
 import { subscribeKey } from 'valtio/utils'
