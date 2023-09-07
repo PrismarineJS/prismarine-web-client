@@ -153,8 +153,12 @@ export const disconnect = async () => {
   if (window.localServer) {
     await saveWorld()
     localServer.quit()
+  } else {
+    // workaround bot.end doesn't end the socket and emit end event
+    bot.end()
+    bot._client.socket.end()
   }
-  bot._client.emit('end')
+  bot._client.emit('end', 'You left the server')
   miscUiState.gameLoaded = false
 }
 
