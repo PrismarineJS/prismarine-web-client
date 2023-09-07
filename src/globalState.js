@@ -36,6 +36,9 @@ const defaultModalActions = {
   }
 }
 
+/**
+ * @returns true if operation was successful
+ */
 const showModalInner = (/** @type {Modal} */ modal) => {
   const cancel = modal.elem?.show?.()
   if (cancel && cancel !== customDisplayManageKeyword) return false
@@ -54,8 +57,8 @@ export const showModal = (/** @type {HTMLElement & Record<string, any> | {reactT
 /**
  *
  * @param {*} data
- * @param {{ force?: boolean, restorePrevious?: boolean, }} options
- * @returns
+ * @param {{ force?: boolean, restorePrevious?: boolean }} options
+ * @returns true if previous modal was restored
  */
 export const hideModal = (modal = activeModalStack.slice(-1)[0], data = undefined, options = {}) => {
   const { force = false, restorePrevious = true } = options
@@ -77,13 +80,15 @@ export const hideModal = (modal = activeModalStack.slice(-1)[0], data = undefine
   }
 }
 
-export const hideCurrentModal = (_data = undefined, preActions = undefined) => {
+export const hideCurrentModal = (_data = undefined, restoredActions = undefined) => {
   if (hideModal(undefined, undefined)) {
-    preActions?.()
-    if (!isGameActive()) {
-      showModal(document.getElementById('title-screen'))
-    } else {
-      pointerLock.requestPointerLock() // will work only if no modals left
+    restoredActions?.()
+    if (activeModalStack.length === 0) {
+      if (!isGameActive()) {
+        showModal(document.getElementById('title-screen'))
+      } else {
+        pointerLock.requestPointerLock()
+      }
     }
   }
 }
