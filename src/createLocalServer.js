@@ -1,4 +1,5 @@
-import mcServer from 'space-squid'
+//@ts-check
+import mcServer from 'flying-squid'
 import serverOptions from './defaultLocalServerOptions'
 import { LocalServer } from './customServer'
 

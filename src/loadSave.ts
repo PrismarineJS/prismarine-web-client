@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { supportedVersions } from 'space-squid/src/lib/version'
+import { supportedVersions } from 'flying-squid/src/lib/version'
 import * as nbt from 'prismarine-nbt'
 import { promisify } from 'util'
 import { options } from './optionsStorage'

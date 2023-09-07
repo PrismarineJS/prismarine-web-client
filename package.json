@@ -48,7 +48,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.0",
-    "space-squid": "github:zardoy/space-squid#everything",
+    "flying-squid": "github:zardoy/space-squid#everything",
     "speed-measure-webpack-plugin": "^1.5.0",
     "stats.js": "^0.17.0",
     "url": "^0.11.1",
