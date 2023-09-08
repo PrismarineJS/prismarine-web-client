@@ -126,7 +126,7 @@ class Cursor {
       // check instead?
       //@ts-ignore
       bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
-      // this.lastBlockPlaced = 0
+      this.lastBlockPlaced = 0
     }
 
     // Start break
