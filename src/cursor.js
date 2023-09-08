@@ -1,3 +1,4 @@
+//@ts-check
 /* global THREE performance */
 
 // wouldn't better to create atlas instead?
@@ -108,10 +109,9 @@ class Cursor {
 
   // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags
   update (/** @type {import('mineflayer').Bot} */bot) {
-    /** diggable block */
-    let cursorBlock = bot.blockAtCursor(6)
-    let cursorBlockOriginal = cursorBlock
-    if (!bot.canDigBlock(cursorBlock)) cursorBlock = null
+    const cursorBlock = bot.blockAtCursor(5)
+    let cursorBlockDiggable = cursorBlock
+    if (!bot.canDigBlock(cursorBlock) && bot.game.gameMode !== 'creative') cursorBlockDiggable = null
 
     let cursorChanged = !cursorBlock !== !this.cursorBlock
     if (cursorBlock && this.cursorBlock) {
@@ -131,7 +131,7 @@ class Cursor {
 
     // Start break
     // todo last check doesnt work as cursorChanged happens once (after that check is false)
-    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 100))) {
+    if (cursorBlockDiggable && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 100))) {
       this.breakStartTime = performance.now()
       bot.dig(cursorBlock, 'ignore').catch((err) => {
         if (err.message === 'Digging aborted') return
@@ -151,7 +151,7 @@ class Cursor {
     if (!cursorBlock) {
       this.cursorMesh.visible = false
     } else {
-      for (const collisionData of cursorBlockOriginal.shapes.slice(0, 1) ?? []) {
+      for (const collisionData of cursorBlock.shapes.slice(0, 1) ?? []) {
         const width = collisionData[3] - collisionData[0]
         const height = collisionData[4] - collisionData[1]
         const depth = collisionData[5] - collisionData[2]
@@ -171,7 +171,7 @@ class Cursor {
     }
 
     // Show break animation
-    if (cursorBlock && this.buttons[0]) {
+    if (cursorBlockDiggable && this.buttons[0]) {
       const elapsed = performance.now() - this.breakStartTime
       const time = bot.digTime(cursorBlock)
       const state = Math.floor((elapsed / time) * 10)

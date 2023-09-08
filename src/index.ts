@@ -531,9 +531,9 @@ async function connect(connectOptions) {
 
     const cursor = new Cursor(viewer, renderer, bot)
     postRenderFrameFn = () => {
-      debugMenu.cursorBlock = cursor.cursorBlock
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
       cursor.update(bot)
+      debugMenu.cursorBlock = cursor.cursorBlock
     }
 
     try {
