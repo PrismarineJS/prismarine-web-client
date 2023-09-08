@@ -5,6 +5,8 @@ import { LocalServer } from './customServer'
 
 export const startLocalServer = () => {
   const server = mcServer.createMCServer({ ...serverOptions, Server: LocalServer })
+  server.formatMessage = (message) => `[server] ${message}`
+  server.options = serverOptions
   return server
 }
 
