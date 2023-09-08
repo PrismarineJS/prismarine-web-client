@@ -106,7 +106,7 @@
   "pnpm": {
     "overrides": {
       "minecraft-data": "latest",
-      "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#chunk-impl-require-fix",
+      "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#everything",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra"
     }
   }
