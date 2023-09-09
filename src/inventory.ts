@@ -45,6 +45,7 @@ const getBlockData = (name) => {
 
   const getSpriteBlockSide = (side) => {
     const d = data[side]
+    if (!d) return
     const spriteSide = [d.u * blocksImg.width, d.v * blocksImg.height, d.su * blocksImg.width, d.sv * blocksImg.height]
     const blockSideData = {
       slice: spriteSide,
@@ -54,9 +55,10 @@ const getBlockData = (name) => {
   }
 
   return {
-    top: getSpriteBlockSide('up'),
-    left: getSpriteBlockSide('east'),
-    right: getSpriteBlockSide('north'),
+    // todo look at grass bug
+    top: getSpriteBlockSide('up') || getSpriteBlockSide('top'),
+    left: getSpriteBlockSide('east') || getSpriteBlockSide('side'),
+    right: getSpriteBlockSide('north') || getSpriteBlockSide('side'),
   }
 }
 
