@@ -63,6 +63,7 @@ class ChatBox extends LitElement {
             width: var(--chatWidth);
             transform-origin: bottom left;
             transform: scale(var(--chatScale));
+            pointer-events: none;
         }
 
         .chat-input-wrapper {
