@@ -66,6 +66,7 @@ const ctx = await esbuild.context({
     crypto: './src/crypto.js',
     stream: 'stream-browserify',
     net: 'net-browserify',
+    assert: 'assert',
     dns: './src/dns.js'
   },
   inject: [
