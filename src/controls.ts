@@ -302,3 +302,15 @@ const toggleFly = () => {
   gameAdditionalState.isFlying = isFlying()
 }
 // #endregion
+addEventListener('mousedown', (e) => {
+  // wheel click
+  // todo support ctrl+wheel (+nbt)
+  if (e.button === 1) {
+    const block = bot.blockAtCursor(/* 6 */5)
+    if (!block) return
+    const Item = require('prismarine-item')(bot.version);
+    const item = new Item(block.type, 1, 0);
+    bot.creative.setInventorySlot(bot.inventory.hotbarStart + bot.quickBarSlot, item)
+    bot.updateHeldItem()
+  }
+})

@@ -118,8 +118,8 @@ canvas {
 
 @media only screen and (max-height: 430px) {
   #ui-root {
-    transform: scale(1);
-    width: calc(100% / 1);
-    height: calc(100% / 1);
+    transform: scale(1.5);
+    width: calc(100% / 1.5);
+    height: calc(100% / 1.5);
   }
 }
