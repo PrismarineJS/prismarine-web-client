@@ -5,9 +5,9 @@ import JSZip from 'jszip'
 import { join } from 'path'
 import { options } from './optionsStorage'
 
-const { promisify } = require('util')
-const browserfs = require('browserfs')
-const fs = require('fs')
+import { promisify } from 'util'
+import browserfs from 'browserfs'
+import * as fs from 'fs'
 
 browserfs.install(window)
 // todo migrate to StorageManager API for localsave as localstorage has only 5mb limit, when localstorage is fallback test limit warning on 4mb
@@ -181,7 +181,7 @@ export const openWorldZip = async (file: File | ArrayBuffer, name = file['name']
     loadSave()
   } else {
     const dirs = fs.readdirSync('/world')
-    let availableWorlds = []
+    let availableWorlds: string[] = []
     for (const dir of dirs) {
       if (fs.existsSync(`/world/${dir}/level.dat`)) {
         availableWorlds.push(dir)
