@@ -1,6 +1,10 @@
 import { openWorldZip } from './browserfs'
 import { setLoadingScreenStatus } from './utils'
-import { filesize } from 'filesize'
+import prettyBytes from 'pretty-bytes'
+
+const getConstantFilesize = (bytes: number) => {
+  return prettyBytes(bytes, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+}
 
 export default async () => {
   const qs = new URLSearchParams(window.location.search)
@@ -18,7 +22,7 @@ export default async () => {
     alert('Invalid map file')
   }
   const contentLength = +response.headers.get('Content-Length')
-  setLoadingScreenStatus(`Downloading world ${name}: have to download ${filesize(contentLength)}...`)
+  setLoadingScreenStatus(`Downloading world ${name}: have to download ${getConstantFilesize(contentLength)}...`)
 
   let downloadedBytes = 0
   const buffer = await new Response(
@@ -40,7 +44,9 @@ export default async () => {
           const progress = (downloadedBytes / contentLength) * 100
 
           // Update your progress bar or display the progress value as needed
-          setLoadingScreenStatus(`Download Progress: ${Math.floor(progress)}% (${filesize(downloadedBytes, { round: 2, })} / ${filesize(contentLength, { round: 2, })}))`, false, true)
+          if (contentLength) {
+            setLoadingScreenStatus(`Download Progress: ${Math.floor(progress)}% (${getConstantFilesize(downloadedBytes)} / ${getConstantFilesize(contentLength)}))`, false, true)
+          }
 
           // Pass the received data to the controller
           controller.enqueue(value)
