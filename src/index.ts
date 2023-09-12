@@ -31,7 +31,7 @@ import './controls'
 import './dragndrop'
 import './browserfs'
 import './eruda'
-import './downloadAndOpenWorld'
+import downloadAndOpenWorld from './downloadAndOpenWorld'
 
 import net from 'net'
 import Stats from 'stats.js'
@@ -583,10 +583,18 @@ async function connect(connectOptions) {
     const touchStartBreakingBlockMs = 500
     let virtualClickActive = false
     let virtualClickTimeout
+    let screenTouches = 0
     let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time; } | null
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
-      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer || e.pointerId === undefined) {
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
+        return
+      }
+      screenTouches++
+      if (screenTouches === 3) {
+        window.dispatchEvent(new MouseEvent('mousedown', { button: 1, }))
+      }
+      if (capturedPointer) {
         return
       }
       cameraControlEl.setPointerCapture(e.pointerId)
@@ -649,6 +657,14 @@ async function connect(connectOptions) {
       capturedPointer = undefined
     }, { passive: false })
 
+    registerListener(document, 'pointerup', (e) => {
+      const clickedEl = e.composedPath()[0]
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
+        return
+      }
+      screenTouches--
+    })
+
     registerListener(document, 'contextmenu', (e) => e.preventDefault(), false)
 
     registerListener(document, 'blur', (e) => {
@@ -707,3 +723,4 @@ window.addEventListener('keydown', (e) => {
 addPanoramaCubeMap()
 showModal(document.getElementById('title-screen'))
 main()
+downloadAndOpenWorld()

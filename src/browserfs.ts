@@ -6,8 +6,8 @@ import { join } from 'path'
 import { options } from './optionsStorage'
 
 import { promisify } from 'util'
-import browserfs from 'browserfs'
-import * as fs from 'fs'
+import * as browserfs from 'browserfs'
+import fs from 'fs'
 
 browserfs.install(window)
 // todo migrate to StorageManager API for localsave as localstorage has only 5mb limit, when localstorage is fallback test limit warning on 4mb

@@ -2,7 +2,7 @@ import { openWorldZip } from './browserfs'
 import { setLoadingScreenStatus } from './utils'
 import { filesize } from 'filesize'
 
-window.addEventListener('load', async (e) => {
+export default async () => {
   const qs = new URLSearchParams(window.location.search)
   const mapUrl = qs.get('map')
   if (!mapUrl) return
@@ -13,6 +13,10 @@ window.addEventListener('load', async (e) => {
   setLoadingScreenStatus(`Downloading world ${name}...`)
 
   const response = await fetch(mapUrl)
+  const contentType = response.headers.get('Content-Type')
+  if (!contentType || !contentType.startsWith('application/zip')) {
+    alert('Invalid map file')
+  }
   const contentLength = +response.headers.get('Content-Length')
   setLoadingScreenStatus(`Downloading world ${name}: have to download ${filesize(contentLength)}...`)
 
@@ -45,7 +49,4 @@ window.addEventListener('load', async (e) => {
     })
   ).arrayBuffer()
   await openWorldZip(buffer)
-})
-
-export default async () => {
 }
