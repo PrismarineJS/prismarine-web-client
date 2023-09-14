@@ -310,12 +310,6 @@ async function connect(connectOptions) {
   }
   console.log(`connecting to ${host} ${port} with ${username}`)
 
-  if (proxy) {
-    console.log(`using proxy ${proxy} ${proxyport}`)
-    //@ts-ignore
-    net.setProxy({ hostname: proxy, port: proxyport })
-  }
-
   setLoadingScreenStatus('Logging in')
 
   let bot: mineflayer.Bot
@@ -374,6 +368,21 @@ async function connect(connectOptions) {
   }, {
     signal: errorAbortController.signal
   })
+
+  if (proxy) {
+    console.log(`using proxy ${proxy} ${proxyport}`)
+
+    // check proxy server availability for proper error message
+    try {
+      await fetch(`http://${proxy}:${proxyport}/api/vm/net`, { method: 'GET' })
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Proxy server ${proxy}:${proxyport} is not available`)
+    }
+    //@ts-ignore
+    net.setProxy({ hostname: proxy, port: proxyport })
+  }
+
   let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
@@ -584,7 +593,7 @@ async function connect(connectOptions) {
     let virtualClickActive = false
     let virtualClickTimeout
     let screenTouches = 0
-    let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time; } | null
+    let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time } | null
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
       if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {

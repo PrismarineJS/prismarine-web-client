@@ -95,7 +95,6 @@ class DebugOverlay extends LitElement {
     }
 
     const target = this.cursorBlock
-    const targetDiggable = (target && this.bot.canDigBlock(target))
 
     const pos = this.bot.entity.position
     const rot = [this.bot.entity.yaw, this.bot.entity.pitch]
@@ -140,8 +139,8 @@ class DebugOverlay extends LitElement {
       <div class="debug-right-side">
         <p>Renderer: ${this.rendererDevice} powered by three.js r${global.THREE.REVISION}</p>
         <div class="empty"></div>
-        ${targetDiggable ? html`<p>${target.name}</p>${Object.entries(target.getProperties()).map(([n, p], idx, arr) => renderProp(n, p, arr[idx + 1]))}` : ''}
-        ${targetDiggable ? html`<p>Looking at: ${target.position.x} ${target.position.y} ${target.position.z}</p>` : ''}
+        ${target ? html`<p>${target.name}</p>${Object.entries(target.getProperties()).map(([n, p], idx, arr) => renderProp(n, p, arr[idx + 1]))}` : ''}
+        ${target ? html`<p>Looking at: ${target.position.x} ${target.position.y} ${target.position.z}</p>` : ''}
       </div>
     `
   }
