@@ -25,7 +25,11 @@ function getViewDirection (pitch, yaw) {
 }
 
 class Cursor {
+  static instance = null
+
   constructor (viewer, renderer, /** @type {import('mineflayer').Bot} */bot) {
+    if (Cursor.instance) return Cursor.instance
+
     // Init state
     this.buttons = [false, false, false]
     this.lastButtons = [false, false, false]
@@ -151,7 +155,7 @@ class Cursor {
     if (!cursorBlock) {
       this.cursorMesh.visible = false
     } else {
-      for (const collisionData of cursorBlock.shapes.slice(0, 1) ?? []) {
+      for (const collisionData of [...cursorBlock.shapes, ...cursorBlock['interactionShapes'] ?? []].slice(0, 1) ?? []) {
         const width = collisionData[3] - collisionData[0]
         const height = collisionData[4] - collisionData[1]
         const depth = collisionData[5] - collisionData[2]

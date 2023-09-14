@@ -105,6 +105,8 @@
   },
   "pnpm": {
     "overrides": {
+      "prismarine-block": "github:zardoy/prismarine-block#next-era",
+      "prismarine-world": "github:zardoy/prismarine-world#next-era",
       "minecraft-data": "latest",
       "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#everything",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra"
