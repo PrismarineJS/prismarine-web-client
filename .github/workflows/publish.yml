@@ -24,6 +24,8 @@ jobs:
       #     path: cypress/integration/__image_snapshots__/
       # todo link vercel deployment
       - run: pnpx zardoy-release node
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
