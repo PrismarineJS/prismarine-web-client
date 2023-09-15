@@ -10,6 +10,7 @@
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
+    "postinstall": "node scripts/gen-texturepack-files.mjs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -108,7 +109,7 @@
     "overrides": {
       "prismarine-block": "github:zardoy/prismarine-block#next-era",
       "prismarine-world": "github:zardoy/prismarine-world#next-era",
-      "minecraft-data": "latest",
+      "minecraft-data": "3.45.0",
       "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#everything",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra"
     }
