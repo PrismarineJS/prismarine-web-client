@@ -20,6 +20,13 @@
   ],
   "author": "PrismarineJS",
   "license": "MIT",
+  "release": {
+    "initialVersion": {
+      "version": "0.1.0",
+      "releaseNotes": "First GH release",
+      "releaseNotesWithExisting": "The start of something new..."
+    }
+  },
   "dependencies": {
     "@dimaka/interface": "0.0.1",
     "@emotion/css": "^11.11.2",
