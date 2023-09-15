@@ -1,9 +1,11 @@
-import { activeModalStack, miscUiState, showModal } from './globalState'
+import { activeModalStack, hideModal, miscUiState, showModal } from './globalState'
 import { notification } from './menus/notification'
 import * as crypto from 'crypto'
 import UUID from 'uuid-1345'
 import { options } from './optionsStorage'
 import { saveWorld } from './builtinCommands'
+import { openWorldZip } from './browserfs'
+import { installTexturePack } from './texturePack'
 
 export const goFullscreen = async (doToggle = false) => {
   if (!document.fullscreenElement) {
@@ -132,8 +134,13 @@ export function nameToMcOfflineUUID(name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
 }
 
-export const setLoadingScreenStatus = function (status: string, isError = false, hideDots = false) {
+export const setLoadingScreenStatus = function (status: string | undefined, isError = false, hideDots = false) {
   const loadingScreen = document.getElementById('loading-error-screen')
+
+  if (status === undefined) {
+    hideModal({ elem: loadingScreen, }, null, { force: true })
+    return
+  }
 
   // todo update in component instead
   showModal(loadingScreen)
@@ -196,4 +203,33 @@ export const reloadChunks = () => {
   localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
   worldView.updatePosition(bot.entity.position, true)
   prevRenderDistance = options.renderDistance
+}
+
+export const openFilePicker = (specificCase?: 'resourcepack') => {
+  // create and show input picker
+  let picker: HTMLInputElement = document.body.querySelector('input#file-zip-picker')
+  if (!picker) {
+    picker = document.createElement('input')
+    picker.type = 'file'
+    picker.accept = '.zip'
+
+    picker.addEventListener('change', () => {
+      const file = picker.files[0]
+      picker.value = ''
+      if (!file) return
+      if (!file.name.endsWith('.zip')) {
+        const doContinue = confirm(`Are you sure ${file.name.slice(-20)} is .zip file? Only .zip files are supported. Continue?`)
+        if (!doContinue) return
+      }
+      if (specificCase === 'resourcepack') {
+        installTexturePack(file)
+      } else {
+        openWorldZip(file)
+      }
+    })
+    picker.hidden = true
+    document.body.appendChild(picker)
+  }
+
+  picker.click()
 }

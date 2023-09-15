@@ -106,6 +106,7 @@ export const miscUiState = proxy({
   currentTouch: null as boolean | null,
   singleplayer: false,
   gameLoaded: false,
+  resourcePackInstalled: false,
 })
 
 export const isGameActive = (foregroundCheck: boolean) => {

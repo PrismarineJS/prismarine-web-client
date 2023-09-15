@@ -74,7 +74,7 @@ class LoadingErrorScreen extends LitElement {
     return html`
       <div class="dirt-bg"></div>
 
-      <div class="title">${this.status}${this.hasError && !this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
+      <div class="title">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
 
       ${this.hasError
         ? html`<div class="error-buttons"><pmui-button .hidden=${!this.maybeRecoverable} pmui-width="200px" pmui-label="Back" @pmui-click=${() => {

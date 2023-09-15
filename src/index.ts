@@ -80,11 +80,12 @@ import { options } from './optionsStorage'
 import { subscribeKey } from 'valtio/utils'
 import _ from 'lodash'
 import { contro } from './controls'
+import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
 
 //@ts-ignore
 window.THREE = THREE
 
-if ('serviceWorker' in navigator && !isCypress()) {
+if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {
       console.log('SW registered: ', registration)
@@ -138,6 +139,7 @@ document.body.appendChild(renderer.domElement)
 // Create viewer
 const viewer: import('../prismarine-viewer/viewer/lib/viewer').Viewer = new Viewer(renderer, options.numWorkers)
 initPanoramaOptions(viewer)
+watchTexturepackInViewer(viewer)
 
 const frameLimit = toNumber(localStorage.frameLimit)
 let interval = frameLimit && 1000 / frameLimit
@@ -388,6 +390,15 @@ async function connect(connectOptions) {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
     const downloadMcData = async (version) => {
       setLoadingScreenStatus(`Downloading data for ${version}`)
+      try {
+        await genTexturePackTextures(version)
+      } catch (err) {
+        console.error(err)
+        const doContinue = prompt('Failed to apply texture pack. See errors in the console. Continue?')
+        if (!doContinue) {
+          setLoadingScreenStatus(undefined)
+        }
+      }
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
     }
 
@@ -488,7 +499,6 @@ async function connect(connectOptions) {
   })
 
   bot.once('spawn', () => {
-    miscUiState.gameLoaded = true
     // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 
@@ -681,6 +691,7 @@ async function connect(connectOptions) {
     }, false)
 
     setLoadingScreenStatus('Done!')
+    miscUiState.gameLoaded = true
     console.log('Done!')
 
     hud.init(renderer, bot, host)

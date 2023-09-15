@@ -8,6 +8,7 @@ const fs = require('fs')
 const mcImage = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/title/minecraft.png')
 const { options } = require('../optionsStorage')
 const defaultLocalServerOptions = require('../defaultLocalServerOptions')
+const { openFilePicker } = require('../utils')
 
 // const SUPPORT_WORLD_LOADING = !!window.showDirectoryPicker
 const SUPPORT_WORLD_LOADING = true
@@ -175,29 +176,7 @@ class TitleScreen extends LitElement {
         if (!!window.showDirectoryPicker && !e.shiftKey) {
           openWorldDirectory()
         } else {
-          // create and show input picker
-          /** @type {HTMLInputElement} */
-          let picker = document.body.querySelector('input#file-zip-picker')
-          if (!picker) {
-            picker = document.createElement('input')
-            picker.type = 'file'
-            picker.accept = '.zip'
-
-            picker.addEventListener('change', () => {
-              const file = picker.files[0]
-              picker.value = ''
-              if (!file) return
-              if (!file.name.endsWith('.zip')) {
-                const doContinue = confirm(`Are you sure ${file.name.slice(-20)} is .zip file? Only .zip files are supported. Continue?`)
-                if (!doContinue) return
-              }
-              openWorldZip(file)
-            })
-            picker.hidden = true
-            document.body.appendChild(picker)
-          }
-
-          picker.click()
+          openFilePicker()
         }
       }}></pmui-button>` : ''}
         </div>

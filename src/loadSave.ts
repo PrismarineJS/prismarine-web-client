@@ -15,6 +15,7 @@ export const fsState = proxy({
   isReadonly: false,
   syncFs: false,
   inMemorySave: false,
+  saveLoaded: false
 })
 
 const PROPOSE_BACKUP = true
@@ -120,6 +121,7 @@ export const loadSave = async (root = '/world') => {
     alert("Note: the world is saved only on /save or disconnect! ENSURE YOU HAVE BACKUP!")
   }
 
+  fsState.saveLoaded = true
   document.querySelector('#title-screen').dispatchEvent(new CustomEvent('singleplayer', {
     // todo check gamemode level.dat data etc
     detail: {
