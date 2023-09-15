@@ -166,7 +166,7 @@ class TitleScreen extends LitElement {
         fsState.inMemorySave = true
         const notFirstTime = fs.existsSync('./world/level.dat')
         if (notFirstTime && !options.localServerOptions.version) {
-          options.localServerOptions.version = '1.16.1' // legacy version, now we use 1.8.8
+          options.localServerOptions.version = '1.16.1' // legacy version
         } else {
           options.localServerOptions.version ??= defaultLocalServerOptions.version
         }
