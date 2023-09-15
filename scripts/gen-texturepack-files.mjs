@@ -48,4 +48,5 @@ for (const [i, version] of minecraftAssets.versions.reverse().entries()) {
     // }
 }
 
+fs.mkdirSync('./generated', { recursive: true, })
 fs.writeFileSync('./generated/blocks.json', JSON.stringify({ blockNames: blockNames, indexes: indexesPerVersion }))
