@@ -10,8 +10,7 @@
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
-    "postinstall": "node scripts/gen-texturepack-files.mjs",
-    "prepublishOnly": "npm run build"
+    "postinstall": "node scripts/gen-texturepack-files.mjs"
   },
   "keywords": [
     "prismarine",
