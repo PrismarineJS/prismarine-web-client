@@ -105,6 +105,8 @@ export const showContextmenu = (items: ContextMenuItem[], { clientX, clientY }) 
 export const miscUiState = proxy({
   currentTouch: null as boolean | null,
   singleplayer: false,
+  flyingSquid: false,
+  wanOpened: false,
   gameLoaded: false,
   resourcePackInstalled: false,
 })
@@ -148,6 +150,7 @@ window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
   if (sessionStorage.lastReload && options.preventDevReloadWhilePlaying === false) return
+  if (options.closeConfirmation === false) return
 
   // For major browsers doning only this is enough
   event.preventDefault()

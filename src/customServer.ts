@@ -2,6 +2,7 @@ import EventEmitter from 'events'
 
 import Client from 'minecraft-protocol/src/client'
 
+window.serverDataChannel ??= {}
 export const customCommunication = {
   sendData(data) {
     //@ts-ignore

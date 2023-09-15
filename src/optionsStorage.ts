@@ -13,6 +13,7 @@ const defaultOptions = {
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
   preventDevReloadWhilePlaying: false,
+  closeConfirmation: true,
   autoFullScreen: false,
   mouseRawInput: false,
   autoExitFullscreen: false,

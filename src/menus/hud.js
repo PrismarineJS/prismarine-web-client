@@ -9,6 +9,10 @@ export const guiIcons1_17_1 = require('minecraft-assets/minecraft-assets/data/1.
 export const guiIcons1_16_4 = require('minecraft-assets/minecraft-assets/data/1.16.4/gui/icons.png')
 
 class Hud extends LitElement {
+  firstUpdated () {
+    window.dispatchEvent(new CustomEvent('hud-ready', { detail: this }))
+  }
+
   static get styles () {
     return css`
       :host {

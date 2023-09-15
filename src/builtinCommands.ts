@@ -2,6 +2,7 @@ import JSZip from 'jszip'
 import fs from 'fs'
 import { join } from 'path'
 import { fsState } from './loadSave'
+import { closeWan, openToWanAndCopyJoinLink } from './localServerMultiplayer'
 
 const notImplemented = () => {
   return 'Not implemented yet'
@@ -50,15 +51,30 @@ const exportWorld = async () => {
 
 window.exportWorld = exportWorld
 
+const writeText = (text) => {
+  bot._client.emit('chat', {
+    message: JSON.stringify({ text })
+  })
+}
+
 const commands = [
   {
     command: ['/download', '/export'],
     invoke: exportWorld
   },
   {
-    command: ['/publish'],
-    // todo
-    invoke: notImplemented
+    command: ['/publish', '/share'],
+    invoke: async () => {
+      const text = await openToWanAndCopyJoinLink(writeText)
+      if (text) writeText(text)
+    }
+  },
+  {
+    command: ['/close'],
+    invoke: () => {
+      const text = closeWan()
+      if (text) writeText(text)
+    }
   },
   {
     command: '/reset-world -y',
