@@ -47,6 +47,10 @@ export const getResourcePackName = async () => {
     }
 }
 
+export const fromTexturePackPath = (path) => {
+    return join(texturePackBasePath, path)
+}
+
 export const updateTexturePackInstalledState = async () => {
     try {
         miscUiState.resourcePackInstalled = await existsAsync(texturePackBasePath)
@@ -219,6 +223,7 @@ export const genTexturePackTextures = async (version: string) => {
         if (imgCustom) {
             ctx.drawImage(imgCustom, x, y, tileSize, tileSize)
         } else {
+            // todo this involves incorrect mappings for existing textures when the size is different
             ctx.drawImage(img, xOrig, yOrig, originalTileSize, originalTileSize, x, y, tileSize, tileSize)
         }
     }

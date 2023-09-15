@@ -167,7 +167,7 @@ class OptionsScreen extends CommonOptionsScreen {
             setLoadingScreenStatus(undefined)
           }
         } else {
-          if (!fsState.inMemorySave) {
+          if (!fsState.inMemorySave && isGameActive(false)) {
             alert('Unable to install resource pack in loaded save for now')
             return
           }
