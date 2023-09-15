@@ -252,6 +252,7 @@ const plugins = [
       buffer: false,
       perf_hooks: false,
       net: false,
+      assert: false,
     },
   })
 ]

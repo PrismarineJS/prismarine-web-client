@@ -18,6 +18,7 @@ let baseConfig = {}
 // }
 
 try {
+  //@ts-ignore
   await import('./localSettings.mjs')
 } catch { }
 
@@ -39,7 +40,7 @@ const buildingVersion = new Date().toISOString().split(':')[0]
 
 const ctx = await esbuild.context({
   bundle: true,
-  entryPoints: ['src/index.js'],
+  entryPoints: ['src/index.ts'],
   target: ['es2020'],
   jsx: 'automatic',
   jsxDev: dev,
@@ -65,6 +66,7 @@ const ctx = await esbuild.context({
     crypto: './src/crypto.js',
     stream: 'stream-browserify',
     net: 'net-browserify',
+    assert: 'assert',
     dns: './src/dns.js'
   },
   inject: [

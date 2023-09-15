@@ -1,10 +1,11 @@
-//@ts-check
-import { activeModalStack, miscUiState, showModal } from './globalState'
+import { activeModalStack, hideModal, miscUiState, showModal } from './globalState'
 import { notification } from './menus/notification'
 import * as crypto from 'crypto'
 import UUID from 'uuid-1345'
 import { options } from './optionsStorage'
 import { saveWorld } from './builtinCommands'
+import { openWorldZip } from './browserfs'
+import { installTexturePack } from './texturePack'
 
 export const goFullscreen = async (doToggle = false) => {
   if (!document.fullscreenElement) {
@@ -24,11 +25,11 @@ export const toNumber = (val) => {
 }
 
 export const pointerLock = {
-  get hasPointerLock () {
+  get hasPointerLock() {
     return document.pointerLockElement
   },
   justHitEscape: false,
-  async requestPointerLock () {
+  async requestPointerLock() {
     if (document.getElementById('hud').style.display === 'none' || activeModalStack.length || !document.documentElement.requestPointerLock || miscUiState.currentTouch) {
       return
     }
@@ -44,9 +45,8 @@ export const pointerLock = {
     if (!(document.fullscreenElement && navigator['keyboard']) && this.justHitEscape) {
       displayBrowserProblem()
     } else {
-      /** @type {any} */
       //@ts-ignore
-      const promise = document.documentElement.requestPointerLock({
+      const promise: any = document.documentElement.requestPointerLock({
         unadjustedMovement: options.mouseRawInput
       })
       promise?.catch((error) => {
@@ -70,7 +70,7 @@ window.getScreenRefreshRate = getScreenRefreshRate
 /**
  * Allows to obtain the estimated Hz of the primary monitor in the system.
  */
-export function getScreenRefreshRate () {
+export function getScreenRefreshRate() {
   let requestId = null
   let callbackTriggered = false
   let resolve
@@ -121,7 +121,7 @@ export const isCypress = () => {
 }
 
 // https://github.com/PrismarineJS/node-minecraft-protocol/blob/cf1f67117d586b5e6e21f0d9602da12e9fcf46b6/src/server/login.js#L170
-function javaUUID (s) {
+function javaUUID(s: string) {
   const hash = crypto.createHash('md5')
   hash.update(s, 'utf8')
   const buffer = hash.digest()
@@ -130,12 +130,17 @@ function javaUUID (s) {
   return buffer
 }
 
-export function nameToMcOfflineUUID (name) {
+export function nameToMcOfflineUUID(name) {
   return (new UUID(javaUUID('OfflinePlayer:' + name))).toString()
 }
 
-export const setLoadingScreenStatus = function (/** @type {string} */status, isError = false, hideDots = false) {
+export const setLoadingScreenStatus = function (status: string | undefined, isError = false, hideDots = false) {
   const loadingScreen = document.getElementById('loading-error-screen')
+
+  if (status === undefined) {
+    hideModal({ elem: loadingScreen, }, null, { force: true })
+    return
+  }
 
   // todo update in component instead
   showModal(loadingScreen)
@@ -153,12 +158,16 @@ export const disconnect = async () => {
   if (window.localServer) {
     await saveWorld()
     localServer.quit()
+  } else {
+    // workaround bot.end doesn't end the socket and emit end event
+    bot.end()
+    bot._client.socket.end()
   }
-  bot._client.emit('end')
+  bot._client.emit('end', 'You left the server')
   miscUiState.gameLoaded = false
 }
 
-export const loadScript = async function (/** @type {string} */ scriptSrc) {
+export const loadScript = async function (scriptSrc: string) {
   if (document.querySelector(`script[src="${scriptSrc}"]`)) {
     return
   }
@@ -194,4 +203,33 @@ export const reloadChunks = () => {
   localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
   worldView.updatePosition(bot.entity.position, true)
   prevRenderDistance = options.renderDistance
+}
+
+export const openFilePicker = (specificCase?: 'resourcepack') => {
+  // create and show input picker
+  let picker: HTMLInputElement = document.body.querySelector('input#file-zip-picker')
+  if (!picker) {
+    picker = document.createElement('input')
+    picker.type = 'file'
+    picker.accept = '.zip'
+
+    picker.addEventListener('change', () => {
+      const file = picker.files[0]
+      picker.value = ''
+      if (!file) return
+      if (!file.name.endsWith('.zip')) {
+        const doContinue = confirm(`Are you sure ${file.name.slice(-20)} is .zip file? Only .zip files are supported. Continue?`)
+        if (!doContinue) return
+      }
+      if (specificCase === 'resourcepack') {
+        installTexturePack(file)
+      } else {
+        openWorldZip(file)
+      }
+    })
+    picker.hidden = true
+    document.body.appendChild(picker)
+  }
+
+  picker.click()
 }

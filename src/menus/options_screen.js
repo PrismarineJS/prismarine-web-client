@@ -2,10 +2,12 @@ const { LitElement, html, css } = require('lit')
 const { commonCss, isMobile } = require('./components/common')
 const { showModal, hideCurrentModal, isGameActive, miscUiState } = require('../globalState')
 const { CommonOptionsScreen } = require('./options_store')
-const { toNumber } = require('../utils')
+const { toNumber, openFilePicker, setLoadingScreenStatus } = require('../utils')
 const { options } = require('../optionsStorage')
 const { subscribe } = require('valtio')
 const { subscribeKey } = require('valtio/utils')
+const { getResourcePackName, uninstallTexturePack } = require('../texturePack')
+const { fsState } = require('../loadSave')
 
 class OptionsScreen extends CommonOptionsScreen {
   static get styles () {
@@ -74,6 +76,9 @@ class OptionsScreen extends CommonOptionsScreen {
       this.requestUpdate()
     })
     subscribeKey(miscUiState, 'singleplayer', () => {
+      this.requestUpdate()
+    })
+    subscribeKey(miscUiState, 'resourcePackInstalled', () => {
       this.requestUpdate()
     })
   }
@@ -145,12 +150,31 @@ class OptionsScreen extends CommonOptionsScreen {
         options.autoFullScreen = !options.autoFullScreen
       }
       }></pmui-button>
-      <!-- todo also allow to remap f11 -->
-          <pmui-button title="Exit fullscreen (not recommended, also you can always do it with F11)" pmui-width="150px" pmui-label=${'Auto Exit Fullscreen: ' + (options.autoExitFullscreen ? 'ON' : 'OFF')} @pmui-click=${() => {
+        <!-- todo also allow to remap f11 -->
+            <pmui-button title="Exit fullscreen (not recommended, also you can always do it with F11)" pmui-width="150px" pmui-label=${'Auto Exit Fullscreen: ' + (options.autoExitFullscreen ? 'ON' : 'OFF')} @pmui-click=${() => {
         options.autoExitFullscreen = !options.autoExitFullscreen
       }
       }></pmui-button>
         </div>
+        <div class="wrapper">
+          <pmui-button pmui-width="150px" pmui-label=${'Resource Pack: ' + (miscUiState.resourcePackInstalled ? 'ON' : 'OFF')} @pmui-click=${async () => {
+        if (miscUiState.resourcePackInstalled) {
+          const resourcePackName = await getResourcePackName()
+          if (confirm(`Uninstall ${resourcePackName} resource pack?`)) {
+            // todo make hidable
+            setLoadingScreenStatus('Uninstalling texturepack...')
+            await uninstallTexturePack()
+            setLoadingScreenStatus(undefined)
+          }
+        } else {
+          if (!fsState.inMemorySave && isGameActive(false)) {
+            alert('Unable to install resource pack in loaded save for now')
+            return
+          }
+          openFilePicker('resourcepack')
+        }
+      }}></pmui-button>
+      </div>
 
         <pmui-button pmui-width="200px" pmui-label="Done" @pmui-click=${() => hideCurrentModal()}></pmui-button>
       </main>

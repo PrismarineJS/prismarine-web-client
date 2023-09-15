@@ -74,7 +74,7 @@ class LoadingErrorScreen extends LitElement {
     return html`
       <div class="dirt-bg"></div>
 
-      <div class="title">${this.status}${this.hasError && !this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
+      <div class="title">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
 
       ${this.hasError
         ? html`<div class="error-buttons"><pmui-button .hidden=${!this.maybeRecoverable} pmui-width="200px" pmui-label="Back" @pmui-click=${() => {
@@ -87,7 +87,7 @@ class LoadingErrorScreen extends LitElement {
           }
           document.getElementById('play-screen').style.display = 'block'
           addPanoramaCubeMap()
-        }}></pmui-button><pmui-button .hidden=${!(miscUiState.singleplayer && fsState.syncFs)} pmui-width="200px" pmui-label="Reset world" @pmui-click=${() => {
+        }}></pmui-button><pmui-button .hidden=${!(miscUiState.singleplayer && fsState.inMemorySave)} pmui-width="200px" pmui-label="Reset world" @pmui-click=${() => {
           if (!confirm('Are you sure you want to delete all local world content?')) return
           for (const key of Object.keys(localStorage)) {
             if (/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/g.test(key) || key === '/') {

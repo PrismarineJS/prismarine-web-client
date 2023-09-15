@@ -187,7 +187,11 @@ class Hotbar extends LitElement {
       <div class="hotbar">
         <p id="hotbar-item-name">${this.activeItemName}</p>
         <div id="hotbar-selected"></div>
-        <div id="hotbar-items-wrapper">
+        <div id="hotbar-items-wrapper" @touchstart=${(e) => {
+        if (!e.target.id.startsWith('hotbar')) return
+        const slot = +e.target.id.split('-')[1]
+        this.reloadHotbarSelected(slot)
+      }}>
           <div class="hotbar-item" id="hotbar-0">
             <div class="item-icon"></div>
             <span class="item-stack"></span>

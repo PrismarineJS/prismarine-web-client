@@ -1,14 +1,61 @@
 //@ts-check
 
+import { join } from 'path'
+import { miscUiState } from './globalState'
+import { fromTexturePackPath } from './texturePack'
+import fs from 'fs'
+import { subscribeKey } from 'valtio/utils'
+
 let panoramaCubeMap
+let panoramaUsesResourePack = false
 let viewer
 
 export const initPanoramaOptions = (_viewer) => {
   viewer = _viewer
 }
 
+const panoramaFiles = [
+  'panorama_1.png', // WS
+  'panorama_3.png', // ES
+  'panorama_4.png', // Up
+  'panorama_5.png', // Down
+  'panorama_0.png', // NS
+  'panorama_2.png' // SS
+]
+
+const panoramaResourcePackPath = 'assets/minecraft/textures/gui/title/background'
+const possiblyLoadPanoramaFromResourcePack = async (file) => {
+  let base64Texture
+  if (panoramaUsesResourePack) {
+    try {
+      base64Texture = await fs.promises.readFile(fromTexturePackPath(join(panoramaResourcePackPath, file)), 'base64')
+    } catch (err) {
+      panoramaUsesResourePack = false
+    }
+  }
+  if (base64Texture) return `data:image/png;base64,${base64Texture}`
+  else return join('extra-textures/background', file)
+}
+
+const updateResourecePackSupportPanorama = async () => {
+  try {
+    await fs.promises.readFile(fromTexturePackPath(join(panoramaResourcePackPath, panoramaFiles[0])), 'base64')
+    panoramaUsesResourePack = true
+  } catch (err) {
+    panoramaUsesResourePack = false
+  }
+}
+
+subscribeKey(miscUiState, 'resourcePackInstalled', async () => {
+  const oldState = panoramaUsesResourePack
+  const newState = miscUiState.resourcePackInstalled && (await updateResourecePackSupportPanorama(), panoramaUsesResourePack)
+  if (newState === oldState) return
+  removePanorama()
+  addPanoramaCubeMap()
+})
+
 // Menu panorama background
-export function addPanoramaCubeMap () {
+export async function addPanoramaCubeMap () {
   // remove all existing object in the viewer.scene
   // viewer.scene.children = []
 
@@ -20,14 +67,15 @@ export function addPanoramaCubeMap () {
   const panorGeo = new THREE.BoxGeometry(1000, 1000, 1000)
 
   const loader = new THREE.TextureLoader()
-  const panorMaterials = [
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_1.png'), transparent: true, side: THREE.DoubleSide }), // WS
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_3.png'), transparent: true, side: THREE.DoubleSide }), // ES
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_4.png'), transparent: true, side: THREE.DoubleSide }), // Up
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_5.png'), transparent: true, side: THREE.DoubleSide }), // Down
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_0.png'), transparent: true, side: THREE.DoubleSide }), // NS
-    new THREE.MeshBasicMaterial({ map: loader.load('extra-textures/background/panorama_2.png'), transparent: true, side: THREE.DoubleSide }) // SS
-  ]
+  let panorMaterials = []
+  await updateResourecePackSupportPanorama()
+  for (const file of panoramaFiles) {
+    panorMaterials.push(new THREE.MeshBasicMaterial({
+      map: loader.load(await possiblyLoadPanoramaFromResourcePack(file)),
+      transparent: true,
+      side: THREE.DoubleSide
+    }))
+  }
 
   const panoramaBox = new THREE.Mesh(panorGeo, panorMaterials)
 
@@ -58,7 +106,7 @@ export function addPanoramaCubeMap () {
 }
 
 export function removePanorama () {
-  if (!panoramaCubeMap) throw new Error('panorama is not there')
+  if (!panoramaCubeMap) return
   viewer.camera = new THREE.PerspectiveCamera(document.getElementById('options-screen').fov, window.innerWidth / window.innerHeight, 0.1, 1000)
   viewer.camera.updateProjectionMatrix()
   viewer.scene.remove(panoramaCubeMap)

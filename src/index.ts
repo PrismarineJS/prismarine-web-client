@@ -1,75 +1,92 @@
-//@ts-check
-/* global THREE */
-// todo cant ignore fs thus doesnt work in browser
-// const soureMapSupport = require('source-map-support')
-// soureMapSupport.install({
-//   environment: 'browser',
-// })
-require('./styles.css')
-require('iconify-icon')
-require('./chat')
-require('./inventory')
+import './importsWorkaround'
+import './styles.css'
+import './globals'
+import 'iconify-icon'
+import './chat'
+import './inventory'
+
+import './menus/components/button'
+import './menus/components/edit_box'
+import './menus/components/slider'
+import './menus/components/hotbar'
+import './menus/components/health_bar'
+import './menus/components/food_bar'
+import './menus/components/breath_bar'
+import './menus/components/debug_overlay'
+import './menus/components/playerlist_overlay'
+import './menus/components/bossbars_overlay'
+import './menus/hud'
+import './menus/play_screen'
+import './menus/pause_screen'
+import './menus/loading_or_error_screen'
+import './menus/keybinds_screen'
+import './menus/options_screen'
+import './menus/advanced_options_screen'
+import { notification } from './menus/notification'
+import './menus/title_screen'
+
+import './optionsStorage'
+import './reactUi.jsx'
+import './controls'
+import './dragndrop'
+import './browserfs'
+import './eruda'
+import downloadAndOpenWorld from './downloadAndOpenWorld'
+
+import net from 'net'
+import Stats from 'stats.js'
+import mineflayer from 'mineflayer'
+import { WorldView, Viewer } from 'prismarine-viewer/viewer'
+import pathfinder from 'mineflayer-pathfinder'
+import { Vec3 } from 'vec3'
+
+import Cursor from './cursor'
+
+import * as THREE from 'three'
+
+import { initVR } from './vr'
+import {
+  activeModalStack,
+  showModal,
+  hideCurrentModal,
+  activeModalStacks,
+  replaceActiveModalStack,
+  isGameActive,
+  miscUiState,
+  gameAdditionalState
+} from './globalState'
+
+import {
+  pointerLock,
+  goFullscreen,
+  toNumber,
+  isCypress,
+  loadScript,
+  toMajorVersion,
+  setLoadingScreenStatus
+} from './utils'
+
+import {
+  removePanorama,
+  addPanoramaCubeMap,
+  initPanoramaOptions
+} from './panorama'
+
+import { startLocalServer, unsupportedLocalServerFeatures } from './createLocalServer'
+import serverOptions from './defaultLocalServerOptions'
+import { customCommunication } from './customServer'
+import updateTime from './updateTime'
+import { options } from './optionsStorage'
+import { subscribeKey } from 'valtio/utils'
+import _ from 'lodash'
+import { contro } from './controls'
+import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
+
 //@ts-ignore
-require('./globals.js')
-require('./watchOptions')
+window.THREE = THREE
+globalThis.emptyShapeReplacer = [[0.0, 0.0, 0.0, 1.0, 1.0, 1.0]]
 
-// workaround for mineflayer
-process.versions.node = '18.0.0'
-
-require('./menus/components/button')
-require('./menus/components/edit_box')
-require('./menus/components/slider')
-require('./menus/components/hotbar')
-require('./menus/components/health_bar')
-require('./menus/components/food_bar')
-require('./menus/components/breath_bar')
-require('./menus/components/debug_overlay')
-require('./menus/components/playerlist_overlay')
-require('./menus/components/bossbars_overlay')
-require('./menus/hud')
-require('./menus/play_screen')
-require('./menus/pause_screen')
-require('./menus/loading_or_error_screen')
-require('./menus/keybinds_screen')
-require('./menus/options_screen')
-require('./menus/advanced_options_screen')
-require('./menus/notification')
-require('./menus/title_screen')
-
-require('./optionsStorage')
-require('./reactUi.jsx')
-require('./controls')
-require('./dragndrop')
-require('./browserfs')
-require('./eruda')
-require('./downloadAndOpenWorld')
-
-const net = require('net')
-const Stats = require('stats.js')
-
-const mineflayer = require('mineflayer')
-const { WorldView, Viewer } = require('prismarine-viewer/viewer')
-const pathfinder = require('mineflayer-pathfinder')
-const { Vec3 } = require('vec3')
-
-const Cursor = require('./cursor').default
-//@ts-ignore
-global.THREE = require('three')
-const { initVR } = require('./vr')
-const { activeModalStack, showModal, hideModal, hideCurrentModal, activeModalStacks, replaceActiveModalStack, isGameActive, miscUiState, gameAdditionalState } = require('./globalState')
-const { pointerLock, goFullscreen, toNumber, isCypress, loadScript, toMajorVersion, setLoadingScreenStatus } = require('./utils')
-const { notification } = require('./menus/notification')
-const { removePanorama, addPanoramaCubeMap, initPanoramaOptions } = require('./panorama')
-const { startLocalServer, unsupportedLocalServerFeatures } = require('./createLocalServer')
-const serverOptions = require('./defaultLocalServerOptions')
-const { customCommunication } = require('./customServer')
-const { default: updateTime } = require('./updateTime')
-const { options } = require('./optionsStorage')
-const { subscribeKey } = require('valtio/utils')
-const _ = require('lodash')
-const { contro } = require('./controls')
-
-if ('serviceWorker' in navigator && !isCypress()) {
+if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {
       console.log('SW registered: ', registration)
@@ -121,13 +138,13 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 // Create viewer
-/** @type {import('../prismarine-viewer/viewer/lib/viewer').Viewer} */
-const viewer = new Viewer(renderer, options.numWorkers)
+const viewer: import('../prismarine-viewer/viewer/lib/viewer').Viewer = new Viewer(renderer, options.numWorkers)
 initPanoramaOptions(viewer)
+watchTexturepackInViewer(viewer)
 
 const frameLimit = toNumber(localStorage.frameLimit)
 let interval = frameLimit && 1000 / frameLimit
-window.addEventListener('option-change', (/** @type {any} */{ detail }) => {
+window.addEventListener('option-change', ({ detail }: any) => {
   if (detail.name === 'frameLimit') interval = toNumber(detail.value) && 1000 / toNumber(detail.value)
 })
 
@@ -135,7 +152,7 @@ let nextFrameFn = []
 let postRenderFrameFn = () => { }
 let delta = 0
 let lastTime = performance.now()
-const renderFrame = (/** @type {DOMHighResTimeStamp} */ time) => {
+const renderFrame = (time: DOMHighResTimeStamp) => {
   if (window.stopLoop) return
   window.requestAnimationFrame(renderFrame)
   if (window.stopRender) return
@@ -179,7 +196,7 @@ const pauseMenu = document.getElementById('pause-screen')
 
 let mouseMovePostHandle = (e) => { }
 let lastMouseCall
-function onMouseMove (e) {
+function onMouseMove(e) {
   if (e.type !== 'touchmove' && !pointerLock.hasPointerLock) return
   e.stopPropagation?.()
   const now = performance.now()
@@ -197,12 +214,12 @@ function onMouseMove (e) {
 window.addEventListener('mousemove', onMouseMove, { capture: true })
 
 
-function hideCurrentScreens () {
+function hideCurrentScreens() {
   activeModalStacks['main-menu'] = activeModalStack
   replaceActiveModalStack('', [])
 }
 
-async function main () {
+async function main() {
   const menu = document.getElementById('play-screen')
   menu.addEventListener('connect', e => {
     const options = e.detail
@@ -231,8 +248,7 @@ let timeouts = []
 let intervals = []
 // only for dom listeners (no removeAllListeners)
 // todo refactor them out of connect fn instead
-/** @type {import('./utilsTs').RegisterListener} */
-const registerListener = (target, event, callback) => {
+const registerListener: import('./utilsTs').RegisterListener = (target, event, callback) => {
   target.addEventListener(event, callback)
   listeners.push({ target, event, callback })
 }
@@ -250,7 +266,7 @@ const removeAllListeners = () => {
 /**
  * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; serverOverrides? }} connectOptions
  */
-async function connect (connectOptions) {
+async function connect(connectOptions) {
   const menu = document.getElementById('play-screen')
   menu.style = 'display: none;'
   removePanorama()
@@ -297,16 +313,9 @@ async function connect (connectOptions) {
   }
   console.log(`connecting to ${host} ${port} with ${username}`)
 
-  if (proxy) {
-    console.log(`using proxy ${proxy} ${proxyport}`)
-    //@ts-ignore
-    net.setProxy({ hostname: proxy, port: proxyport })
-  }
-
   setLoadingScreenStatus('Logging in')
 
-  /** @type {mineflayer.Bot} */
-  let bot
+  let bot: mineflayer.Bot
   const destroyAll = () => {
     viewer.resetAll()
     window.localServer = undefined
@@ -362,11 +371,35 @@ async function connect (connectOptions) {
   }, {
     signal: errorAbortController.signal
   })
+
+  if (proxy) {
+    console.log(`using proxy ${proxy} ${proxyport}`)
+
+    // check proxy server availability for proper error message
+    try {
+      await fetch(`http://${proxy}:${proxyport}/api/vm/net`, { method: 'GET' })
+    } catch (err) {
+      console.error(err)
+      throw new Error(`Proxy server ${proxy}:${proxyport} is not available`)
+    }
+    //@ts-ignore
+    net.setProxy({ hostname: proxy, port: proxyport })
+  }
+
   let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
     const downloadMcData = async (version) => {
       setLoadingScreenStatus(`Downloading data for ${version}`)
+      try {
+        await genTexturePackTextures(version)
+      } catch (err) {
+        console.error(err)
+        const doContinue = prompt('Failed to apply texture pack. See errors in the console. Continue?')
+        if (!doContinue) {
+          setLoadingScreenStatus(undefined)
+        }
+      }
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
     }
 
@@ -385,7 +418,7 @@ async function connect (connectOptions) {
       // tcpDns() skipped since we define connect option
       // in setProtocol: we emit 'connect' here below so in that file we send set_protocol and login_start (onLogin handler)
       // Client (class) of flying-squid (in server/login.js of mc-protocol): onLogin handler: skip most logic & go to loginClient() which assigns uuid and sends 'success' back to client (onLogin handler) and emits 'login' on the server (login.js in flying-squid handler)
-      // flying-squid: 'login' -> player.login -> now sends 'login' event to the client (handled in many plugins in mineflayer) -> then 'update_health' is sent which emits 'spawn'
+      // flying-squid: 'login' -> player.login -> now sends 'login' event to the client (handled in many plugins in mineflayer) -> then 'update_health' is sent which emits 'spawn' in mineflayer
 
       setLoadingScreenStatus('Starting local server')
       window.serverDataChannel ??= {}
@@ -407,7 +440,7 @@ async function connect (connectOptions) {
       version: connectOptions.botVersion === '' ? false : connectOptions.botVersion,
       ...singeplayer ? {
         version: serverOptions.version,
-        connect () { },
+        connect() { },
         keepAlive: false,
         customCommunication
       } : {},
@@ -417,7 +450,7 @@ async function connect (connectOptions) {
       checkTimeoutInterval: 240 * 1000,
       noPongTimeout: 240 * 1000,
       closeTimeout: 240 * 1000,
-      async versionSelectedHook (client) {
+      async versionSelectedHook(client) {
         await downloadMcData(client.version)
       }
     })
@@ -459,8 +492,7 @@ async function connect (connectOptions) {
 
   bot.once('login', () => {
     // server is ok, add it to the history
-    /** @type {string[]} */
-    const serverHistory = JSON.parse(localStorage.getItem('serverHistory') || '[]')
+    const serverHistory: string[] = JSON.parse(localStorage.getItem('serverHistory') || '[]')
     serverHistory.unshift(connectOptions.server)
     localStorage.setItem('serverHistory', JSON.stringify([...new Set(serverHistory)]))
 
@@ -468,7 +500,6 @@ async function connect (connectOptions) {
   })
 
   bot.once('spawn', () => {
-    miscUiState.gameLoaded = true
     // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 
@@ -480,8 +511,7 @@ async function connect (connectOptions) {
 
     const center = bot.entity.position
 
-    /** @type {import('../prismarine-viewer/viewer/lib/worldView').WorldView} */
-    const worldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
+    const worldView: import('../prismarine-viewer/viewer/lib/worldView').WorldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
 
     let fovSetting = optionsScrn.fov
     const updateFov = () => {
@@ -521,9 +551,9 @@ async function connect (connectOptions) {
 
     const cursor = new Cursor(viewer, renderer, bot)
     postRenderFrameFn = () => {
-      debugMenu.cursorBlock = cursor.cursorBlock
       viewer.setFirstPersonCamera(null, bot.entity.yaw, bot.entity.pitch)
       cursor.update(bot)
+      debugMenu.cursorBlock = cursor.cursorBlock
     }
 
     try {
@@ -542,7 +572,7 @@ async function connect (connectOptions) {
     updateTime(bot)
 
     // Bot position callback
-    function botPosition () {
+    function botPosition() {
       // this might cause lag, but not sure
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
       worldView.updatePosition(bot.entity.position)
@@ -558,7 +588,7 @@ async function connect (connectOptions) {
       bot.entity.yaw -= x
     }
 
-    function changeCallback () {
+    function changeCallback() {
       notification.show = false
       if (!pointerLock.hasPointerLock && activeModalStack.length === 0) {
         showModal(pauseMenu)
@@ -573,11 +603,18 @@ async function connect (connectOptions) {
     const touchStartBreakingBlockMs = 500
     let virtualClickActive = false
     let virtualClickTimeout
-    /** @type {{id,x,y,sourceX,sourceY,activateCameraMove,time}?} */
-    let capturedPointer
+    let screenTouches = 0
+    let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time } | null
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
-      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || capturedPointer || e.pointerId === undefined) {
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
+        return
+      }
+      screenTouches++
+      if (screenTouches === 3) {
+        window.dispatchEvent(new MouseEvent('mousedown', { button: 1, }))
+      }
+      if (capturedPointer) {
         return
       }
       cameraControlEl.setPointerCapture(e.pointerId)
@@ -640,6 +677,14 @@ async function connect (connectOptions) {
       capturedPointer = undefined
     }, { passive: false })
 
+    registerListener(document, 'pointerup', (e) => {
+      const clickedEl = e.composedPath()[0]
+      if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
+        return
+      }
+      screenTouches--
+    })
+
     registerListener(document, 'contextmenu', (e) => e.preventDefault(), false)
 
     registerListener(document, 'blur', (e) => {
@@ -647,6 +692,7 @@ async function connect (connectOptions) {
     }, false)
 
     setLoadingScreenStatus('Done!')
+    miscUiState.gameLoaded = true
     console.log('Done!')
 
     hud.init(renderer, bot, host)
@@ -698,3 +744,4 @@ window.addEventListener('keydown', (e) => {
 addPanoramaCubeMap()
 showModal(document.getElementById('title-screen'))
 main()
+downloadAndOpenWorld()

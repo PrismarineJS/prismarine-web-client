@@ -1,5 +1,5 @@
 //@ts-check
-import mcServer from 'space-squid'
+import mcServer from 'flying-squid'
 
 /** @type {import('minecraft-protocol').ServerOptions & Record<string ,any>} */
 const serverOptions = {

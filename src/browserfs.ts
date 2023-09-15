@@ -5,27 +5,30 @@ import JSZip from 'jszip'
 import { join } from 'path'
 import { options } from './optionsStorage'
 
-const { promisify } = require('util')
-const browserfs = require('browserfs')
-const fs = require('fs')
+import { promisify } from 'util'
+import * as browserfs from 'browserfs'
+import fs from 'fs'
+import { installTexturePack, updateTexturePackInstalledState } from './texturePack'
 
 browserfs.install(window)
 // todo migrate to StorageManager API for localsave as localstorage has only 5mb limit, when localstorage is fallback test limit warning on 4mb
+const deafultMountablePoints = {
+  "/world": { fs: "LocalStorage" },
+  '/userData': { fs: 'IndexedDB' },
+};
 browserfs.configure({
-  // todo change to localstorage: mkdir doesnt work for some reason
   fs: 'MountableFileSystem',
-  options: {
-    "/world": { fs: "LocalStorage" }
-  },
+  options: deafultMountablePoints,
 }, (e) => {
   if (e) throw e
+  updateTexturePackInstalledState()
 })
 
 export const forceCachedDataPaths = {}
 
 //@ts-ignore
-fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir', 'rename', /* 'copyFile',  */'readdir'].map(key => [key, promisify(fs[key])])), {
-  get (target, p, receiver) {
+fs.promises = new Proxy(Object.fromEntries(['readFile', 'writeFile', 'stat', 'mkdir', 'rmdir', 'unlink', 'rename', /* 'copyFile',  */'readdir'].map(key => [key, promisify(fs[key])])), {
+  get(target, p, receiver) {
     //@ts-ignore
     if (!target[p]) throw new Error(`Not implemented fs.promises.${p}`)
     return (...args) => {
@@ -78,7 +81,7 @@ fs.promises.open = async (...args) => {
     fd,
     filename: args[0],
     close: () => {
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         fs.close(fd, (err) => {
           if (err) {
             throw err
@@ -108,11 +111,32 @@ const removeFileRecursiveSync = (path) => {
 
 window.removeFileRecursiveSync = removeFileRecursiveSync
 
+// todo it still doesnt clean the storage, need to debug
+export async function removeFileRecursiveAsync(path) {
+  try {
+    const files = await fs.promises.readdir(path);
+    for (const file of files) {
+      const curPath = join(path, file);
+      const stats = await fs.promises.stat(curPath);
+      if (stats.isDirectory()) {
+        // Recurse
+        await removeFileRecursiveAsync(curPath);
+      } else {
+        // Delete file
+        await fs.promises.unlink(curPath);
+      }
+    }
+    await fs.promises.rmdir(path);
+  } catch (error) {
+    throw error;
+  }
+}
+
+
 const SUPPORT_WRITE = true
 
-export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} */dragndropHandle = undefined) => {
-  /** @type {FileSystemDirectoryHandle} */
-  let _directoryHandle
+export const openWorldDirectory = async (dragndropHandle?: FileSystemDirectoryHandle) => {
+  let _directoryHandle: FileSystemDirectoryHandle
   if (dragndropHandle) {
     _directoryHandle = dragndropHandle
   } else {
@@ -130,7 +154,7 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   const doContinue = writeAccess || !SUPPORT_WRITE || options.disableLoadPrompts || confirm('Continue in readonly mode?')
   if (!doContinue) return
-  await new Promise(resolve => {
+  await new Promise<void>(resolve => {
     browserfs.configure({
       // todo
       fs: 'MountableFileSystem',
@@ -150,15 +174,52 @@ export const openWorldDirectory = async (/** @type {FileSystemDirectoryHandle?} 
 
   fsState.isReadonly = !writeAccess
   fsState.syncFs = false
+  fsState.inMemorySave = false
   loadSave()
 }
 
-export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name = file['name']) => {
-  await new Promise(async resolve => {
+const tryToDetectResourcePack = async (file: File | ArrayBuffer) => {
+  const askInstall = async () => {
+    return alert('ATM You can install texturepacks only via options menu. WIll be fixed')
+    if (confirm('Resource pack detected, do you want to install it?')) {
+      await installTexturePack(file)
+    }
+  }
+
+  if (fs.existsSync('/world/pack.mcmeta')) {
+    askInstall()
+    return true
+  }
+  // const jszip = new JSZip()
+  // let loaded = await jszip.loadAsync(file)
+  // if (loaded.file('pack.mcmeta')) {
+  //   loaded = null
+  //   askInstall()
+  //   return true
+  // }
+  // loaded = null
+}
+
+export const possiblyCleanHandle = () => {
+  if (!fsState.saveLoaded) {
+    // todo clean handle
+    browserfs.configure({
+      fs: 'MountableFileSystem',
+      options: deafultMountablePoints,
+    }, (e) => {
+      if (e) throw e
+    })
+  }
+}
+
+// todo rename method
+const openWorldZipInner = async (file: File | ArrayBuffer, name = file['name']) => {
+  await new Promise<void>(async resolve => {
     browserfs.configure({
       // todo
       fs: 'MountableFileSystem',
       options: {
+        ...deafultMountablePoints,
         "/world": {
           fs: "ZipFS",
           options: {
@@ -173,14 +234,16 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
     })
   })
 
+  fsState.saveLoaded = false
   fsState.isReadonly = true
   fsState.syncFs = true
+  fsState.inMemorySave = false
 
   if (fs.existsSync('/world/level.dat')) {
-    loadSave()
+    await loadSave()
   } else {
     const dirs = fs.readdirSync('/world')
-    let availableWorlds = []
+    let availableWorlds: string[] = []
     for (const dir of dirs) {
       if (fs.existsSync(`/world/${dir}/level.dat`)) {
         availableWorlds.push(dir)
@@ -188,12 +251,13 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
     }
 
     if (availableWorlds.length === 0) {
+      if (await tryToDetectResourcePack(file)) return
       alert('No worlds found in the zip')
       return
     }
 
     if (availableWorlds.length === 1) {
-      loadSave(`/world/${availableWorlds[0]}`)
+      await loadSave(`/world/${availableWorlds[0]}`)
       return
     }
 
@@ -203,7 +267,15 @@ export const openWorldZip = async (/** @type {File | ArrayBuffer} */file, name =
   }
 }
 
-export async function generateZipAndWorld () {
+export const openWorldZip = async (...args: Parameters<typeof openWorldZipInner>) => {
+  try {
+    return await openWorldZipInner(...args)
+  } finally {
+    possiblyCleanHandle()
+  }
+}
+
+export async function generateAndDownloadWorldZip() {
   const zip = new JSZip()
 
   zip.folder('world')

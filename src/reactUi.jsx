@@ -13,7 +13,7 @@ import { contro } from './controls'
 useInterfaceState.setState({
     isFlying: false,
     uiCustomization: {
-        touchButtonSize: isProbablyIphone() ? 55 : 40,
+        touchButtonSize: isProbablyIphone() ? 30 : 40,
     },
     updateCoord: ([coord, state]) => {
         const coordToAction = [

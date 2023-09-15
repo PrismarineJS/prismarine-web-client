@@ -315,6 +315,9 @@ class Hud extends LitElement {
     return html`
       <div class="mobile-top-btns" id="mobile-top">
         <button class="debug-btn" @click=${(e) => {
+        window.dispatchEvent(new MouseEvent('mousedown', { button: 1, }))
+      }}>Select</button>
+        <button class="debug-btn" @click=${(e) => {
         this.shadowRoot.getElementById('debug-overlay').showOverlay = !this.shadowRoot.getElementById('debug-overlay').showOverlay
       }}>F3</button>
         <button class="chat-btn" @click=${(e) => {

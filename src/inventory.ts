@@ -9,7 +9,22 @@ import invspriteJson from './invsprite.json'
 import { getVersion } from 'prismarine-viewer/viewer/lib/version'
 
 const loadedImages = new Map<string, HTMLImageElement>()
-let blockStates: Record<string, null | { variants: Record<string, { model: { textures: { up: { u, v, su, sv } } } }[]> }>
+export type BlockStates = Record<string, null | {
+  variants: Record<string, {
+    model: {
+      textures: {
+        up: {
+          u
+          v
+          su
+          sv
+        }
+      }
+    }
+  }[]>
+}>
+
+let blockStates: BlockStates
 let lastInventory
 let mcData
 let version
@@ -45,6 +60,7 @@ const getBlockData = (name) => {
 
   const getSpriteBlockSide = (side) => {
     const d = data[side]
+    if (!d) return
     const spriteSide = [d.u * blocksImg.width, d.v * blocksImg.height, d.su * blocksImg.width, d.sv * blocksImg.height]
     const blockSideData = {
       slice: spriteSide,
@@ -54,9 +70,10 @@ const getBlockData = (name) => {
   }
 
   return {
-    top: getSpriteBlockSide('up'),
-    left: getSpriteBlockSide('east'),
-    right: getSpriteBlockSide('north'),
+    // todo look at grass bug
+    top: getSpriteBlockSide('up') || getSpriteBlockSide('top'),
+    left: getSpriteBlockSide('east') || getSpriteBlockSide('side'),
+    right: getSpriteBlockSide('north') || getSpriteBlockSide('side'),
   }
 }
 
@@ -72,7 +89,7 @@ const getItemSlice = (name) => {
 const getImageSrc = (path) => {
   switch (path) {
     case 'gui/container/inventory': return InventoryGui
-    case 'blocks': return `textures/${version}.png`
+    case 'blocks': return globalThis.texturePackDataUrl || `textures/${version}.png`
     case 'invsprite': return `invsprite.png`
   }
   return Dirt

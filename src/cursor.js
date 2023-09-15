@@ -25,7 +25,11 @@ function getViewDirection (pitch, yaw) {
 }
 
 class Cursor {
+  static instance = null
+
   constructor (viewer, renderer, /** @type {import('mineflayer').Bot} */bot) {
+    if (Cursor.instance) return Cursor.instance
+
     // Init state
     this.buttons = [false, false, false]
     this.lastButtons = [false, false, false]
@@ -109,9 +113,9 @@ class Cursor {
 
   // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags
   update (/** @type {import('mineflayer').Bot} */bot) {
-    /** diggable block */
-    let cursorBlock = bot.blockAtCursor(6)
-    if (!bot.canDigBlock(cursorBlock)) cursorBlock = null
+    const cursorBlock = bot.blockAtCursor(5)
+    let cursorBlockDiggable = cursorBlock
+    if (!bot.canDigBlock(cursorBlock) && bot.game.gameMode !== 'creative') cursorBlockDiggable = null
 
     let cursorChanged = !cursorBlock !== !this.cursorBlock
     if (cursorBlock && this.cursorBlock) {
@@ -126,12 +130,12 @@ class Cursor {
       // check instead?
       //@ts-ignore
       bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
-      // this.lastBlockPlaced = 0
+      this.lastBlockPlaced = 0
     }
 
     // Start break
     // todo last check doesnt work as cursorChanged happens once (after that check is false)
-    if (cursorBlock && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 100))) {
+    if (cursorBlockDiggable && this.buttons[0] && (!this.lastButtons[0] || (cursorChanged && Date.now() - (this.lastDigged ?? 0) > 100))) {
       this.breakStartTime = performance.now()
       bot.dig(cursorBlock, 'ignore').catch((err) => {
         if (err.message === 'Digging aborted') return
@@ -147,24 +151,38 @@ class Cursor {
       } catch (e) { } // to be reworked in mineflayer, then remove the try here
     }
 
-    // Show break animation
-    if (cursorBlock && this.buttons[0]) {
-      const elapsed = performance.now() - this.breakStartTime
-      const time = bot.digTime(cursorBlock)
-      const state = Math.floor((elapsed / time) * 10)
-      this.blockBreakMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
-      this.blockBreakMesh.material.map = this.breakTextures[state]
-      this.blockBreakMesh.visible = true
-    } else {
-      this.blockBreakMesh.visible = false
-    }
-
     // Show cursor
     if (!cursorBlock) {
       this.cursorMesh.visible = false
     } else {
+      for (const collisionData of [...cursorBlock.shapes, ...cursorBlock['interactionShapes'] ?? []].slice(0, 1) ?? []) {
+        const width = collisionData[3] - collisionData[0]
+        const height = collisionData[4] - collisionData[1]
+        const depth = collisionData[5] - collisionData[2]
+
+        const initialSize = 1.001
+        this.cursorMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
+        this.blockBreakMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
+        // this.cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
+        const centerX = (collisionData[3] + collisionData[0]) / 2
+        const centerY = (collisionData[4] + collisionData[1]) / 2
+        const centerZ = (collisionData[5] + collisionData[2]) / 2
+        this.cursorMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
+        this.blockBreakMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
+      }
       this.cursorMesh.visible = true
-      this.cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
+      // change
+    }
+
+    // Show break animation
+    if (cursorBlockDiggable && this.buttons[0]) {
+      const elapsed = performance.now() - this.breakStartTime
+      const time = bot.digTime(cursorBlock)
+      const state = Math.floor((elapsed / time) * 10)
+      this.blockBreakMesh.material.map = this.breakTextures[state]
+      this.blockBreakMesh.visible = true
+    } else {
+      this.blockBreakMesh.visible = false
     }
 
     // Update state

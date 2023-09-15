@@ -31,6 +31,6 @@ module.exports = {
   },
   'everybody-op': true,
   'max-entities': 100,
-  'version': '1.8.8',
-  versionMajor: '1.8'
+  'version': '1.14.4',
+  versionMajor: '1.14'
 }

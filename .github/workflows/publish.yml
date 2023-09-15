@@ -22,6 +22,8 @@ jobs:
       #   with:
       #     name: cypress-images
       #     path: cypress/integration/__image_snapshots__/
+      # todo link vercel deployment
+      - run: pnpx zardoy-release node
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

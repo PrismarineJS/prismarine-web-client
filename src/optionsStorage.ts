@@ -1,15 +1,14 @@
-//@ts-check
 // todo implement async options storage
 
 import { proxy, subscribe } from 'valtio/vanilla'
-import { mergeAny } from './optionsStorageTypes'
 // weird webpack configuration bug: it cant import valtio/utils in this file
 import { subscribeKey } from 'valtio/utils'
 
+const mergeAny: <T>(arg1: T, arg2: any) => T = Object.assign
+
 const defaultOptions = {
   renderDistance: 4,
-  /** @type {boolean | undefined | null} */
-  alwaysBackupWorldBeforeLoading: undefined,
+  alwaysBackupWorldBeforeLoading: undefined as boolean | undefined | null,
   alwaysShowMobileControls: false,
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
@@ -34,11 +33,12 @@ subscribe(options, () => {
   localStorage.options = JSON.stringify(options)
 })
 
-/** @type {import('./optionsStorageTypes').WatchValue} */
-export const watchValue = (proxy, callback) => {
-  const watchedProps = new Set()
+type WatchValue = <T extends Record<string, any>>(proxy: T, callback: (p: T) => void) => void
+
+export const watchValue: WatchValue = (proxy, callback) => {
+  const watchedProps = new Set<string>()
   callback(new Proxy(proxy, {
-    get (target, p, receiver) {
+    get(target, p, receiver) {
       watchedProps.add(p.toString())
       return Reflect.get(target, p, receiver)
     },

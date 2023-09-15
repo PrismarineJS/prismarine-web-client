@@ -10,6 +10,7 @@
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
+    "postinstall": "node scripts/gen-texturepack-files.mjs",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -19,6 +20,13 @@
   ],
   "author": "PrismarineJS",
   "license": "MIT",
+  "release": {
+    "initialVersion": {
+      "version": "0.1.0",
+      "releaseNotes": "First GH release",
+      "releaseNotesWithExisting": "The start of something new..."
+    }
+  },
   "dependencies": {
     "@dimaka/interface": "0.0.1",
     "@emotion/css": "^11.11.2",
@@ -37,18 +45,19 @@
     "esbuild-loader": "^4.0.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "express": "^4.18.2",
+    "flying-squid": "github:zardoy/space-squid#everything",
     "fs-extra": "^11.1.1",
     "iconify-icon": "^1.0.8",
     "jszip": "^3.10.1",
     "lit": "^2.8.0",
     "minecraft-data": "^3.0.0",
     "net-browserify": "github:PrismarineJS/net-browserify",
+    "pretty-bytes": "^6.1.1",
     "prismarine-world": "^3.6.2",
     "querystring": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.0",
-    "space-squid": "github:zardoy/space-squid#everything",
     "speed-measure-webpack-plugin": "^1.5.0",
     "stats.js": "^0.17.0",
     "url": "^0.11.1",
@@ -69,7 +78,6 @@
     "cypress": "^9.5.4",
     "cypress-esbuild-preprocessor": "^1.0.2",
     "events": "^3.3.0",
-    "filesize": "^10.0.12",
     "html-webpack-plugin": "^5.5.3",
     "http-browserify": "^1.7.0",
     "http-server": "^14.1.1",
@@ -94,6 +102,7 @@
     "three": "0.128.0",
     "timers-browserify": "^2.0.12",
     "url-loader": "^4.1.1",
+    "filesize": "^10.0.12",
     "use-typed-event-listener": "^4.0.2",
     "vite": "^4.4.9",
     "webpack": "^5.88.2",
@@ -105,8 +114,10 @@
   },
   "pnpm": {
     "overrides": {
-      "minecraft-data": "latest",
-      "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#chunk-impl-require-fix",
+      "prismarine-block": "github:zardoy/prismarine-block#next-era",
+      "prismarine-world": "github:zardoy/prismarine-world#next-era",
+      "minecraft-data": "3.45.0",
+      "prismarine-provider-anvil": "github:zardoy/prismarine-provider-anvil#everything",
       "minecraft-protocol": "github:zardoy/minecraft-protocol#custom-client-extra"
     }
   }
