@@ -84,6 +84,7 @@ import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
 
 //@ts-ignore
 window.THREE = THREE
+globalThis.emptyShapeReplacer = [[0.0, 0.0, 0.0, 1.0, 1.0, 1.0]]
 
 if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
