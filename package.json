@@ -22,7 +22,7 @@
   "release": {
     "initialVersion": {
       "version": "0.1.0",
-      "releaseNotes": "First GH release",
+      "releaseNotes": "The start of something new...",
       "releaseNotesWithExisting": "The start of something new..."
     }
   },
