@@ -769,7 +769,7 @@ if (hasMapUrl()) {
     const version = qs.get('peerVersion')
     if (peerId) {
       let username = options.guestUsername
-      if (!options.askGuestName) username = prompt('Enter your username', username)
+      if (options.askGuestName) username = prompt('Enter your username', username)
       options.guestUsername = username
       connect({
         server: '', port: '', proxy: '', password: '',
