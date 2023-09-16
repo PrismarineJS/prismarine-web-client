@@ -768,9 +768,12 @@ if (hasMapUrl()) {
     const peerId = qs.get('connectPeer')
     const version = qs.get('peerVersion')
     if (peerId) {
+      let username = options.guestUsername
+      if (!options.askGuestName) username = prompt('Enter your username', username)
+      options.guestUsername = username
       connect({
         server: '', port: '', proxy: '', password: '',
-        username: 'test',
+        username,
         botVersion: version || undefined,
         peerId
       })

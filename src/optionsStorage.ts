@@ -21,7 +21,9 @@ const defaultOptions = {
   localServerOptions: {},
   localUsername: 'wanderer',
   preferLoadReadonly: false,
-  disableLoadPrompts: false
+  disableLoadPrompts: false,
+  guestUsername: 'guest',
+  askGuestName: true
 }
 
 export const options = proxy(
