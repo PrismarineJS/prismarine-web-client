@@ -406,9 +406,9 @@ async function connect(connectOptions: {
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
     }
 
-    const version = connectOptions.botVersion ?? serverOptions.version
-    if (version) {
-      await downloadMcData(version)
+    const downloadVersion = connectOptions.botVersion || singeplayer ? serverOptions.version : undefined
+    if (downloadVersion) {
+      await downloadMcData(downloadVersion)
     }
 
     if (singeplayer) {
@@ -443,13 +443,13 @@ async function connect(connectOptions: {
     bot = mineflayer.createBot({
       host,
       port,
-      version: connectOptions.botVersion === '' ? false : connectOptions.botVersion,
+      version: !connectOptions.botVersion ? false : connectOptions.botVersion,
       ...singeplayer || p2pMultiplayer ? {
-        version: serverOptions.version,
         keepAlive: false,
         stream: botDuplex,
       } : {},
       ...singeplayer ? {
+        version: serverOptions.version,
         connect() { },
         customCommunication: usingCustomCommunication ? customCommunication : undefined,
       } : {},
