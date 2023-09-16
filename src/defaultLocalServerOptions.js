@@ -29,6 +29,7 @@ module.exports = {
     'header': 'Flying squid',
     'footer': 'Test server'
   },
+  keepAlive: false,
   'everybody-op': true,
   'max-entities': 100,
   'version': '1.14.4',

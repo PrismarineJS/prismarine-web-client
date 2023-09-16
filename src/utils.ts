@@ -138,6 +138,7 @@ export const setLoadingScreenStatus = function (status: string | undefined, isEr
   const loadingScreen = document.getElementById('loading-error-screen')
 
   if (status === undefined) {
+    loadingScreen.status = ''
     hideModal({ elem: loadingScreen, }, null, { force: true })
     return
   }
@@ -150,7 +151,7 @@ export const setLoadingScreenStatus = function (status: string | undefined, isEr
   }
   loadingScreen.hideDots = hideDots
   loadingScreen.hasError = isError
-  loadingScreen.status = status
+  loadingScreen.status = isError && loadingScreen.status ? status + `\nLast status: ${loadingScreen.status}` : status
 }
 
 
@@ -232,4 +233,13 @@ export const openFilePicker = (specificCase?: 'resourcepack') => {
   }
 
   picker.click()
+}
+
+export const resolveTimeout = (promise, timeout = 10000) => {
+  return new Promise((resolve, reject) => {
+    promise.then(resolve, reject)
+    setTimeout(() => {
+      reject(new Error('timeout'))
+    }, timeout)
+  })
 }

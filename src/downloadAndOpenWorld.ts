@@ -6,6 +6,12 @@ const getConstantFilesize = (bytes: number) => {
   return prettyBytes(bytes, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
+export const hasMapUrl = () => {
+  const qs = new URLSearchParams(window.location.search)
+  const mapUrl = qs.get('map')
+  return !!mapUrl
+}
+
 export default async () => {
   const qs = new URLSearchParams(window.location.search)
   const mapUrl = qs.get('map')

@@ -16,6 +16,8 @@ jobs:
           fetch-depth: 0
       - name: Install Global Dependencies
         run: npm install --global vercel pnpm
+      - run: pnpm install
+      - run: pnpm run build
       - uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}

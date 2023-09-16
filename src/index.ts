@@ -31,7 +31,7 @@ import './controls'
 import './dragndrop'
 import './browserfs'
 import './eruda'
-import downloadAndOpenWorld from './downloadAndOpenWorld'
+import downloadAndOpenWorld, { hasMapUrl } from './downloadAndOpenWorld'
 
 import net from 'net'
 import Stats from 'stats.js'
@@ -63,7 +63,8 @@ import {
   isCypress,
   loadScript,
   toMajorVersion,
-  setLoadingScreenStatus
+  setLoadingScreenStatus,
+  resolveTimeout
 } from './utils'
 
 import {
@@ -74,13 +75,14 @@ import {
 
 import { startLocalServer, unsupportedLocalServerFeatures } from './createLocalServer'
 import serverOptions from './defaultLocalServerOptions'
-import { customCommunication } from './customServer'
+import { clientDuplex, customCommunication } from './customServer'
 import updateTime from './updateTime'
 import { options } from './optionsStorage'
 import { subscribeKey } from 'valtio/utils'
 import _ from 'lodash'
 import { contro } from './controls'
 import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
+import { connectToPeer } from './localServerMultiplayer'
 
 //@ts-ignore
 window.THREE = THREE
@@ -263,16 +265,17 @@ const removeAllListeners = () => {
   disposables = []
 }
 
-/**
- * @param {{ server: any; port?: string; singleplayer: any; username: any; password: any; proxy: any; botVersion?: any; serverOverrides? }} connectOptions
- */
-async function connect(connectOptions) {
+async function connect(connectOptions: {
+  server: any; port?: string; singleplayer?: any; username: any; password: any; proxy: any; botVersion?: any; serverOverrides?; peerId?: string
+}) {
   const menu = document.getElementById('play-screen')
   menu.style = 'display: none;'
   removePanorama()
 
   const singeplayer = connectOptions.singleplayer
+  const p2pMultiplayer = !!connectOptions.peerId
   miscUiState.singleplayer = singeplayer
+  miscUiState.flyingSquid = singeplayer || p2pMultiplayer
   const oldSetInterval = window.setInterval
   // @ts-ignore
   window.setInterval = (callback, ms) => {
@@ -403,9 +406,9 @@ async function connect(connectOptions) {
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
     }
 
-    const version = connectOptions.botVersion ?? serverOptions.version
-    if (version) {
-      await downloadMcData(version)
+    const downloadVersion = connectOptions.botVersion || singeplayer ? serverOptions.version : undefined
+    if (downloadVersion) {
+      await downloadMcData(downloadVersion)
     }
 
     if (singeplayer) {
@@ -421,7 +424,6 @@ async function connect(connectOptions) {
       // flying-squid: 'login' -> player.login -> now sends 'login' event to the client (handled in many plugins in mineflayer) -> then 'update_health' is sent which emits 'spawn' in mineflayer
 
       setLoadingScreenStatus('Starting local server')
-      window.serverDataChannel ??= {}
       localServer = window.localServer = startLocalServer()
       // todo need just to call quit if started
       // loadingScreen.maybeRecoverable = false
@@ -433,16 +435,23 @@ async function connect(connectOptions) {
       }
     }
 
+    const usingCustomCommunication = true
+
+    const botDuplex = !p2pMultiplayer ? undefined/* clientDuplex */ : await connectToPeer(connectOptions.peerId);
+
     setLoadingScreenStatus('Creating mineflayer bot')
     bot = mineflayer.createBot({
       host,
       port,
-      version: connectOptions.botVersion === '' ? false : connectOptions.botVersion,
+      version: !connectOptions.botVersion ? false : connectOptions.botVersion,
+      ...singeplayer || p2pMultiplayer ? {
+        keepAlive: false,
+        stream: botDuplex,
+      } : {},
       ...singeplayer ? {
         version: serverOptions.version,
         connect() { },
-        keepAlive: false,
-        customCommunication
+        customCommunication: usingCustomCommunication ? customCommunication : undefined,
       } : {},
       username,
       password,
@@ -454,7 +463,8 @@ async function connect(connectOptions) {
         await downloadMcData(client.version)
       }
     })
-    if (singeplayer) {
+    if (singeplayer || p2pMultiplayer) {
+      // p2pMultiplayer still uses the same flying-squid server
       const _supportFeature = bot.supportFeature
       bot.supportFeature = (feature) => {
         if (unsupportedLocalServerFeatures.includes(feature)) {
@@ -463,13 +473,16 @@ async function connect(connectOptions) {
         return _supportFeature(feature)
       }
 
-      bot.emit('inject_allowed')
-      bot._client.emit('connect')
+      if (usingCustomCommunication) {
+        bot.emit('inject_allowed')
+        bot._client.emit('connect')
+      }
     }
   } catch (err) {
     handleError(err)
   }
   if (!bot) return
+  let p2pConnectTimeout = p2pMultiplayer ? setTimeout(() => { throw new Error('Spawn timeout. There might be error on other side, check console.') }, 20_000) : undefined
   hud.preload(bot)
 
   // bot.on('inject_allowed', () => {
@@ -500,6 +513,7 @@ async function connect(connectOptions) {
   })
 
   bot.once('spawn', () => {
+    if (p2pConnectTimeout) clearTimeout(p2pConnectTimeout)
     // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 
@@ -702,6 +716,7 @@ async function connect(connectOptions) {
       errorAbortController.abort()
       if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
+      setLoadingScreenStatus(undefined)
       hideCurrentScreens()
     }, singeplayer ? 0 : 2500)
   })
@@ -744,4 +759,24 @@ window.addEventListener('keydown', (e) => {
 addPanoramaCubeMap()
 showModal(document.getElementById('title-screen'))
 main()
-downloadAndOpenWorld()
+if (hasMapUrl()) {
+  downloadAndOpenWorld()
+} else {
+  window.addEventListener('hud-ready', (e) => {
+    // try to connect to peer
+    const qs = new URLSearchParams(window.location.search)
+    const peerId = qs.get('connectPeer')
+    const version = qs.get('peerVersion')
+    if (peerId) {
+      let username = options.guestUsername
+      if (!options.askGuestName) username = prompt('Enter your username', username)
+      options.guestUsername = username
+      connect({
+        server: '', port: '', proxy: '', password: '',
+        username,
+        botVersion: version || undefined,
+        peerId
+      })
+    }
+  })
+}

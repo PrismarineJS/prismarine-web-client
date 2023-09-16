@@ -3,11 +3,13 @@ import { renderToDom } from '@zardoy/react-util'
 
 import { LeftTouchArea, RightTouchArea, useUsingTouch, useInterfaceState } from '@dimaka/interface'
 import { css } from '@emotion/css'
-import { activeModalStack, isGameActive } from './globalState'
+import { activeModalStack, isGameActive, miscUiState } from './globalState'
 import { isProbablyIphone } from './menus/components/common'
 // import DeathScreen from './react/DeathScreen'
 import { useSnapshot } from 'valtio'
 import { contro } from './controls'
+import { QRCodeSVG } from 'qrcode.react'
+import { createPortal } from 'react-dom'
 
 // todo
 useInterfaceState.setState({
@@ -73,11 +75,38 @@ function useIsBotAvailable() {
     return isGameActive(false)
 }
 
+const DisplayQr = () => {
+    const { currentDisplayQr } = useSnapshot(miscUiState)
+
+    if (!currentDisplayQr) return null
+
+    return createPortal(<div
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 15
+            }}
+            onClick={() => {
+                miscUiState.currentDisplayQr = null
+            }}
+        >
+            <QRCodeSVG size={384} value={currentDisplayQr} style={{display: 'block', border: '2px solid black',}} />
+        </div>, document.body)
+
+}
+
 const App = () => {
     const isBotAvailable = useIsBotAvailable()
     if (!isBotAvailable) return null
 
     return <div>
+        <DisplayQr />
         <TouchControls />
     </div>
 }

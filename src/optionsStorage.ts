@@ -13,6 +13,7 @@ const defaultOptions = {
   maxMultiplayerRenderDistance: 6,
   excludeCommunicationDebugEvents: [],
   preventDevReloadWhilePlaying: false,
+  closeConfirmation: true,
   autoFullScreen: false,
   mouseRawInput: false,
   autoExitFullscreen: false,
@@ -20,7 +21,9 @@ const defaultOptions = {
   localServerOptions: {},
   localUsername: 'wanderer',
   preferLoadReadonly: false,
-  disableLoadPrompts: false
+  disableLoadPrompts: false,
+  guestUsername: 'guest',
+  askGuestName: true
 }
 
 export const options = proxy(
