@@ -176,6 +176,17 @@ async function connect (options) {
 
   loadingScreen.status = 'Logging in'
 
+  const errorAbortController = new AbortController()
+  window.addEventListener('unhandledrejection', (e) => {
+    handleError(e.reason)
+  }, {
+    signal: errorAbortController
+  })
+  window.addEventListener('error', (e) => {
+    handleError(e.message)
+  }, {
+    signal: errorAbortController.signal
+  })
   const bot = mineflayer.createBot({
     host,
     port,
@@ -189,12 +200,13 @@ async function connect (options) {
   })
   hud.preload(bot)
 
-  bot.on('error', (err) => {
+  const handleError = (err) => {
     console.log('Encountered error!', err)
     loadingScreen.status = `Error encountered. Error message: ${err}. Please reload the page`
     loadingScreen.style = 'display: block;'
     loadingScreen.hasError = true
-  })
+  }
+  bot.on('error', handleError)
 
   bot.on('kicked', (kickReason) => {
     console.log('User was kicked!', kickReason)
@@ -398,6 +410,9 @@ async function connect (options) {
     hud.style.display = 'block'
 
     setTimeout(function () {
+      // game in playable state show errors in console instead
+      errorAbortController.abort()
+      if (loadingScreen.hasError) return
       // remove loading screen, wait a second to make sure a frame has properly rendered
       loadingScreen.style = 'display: none;'
     }, 2500)

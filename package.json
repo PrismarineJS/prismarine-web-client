@@ -4,6 +4,7 @@
   "description": "A minecraft client running in a browser",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node scripts/patchPackages.js",
     "build": "webpack --config webpack.prod.js",
     "build-dev": "webpack --config webpack.dev.js",
     "start": "node --max-old-space-size=8192 server.js 8080 dev",
