@@ -103,6 +103,7 @@ export const showContextmenu = (items: ContextMenuItem[], { clientX, clientY }) 
 // ---
 
 export const miscUiState = proxy({
+  currentDisplayQr: null as string | null,
   currentTouch: null as boolean | null,
   singleplayer: false,
   flyingSquid: false,

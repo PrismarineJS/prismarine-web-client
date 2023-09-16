@@ -19,13 +19,6 @@
   ],
   "author": "PrismarineJS",
   "license": "MIT",
-  "release": {
-    "initialVersion": {
-      "version": "0.1.0",
-      "releaseNotes": "The start of something new...",
-      "releaseNotesWithExisting": "The start of something new..."
-    }
-  },
   "dependencies": {
     "@dimaka/interface": "0.0.1",
     "@emotion/css": "^11.11.2",
@@ -51,8 +44,10 @@
     "lit": "^2.8.0",
     "minecraft-data": "^3.0.0",
     "net-browserify": "github:PrismarineJS/net-browserify",
+    "peerjs": "^1.5.0",
     "pretty-bytes": "^6.1.1",
     "prismarine-world": "^3.6.2",
+    "qrcode.react": "^3.1.0",
     "querystring": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

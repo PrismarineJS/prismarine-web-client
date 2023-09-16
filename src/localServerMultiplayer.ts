@@ -9,33 +9,38 @@ class CustomDuplex extends Duplex {
         super(options)
     }
 
-    // Implement the _read() method for reading data from the stream
-    _read(size) {
-    }
+    _read() { }
 
-    // Implement the _write() method for writing data to the stream
     _write(chunk, encoding, callback) {
         this.writeAction(chunk)
-        // this.writeStream.push(chunk) // Push the data chunk to the write queue
-        // this.writeStream.resume() // Resume the write stream
-        callback() // Signal that the write operation is complete
+        callback()
     }
 }
 
 let peerInstance: Peer | undefined
 
-const copyJoinLink = async (id) => {
-    miscUiState.wanOpened = true
+export const getJoinLink = () => {
+    if (!peerInstance) return
     const url = new URL(window.location.href)
-    url.searchParams.set('connectPeer', id)
+    url.searchParams.set('connectPeer', peerInstance.id)
     url.searchParams.set('peerVersion', localServer.options.version)
-    await navigator.clipboard.writeText(url.toString())
+    return url.toString()
 }
 
-export const openToWanAndCopyJoinLink = async (writeText: (text) => void) => {
+const copyJoinLink = async () => {
+    miscUiState.wanOpened = true
+    const joinLink = getJoinLink()
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(joinLink)
+    } else {
+        window.prompt('Copy to clipboard: Ctrl+C, Enter', joinLink)
+    }
+}
+
+export const openToWanAndCopyJoinLink = async (writeText: (text) => void, doCopy = true) => {
     if (!localServer) return
     if (peerInstance) {
-        await copyJoinLink(peerInstance.id)
+        if (doCopy) await copyJoinLink()
         return 'Already opened to wan. Join link copied'
     }
     const peer = new Peer({
@@ -80,8 +85,8 @@ export const openToWanAndCopyJoinLink = async (writeText: (text) => void) => {
         writeText(error.message)
     })
     return await new Promise<string>(resolve => {
-        peer.on('open', async (id) => {
-            await copyJoinLink(id)
+        peer.on('open', async () => {
+            await copyJoinLink()
             resolve('Copied join link to clipboard')
         })
         setTimeout(() => {

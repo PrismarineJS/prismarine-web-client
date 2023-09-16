@@ -8,7 +8,7 @@ const { saveWorld } = require('../builtinCommands')
 const { notification } = require('./notification')
 const { disconnect } = require('../utils')
 const { subscribeKey } = require('valtio/utils')
-const { closeWan, openToWanAndCopyJoinLink } = require('../localServerMultiplayer')
+const { closeWan, openToWanAndCopyJoinLink, getJoinLink } = require('../localServerMultiplayer')
 
 class PauseScreen extends LitElement {
   static get styles () {
@@ -91,13 +91,19 @@ class PauseScreen extends LitElement {
     `
   }
 
-  clickJoinLinkButton (qr = false) {
+  async clickJoinLinkButton (qr = false) {
     if (!qr && miscUiState.wanOpened) {
       closeWan()
       return
     }
-    // todo display qr!
-    openToWanAndCopyJoinLink(() => { })
+    if (!miscUiState.wanOpened || !qr) {
+      await openToWanAndCopyJoinLink(() => { }, !qr)
+    }
+    if (qr) {
+      const joinLink = getJoinLink()
+      miscUiState.currentDisplayQr = joinLink
+      return
+    }
   }
 
   show () {
