@@ -10,24 +10,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
       - name: Install pnpm
-        run: npm i -g pnpm
-      - run: pnpm install
-      - run: pnpm build
-      # - uses: cypress-io/github-action@v5
-      #   with:
-      #     install: false
-      #     start: pnpm prod-start
-      # - uses: actions/upload-artifact@v3
-      #   if: failure()
-      #   with:
-      #     name: cypress-images
-      #     path: cypress/integration/__image_snapshots__/
-      # todo link vercel deployment
+        run: npm i -g vercel pnpm
+      # - run: pnpm install
+      # - run: pnpm build
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      # will install + build to .vercel/output/static
+      - run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --prod
+      - run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
       - run: pnpx zardoy-release node
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: .vercel/output/static
           force_orphan: true
