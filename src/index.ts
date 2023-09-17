@@ -379,12 +379,13 @@ async function connect(connectOptions: {
     console.log(`using proxy ${proxy} ${proxyport}`)
 
     // check proxy server availability for proper error message
-    try {
-      await fetch(`http://${proxy}:${proxyport}/api/vm/net`, { method: 'GET' })
-    } catch (err) {
-      console.error(err)
-      throw new Error(`Proxy server ${proxy}:${proxyport} is not available`)
-    }
+    // todo fix correctly
+    // try {
+    //   await fetch(`http://${proxy}:${proxyport}/api/vm/net`, { method: 'GET' })
+    // } catch (err) {
+    //   console.error(err)
+    //   throw new Error(`Proxy server ${proxy}:${proxyport} is not available`)
+    // }
     //@ts-ignore
     net.setProxy({ hostname: proxy, port: proxyport })
   }
