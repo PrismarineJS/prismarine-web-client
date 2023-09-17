@@ -3,7 +3,7 @@
   "version": "0.0.0-dev",
   "description": "A minecraft client running in a browser",
   "scripts": {
-    "start": "node scripts/build.js copyFilesDev && node scripts/prepareData.mjs && node esbuild.mjs --minify --watch",
+    "start": "node scripts/build.js copyFilesDev && node scripts/prepareData.mjs && node esbuild.mjs --watch",
     "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
     "build": "node scripts/build.js copyFiles && node scripts/prepareData.mjs && node esbuild.mjs --minify --prod",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
