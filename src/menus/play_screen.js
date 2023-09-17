@@ -184,7 +184,7 @@ class PlayScreen extends LitElement {
       </main>
 
       <div class="button-wrapper">
-        <pmui-button pmui-width="150px" pmui-label="Connect" @pmui-click=${this.onConnectPress}></pmui-button>
+        <pmui-button pmui-test-id="connect-to-server" pmui-width="150px" pmui-label="Connect" @pmui-click=${this.onConnectPress}></pmui-button>
         <pmui-button pmui-width="150px" pmui-label="Cancel" @pmui-click=${() => hideCurrentModal()}></pmui-button>
       </div>
     `

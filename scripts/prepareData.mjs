@@ -1,7 +1,13 @@
 //@ts-check
 import { build } from 'esbuild'
+import { existsSync } from 'node:fs'
 import Module from "node:module"
 import { dirname } from 'node:path'
+
+if (existsSync('dist/mc-data')) {
+  console.log('using cached prepared data')
+  process.exit(0)
+}
 
 const require = Module.createRequire(import.meta.url)
 

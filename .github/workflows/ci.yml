@@ -15,6 +15,7 @@ jobs:
       - uses: cypress-io/github-action@v5
         with:
           install: false
+          # start: pnpm prod-start & node cypress/minecraft-server.mjs
           start: pnpm prod-start
       - uses: actions/upload-artifact@v3
         if: failure()

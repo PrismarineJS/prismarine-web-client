@@ -7,20 +7,8 @@ import { clients, plugins } from './scripts/esbuildPlugins.mjs'
 import { generateSW } from 'workbox-build'
 import { getSwAdditionalEntries } from './scripts/build.js'
 
-/** @type {import('esbuild').BuildOptions} */
-let baseConfig = {}
-
-// // testing config
-// baseConfig = {
-//   entryPoints: ['files/index.js'],
-//   outfile: 'out.js',
-//   outdir: undefined,
-// }
-
-try {
-  //@ts-ignore
-  await import('./localSettings.mjs')
-} catch { }
+//@ts-ignore
+try { await import('./localSettings.mjs') } catch { }
 
 fs.writeFileSync('dist/index.html', fs.readFileSync('index.html', 'utf8').replace('<!-- inject script -->', '<script src="index.js"></script>'), 'utf8')
 
@@ -53,7 +41,6 @@ const ctx = await esbuild.context({
     'browser', 'module', 'main'
   ],
   keepNames: true,
-  ...baseConfig,
   banner: {
     js: banner.join('\n'),
   },
@@ -73,10 +60,8 @@ const ctx = await esbuild.context({
     './src/shims.js'
   ],
   metafile: true,
-  plugins: [
-    ...plugins,
-    ...baseConfig.plugins ?? [],
-  ],
+  plugins,
+  sourcesContent: process.argv.includes('--no-sources'),
   minify: process.argv.includes('--minify'),
   define: {
     'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production'),
