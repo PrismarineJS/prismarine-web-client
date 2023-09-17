@@ -126,6 +126,10 @@ class Button extends LitElement {
       icon: {
         type: Function,
         attribute: 'pmui-icon'
+      },
+      testId: {
+        type: String,
+        attribute: 'pmui-test-id'
       }
     }
   }
@@ -134,6 +138,7 @@ class Button extends LitElement {
     super()
     this.label = ''
     this.icon = undefined
+    this.testId = undefined
     this.disabled = false
     this.width = '200px'
     this.onPress = () => { }
@@ -146,6 +151,7 @@ class Button extends LitElement {
       ?disabled=${this.disabled}
       @click=${this.onBtnClick}
       style="width: ${this.width};"
+      data-test-id=${this.testId}
     >
     <!-- todo self host icons -->
       ${this.icon ? html`<iconify-icon class="icon" icon="${this.icon}"></iconify-icon>` : ''}

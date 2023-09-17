@@ -157,9 +157,9 @@ class TitleScreen extends LitElement {
       </div>
 
       <div class="menu">
-        <pmui-button pmui-width="200px" pmui-label="Connect to server" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
+        <pmui-button pmui-width="200px" pmui-label="Connect to server" pmui-test-id="connect-screen-button" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
         <div style="display:flex;justify-content: space-between;">
-          <pmui-button pmui-width="${SUPPORT_WORLD_LOADING ? '170px' : '200px'}" pmui-label="Singleplayer" @pmui-click=${() => {
+          <pmui-button pmui-width="${SUPPORT_WORLD_LOADING ? '170px' : '200px'}" pmui-test-id="singleplayer-button" pmui-label="Singleplayer" @pmui-click=${() => {
         this.style.display = 'none'
         fsState.isReadonly = false
         fsState.syncFs = true
@@ -172,7 +172,7 @@ class TitleScreen extends LitElement {
         }
         this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
       }}></pmui-button>
-          ${SUPPORT_WORLD_LOADING ? html`<pmui-button pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${({ detail: e }) => {
+          ${SUPPORT_WORLD_LOADING ? html`<pmui-button pmui-test-id="select-file-folder" pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${({ detail: e }) => {
         if (!!window.showDirectoryPicker && !e.shiftKey) {
           openWorldDirectory()
         } else {
