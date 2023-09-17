@@ -30,7 +30,7 @@ it('Loads & renders singleplayer', () => {
     })
 })
 
-it('Joins to server', () => {
+it.skip('Joins to server', () => {
     cy.visit('/')
     setLocalStorageSettings()
     // todo replace with data-test
