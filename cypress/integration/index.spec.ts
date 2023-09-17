@@ -49,7 +49,7 @@ it('Loads & renders zip world', () => {
     setLocalStorageSettings()
     // todo replace with data-test
     cy.get('#title-screen').find('[data-test-id="select-file-folder"]', { includeShadowDom: true, }).click({ shiftKey: true })
-    cy.get('input[type="file"]').selectFile('cypress/fixtures/superflat.zip', { force: true })
+    cy.get('input[type="file"]').selectFile('cypress/superflat.zip', { force: true })
     // todo implement load event
     cy.wait(12000)
     cy.get('body').toMatchImageSnapshot({
