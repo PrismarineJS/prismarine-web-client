@@ -407,7 +407,7 @@ async function connect(connectOptions: {
       await loadScript(`./mc-data/${toMajorVersion(version)}.js`)
     }
 
-    const downloadVersion = connectOptions.botVersion || singeplayer ? serverOptions.version : undefined
+    const downloadVersion = (connectOptions.botVersion) || singeplayer ? serverOptions.version : undefined
     if (downloadVersion) {
       await downloadMcData(downloadVersion)
     }
