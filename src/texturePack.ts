@@ -8,6 +8,7 @@ import type { Viewer } from 'prismarine-viewer/viewer/lib/viewer'
 import { removeFileRecursiveAsync } from './browserfs'
 import { miscUiState } from './globalState'
 import { subscribeKey } from 'valtio/utils'
+import { showNotification } from './menus/notification'
 
 function nextPowerOfTwo(n) {
     if (n === 0) return 1
@@ -63,7 +64,7 @@ export const installTexturePack = async (file: File | ArrayBuffer) => {
         await uninstallTexturePack()
     } catch (err) {
     }
-    const status = 'Installing resource pack: copying all files';
+    const status = 'Installing resource pack: copying all files'
     setLoadingScreenStatus(status)
     // extract the zip and write to fs every file in it
     const zip = new JSZip()
@@ -71,21 +72,28 @@ export const installTexturePack = async (file: File | ArrayBuffer) => {
     if (!zipFile.file('pack.mcmeta')) throw new Error('Not a resource pack: missing pack.mcmeta')
     await mkdirRecursive(texturePackBasePath)
 
-    const allFilesArr = Object.entries(zipFile.files);
-    let i = 0
-    for (const [path, file] of allFilesArr) {
-        const writePath = join(texturePackBasePath, path);
-        if (path.endsWith('/')) continue
+    const allFilesArr = Object.entries(zipFile.files)
+    let done = 0
+    const upStatus = () => {
+        setLoadingScreenStatus(`${status} ${Math.round(++done / allFilesArr.length * 100)}%`)
+    }
+    await Promise.all(allFilesArr.map(async ([path, file]) => {
+        const writePath = join(texturePackBasePath, path)
+        if (path.endsWith('/')) return
         await mkdirRecursive(dirname(writePath))
         await fs.promises.writeFile(writePath, Buffer.from(await file.async('arraybuffer')))
-        setLoadingScreenStatus(`${status} ${Math.round(++i / allFilesArr.length * 100)}%`)
-    }
+        done++
+        upStatus()
+    }))
     await fs.promises.writeFile(join(texturePackBasePath, 'name.txt'), file['name'] ?? '??', 'utf8')
 
     if (viewer?.world.active) {
         await genTexturePackTextures(viewer.version)
     }
     setLoadingScreenStatus(undefined)
+    showNotification({
+        message: 'Texturepack installed!',
+    })
 }
 
 const existsAsync = async (path) => {
@@ -144,7 +152,7 @@ const setCustomTexturePackData = (blockTextures, blockStates) => {
 
 const getSizeFromImage = async (filePath: string) => {
     const probeImg = new Image()
-    const file = await fs.promises.readFile(filePath, 'base64');
+    const file = await fs.promises.readFile(filePath, 'base64')
     probeImg.src = `data:image/png;base64,${file}`
     await new Promise((resolve, reject) => {
         probeImg.onload = resolve
@@ -155,11 +163,17 @@ const getSizeFromImage = async (filePath: string) => {
 
 export const genTexturePackTextures = async (version: string) => {
     setCustomTexturePackData(undefined, undefined)
-    const blocksBasePath = '/userData/resourcePacks/default/assets/minecraft/textures/blocks';
+    let blocksBasePath = '/userData/resourcePacks/default/assets/minecraft/textures/block'
+    // todo not clear why this is needed
+    const blocksBasePathAlt = '/userData/resourcePacks/default/assets/minecraft/textures/blocks'
     const blocksGenereatedPath = `/userData/resourcePacks/default/${version}.png`
     const genereatedPathData = `/userData/resourcePacks/default/${version}.json`
     if (await existsAsync(blocksBasePath) === false) {
-        return
+        if (await existsAsync(blocksBasePathAlt) === false) {
+            return
+        } else {
+            blocksBasePath = blocksBasePathAlt
+        }
     }
     if (await existsAsync(blocksGenereatedPath) === true) {
         applyTexturePackData(version, JSON.parse(await fs.promises.readFile(genereatedPathData, 'utf8')), await fs.promises.readFile(blocksGenereatedPath, 'utf8'))
@@ -208,7 +222,7 @@ export const genTexturePackTextures = async (version: string) => {
             await new Promise<void>(resolve => {
                 _imgCustom.onload = () => {
                     imgCustom = _imgCustom
-                    resolve();
+                    resolve()
                 }
                 _imgCustom.onerror = () => {
                     console.log('Skipping issued texture', fileName)
@@ -227,10 +241,10 @@ export const genTexturePackTextures = async (version: string) => {
             ctx.drawImage(img, xOrig, yOrig, originalTileSize, originalTileSize, x, y, tileSize, tileSize)
         }
     }
-    const blockDataUrl = canvas.toDataURL('image/png');
+    const blockDataUrl = canvas.toDataURL('image/png')
     const newData: TextureResolvedData = {
         blockSize: tileSize,
-    };
+    }
     await fs.promises.writeFile(genereatedPathData, JSON.stringify(newData), 'utf8')
     await fs.promises.writeFile(blocksGenereatedPath, blockDataUrl, 'utf8')
     await applyTexturePackData(version, newData, blockDataUrl)

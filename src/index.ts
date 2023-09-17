@@ -31,7 +31,7 @@ import './controls'
 import './dragndrop'
 import './browserfs'
 import './eruda'
-import downloadAndOpenWorld, { hasMapUrl } from './downloadAndOpenWorld'
+import downloadAndOpenFile from './downloadAndOpenFile'
 
 import net from 'net'
 import Stats from 'stats.js'
@@ -63,8 +63,7 @@ import {
   isCypress,
   loadScript,
   toMajorVersion,
-  setLoadingScreenStatus,
-  resolveTimeout
+  setLoadingScreenStatus
 } from './utils'
 
 import {
@@ -756,9 +755,9 @@ window.addEventListener('keydown', (e) => {
 addPanoramaCubeMap()
 showModal(document.getElementById('title-screen'))
 main()
-if (hasMapUrl()) {
-  downloadAndOpenWorld()
-} else {
+downloadAndOpenFile().then((downloadAction) => {
+  if (downloadAction !== false) return
+
   window.addEventListener('hud-ready', (e) => {
     // try to connect to peer
     const qs = new URLSearchParams(window.location.search)
@@ -776,4 +775,7 @@ if (hasMapUrl()) {
       })
     }
   })
-}
+}, (err) => {
+  console.error(err)
+  alert(`Failed to download file: ${err}`)
+})
