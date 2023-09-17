@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/cypress-io/cypress/develop/cli/schema/cypress.schema.json",
+    "$schema": "https://raw.githubusercontent.com/cypress-io/cypress/188b9a742ee2ef51102167bfd84b3696a3f72a26/cli/schema/cypress.schema.json",
     "baseUrl": "http://localhost:8080",
     "testFiles": "**/*.spec.ts",
     "video": false,
