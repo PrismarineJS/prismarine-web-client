@@ -75,7 +75,7 @@ import {
 
 import { startLocalServer, unsupportedLocalServerFeatures } from './createLocalServer'
 import serverOptions from './defaultLocalServerOptions'
-import { clientDuplex, customCommunication } from './customServer'
+import { customCommunication } from './customServer'
 import updateTime from './updateTime'
 import { options } from './optionsStorage'
 import { subscribeKey } from 'valtio/utils'
@@ -435,9 +435,7 @@ async function connect(connectOptions: {
       }
     }
 
-    const usingCustomCommunication = true
-
-    const botDuplex = !p2pMultiplayer ? undefined/* clientDuplex */ : await connectToPeer(connectOptions.peerId);
+    const botDuplex = !p2pMultiplayer ? undefined/* clientDuplex */ : await connectToPeer(connectOptions.peerId)
 
     setLoadingScreenStatus('Creating mineflayer bot')
     bot = mineflayer.createBot({
@@ -451,7 +449,7 @@ async function connect(connectOptions: {
       ...singeplayer ? {
         version: serverOptions.version,
         connect() { },
-        customCommunication: usingCustomCommunication ? customCommunication : undefined,
+        customCommunication,
       } : {},
       username,
       password,
@@ -473,10 +471,8 @@ async function connect(connectOptions: {
         return _supportFeature(feature)
       }
 
-      if (usingCustomCommunication) {
-        bot.emit('inject_allowed')
-        bot._client.emit('connect')
-      }
+      bot.emit('inject_allowed')
+      bot._client.emit('connect')
     }
   } catch (err) {
     handleError(err)
