@@ -9,7 +9,7 @@ const serverOptions = {
   'logging': false,
   'gameMode': 0,
   'difficulty': 0,
-  'worldFolder': false,
+  'worldFolder': undefined,
   // todo set sid, disable entities auto-spawn
   'generation': {
     'name': 'superflat',
