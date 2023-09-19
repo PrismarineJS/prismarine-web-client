@@ -54,6 +54,7 @@
     "stats.js": "^0.17.0",
     "url": "^0.11.1",
     "valtio": "^1.11.1",
+    "minecraft-assets": "^1.9.1",
     "workbox-build": "^7.0.0"
   },
   "devDependencies": {
