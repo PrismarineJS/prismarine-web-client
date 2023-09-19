@@ -555,9 +555,8 @@ async function connect(connectOptions: {
     subscribeKey(options, 'fov', updateFov)
     subscribeKey(gameAdditionalState, 'isFlying', updateFov)
     subscribeKey(gameAdditionalState, 'isSprinting', updateFov)
-    const defaultPlayerHeight = viewer.playerHeight
     subscribeKey(gameAdditionalState, 'isSneaking', () => {
-      viewer.playerHeight = gameAdditionalState.isSneaking ? defaultPlayerHeight - 0.3 : defaultPlayerHeight
+      viewer.isSneaking = gameAdditionalState.isSneaking
       viewer.setFirstPersonCamera(bot.entity.position, bot.entity.yaw, bot.entity.pitch)
     })
 
