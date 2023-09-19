@@ -6,9 +6,15 @@ import fs from 'fs'
 import type { BlockStates } from './inventory'
 import type { Viewer } from 'prismarine-viewer/viewer/lib/viewer'
 import { removeFileRecursiveAsync } from './browserfs'
-import { miscUiState } from './globalState'
 import { subscribeKey } from 'valtio/utils'
 import { showNotification } from './menus/notification'
+import { proxy, ref } from 'valtio'
+
+export const resourcePackState = proxy({
+    resourcePackInstalled: false,
+    currentTexturesDataUrl: undefined as string | undefined,
+    currentTexturesBlockStates: undefined as BlockStates | undefined,
+})
 
 function nextPowerOfTwo(n) {
     if (n === 0) return 1
@@ -54,7 +60,7 @@ export const fromTexturePackPath = (path) => {
 
 export const updateTexturePackInstalledState = async () => {
     try {
-        miscUiState.resourcePackInstalled = await existsAsync(texturePackBasePath)
+        resourcePackState.resourcePackInstalled = await existsAsync(texturePackBasePath)
     } catch {
     }
 }
@@ -145,9 +151,9 @@ const applyTexturePackData = async (version: string, { blockSize }: TextureResol
 }
 
 const setCustomTexturePackData = (blockTextures, blockStates) => {
-    globalThis.texturePackDataBlockStates = blockStates
-    globalThis.texturePackDataUrl = blockTextures
-    miscUiState.resourcePackInstalled = blockTextures !== undefined
+    resourcePackState.currentTexturesBlockStates = blockStates && ref(blockStates)
+    resourcePackState.currentTexturesDataUrl = blockTextures
+    resourcePackState.resourcePackInstalled = blockTextures !== undefined
 }
 
 const getSizeFromImage = async (filePath: string) => {
@@ -256,9 +262,11 @@ export const genTexturePackTextures = async (version: string) => {
 }
 
 export const watchTexturepackInViewer = (viewer: Viewer) => {
-    subscribeKey(miscUiState, 'resourcePackInstalled', () => {
+    subscribeKey(resourcePackState, 'currentTexturesDataUrl', () => {
+        console.log('applying resourcepack world data')
+        viewer.world.texturesDataUrl = resourcePackState.currentTexturesDataUrl
+        viewer.world.blockStatesData = resourcePackState.currentTexturesBlockStates
         if (!viewer?.world.active) return
-        console.log('reloading world data')
-        viewer.world.updateData()
+        viewer.world.updateTexturesData()
     })
 }
