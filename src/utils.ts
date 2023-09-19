@@ -151,7 +151,8 @@ export const setLoadingScreenStatus = function (status: string | undefined, isEr
   }
   loadingScreen.hideDots = hideDots
   loadingScreen.hasError = isError
-  loadingScreen.status = isError && loadingScreen.status ? status + `\nLast status: ${loadingScreen.status}` : status
+  loadingScreen.lastStatus = isError ? loadingScreen.status : ''
+  loadingScreen.status = status
 }
 
 

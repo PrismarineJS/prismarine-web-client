@@ -17,6 +17,9 @@ class LoadingErrorScreen extends LitElement {
       .potential-problem {
         color: #808080;
       }
+      .last-status {
+        color: #808080;
+      }
 
       .error-buttons {
         position: absolute;
@@ -32,6 +35,7 @@ class LoadingErrorScreen extends LitElement {
   static get properties () {
     return {
       status: { type: String },
+      lastStatus: { type: String },
       _loadingDots: { type: String },
       maybeRecoverable: { type: Boolean },
       hasError: { type: Boolean }
@@ -40,6 +44,7 @@ class LoadingErrorScreen extends LitElement {
 
   constructor () {
     super()
+    this.lastStatus = ''
     this.hideDots = false
     this.hasError = false
     this.maybeRecoverable = true
@@ -74,11 +79,14 @@ class LoadingErrorScreen extends LitElement {
     return html`
       <div class="dirt-bg"></div>
 
-      <div class="title">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}<p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p></div>
+      <div class="title">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}
+      <p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p>
+      <p class="last-status">${this.lastStatus ? `Last status: ${this.lastStatus}` : this.lastStatus}</p></div>
 
       ${this.hasError
         ? html`<div class="error-buttons"><pmui-button .hidden=${!this.maybeRecoverable} pmui-width="200px" pmui-label="Back" @pmui-click=${() => {
           this.hasError = false
+          this.lastStatus = ''
           miscUiState.gameLoaded = false
           if (activeModalStacks['main-menu']) {
             replaceActiveModalStack('main-menu')
