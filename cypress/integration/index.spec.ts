@@ -8,7 +8,6 @@ const setLocalStorageSettings = () => {
 // todo use ssl
 
 it('Loads & renders singleplayer', () => {
-    // todo use <button match text selectors
     cy.visit('/')
     window.localStorage.clear()
     window.localStorage.setItem('renderDistance', '2')
@@ -21,7 +20,6 @@ it('Loads & renders singleplayer', () => {
         }
     }))
     setLocalStorageSettings()
-    // todo replace with data-test
     cy.get('#title-screen').find('[data-test-id="singleplayer-button"]', { includeShadowDom: true, }).click()
     // todo implement load event
     cy.wait(12000)
@@ -47,7 +45,6 @@ it('Joins to server', () => {
 it('Loads & renders zip world', () => {
     cy.visit('/')
     setLocalStorageSettings()
-    // todo replace with data-test
     cy.get('#title-screen').find('[data-test-id="select-file-folder"]', { includeShadowDom: true, }).click({ shiftKey: true })
     cy.get('input[type="file"]').selectFile('cypress/superflat.zip', { force: true })
     // todo implement load event

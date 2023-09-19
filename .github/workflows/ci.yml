@@ -12,7 +12,8 @@ jobs:
         run: npm i -g pnpm
       - run: pnpm install
       - run: pnpm build
-      - run: nohup pnpm prod-start & node cypress/minecraft-server.mjs &
+      - run: nohup pnpm prod-start &
+      - run: nohup node cypress/minecraft-server.mjs &
       - uses: cypress-io/github-action@v5
         with:
           install: false
