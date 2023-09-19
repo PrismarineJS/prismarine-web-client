@@ -85,6 +85,7 @@ import { connectToPeer } from './localServerMultiplayer'
 
 //@ts-ignore
 window.THREE = THREE
+// workaround to be used in prismarine-block
 globalThis.emptyShapeReplacer = [[0.0, 0.0, 0.0, 1.0, 1.0, 1.0]]
 
 if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'development') {
@@ -141,6 +142,7 @@ document.body.appendChild(renderer.domElement)
 
 // Create viewer
 const viewer: import('prismarine-viewer/viewer/lib/viewer').Viewer = new Viewer(renderer, options.numWorkers)
+window.viewer = viewer
 initPanoramaOptions(viewer)
 watchTexturepackInViewer(viewer)
 
@@ -562,7 +564,6 @@ async function connect(connectOptions: {
 
     const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
 
-    window.viewer = viewer
     window.loadedData = mcData
     window.worldView = worldView
     window.bot = bot
