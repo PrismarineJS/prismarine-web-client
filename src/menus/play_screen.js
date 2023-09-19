@@ -3,7 +3,7 @@ const { LitElement, html, css } = require('lit')
 const { commonCss } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
 const mineflayer = require('mineflayer')
-const viewerSupportedVersions = require('prismarine-viewer/viewer/supportedVersions.json')
+const viewerSupportedVersions = require('prismarine-viewer/public/supportedVersions.json')
 
 const fullySupporedVersions = viewerSupportedVersions
 const partiallySupportVersions = mineflayer.supportedVersions

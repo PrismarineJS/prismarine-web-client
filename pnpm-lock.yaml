@@ -200,8 +200,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       prismarine-viewer:
-        specifier: ./prismarine-viewer
-        version: link:prismarine-viewer
+        specifier: github:zardoy/prismarine-viewer#world-improvements
+        version: github.com/zardoy/prismarine-viewer/cfb88434c576b17cb270e04d2024f2ca24d6543e
       process:
         specifier: github:PrismarineJS/node-process
         version: github.com/PrismarineJS/node-process/380d0b4f4c86f1b65b216c311bf00431f314e88e
@@ -3022,7 +3022,7 @@ packages:
   /@types/cors@2.8.13:
     resolution: {integrity: sha512-RG8AStHlUiV5ysZQKq97copd2UmVYw3/pRMLefISZ3S1hK104Cwm7iLQ3fTKx+lsUH2CE8FlLaYeEA2LSeqYUA==}
     dependencies:
-      '@types/node': 20.5.7
+      '@types/node': 20.6.2
 
   /@types/eslint-scope@3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
@@ -5360,7 +5360,7 @@ packages:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.13
-      '@types/node': 20.5.7
+      '@types/node': 20.6.2
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
@@ -12925,6 +12925,31 @@ packages:
     transitivePeerDependencies:
       - minecraft-data
     dev: false
+
+  github.com/zardoy/prismarine-viewer/cfb88434c576b17cb270e04d2024f2ca24d6543e:
+    resolution: {tarball: https://codeload.github.com/zardoy/prismarine-viewer/tar.gz/cfb88434c576b17cb270e04d2024f2ca24d6543e}
+    name: prismarine-viewer
+    version: 1.25.0
+    prepare: true
+    requiresBuild: true
+    dependencies:
+      '@tweenjs/tween.js': 20.0.3
+      compression: 1.7.4
+      express: 4.18.2
+      minecraft-data: 3.45.0
+      prismarine-block: github.com/zardoy/prismarine-block/100f3e3be7927b8144e19a71c8d06f6218021a02
+      prismarine-chunk: 1.35.0(minecraft-data@3.45.0)
+      prismarine-world: github.com/zardoy/prismarine-world/c358222204d21fe7d45379fbfcefb047f926c786
+      socket.io: 4.7.2
+      socket.io-client: 4.7.2
+      three: 0.128.0
+      three.meshline: 1.4.0
+      vec3: 0.1.8
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: true
 
   github.com/zardoy/prismarine-world/c358222204d21fe7d45379fbfcefb047f926c786:
     resolution: {tarball: https://codeload.github.com/zardoy/prismarine-world/tar.gz/c358222204d21fe7d45379fbfcefb047f926c786}

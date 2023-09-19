@@ -1,3 +1,4 @@
+//@ts-check
 const fsExtra = require('fs-extra')
 const defaultLocalServerOptions = require('../src/defaultLocalServerOptions')
 const glob = require('glob')
@@ -5,28 +6,23 @@ const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
 
-// these files need to be copied before build for now
-const filesAlwaysToCopy = [
-    // { from: './node_modules/prismarine-viewer2/public/supportedVersions.json', to: './prismarine-viewer/public/supportedVersions.json' },
-]
-// these files could be copied at build time eg with copy plugin, but copy plugin slows down the config (2x in my testing, sometimes with too many open files error) is slow so we also copy them there
+const prismarineViewerBase = "./node_modules/prismarine-viewer";
+
+// these files could be copied at build time eg with copy plugin, but copy plugin slows down the config so we copy them there, alternative we could inline it in esbuild config
 const webpackFilesToCopy = [
-    { from: './prismarine-viewer/public/blocksStates/', to: 'dist/blocksStates/' },
-    // { from: './prismarine-viewer/public/textures/', to: 'dist/textures/' },
-    // { from: './prismarine-viewer/public/textures/1.17.1/gui', to: 'dist/gui' },
-    { from: './prismarine-viewer/public/worker.js', to: 'dist/worker.js' },
-    // { from: './prismarine-viewer/public/supportedVersions.json', to: 'dist/supportedVersions.json' },
+    { from: `${prismarineViewerBase}/public/blocksStates/`, to: 'dist/blocksStates/' },
+    { from: `${prismarineViewerBase}/public/worker.js`, to: 'dist/worker.js' },
     { from: './assets/', to: './dist/' },
     { from: './config.json', to: 'dist/config.json' }
 ]
 exports.webpackFilesToCopy = webpackFilesToCopy
 exports.copyFiles = (isDev = false) => {
     console.time('copy files');
-    [...filesAlwaysToCopy, ...webpackFilesToCopy].forEach(file => {
+    webpackFilesToCopy.forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
     // todo copy directly only needed
-    const cwd = './prismarine-viewer/public/textures/'
+    const cwd = `${prismarineViewerBase}/public/textures/`
     const files = glob.sync('{*/entity/**,*.png}', { cwd: cwd, nodir: true, })
     for (const file of files) {
         const copyDest = path.join('dist/textures/', file)
