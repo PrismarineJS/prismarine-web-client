@@ -6,7 +6,7 @@ const { toNumber, openFilePicker, setLoadingScreenStatus } = require('../utils')
 const { options } = require('../optionsStorage')
 const { subscribe } = require('valtio')
 const { subscribeKey } = require('valtio/utils')
-const { getResourcePackName, uninstallTexturePack } = require('../texturePack')
+const { getResourcePackName, uninstallTexturePack, resourcePackState } = require('../texturePack')
 const { fsState } = require('../loadSave')
 
 class OptionsScreen extends CommonOptionsScreen {
@@ -78,7 +78,7 @@ class OptionsScreen extends CommonOptionsScreen {
     subscribeKey(miscUiState, 'singleplayer', () => {
       this.requestUpdate()
     })
-    subscribeKey(miscUiState, 'resourcePackInstalled', () => {
+    subscribeKey(resourcePackState, 'resourcePackInstalled', () => {
       this.requestUpdate()
     })
   }
@@ -157,8 +157,8 @@ class OptionsScreen extends CommonOptionsScreen {
       }></pmui-button>
         </div>
         <div class="wrapper">
-          <pmui-button pmui-width="150px" pmui-label=${'Resource Pack: ' + (miscUiState.resourcePackInstalled ? 'ON' : 'OFF')} @pmui-click=${async () => {
-        if (miscUiState.resourcePackInstalled) {
+          <pmui-button pmui-width="150px" pmui-label=${'Resource Pack: ' + (resourcePackState.resourcePackInstalled ? 'ON' : 'OFF')} @pmui-click=${async () => {
+        if (resourcePackState.resourcePackInstalled) {
           const resourcePackName = await getResourcePackName()
           if (confirm(`Uninstall ${resourcePackName} resource pack?`)) {
             // todo make hidable

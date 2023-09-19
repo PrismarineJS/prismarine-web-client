@@ -109,7 +109,6 @@ export const miscUiState = proxy({
   flyingSquid: false,
   wanOpened: false,
   gameLoaded: false,
-  resourcePackInstalled: false,
 })
 
 export const isGameActive = (foregroundCheck: boolean) => {
