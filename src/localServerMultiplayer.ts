@@ -50,7 +50,7 @@ export const openToWanAndCopyJoinLink = async (writeText: (text) => void, doCopy
     peer.on('connection', (connection) => {
         console.log('connection')
         const serverDuplex = new CustomDuplex({}, (data) => connection.send(data))
-        const client = new Client(true, localServer.options.version, undefined, false, undefined, /* true */);
+        const client = new Client(true, localServer.options.version, undefined)
         client.setSocket(serverDuplex)
         localServer._server.emit('connection', client)
 
@@ -62,7 +62,7 @@ export const openToWanAndCopyJoinLink = async (writeText: (text) => void, doCopy
             console.log('connection.close')
             serverDuplex.end()
             connection.close()
-        };
+        }
         serverDuplex.on('end', endConnection)
         serverDuplex.on('force-close', endConnection)
         client.on('end', endConnection)
@@ -120,7 +120,7 @@ export const connectToPeer = async (peerId: string) => {
         connection.once('error', (error) => {
             console.log(error.type, error.name)
             console.log(error)
-            return reject(error.message);
+            return reject(error.message)
         })
         connection.once('open', resolve)
     }))
@@ -128,7 +128,7 @@ export const connectToPeer = async (peerId: string) => {
     const clientDuplex = new CustomDuplex({}, (data) => {
         // todo rm debug
         console.debug('sending', data.toString())
-        connection.send(data);
+        connection.send(data)
     })
     connection.on('data', (data: any) => {
         console.debug('received', Buffer.from(data).toString())

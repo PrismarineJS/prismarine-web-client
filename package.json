@@ -20,7 +20,7 @@
   "author": "PrismarineJS",
   "license": "MIT",
   "dependencies": {
-    "@dimaka/interface": "0.0.1",
+    "@dimaka/interface": "0.0.3-alpha.0",
     "@emotion/css": "^11.11.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@types/react": "^18.2.20",
@@ -46,9 +46,7 @@
     "net-browserify": "github:PrismarineJS/net-browserify",
     "peerjs": "^1.5.0",
     "pretty-bytes": "^6.1.1",
-    "prismarine-world": "^3.6.2",
     "qrcode.react": "^3.1.0",
-    "querystring": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.0",
@@ -104,7 +102,8 @@
     "webpack-dev-middleware": "^6.1.1",
     "webpack-dev-server": "^4.15.1",
     "webpack-merge": "^5.9.0",
-    "workbox-webpack-plugin": "^6.6.0"
+    "workbox-webpack-plugin": "^6.6.0",
+    "yaml": "^2.3.2"
   },
   "pnpm": {
     "overrides": {

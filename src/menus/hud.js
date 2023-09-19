@@ -10,18 +10,19 @@ export const guiIcons1_16_4 = require('minecraft-assets/minecraft-assets/data/1.
 
 class Hud extends LitElement {
   firstUpdated () {
+    this.isReady = true
     window.dispatchEvent(new CustomEvent('hud-ready', { detail: this }))
   }
 
   static get styles () {
     return css`
       :host {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         z-index: -2;
         width: 100%;
-        height: 100%;
+        height: 100vh;
         touch-action: none;
       }
 
@@ -30,7 +31,7 @@ class Hud extends LitElement {
         height: 16px;
         background: url('${unsafeCSS(guiIcons1_17_1)}');
         background-size: 256px;
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -38,7 +39,7 @@ class Hud extends LitElement {
       }
 
       #xp-label {
-        position: absolute;
+        position: fixed;
         top: -8px;
         left: 50%;
         transform: translate(-50%);
@@ -50,7 +51,7 @@ class Hud extends LitElement {
       }
 
       #xp-bar-bg {
-        position: absolute;
+        position: fixed;
         left: 50%;
         bottom: 24px;
         transform: translate(-50%);
@@ -72,7 +73,7 @@ class Hud extends LitElement {
       .mobile-top-btns {
         display: none;
         flex-direction: row;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 50%;
         transform: translate(-50%);
@@ -318,17 +319,17 @@ class Hud extends LitElement {
   render () {
     return html`
       <div class="mobile-top-btns" id="mobile-top">
-        <button class="debug-btn" @click=${(e) => {
+        <button class="debug-btn" @pointerdown=${(e) => {
         window.dispatchEvent(new MouseEvent('mousedown', { button: 1, }))
       }}>Select</button>
-        <button class="debug-btn" @click=${(e) => {
+        <button class="debug-btn" @pointerdown=${(e) => {
         this.shadowRoot.getElementById('debug-overlay').showOverlay = !this.shadowRoot.getElementById('debug-overlay').showOverlay
       }}>F3</button>
-        <button class="chat-btn" @click=${(e) => {
+        <button class="chat-btn" @pointerdown=${(e) => {
         e.stopPropagation()
         this.shadowRoot.querySelector('#chat').enableChat()
       }}></button>
-        <button class="pause-btn" @click=${(e) => {
+        <button class="pause-btn" @pointerdown=${(e) => {
         e.stopPropagation()
         showModal(document.getElementById('pause-screen'))
       }}></button>

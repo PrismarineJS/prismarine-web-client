@@ -10,7 +10,7 @@ class Hotbar extends LitElement {
   static get styles () {
     return css`
       .hotbar {
-        position: absolute;
+        position: fixed;
         bottom: ${unsafeCSS(isProbablyIphone() ? '40px' : '0')};
         left: 50%;
         transform: translate(-50%);

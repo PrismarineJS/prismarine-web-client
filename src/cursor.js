@@ -28,6 +28,7 @@ class Cursor {
   static instance = null
 
   constructor (viewer, renderer, /** @type {import('mineflayer').Bot} */bot) {
+    bot.on('physicsTick', () => { if (this.lastBlockPlaced < 4) this.lastBlockPlaced++ })
     if (Cursor.instance) return Cursor.instance
 
     // Init state
@@ -108,7 +109,6 @@ class Cursor {
         bot.attack(entity)
       }
     })
-    bot.on('physicsTick', () => { if (this.lastBlockPlaced < 4) this.lastBlockPlaced++ })
   }
 
   // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags

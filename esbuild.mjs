@@ -61,7 +61,7 @@ const ctx = await esbuild.context({
   ],
   metafile: true,
   plugins,
-  sourcesContent: process.argv.includes('--no-sources'),
+  sourcesContent: !process.argv.includes('--no-sources'),
   minify: process.argv.includes('--minify'),
   define: {
     'process.env.NODE_ENV': JSON.stringify(dev ? 'development' : 'production'),

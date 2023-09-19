@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom'
 useInterfaceState.setState({
     isFlying: false,
     uiCustomization: {
-        touchButtonSize: isProbablyIphone() ? 30 : 40,
+        touchButtonSize: 40,
     },
     updateCoord: ([coord, state]) => {
         const coordToAction = [

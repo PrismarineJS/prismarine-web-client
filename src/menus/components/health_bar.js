@@ -14,7 +14,7 @@ class HealthBar extends LitElement {
   static get styles () {
     return css`
       .health {
-        position: absolute;
+        position: fixed;
         display: flex;
         flex-direction: row;
         left: calc(50% - 91px);

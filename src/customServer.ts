@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 
-import Client from 'minecraft-protocol/src/client'
+import CustomChannelClient from 'minecraft-protocol/src/customChannelClient'
 
 window.serverDataChannel ??= {}
 export const customCommunication = {
@@ -27,7 +27,7 @@ export class LocalServer extends EventEmitter.EventEmitter {
   }
 
   listen() {
-    this.emit('connection', new Client(true, this.version, this.customPackets, this.hideErrors, customCommunication))
+    this.emit('connection', new CustomChannelClient(true, this.version, customCommunication))
   }
 
   close() { }

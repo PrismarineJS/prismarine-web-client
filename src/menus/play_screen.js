@@ -17,7 +17,7 @@ class PlayScreen extends LitElement {
       }
 
       .edit-boxes {
-        position: absolute;
+        position: fixed;
         top: 59px;
         left: 50%;
         display: flex;
