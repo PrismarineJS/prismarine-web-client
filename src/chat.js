@@ -69,7 +69,7 @@ class ChatBox extends LitElement {
         .chat-input-wrapper {
             bottom: 1px;
             width: calc(100% - 3px);
-            position: absolute;
+            position: fixed;
             left: 1px;
             box-sizing: border-box;
             overflow: hidden;
