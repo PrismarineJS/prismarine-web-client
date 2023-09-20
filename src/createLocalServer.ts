@@ -4,9 +4,10 @@ import serverOptions from './defaultLocalServerOptions'
 import { LocalServer } from './customServer'
 
 export const startLocalServer = () => {
-  const server = mcServer.createMCServer({ ...serverOptions, Server: LocalServer })
+  const passOptions = { ...serverOptions, Server: LocalServer }
+  const server = mcServer.createMCServer(passOptions)
   server.formatMessage = (message) => `[server] ${message}`
-  server.options = serverOptions
+  server.options = passOptions
   return server
 }
 

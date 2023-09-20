@@ -198,13 +198,18 @@ export const toMajorVersion = (version) => {
 }
 
 let prevRenderDistance = options.renderDistance
-export const reloadChunks = () => {
-  if (!worldView || !localServer) return
-  localServer.options['view-distance'] = options.renderDistance
+export const setRenderDistance = () => {
   worldView.viewDistance = options.renderDistance
-  localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
-  worldView.updatePosition(bot.entity.position, true)
+  if (localServer) {
+    localServer.options['view-distance'] = options.renderDistance
+    localServer.players[0].emit('playerChangeRenderDistance', options.renderDistance)
+  }
   prevRenderDistance = options.renderDistance
+}
+export const reloadChunks = () => {
+  if (!worldView) return
+  setRenderDistance()
+  worldView.updatePosition(bot.entity.position, true)
 }
 
 export const openFilePicker = (specificCase?: 'resourcepack') => {

@@ -31,6 +31,7 @@ import './controls'
 import './dragndrop'
 import './browserfs'
 import './eruda'
+import './watchOptions'
 import downloadAndOpenFile from './downloadAndOpenFile'
 
 import net from 'net'
@@ -63,7 +64,8 @@ import {
   isCypress,
   loadScript,
   toMajorVersion,
-  setLoadingScreenStatus
+  setLoadingScreenStatus,
+  setRenderDistance
 } from './utils'
 
 import {
@@ -402,6 +404,7 @@ async function connect(connectOptions: {
   let localServer
   try {
     Object.assign(serverOptions, _.defaultsDeep({}, connectOptions.serverOverrides ?? {}, options.localServerOptions, serverOptions))
+    serverOptions['view-distance'] = renderDistance
     const downloadMcData = async (version) => {
       setLoadingScreenStatus(`Downloading data for ${version}`)
       try {
@@ -535,6 +538,8 @@ async function connect(connectOptions: {
     const center = bot.entity.position
 
     const worldView: import('prismarine-viewer/viewer/lib/worldView').WorldView = new WorldView(bot.world, singeplayer ? renderDistance : Math.min(renderDistance, maxMultiplayerRenderDistance), center)
+    window.worldView = worldView
+    setRenderDistance()
 
     let fovSetting = optionsScrn.fov
     const updateFov = () => {
@@ -565,7 +570,6 @@ async function connect(connectOptions: {
     const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
 
     window.loadedData = mcData
-    window.worldView = worldView
     window.bot = bot
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
