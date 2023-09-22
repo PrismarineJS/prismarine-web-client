@@ -1,6 +1,6 @@
 //@ts-check
 const widgetsGui = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/widgets.png')
-const { LitElement, html, css, unsafeCSS } = require('lit')
+const { options } = require('../../optionsStorage')
 
 const audioContext = new window.AudioContext()
 const sounds = {}
@@ -16,12 +16,8 @@ async function loadSound (path) {
   loadingSounds.splice(loadingSounds.indexOf(path), 1)
 }
 
-async function playSound (path) {
-  let volume = 1
-  const options = document.getElementById('options-screen')
-  if (options) {
-    volume = options.sound / 100
-  }
+export async function playSound (path) {
+  const volume = options.volume / 100
 
   // todo?
   if (loadingSounds.includes(path)) return
@@ -167,5 +163,3 @@ class Button extends LitElement {
 
 loadSound('click_stereo.mp3')
 window.customElements.define('pmui-button', Button)
-const _playSound = playSound
-export { _playSound as playSound }

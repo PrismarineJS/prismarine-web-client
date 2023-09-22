@@ -1,21 +1,17 @@
 //@ts-check
-const { html, css } = require('lit')
-const { CommonOptionsScreen } = require('./options_store')
+const { html, css, LitElement } = require('lit')
 const { commonCss, openURL } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
 const { toNumber, getScreenRefreshRate } = require('../utils')
 const { subscribe } = require('valtio')
 const { options } = require('../optionsStorage')
 
-class AdvancedOptionsScreen extends CommonOptionsScreen {
+class AdvancedOptionsScreen extends LitElement {
   /** @type {null | number} */
   frameLimitMax = null
 
   constructor () {
     super()
-    this.defineOptions({
-      frameLimit: { defaultValue: false, convertFn: (v) => toNumber(v) ?? false },
-    })
     subscribe(options, () => {
       this.requestUpdate()
     })
@@ -66,10 +62,10 @@ class AdvancedOptionsScreen extends CommonOptionsScreen {
         <pmui-button pmui-width="150px" pmui-label="Guide: Disable VSync" @click=${() => openURL('https://gist.github.com/zardoy/6e5ce377d2b4c1e322e660973da069cd')}></pmui-button>
       </div>
       <div class="wrapper">
-        <pmui-slider .disabled=${!this.frameLimitMax} pmui-label="Frame Limit" .valueDisplay=${this.options.frameLimit || 'VSync'} pmui-value="${this.options.frameLimit || this.frameLimitMax + 1}"
-         pmui-type="${this.options.frameLimit ? 'fps' : ''}" pmui-min="20" pmui-max="${this.frameLimitMax + 1}" @input=${(e) => {
+        <pmui-slider .disabled=${!this.frameLimitMax} pmui-label="Frame Limit" .valueDisplay=${options.frameLimit || 'VSync'} pmui-value="${options.frameLimit || this.frameLimitMax + 1}"
+         pmui-type="${options.frameLimit ? 'fps' : ''}" pmui-min="20" pmui-max="${this.frameLimitMax + 1}" @input=${(e) => {
         const newVal = e.target.value
-        this.changeOption('frameLimit', newVal > this.frameLimitMax ? false : newVal)
+        options.frameLimit = newVal > this.frameLimitMax ? false : newVal
         this.requestUpdate()
       }}></pmui-slider>
         <pmui-button pmui-width="20px" pmui-icon="pixelarticons:lock-open" @click=${async () => {

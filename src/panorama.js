@@ -4,6 +4,7 @@ import { join } from 'path'
 import { fromTexturePackPath, resourcePackState } from './texturePack'
 import fs from 'fs'
 import { subscribeKey } from 'valtio/utils'
+import { options } from './optionsStorage'
 
 let panoramaCubeMap
 let panoramaUsesResourePack = false
@@ -106,7 +107,7 @@ export async function addPanoramaCubeMap () {
 
 export function removePanorama () {
   if (!panoramaCubeMap) return
-  viewer.camera = new THREE.PerspectiveCamera(document.getElementById('options-screen').fov, window.innerWidth / window.innerHeight, 0.1, 1000)
+  viewer.camera = new THREE.PerspectiveCamera(options.fov, window.innerWidth / window.innerHeight, 0.1, 1000)
   viewer.camera.updateProjectionMatrix()
   viewer.scene.remove(panoramaCubeMap)
 }
