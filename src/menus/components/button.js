@@ -1,37 +1,15 @@
 //@ts-check
+const { LitElement, html, css, unsafeCSS } = require('lit')
 const widgetsGui = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/widgets.png')
-const { options } = require('../../optionsStorage')
+const { options, watchValue } = require('../../optionsStorage')
 
-const audioContext = new window.AudioContext()
-const sounds = {}
-
+const buttonClickAudio = new Audio()
+buttonClickAudio.src = 'button_click.mp3'
 // load as many resources on page load as possible instead on demand as user can disable internet connection after he thinks the page is loaded
-let loadingSounds = []
-async function loadSound (path) {
-  loadingSounds.push(path)
-  const res = await window.fetch(path)
-  const data = await res.arrayBuffer()
-
-  sounds[path] = await audioContext.decodeAudioData(data)
-  loadingSounds.splice(loadingSounds.indexOf(path), 1)
-}
-
-export async function playSound (path) {
-  const volume = options.volume / 100
-
-  // todo?
-  if (loadingSounds.includes(path)) return
-  let soundBuffer = sounds[path]
-  if (!soundBuffer) throw new Error(`Sound ${path} not loaded`)
-
-  const gainNode = audioContext.createGain()
-  const source = audioContext.createBufferSource()
-  source.buffer = soundBuffer
-  source.connect(gainNode)
-  gainNode.connect(audioContext.destination)
-  gainNode.gain.value = volume
-  source.start(0)
-}
+buttonClickAudio.load()
+watchValue(options, o => {
+  buttonClickAudio.volume = o.volume / 100
+})
 
 class Button extends LitElement {
   static get styles () {
@@ -156,10 +134,9 @@ class Button extends LitElement {
   }
 
   onBtnClick (e) {
-    playSound('click_stereo.mp3')
+    buttonClickAudio.play()
     this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e, }))
   }
 }
 
-loadSound('click_stereo.mp3')
 window.customElements.define('pmui-button', Button)
