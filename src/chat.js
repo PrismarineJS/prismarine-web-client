@@ -290,7 +290,7 @@ class ChatBox extends LitElement {
             ...styles
           })
         } else if (msg.translate) {
-          const tText = window.mcData.language[msg.translate] ?? msg.translate
+          const tText = window.loadedData.language[msg.translate] ?? msg.translate
 
           if (msg.with) {
             const splitted = tText.split(/%s|%\d+\$s/g)
