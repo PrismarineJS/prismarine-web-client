@@ -15,7 +15,7 @@ const initialNotification = {
 export const notification = proxy(initialNotification)
 
 export const showNotification = (/** @type {Partial<typeof notification>} */newNotification) => {
-  Object.assign(notification, newNotification, initialNotification)
+  Object.assign(notification, { show: true, ...newNotification }, initialNotification)
 }
 
 window.notification = notification

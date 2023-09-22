@@ -30,6 +30,10 @@ export const contro = new ControMax({
       chat: [['KeyT', 'Enter'], null],
       command: ['Slash', null],
     },
+    ui: {
+      back: [null/* 'Escape' */, 'B'],
+      click: [null, 'A'],
+    }
     // waila: {
     //   showLookingBlockRecipe: ['Numpad3'],
     //   showLookingBlockUsages: ['Numpad4']
@@ -117,9 +121,20 @@ subscribe(activeModalStack, () => {
   }
 })
 
+const uiCommand = (command: Command) => {
+  if (command === 'ui.back') {
+    hideCurrentModal()
+  } else if (command === 'ui.click') {
+    // todo cursor
+  }
+}
+
 const onTriggerOrReleased = (command: Command, pressed: boolean) => {
   // always allow release!
-  if (pressed && !isGameActive(true)) return
+  if (pressed && !isGameActive(true)) {
+    uiCommand(command)
+    return
+  }
   if (stringStartsWith(command, 'general')) {
     // handle general commands
     switch (command) {
@@ -308,8 +323,8 @@ addEventListener('mousedown', (e) => {
   if (e.button === 1) {
     const block = bot.blockAtCursor(/* 6 */5)
     if (!block) return
-    const Item = require('prismarine-item')(bot.version);
-    const item = new Item(block.type, 1, 0);
+    const Item = require('prismarine-item')(bot.version)
+    const item = new Item(block.type, 1, 0)
     bot.creative.setInventorySlot(bot.inventory.hotbarStart + bot.quickBarSlot, item)
     bot.updateHeldItem()
   }
