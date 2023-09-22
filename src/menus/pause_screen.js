@@ -80,9 +80,9 @@ class PauseScreen extends LitElement {
         <pmui-button pmui-width="204px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <!-- todo use qr icon (full pixelarticons package) -->
         <!-- todo also display copy link button when opened -->
-        ${joinButton ? html`<div>
+        ${joinButton ? html`<div class="row">
           <pmui-button pmui-width="170px" pmui-label="${miscUiState.wanOpened ? "Close Wan" : "Copy Join Link"}" @pmui-click=${() => this.clickJoinLinkButton()}></pmui-button>
-          <pmui-button pmui-icon="pixelarticons:dice" pmui-width="20px" pmui-label="" @pmui-click=${() => this.clickJoinLinkButton(true)}></pmui-button>
+          <pmui-button style="height: 0;" pmui-icon="pixelarticons:dice" pmui-width="20px" pmui-label="" @pmui-click=${() => this.clickJoinLinkButton(true)}></pmui-button>
         </div>` : ''}
         <pmui-button pmui-width="204px" pmui-label="${localServer && !fsState.syncFs && !fsState.isReadonly ? 'Save & Quit' : 'Disconnect'}" @pmui-click=${async () => {
         disconnect()
