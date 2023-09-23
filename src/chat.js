@@ -7,6 +7,7 @@ import { classMap } from 'lit/directives/class-map.js'
 import { isCypress } from './utils'
 import { tryHandleBuiltinCommand } from './builtinCommands'
 import { notification } from './menus/notification'
+import { options } from './optionsStorage'
 
 const styles = {
   black: 'color:#000000',
@@ -72,9 +73,58 @@ class ChatBox extends LitElement {
             position: fixed;
             left: 1px;
             box-sizing: border-box;
-            overflow: hidden;
             background-color: rgba(0, 0, 0, 0);
-            pointer-events: none;
+        }
+        .chat-input {
+          box-sizing: border-box;
+          width: 100%;
+        }
+        .chat-completions {
+          position: absolute;
+          /* position this bottom on top of parent */
+          top: 0;
+          left: 0;
+          transform: translateY(-100%);
+          /* width: 150px; */
+          display: flex;
+          padding: 0 2px; // input padding
+          width: 100%;
+        }
+        .input-mobile .chat-completions {
+          transform: none;
+          top: 15px; // input height
+        }
+        .chat-completions-pad-text {
+          pointer-events: none;
+          white-space: pre;
+          opacity: 0;
+          overflow: hidden;
+        }
+        .chat-completions-items {
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          flex-direction: column;
+          /* justify-content: flex-end; */
+          /* probably would be better to replace with margin, not sure */
+          padding: 2px;
+          max-height: 100px;
+          overflow: auto;
+        }
+        .chat-completions-items::-webkit-scrollbar {
+            width: 5px;
+            background-color: rgb(24, 24, 24);
+        }
+        .chat-completions-items::-webkit-scrollbar-thumb {
+            background-color: rgb(50, 50, 50);
+        }
+        .chat-completions-items > div {
+          cursor: pointer;
+        }
+        .chat-completions-items > div:hover {
+          text-shadow: 0px 0px 6px white;
+        }
+        .input-mobile .chat-completions-items {
+          justify-content: flex-start;
         }
 
         .input-mobile {
@@ -85,17 +135,19 @@ class ChatBox extends LitElement {
           top: 40px;
         }
 
-        .chat {
-            overflow: hidden;
+        .chat, .chat-input {
             color: white;
             font-size: 10px;
             margin: 0px;
             line-height: 100%;
             text-shadow: 1px 1px 0px #3f3f3f;
             font-family: mojangles, minecraft, monospace;
-            width: 100%;
             max-height: var(--chatHeight);
-            pointer-events: none;
+        }
+        .chat {
+          pointer-events: none;
+          overflow: hidden;
+          width: 100%;
         }
         .chat.opened {
             pointer-events: auto;
@@ -104,9 +156,26 @@ class ChatBox extends LitElement {
         input[type=text], #chatinput {
             background-color: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(0, 0, 0, 0);
-            display: none;
             outline: none;
             pointer-events: auto;
+            /* styles reset */
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 2px;
+            padding-right: 2px;
+            height: 15px;
+        }
+
+        .chat-mobile-hidden {
+          width: 8px;
+          height: 0;
+          position: absolute;
+          display: block !important;
+          opacity: 0;
+          pointer-events: none;
+        }
+        .chat-mobile-hidden:nth-last-child(1) {
+          height: 8px;
         }
 
         #chatinput:focus {
@@ -147,6 +216,12 @@ class ChatBox extends LitElement {
     return {
       messages: {
         type: Array
+      },
+      completionItems: {
+        type: Array
+      },
+      completePadText: {
+        type: String
       }
     }
   }
@@ -155,7 +230,13 @@ class ChatBox extends LitElement {
     super()
     this.chatHistoryPos = 0
     this.chatHistory = JSON.parse(window.sessionStorage.chatHistory || '[]')
+    this.completePadText = ''
     this.messagesLimit = 200
+    /** @type {string[]} */
+    this.completionItemsSource = []
+    /** @type {string[]} */
+    this.completionItems = []
+    this.completeRequestValue = ''
     /** @type {Message[]} */
     this.messages = [{
       parts: [
@@ -185,18 +266,18 @@ class ChatBox extends LitElement {
 
     // Exit the pointer lock
     document.exitPointerLock?.()
-    // Show chat input
-    chatInput.style.display = 'block'
     // Show extended chat history
     chat.style.maxHeight = 'var(--chatHeight)'
     chat.scrollTop = chat.scrollHeight // Stay bottom of the list
     // handle / and other snippets
-    chatInput.value = initialText
-    // Focus element
-    chatInput.focus()
+    this.updateInputValue(initialText)
     this.chatHistoryPos = this.chatHistory.length
     // to show
     this.requestUpdate()
+    setTimeout(() => {
+      // after component update display
+      chatInput.focus()
+    })
   }
 
   get inChat () {
@@ -211,21 +292,24 @@ class ChatBox extends LitElement {
     /** @type {HTMLInputElement} */
     // @ts-ignore
     const chatInput = this.shadowRoot.getElementById('chatinput')
+    this.chatInput = chatInput
 
     // Show chat
     chat.style.display = 'block'
 
+    let savedCurrentValue
     // Chat events
     document.addEventListener('keydown', e => {
       if (activeModalStack.slice(-1)[0]?.elem !== this) return
       if (e.code === 'ArrowUp') {
         if (this.chatHistoryPos === 0) return
-        chatInput.value = this.chatHistory[--this.chatHistoryPos] !== undefined ? this.chatHistory[this.chatHistoryPos] : ''
-        setTimeout(() => { chatInput.setSelectionRange(-1, -1) }, 0)
+        if (this.chatHistoryPos === this.chatHistory.length) {
+          savedCurrentValue = chatInput.value
+        }
+        this.updateInputValue(this.chatHistory[--this.chatHistoryPos] || '')
       } else if (e.code === 'ArrowDown') {
         if (this.chatHistoryPos === this.chatHistory.length) return
-        chatInput.value = this.chatHistory[++this.chatHistoryPos] !== undefined ? this.chatHistory[this.chatHistoryPos] : ''
-        setTimeout(() => { chatInput.setSelectionRange(-1, -1) }, 0)
+        this.updateInputValue(this.chatHistory[++this.chatHistoryPos] || savedCurrentValue || '')
       }
     })
 
@@ -253,12 +337,11 @@ class ChatBox extends LitElement {
     })
 
     this.hide = () => {
+      this.completionItems = []
       // Clear chat input
       chatInput.value = ''
       // Unfocus it
       chatInput.blur()
-      // Hide it
-      chatInput.style.display = 'none'
       // Hide extended chat history
       chat.style.maxHeight = 'var(--chatHeight)'
       chat.scrollTop = chat.scrollHeight // Stay bottom of the list
@@ -364,6 +447,53 @@ class ChatBox extends LitElement {
       })
     }
     // window.dummyMessage()
+
+    chatInput.addEventListener('input', (e) => {
+      const completeValue = this.getCompleteValue()
+      this.completePadText = completeValue === '/' ? '' : completeValue
+      if (this.completeRequestValue === completeValue) {
+        const lastWord = chatInput.value.split(' ').at(-1)
+        this.completionItems = this.completionItemsSource.filter(i => i.startsWith(lastWord))
+        return
+      }
+      this.completeRequestValue = ''
+      this.completionItems = []
+      this.completionItemsSource = []
+      if (options.autoRequestCompletions && this.getCompleteValue() === '/') {
+        void this.fetchCompletion()
+      }
+    })
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.code === 'Tab') {
+        if (this.completionItems.length) {
+          this.tabComplete(this.completionItems[0])
+        } else {
+          void this.fetchCompletion(chatInput.value)
+        }
+        e.preventDefault()
+      }
+      if (e.code === 'Space' && options.autoRequestCompletions) {
+        // alternative we could just simply use keyup, but only with keydown we can display suggestions popup as soon as possible
+        void this.fetchCompletion(this.getCompleteValue(chatInput.value + ' '))
+      }
+    })
+  }
+
+  getCompleteValue (value = this.chatInput.value) {
+    const valueParts = value.split(' ')
+    const lastLength = valueParts.at(-1).length
+    const completeValue = lastLength ? value.slice(0, -lastLength) : value
+    if (valueParts.length === 1 && value.startsWith('/')) return '/'
+    return completeValue
+  }
+
+  async fetchCompletion (value = this.getCompleteValue()) {
+    this.completionItems = []
+    this.completeRequestValue = value
+    const items = await bot.tabComplete(value, true, true)
+    if (value !== this.completeRequestValue) return
+    this.completionItems = items
+    this.completionItemsSource = items
   }
 
   renderMessagePart (/** @type {MessagePart} */{ bold, color, italic, strikethrough, text, underlined }) {
@@ -403,6 +533,29 @@ class ChatBox extends LitElement {
     `
   }
 
+  updateInputValue (value) {
+    const { chatInput } = this
+    chatInput.value = value
+    chatInput.dispatchEvent(new Event('input'))
+    setTimeout(() => {
+      chatInput.setSelectionRange(value.length, value.length)
+    }, 0)
+  }
+
+  auxInputFocus (fireKey) {
+    document.dispatchEvent(new KeyboardEvent('keydown', { code: fireKey }))
+    this.chatInput.focus()
+  }
+
+  tabComplete (item) {
+    const base = this.completeRequestValue === '/' ? '' : this.completeRequestValue
+    this.updateInputValue(base + item)
+    // would be cool but disabled because some comands don't need args (like ping)
+    // // trigger next tab complete
+    // this.chatInput.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space' }))
+    this.chatInput.focus()
+  }
+
   render () {
 
     return html`
@@ -412,9 +565,21 @@ class ChatBox extends LitElement {
         ${repeat(isCypress() ? [] : this.messages, (m) => m.id, (m) => this.renderMessage(m))}
       </div>
     </div>
-    <div class="chat-wrapper chat-input-wrapper ${miscUiState.currentTouch ? 'input-mobile' : ''}">
-      <div class="chat" id="chat-input">
-        <input type="text" class="chat" id="chatinput" spellcheck="false" autocomplete="off"></input>
+    <div class="chat-wrapper chat-input-wrapper ${miscUiState.currentTouch ? 'input-mobile' : ''}" style="display: ${this.inChat ? 'block' : 'none'}">
+      <div class="chat-input">
+        ${this.completionItems.length ? html`<div class="chat-completions">
+          <div class="chat-completions-pad-text">${this.completePadText}</div>
+          <div class="chat-completions-items">
+            ${repeat(this.completionItems, (i) => i, (i) => html`<div @click=${() => this.tabComplete(i)}>${i}</div>`)}
+          </div>
+        </div>` : ''}
+        <input type="text" class="chat-mobile-hidden" id="chatinput-next-command" spellcheck="false" autocomplete="off" @focus=${() => {
+        this.auxInputFocus('ArrowUp')
+      }}></input>
+        <input type="text" class="chat-input" id="chatinput" spellcheck="false" autocomplete="off" aria-autocomplete="both"></input>
+        <input type="text" class="chat-mobile-hidden" id="chatinput-prev-command" spellcheck="false" autocomplete="off" @focus=${() => {
+        this.auxInputFocus('ArrowDown')
+      }}></input>
       </div>
     </div>
     `

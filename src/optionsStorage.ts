@@ -23,6 +23,7 @@ const defaultOptions = {
   // fov: 70,
   fov: 75,
   guiScale: 3,
+  autoRequestCompletions: true,
 
   frameLimit: false as number | false,
   alwaysBackupWorldBeforeLoading: undefined as boolean | undefined | null,
