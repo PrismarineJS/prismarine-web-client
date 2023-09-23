@@ -490,7 +490,11 @@ class ChatBox extends LitElement {
   async fetchCompletion (value = this.getCompleteValue()) {
     this.completionItems = []
     this.completeRequestValue = value
-    const items = await bot.tabComplete(value, true, true)
+    let items = await bot.tabComplete(value, true, true)
+    if (typeof items[0] === 'object') {
+      // @ts-ignore
+      if (items[0].match) items = items.map(i => i.match)
+    }
     if (value !== this.completeRequestValue) return
     this.completionItems = items
     this.completionItemsSource = items
