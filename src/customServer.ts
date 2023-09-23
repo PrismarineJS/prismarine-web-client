@@ -6,7 +6,9 @@ window.serverDataChannel ??= {}
 export const customCommunication = {
   sendData(data) {
     //@ts-ignore
-    window.serverDataChannel[this.isServer ? 'emitClient' : 'emitServer'](data)
+    setTimeout(() => {
+      window.serverDataChannel[this.isServer ? 'emitClient' : 'emitServer'](data)
+    })
   },
   receiverSetup(processData) {
     //@ts-ignore
