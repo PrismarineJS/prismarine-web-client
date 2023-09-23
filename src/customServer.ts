@@ -1,22 +1,6 @@
 import EventEmitter from 'events'
 
-import CustomChannelClient from 'minecraft-protocol/src/customChannelClient'
-
-window.serverDataChannel ??= {}
-export const customCommunication = {
-  sendData(data) {
-    //@ts-ignore
-    setTimeout(() => {
-      window.serverDataChannel[this.isServer ? 'emitClient' : 'emitServer'](data)
-    })
-  },
-  receiverSetup(processData) {
-    //@ts-ignore
-    window.serverDataChannel[this.isServer ? 'emitServer' : 'emitClient'] = (data) => {
-      processData(data)
-    }
-  }
-}
+import CustomChannelClient from './customClient'
 
 export class LocalServer extends EventEmitter.EventEmitter {
   socketServer = null
@@ -29,7 +13,7 @@ export class LocalServer extends EventEmitter.EventEmitter {
   }
 
   listen() {
-    this.emit('connection', new CustomChannelClient(true, this.version, customCommunication))
+    this.emit('connection', new CustomChannelClient(true, this.version))
   }
 
   close() { }

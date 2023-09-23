@@ -59,9 +59,7 @@ import {
 
 import {
   pointerLock,
-  goFullscreen,
-  toNumber,
-  isCypress,
+  goFullscreen, isCypress,
   loadScript,
   toMajorVersion,
   setLoadingScreenStatus,
@@ -76,7 +74,6 @@ import {
 
 import { startLocalServer, unsupportedLocalServerFeatures } from './createLocalServer'
 import serverOptions from './defaultLocalServerOptions'
-import { customCommunication } from './customServer'
 import updateTime from './updateTime'
 import { options, watchValue } from './optionsStorage'
 import { subscribeKey } from 'valtio/utils'
@@ -84,6 +81,7 @@ import _ from 'lodash'
 import { contro } from './controls'
 import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
 import { connectToPeer } from './localServerMultiplayer'
+import CustomChannelClient from './customClient'
 
 //@ts-ignore
 window.THREE = THREE
@@ -446,21 +444,21 @@ async function connect(connectOptions: {
       }
     }
 
-    const botDuplex = !p2pMultiplayer ? undefined/* clientDuplex */ : await connectToPeer(connectOptions.peerId)
-
     setLoadingScreenStatus('Creating mineflayer bot')
     bot = mineflayer.createBot({
       host,
       port,
       version: !connectOptions.botVersion ? false : connectOptions.botVersion,
+      ...p2pMultiplayer ? {
+        stream: await connectToPeer(connectOptions.peerId),
+      } : {},
       ...singeplayer || p2pMultiplayer ? {
         keepAlive: false,
-        stream: botDuplex,
       } : {},
       ...singeplayer ? {
         version: serverOptions.version,
         connect() { },
-        customCommunication,
+        Client: CustomChannelClient as any,
       } : {},
       username,
       password,
