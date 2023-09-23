@@ -1,5 +1,5 @@
 import { openWorldZip } from './browserfs'
-import { installTexturePack } from './texturePack'
+import { getResourcePackName, installTexturePack, resourcePackState, updateTexturePackInstalledState } from './texturePack'
 import { setLoadingScreenStatus } from './utils'
 import prettyBytes from 'pretty-bytes'
 
@@ -18,6 +18,11 @@ export default async () => {
   if (!texturepack) {
     const menu = document.getElementById('play-screen')
     menu.style = 'display: none;'
+  } else {
+    await updateTexturePackInstalledState()
+    if (resourcePackState.resourcePackInstalled) {
+      if (!confirm(`You are going to install a new texturepack which would override a current one: ${getResourcePackName()} Continue?`)) return
+    }
   }
   const name = mapUrl.slice(mapUrl.lastIndexOf('/') + 1).slice(-25)
   const downloadThing = texturepack ? 'texturepack' : 'world'
