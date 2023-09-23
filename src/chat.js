@@ -5,7 +5,7 @@ const { activeModalStack, hideCurrentModal, showModal, miscUiState } = require('
 import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { isCypress } from './utils'
-import { tryHandleBuiltinCommand } from './builtinCommands'
+import { getBuiltinCommandsList, tryHandleBuiltinCommand } from './builtinCommands'
 import { notification } from './menus/notification'
 import { options } from './optionsStorage'
 
@@ -488,6 +488,7 @@ class ChatBox extends LitElement {
   }
 
   async fetchCompletion (value = this.getCompleteValue()) {
+    this.completionItemsSource = []
     this.completionItems = []
     this.completeRequestValue = value
     let items = await bot.tabComplete(value, true, true)
@@ -496,6 +497,7 @@ class ChatBox extends LitElement {
       if (items[0].match) items = items.map(i => i.match)
     }
     if (value !== this.completeRequestValue) return
+    if (this.completeRequestValue === '/') items = [...items, ...getBuiltinCommandsList()]
     this.completionItems = items
     this.completionItemsSource = items
   }

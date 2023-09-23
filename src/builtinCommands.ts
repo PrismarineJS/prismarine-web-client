@@ -96,6 +96,8 @@ const commands = [
   }
 ]
 
+export const getBuiltinCommandsList = () => commands.flatMap(command => command.command)
+
 export const tryHandleBuiltinCommand = (message) => {
   if (!localServer) return
 
