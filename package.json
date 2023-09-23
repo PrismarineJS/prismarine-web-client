@@ -42,6 +42,7 @@
     "iconify-icon": "^1.0.8",
     "jszip": "^3.10.1",
     "lit": "^2.8.0",
+    "lodash": "^4.17.21",
     "minecraft-data": "^3.0.0",
     "net-browserify": "github:PrismarineJS/net-browserify",
     "peerjs": "^1.5.0",
