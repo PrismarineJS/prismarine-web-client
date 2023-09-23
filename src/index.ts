@@ -628,7 +628,11 @@ async function connect(connectOptions: {
     let virtualClickTimeout
     let screenTouches = 0
     let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time } | null
-    document.body.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false })
+    document.body.addEventListener('touchstart', (e) => {
+      if (isGameActive(true)) {
+        e.preventDefault()
+      }
+    }, { passive: false })
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
       if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
