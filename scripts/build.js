@@ -1,4 +1,5 @@
 //@ts-check
+//@ts-check
 const fsExtra = require('fs-extra')
 const defaultLocalServerOptions = require('../src/defaultLocalServerOptions')
 const glob = require('glob')
@@ -6,7 +7,7 @@ const fs = require('fs')
 const crypto = require('crypto')
 const path = require('path')
 
-const prismarineViewerBase = "./node_modules/prismarine-viewer";
+const prismarineViewerBase = "./node_modules/prismarine-viewer"
 
 // these files could be copied at build time eg with copy plugin, but copy plugin slows down the config so we copy them there, alternative we could inline it in esbuild config
 const webpackFilesToCopy = [
@@ -17,7 +18,7 @@ const webpackFilesToCopy = [
 ]
 exports.webpackFilesToCopy = webpackFilesToCopy
 exports.copyFiles = (isDev = false) => {
-    console.time('copy files');
+    console.time('copy files')
     webpackFilesToCopy.forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
