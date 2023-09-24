@@ -29,9 +29,14 @@ if (process.argv[3] === 'dev') {
   app.use(express.static(path.join(__dirname, './dist')))
 }
 
+const portArg = process.argv.indexOf('--port')
+const port = require.main === module ? process.argv[2] : (portArg !== -1 ? process.argv[portArg + 1] : 8080)
+
 // Start the server
-const server = process.argv.includes('--prod') ? undefined : app.listen(require.main !== module || process.argv[2] === undefined ? 8080 : process.argv[2], function () {
-  console.log('Server listening on port ' + server.address().port)
-})
+const server = process.argv.includes('--prod') ?
+  undefined :
+  app.listen(port, function () {
+    console.log('Server listening on port ' + server.address().port)
+  })
 
 module.exports = { app }
