@@ -123,7 +123,7 @@ const applyTexturePackData = async (version: string, { blockSize }: TextureResol
     const blockStates: BlockStates = await result.json()
     const factor = blockSize / 16
 
-    // this will be refactored with prerender refactor
+    // this will be refactored with generateTextures refactor
     const processObj = (x) => {
         if (typeof x !== 'object' || !x) return
         if (Array.isArray(x)) {
