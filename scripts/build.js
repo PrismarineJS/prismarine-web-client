@@ -14,22 +14,24 @@ const webpackFilesToCopy = [
     { from: `${prismarineViewerBase}/public/blocksStates/`, to: 'dist/blocksStates/' },
     { from: `${prismarineViewerBase}/public/worker.js`, to: 'dist/worker.js' },
     { from: './assets/', to: './dist/' },
-    { from: './config.json', to: 'dist/config.json' }
+    { from: './config.json', to: 'dist/config.json' },
+    { from: `${prismarineViewerBase}/public/textures/1.16.4/entity`, to: 'dist/textures/1.16.4/entity' },
 ]
 exports.webpackFilesToCopy = webpackFilesToCopy
 exports.copyFiles = (isDev = false) => {
     console.time('copy files')
-    webpackFilesToCopy.forEach(file => {
-        fsExtra.copySync(file.from, file.to)
-    })
-    // todo copy directly only needed
+    // copy glob
     const cwd = `${prismarineViewerBase}/public/textures/`
-    const files = glob.sync('{*/entity/**,*.png}', { cwd: cwd, nodir: true, })
+    const files = glob.sync('*.png', { cwd: cwd, nodir: true, })
     for (const file of files) {
         const copyDest = path.join('dist/textures/', file)
         fs.mkdirSync(path.dirname(copyDest), { recursive: true, })
         fs.copyFileSync(path.join(cwd, file), copyDest)
     }
+
+    webpackFilesToCopy.forEach(file => {
+        fsExtra.copySync(file.from, file.to)
+    })
 
     console.timeEnd('copy files')
 }
