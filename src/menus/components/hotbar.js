@@ -187,48 +187,20 @@ class Hotbar extends LitElement {
       <div class="hotbar">
         <p id="hotbar-item-name">${this.activeItemName}</p>
         <div id="hotbar-selected"></div>
-        <div id="hotbar-items-wrapper" @touchstart=${(e) => {
+        <div id="hotbar-items-wrapper" @pointerdown=${(e) => {
         if (!e.target.id.startsWith('hotbar')) return
         const slot = +e.target.id.split('-')[1]
         this.reloadHotbarSelected(slot)
       }}>
-          <div class="hotbar-item" id="hotbar-0">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-1">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-2">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-3">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-4">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-5">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-6">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-7">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          <div class="hotbar-item" id="hotbar-8">
-            <div class="item-icon"></div>
-            <span class="item-stack"></span>
-          </div>
-          ${miscUiState.currentTouch ? html`<div class="hotbar-item hotbar-more" @click=${() => {
+      ${Array.from({ length: 9 }).map((_, i) => html`
+          <div class="hotbar-item" id="${`hotbar-${i}`}" @pointerdown=${(e) => {
+          this.reloadHotbarSelected(i)
+        }}>
+          <div class="item-icon"></div>
+          <span class="item-stack"></span>
+      </div>
+      `)}
+          ${miscUiState.currentTouch ? html`<div class="hotbar-item hotbar-more" @pointerdown=${() => {
         showModal({ reactType: 'inventory', })
       }}>` : undefined}
           </div>
