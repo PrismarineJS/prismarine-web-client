@@ -14,11 +14,14 @@ jobs:
       (
         contains(github.event.comment.body, '/deploy')
       )
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: refs/pull/${{ github.event.issue.number }}/head
       - name: Install Global Dependencies
         run: npm install --global vercel pnpm
       - name: Pull Vercel Environment Information
@@ -26,4 +29,11 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        uses: mathiasvr/command-output@v2.0.0
+        with:
+          run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        id: deploy
+      - uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Deployed to Vercel Preview: ${{ steps.deploy.outputs.stdout }}
