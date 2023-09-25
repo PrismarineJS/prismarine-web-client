@@ -665,8 +665,9 @@ async function connect(connectOptions: {
         sourceX: e.clientX,
         sourceY: e.clientY,
         activateCameraMove: false,
-        time: new Date()
+        time: Date.now()
       }
+      console.log('capture!')
       virtualClickTimeout ??= setTimeout(() => {
         virtualClickActive = true
         document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
@@ -710,9 +711,8 @@ async function connect(connectOptions: {
         virtualClickActive = false
       } else if (!capturedPointer.activateCameraMove && (Date.now() - capturedPointer.time < touchStartBreakingBlockMs)) {
         document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
-        nextFrameFn.push(() => {
-          document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
-        })
+        blockInteraction.update()
+        document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
       }
       capturedPointer = undefined
     }, { passive: false })
