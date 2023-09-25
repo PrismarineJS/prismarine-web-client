@@ -4,7 +4,7 @@ import { existsSync } from 'node:fs'
 import Module from "node:module"
 import { dirname } from 'node:path'
 
-if (existsSync('dist/mc-data')) {
+if (existsSync('dist/mc-data') && !process.argv.includes('-f')) {
   console.log('using cached prepared data')
   process.exit(0)
 }

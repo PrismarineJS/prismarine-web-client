@@ -150,7 +150,7 @@ importers:
         version: 1.0.0
       contro-max:
         specifier: ^0.1.1
-        version: 0.1.1
+        version: 0.1.1(typescript@5.2.2)
       copy-webpack-plugin:
         specifier: ^11.0.0
         version: 11.0.0(webpack@5.88.2)
@@ -229,12 +229,15 @@ importers:
       timers-browserify:
         specifier: ^2.0.12
         version: 2.0.12
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
       url-loader:
         specifier: ^4.1.1
         version: 4.1.1(webpack@5.88.2)
       use-typed-event-listener:
         specifier: ^4.0.2
-        version: 4.0.2(react@18.2.0)
+        version: 4.0.2(react@18.2.0)(typescript@5.2.2)
       vite:
         specifier: ^4.4.9
         version: 4.4.9
@@ -4596,14 +4599,14 @@ packages:
     resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
     engines: {node: '>= 0.6'}
 
-  /contro-max@0.1.1:
+  /contro-max@0.1.1(typescript@5.2.2):
     resolution: {integrity: sha512-H+bzJWxiuxu98Tz8iGs1occMkRlr9fOzfOKeflVU8bD5teAEiJu8zjVnNSbweLQIR+Vhdynygv18N69t97rVAw==}
     dependencies:
       emittery: 0.10.2
       lodash-es: 4.17.21
     optionalDependencies:
       react: 17.0.2
-      use-typed-event-listener: 4.0.2(react@17.0.2)
+      use-typed-event-listener: 4.0.2(react@17.0.2)(typescript@5.2.2)
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -11527,6 +11530,12 @@ packages:
       is-typedarray: 1.0.0
     dev: true
 
+  /typescript@5.2.2:
+    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
+
   /uint4@0.1.2:
     resolution: {integrity: sha512-lhEx78gdTwFWG+mt6cWAZD/R6qrIj0TTBeH5xwyuDJyswLNlGe+KVlUPQ6+mx5Ld332pS0AMUTo9hIly7YsWxQ==}
 
@@ -11694,7 +11703,7 @@ packages:
     dependencies:
       react: 18.2.0
 
-  /use-typed-event-listener@4.0.2(react@17.0.2):
+  /use-typed-event-listener@4.0.2(react@17.0.2)(typescript@5.2.2):
     resolution: {integrity: sha512-AhjRw+qg5t7OWg7en2Q4XDCdi2iyhALFl71tITL3FeZqt/jD1Qa6KnbH/UolARtID1Gd0IElizbCgolv3ZbUFA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     peerDependencies:
@@ -11706,11 +11715,12 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.11
       react: 17.0.2
+      typescript: 5.2.2
       use-deep-compare: 1.1.0(react@17.0.2)
     dev: true
     optional: true
 
-  /use-typed-event-listener@4.0.2(react@18.2.0):
+  /use-typed-event-listener@4.0.2(react@18.2.0)(typescript@5.2.2):
     resolution: {integrity: sha512-AhjRw+qg5t7OWg7en2Q4XDCdi2iyhALFl71tITL3FeZqt/jD1Qa6KnbH/UolARtID1Gd0IElizbCgolv3ZbUFA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     peerDependencies:
@@ -11722,6 +11732,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.11
       react: 18.2.0
+      typescript: 5.2.2
       use-deep-compare: 1.1.0(react@18.2.0)
     dev: true
 

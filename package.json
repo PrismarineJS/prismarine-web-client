@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node scripts/build.js copyFilesDev && node scripts/prepareData.mjs && node esbuild.mjs --watch",
     "start-watch-script": "nodemon -w esbuild.mjs esbuild.mjs",
-    "build": "node scripts/build.js copyFiles && node scripts/prepareData.mjs && node esbuild.mjs --minify --prod",
+    "build": "node scripts/build.js copyFiles && node scripts/prepareData.mjs -f && node esbuild.mjs --minify --prod",
+    "check-build": "tsc && pnpm build",
     "watch": "node scripts/build.js copyFilesDev && webpack serve --config webpack.dev.js --progress",
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
@@ -31,6 +32,7 @@
     "browserfs": "github:zardoy/browserfs#build",
     "compression": "^1.7.4",
     "cypress-plugin-snapshots": "^1.4.4",
+    "debug": "^4.3.4",
     "diamond-square": "^1.2.0",
     "eruda": "^3.0.1",
     "esbuild": "^0.19.3",
@@ -56,8 +58,7 @@
     "url": "^0.11.1",
     "valtio": "^1.11.1",
     "minecraft-assets": "^1.9.1",
-    "workbox-build": "^7.0.0",
-    "debug": "^4.3.4"
+    "workbox-build": "^7.0.0"
   },
   "devDependencies": {
     "@types/three": "0.128.0",
@@ -93,6 +94,7 @@
     "style-loader": "^3.3.3",
     "three": "0.128.0",
     "timers-browserify": "^2.0.12",
+    "typescript": "^5.2.2",
     "url-loader": "^4.1.1",
     "use-typed-event-listener": "^4.0.2",
     "vite": "^4.4.9",

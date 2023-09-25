@@ -1,18 +1,24 @@
 {
     "compilerOptions": {
-        "target": "ES2022",
+        "target": "ESNext",
         "moduleResolution": "Node",
-        "module": "CommonJS",
+        "module": "ESNext",
         "allowJs": true,
         "jsx": "react-jsx",
         "allowSyntheticDefaultImports": true,
         "noEmit": true,
-        "strictFunctionTypes": true,
         "resolveJsonModule": true,
-        "noFallthroughCasesInSwitch": true
+        "strictFunctionTypes": true,
+        "noImplicitAny": false,
+        "noFallthroughCasesInSwitch": true,
+        "allowUnreachableCode": true,
+        "forceConsistentCasingInFileNames": true,
+        "useUnknownInCatchVariables": false,
+        "skipLibCheck": true
         // "strictNullChecks": true
     },
     "include": [
-        "src"
+        "src",
+        "cypress"
     ]
 }
