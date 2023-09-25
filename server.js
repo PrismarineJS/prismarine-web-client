@@ -30,7 +30,7 @@ if (process.argv[3] === 'dev') {
 }
 
 const portArg = process.argv.indexOf('--port')
-const port = require.main === module ? process.argv[2] : (portArg !== -1 ? process.argv[portArg + 1] : 8080)
+const port = (require.main === module ? process.argv[2] : portArg !== -1 ? process.argv[portArg + 1] : undefined) || 8080
 
 // Start the server
 const server = process.argv.includes('--prod') ?
