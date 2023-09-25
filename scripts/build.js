@@ -10,15 +10,15 @@ const path = require('path')
 const prismarineViewerBase = "./node_modules/prismarine-viewer"
 
 // these files could be copied at build time eg with copy plugin, but copy plugin slows down the config so we copy them there, alternative we could inline it in esbuild config
-const webpackFilesToCopy = [
+const filesToCopy = [
     { from: `${prismarineViewerBase}/public/blocksStates/`, to: 'dist/blocksStates/' },
     { from: `${prismarineViewerBase}/public/worker.js`, to: 'dist/worker.js' },
     { from: './assets/', to: './dist/' },
     { from: './config.json', to: 'dist/config.json' },
     { from: `${prismarineViewerBase}/public/textures/1.16.4/entity`, to: 'dist/textures/1.16.4/entity' },
 ]
-exports.webpackFilesToCopy = webpackFilesToCopy
-exports.copyFiles = (isDev = false) => {
+exports.filesToCopy = filesToCopy
+exports.copyFiles = () => {
     console.time('copy files')
     // copy glob
     const cwd = `${prismarineViewerBase}/public/textures/`
@@ -29,7 +29,7 @@ exports.copyFiles = (isDev = false) => {
         fs.copyFileSync(path.join(cwd, file), copyDest)
     }
 
-    webpackFilesToCopy.forEach(file => {
+    filesToCopy.forEach(file => {
         fsExtra.copySync(file.from, file.to)
     })
 
@@ -38,7 +38,7 @@ exports.copyFiles = (isDev = false) => {
 
 exports.copyFilesDev = () => {
     if (fsExtra.existsSync('dist/config.json')) return
-    exports.copyFiles(true)
+    exports.copyFiles()
 }
 
 exports.getSwAdditionalEntries = () => {
