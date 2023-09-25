@@ -82,7 +82,9 @@ import { contro } from './controls'
 import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
 import { connectToPeer } from './localServerMultiplayer'
 import CustomChannelClient from './customClient'
+import debug from 'debug'
 
+window.debug = debug
 //@ts-ignore
 window.THREE = THREE
 
@@ -98,6 +100,7 @@ if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'de
 
 // ACTUAL CODE
 
+// todo stats-gl
 let stats
 let stats2
 stats = new Stats()
@@ -333,7 +336,9 @@ async function connect(connectOptions: {
       bot.removeAllListeners()
       bot._client.removeAllListeners()
       bot._client = undefined
-      bot = undefined
+      // for debugging
+      window._botDisconnected = undefined
+      window.bot = bot = undefined
     }
     removeAllListeners()
     for (const timeout of timeouts) {
@@ -465,8 +470,10 @@ async function connect(connectOptions: {
       closeTimeout: 240 * 1000,
       async versionSelectedHook(client) {
         await downloadMcData(client.version)
+        setLoadingScreenStatus('Connecting to server')
       }
     })
+    window.bot = bot
     if (singeplayer || p2pMultiplayer) {
       // p2pMultiplayer still uses the same flying-squid server
       const _supportFeature = bot.supportFeature
@@ -479,6 +486,19 @@ async function connect(connectOptions: {
 
       bot.emit('inject_allowed')
       bot._client.emit('connect')
+    } else {
+      bot._client.socket.on('connect', () => {
+        console.log('TCP connection established')
+        //@ts-ignore
+        bot._client.socket._ws.addEventListener('close', () => {
+          console.log('TCP connection closed')
+          setTimeout(() => {
+            if (bot) {
+              bot.emit('end', 'TCP connection closed with unknown reason')
+            }
+          })
+        })
+      })
     }
   } catch (err) {
     handleError(err)
@@ -560,7 +580,6 @@ async function connect(connectOptions: {
     const debugMenu = hud.shadowRoot.querySelector('#debug-overlay')
 
     window.loadedData = mcData
-    window.bot = bot
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
