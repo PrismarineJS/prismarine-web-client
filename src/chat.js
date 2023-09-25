@@ -466,13 +466,13 @@ class ChatBox extends LitElement {
     chatInput.addEventListener('keydown', (e) => {
       if (e.code === 'Tab') {
         if (this.completionItems.length) {
-          this.tabComplete(this.completionItems[0])
+          this.acceptComplete(this.completionItems[0])
         } else {
           void this.fetchCompletion(chatInput.value)
         }
         e.preventDefault()
       }
-      if (e.code === 'Space' && options.autoRequestCompletions) {
+      if (e.code === 'Space' && options.autoRequestCompletions && chatInput.value.startsWith('/')) {
         // alternative we could just simply use keyup, but only with keydown we can display suggestions popup as soon as possible
         void this.fetchCompletion(this.getCompleteValue(chatInput.value + ' '))
       }
@@ -553,8 +553,8 @@ class ChatBox extends LitElement {
     this.chatInput.focus()
   }
 
-  tabComplete (item) {
-    const base = this.completeRequestValue === '/' ? '' : this.completeRequestValue
+  acceptComplete (item) {
+    const base = this.completeRequestValue === '/' ? '' : this.getCompleteValue()
     this.updateInputValue(base + item)
     // would be cool but disabled because some comands don't need args (like ping)
     // // trigger next tab complete
@@ -576,7 +576,7 @@ class ChatBox extends LitElement {
         ${this.completionItems.length ? html`<div class="chat-completions">
           <div class="chat-completions-pad-text">${this.completePadText}</div>
           <div class="chat-completions-items">
-            ${repeat(this.completionItems, (i) => i, (i) => html`<div @click=${() => this.tabComplete(i)}>${i}</div>`)}
+            ${repeat(this.completionItems, (i) => i, (i) => html`<div @click=${() => this.acceptComplete(i)}>${i}</div>`)}
           </div>
         </div>` : ''}
         <input type="text" class="chat-mobile-hidden" id="chatinput-next-command" spellcheck="false" autocomplete="off" @focus=${() => {
