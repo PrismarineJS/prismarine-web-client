@@ -634,19 +634,30 @@ async function connect(connectOptions: {
 
     registerListener(document, 'pointerlockchange', changeCallback, false)
 
+    let holdingTouch: { touch: Touch, elem: HTMLElement } | undefined
+    document.body.addEventListener('touchend', (e) => {
+      if (!isGameActive(true)) return
+      if (holdingTouch?.touch.identifier !== e.changedTouches[0].identifier) return
+      holdingTouch.elem.click()
+      holdingTouch = undefined
+    })
+    document.body.addEventListener('touchstart', (e) => {
+      if (!isGameActive(true)) return
+      e.preventDefault()
+      holdingTouch = {
+        touch: e.touches[0],
+        elem: e.composedPath()[0] as HTMLElement
+      }
+    }, { passive: false })
+
     const cameraControlEl = hud
 
-    // after what time of holding the finger start breaking the block
+    /** after what time of holding the finger start breaking the block */
     const touchStartBreakingBlockMs = 500
     let virtualClickActive = false
     let virtualClickTimeout
     let screenTouches = 0
     let capturedPointer: { id; x; y; sourceX; sourceY; activateCameraMove; time } | null
-    document.body.addEventListener('touchstart', (e) => {
-      if (isGameActive(true)) {
-        e.preventDefault()
-      }
-    }, { passive: false })
     registerListener(document, 'pointerdown', (e) => {
       const clickedEl = e.composedPath()[0]
       if (!isGameActive(true) || !miscUiState.currentTouch || clickedEl !== cameraControlEl || e.pointerId === undefined) {
