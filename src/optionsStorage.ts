@@ -39,6 +39,8 @@ const defaultOptions = {
   askGuestName: true
 }
 
+export type AppOptions = typeof defaultOptions
+
 export const options = proxy(
   mergeAny(defaultOptions, JSON.parse(localStorage.options || '{}'))
 )

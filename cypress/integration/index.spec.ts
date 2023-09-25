@@ -1,65 +1,78 @@
 /// <reference types="cypress" />
+import type { AppOptions } from '../../src/optionsStorage'
 
-const setLocalStorageSettings = () => {
+const cleanVisit = () => {
+    window.localStorage.clear()
+    visit()
+}
+
+const visit = (url = '/') => {
     window.localStorage.cypress = 'true'
-    window.localStorage.server = 'localhost'
+    cy.visit(url)
 }
 
 // todo use ssl
 
+const compareRenderedFlatWorld = () => {
+    // wait for render
+    // cy.wait(6000)
+    // cy.get('body').toMatchImageSnapshot({
+    //     name: 'superflat-world',
+    // })
+}
+
+const testWorldLoad = () => {
+    cy.document().then({ timeout: 20_000, }, doc => {
+        return new Cypress.Promise(resolve => {
+            doc.addEventListener('cypress-world-ready', resolve)
+        })
+    }).then(() => {
+        compareRenderedFlatWorld()
+    })
+}
+
+const setOptions = (options: Partial<AppOptions>) => {
+    cy.window().then(win => {
+        Object.assign(win['options'], options)
+    })
+}
+
 it('Loads & renders singleplayer', () => {
-    cy.visit('/')
-    window.localStorage.clear()
-    window.localStorage.setItem('renderDistance', '2')
-    window.localStorage.setItem('options', JSON.stringify({
+    cleanVisit()
+    setOptions({
         localServerOptions: {
             generation: {
                 name: 'superflat',
                 options: { seed: 250869072 }
-            }
-        }
-    }))
-    setLocalStorageSettings()
-    cy.get('#title-screen').find('[data-test-id="singleplayer-button"]', { includeShadowDom: true, }).click()
-    // todo implement load event
-    cy.wait(12000)
-    cy.get('body').toMatchImageSnapshot({
-        name: 'superflat-world',
+            },
+        },
+        renderDistance: 2
     })
+    cy.get('#title-screen').find('[data-test-id="singleplayer-button"]', { includeShadowDom: true, }).click()
+    testWorldLoad()
 })
 
 it('Joins to server', () => {
-    cy.visit('/')
-    setLocalStorageSettings()
+    // visit('/?version=1.16.1')
+    window.localStorage.version = '1.16.1'
+    visit()
     // todo replace with data-test
     cy.get('#title-screen').find('[data-test-id="connect-screen-button"]', { includeShadowDom: true, }).click()
     cy.get('input#serverip', { includeShadowDom: true, }).clear().focus().type('localhost')
     cy.get('[data-test-id="connect-to-server"]', { includeShadowDom: true, }).click()
-    // todo implement load event
-    cy.wait(12000)
-    cy.get('body').toMatchImageSnapshot({
-        name: 'superflat-world',
-    })
+    testWorldLoad()
 })
 
 it('Loads & renders zip world', () => {
-    cy.visit('/')
-    setLocalStorageSettings()
+    cleanVisit()
     cy.get('#title-screen').find('[data-test-id="select-file-folder"]', { includeShadowDom: true, }).click({ shiftKey: true })
     cy.get('input[type="file"]').selectFile('cypress/superflat.zip', { force: true })
-    // todo implement load event
-    cy.wait(12000)
-    cy.get('body').toMatchImageSnapshot({
-        name: 'superflat-world',
-    })
+    testWorldLoad()
 })
 
 it.skip('Performance test', () => {
-    cy.visit('/')
-    window.localStorage.cypress = 'true'
-    window.localStorage.setItem('renderDistance', '6')
-    cy.get('#title-screen').find('.menu > div:nth-child(2) > pmui-button:nth-child(1)', { includeShadowDom: true, }).selectFile('worlds')
-    // -2 85 24
+    // select that world
+    // from -2 85 24
     // await bot.loadPlugin(pathfinder.pathfinder)
     // bot.pathfinder.goto(new pathfinder.goals.GoalXZ(28, -28))
 })

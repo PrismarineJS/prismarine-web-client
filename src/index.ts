@@ -365,6 +365,7 @@ async function connect(connectOptions: {
 
     setLoadingScreenStatus(`Error encountered. Error message: ${err}`, true)
     destroyAll()
+    if (isCypress()) throw err
   }
 
   const errorAbortController = new AbortController()
@@ -525,6 +526,7 @@ async function connect(connectOptions: {
     console.log('disconnected for', endReason)
     destroyAll()
     setLoadingScreenStatus(`You have been disconnected from the server. End reason: ${endReason}`, true)
+    if (isCypress()) throw new Error(`disconnected: ${endReason}`)
   })
 
   bot.once('login', () => {
@@ -745,6 +747,10 @@ async function connect(connectOptions: {
       // remove loading screen, wait a second to make sure a frame has properly rendered
       setLoadingScreenStatus(undefined)
       hideCurrentScreens()
+      viewer.waitForChunksToRender().then(() => {
+        console.log('All done and ready!')
+        document.dispatchEvent(new Event('cypress-world-ready'))
+      })
     }, singeplayer ? 0 : 2500)
   })
 }
