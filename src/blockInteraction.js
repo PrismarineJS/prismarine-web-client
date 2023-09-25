@@ -1,5 +1,4 @@
 //@ts-check
-/* global THREE performance */
 
 // wouldn't better to create atlas instead?
 import destroyStage0 from 'minecraft-assets/minecraft-assets/data/1.10/blocks/destroy_stage_0.png'
@@ -24,24 +23,17 @@ function getViewDirection (pitch, yaw) {
   return new Vec3(-snYaw * csPitch, snPitch, -csYaw * csPitch)
 }
 
-class Cursor {
+class BlockInteraction {
   static instance = null
 
-  constructor (viewer, renderer, /** @type {import('mineflayer').Bot} */bot) {
+  init () {
     bot.on('physicsTick', () => { if (this.lastBlockPlaced < 4) this.lastBlockPlaced++ })
-    if (Cursor.instance) return Cursor.instance
 
     // Init state
     this.buttons = [false, false, false]
     this.lastButtons = [false, false, false]
     this.breakStartTime = 0
     this.cursorBlock = null
-
-    // Setup graphics
-    const blockGeometry = new THREE.BoxGeometry(1.001, 1.001, 1.001)
-    this.cursorMesh = new THREE.LineSegments(new THREE.EdgesGeometry(blockGeometry), new THREE.LineBasicMaterial({ color: 0 }))
-    this.cursorMesh.visible = false
-    viewer.scene.add(this.cursorMesh)
 
     const loader = new THREE.TextureLoader()
     this.breakTextures = []
@@ -67,7 +59,7 @@ class Cursor {
       transparent: true,
       blending: THREE.MultiplyBlending
     })
-    this.blockBreakMesh = new THREE.Mesh(blockGeometry, breakMaterial)
+    this.blockBreakMesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), breakMaterial)
     this.blockBreakMesh.visible = false
     this.blockBreakMesh.renderOrder = 999
     viewer.scene.add(this.blockBreakMesh)
@@ -111,8 +103,31 @@ class Cursor {
     })
   }
 
+  /** @type {null | {blockPos,mesh}} */
+  interactionLines = null
+  updateBlockInteractionLines (/** @type {Vec3 | null} */blockPos, /** @type {{position, width, height, depth}[]} */shapePositions = undefined) {
+    if (this.interactionLines !== null) {
+      viewer.scene.remove(this.interactionLines.mesh)
+      this.interactionLines = null
+    }
+    if (blockPos === null || (this.interactionLines && blockPos.equals(this.interactionLines.blockPos))) {
+      return
+    }
+
+    const group = new THREE.Group()
+    for (const { position, width, height, depth } of shapePositions) {
+      const geometry = new THREE.BoxGeometry(1.001 * width, 1.001 * height, 1.001 * depth)
+      const mesh = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0 }))
+      const pos = blockPos.plus(position)
+      mesh.position.set(pos.x, pos.y, pos.z)
+      group.add(mesh)
+    }
+    viewer.scene.add(group)
+    this.interactionLines = { blockPos, mesh: group }
+  }
+
   // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags
-  update (/** @type {import('mineflayer').Bot} */bot) {
+  update () {
     const cursorBlock = bot.blockAtCursor(5)
     let cursorBlockDiggable = cursorBlock
     if (!bot.canDigBlock(cursorBlock) && bot.game.gameMode !== 'creative') cursorBlockDiggable = null
@@ -153,25 +168,29 @@ class Cursor {
 
     // Show cursor
     if (!cursorBlock) {
-      this.cursorMesh.visible = false
+      this.updateBlockInteractionLines(null)
     } else {
-      for (const collisionData of [...cursorBlock.shapes, ...cursorBlock['interactionShapes'] ?? []].slice(0, 1) ?? []) {
-        const width = collisionData[3] - collisionData[0]
-        const height = collisionData[4] - collisionData[1]
-        const depth = collisionData[5] - collisionData[2]
-
-        const initialSize = 1.001
-        this.cursorMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
-        this.blockBreakMesh.scale.set(width * initialSize, height * initialSize, depth * initialSize)
-        // this.cursorMesh.position.set(cursorBlock.position.x + 0.5, cursorBlock.position.y + 0.5, cursorBlock.position.z + 0.5)
-        const centerX = (collisionData[3] + collisionData[0]) / 2
-        const centerY = (collisionData[4] + collisionData[1]) / 2
-        const centerZ = (collisionData[5] + collisionData[2]) / 2
-        this.cursorMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
-        this.blockBreakMesh.position.set(cursorBlock.position.x + centerX, cursorBlock.position.y + centerY, cursorBlock.position.z + centerZ)
+      const allShapes = [...cursorBlock.shapes, ...cursorBlock['interactionShapes'] ?? []]
+      this.updateBlockInteractionLines(cursorBlock.position, allShapes.map(shape => {
+        return getDataFromShape(shape)
+      }))
+      {
+        // union of all values
+        const breakShape = allShapes.reduce((acc, cur) => {
+          return [
+            Math.min(acc[0], cur[0]),
+            Math.min(acc[1], cur[1]),
+            Math.min(acc[2], cur[2]),
+            Math.max(acc[3], cur[3]),
+            Math.max(acc[4], cur[4]),
+            Math.max(acc[5], cur[5])
+          ]
+        })
+        const { position, width, height, depth } = getDataFromShape(breakShape)
+        this.blockBreakMesh.scale.set(width * 1.001, height * 1.001, depth * 1.001)
+        position.add(cursorBlock.position)
+        this.blockBreakMesh.position.set(position.x, position.y, position.z)
       }
-      this.cursorMesh.visible = true
-      // change
     }
 
     // Show break animation
@@ -193,4 +212,15 @@ class Cursor {
   }
 }
 
-export default Cursor
+const getDataFromShape = (shape) => {
+  const width = shape[3] - shape[0]
+  const height = shape[4] - shape[1]
+  const depth = shape[5] - shape[2]
+  const centerX = (shape[3] + shape[0]) / 2
+  const centerY = (shape[4] + shape[1]) / 2
+  const centerZ = (shape[5] + shape[2]) / 2
+  const position = new Vec3(centerX, centerY, centerZ)
+  return { position, width, height, depth }
+}
+
+export default new BlockInteraction()

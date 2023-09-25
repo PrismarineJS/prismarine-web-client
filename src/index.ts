@@ -41,7 +41,7 @@ import { WorldView, Viewer } from 'prismarine-viewer/viewer'
 import pathfinder from 'mineflayer-pathfinder'
 import { Vec3 } from 'vec3'
 
-import Cursor from './cursor'
+import blockInteraction from './blockInteraction'
 
 import * as THREE from 'three'
 
@@ -85,8 +85,6 @@ import CustomChannelClient from './customClient'
 
 //@ts-ignore
 window.THREE = THREE
-// workaround to be used in prismarine-block
-globalThis.emptyShapeReplacer = [[0.0, 0.0, 0.0, 1.0, 1.0, 1.0]]
 
 if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -198,12 +196,11 @@ const pauseMenu = document.getElementById('pause-screen')
 
 let mouseMovePostHandle = (e) => { }
 let lastMouseMove: number
-let cursor: Cursor
 let debugMenu
 const updateCursor = () => {
-  cursor.update(bot)
+  blockInteraction.update()
   debugMenu ??= hud.shadowRoot.querySelector('#debug-overlay')
-  debugMenu.cursorBlock = cursor.cursorBlock
+  debugMenu.cursorBlock = blockInteraction.cursorBlock
 }
 function onCameraMove(e) {
   if (e.type !== 'touchmove' && !pointerLock.hasPointerLock) return
@@ -487,7 +484,6 @@ async function connect(connectOptions: {
     handleError(err)
   }
   if (!bot) return
-  cursor = new Cursor(viewer, renderer, bot)
   // bot.on('move', () => updateCursor())
 
   let p2pConnectTimeout = p2pMultiplayer ? setTimeout(() => { throw new Error('Spawn timeout. There might be error on other side, check console.') }, 20_000) : undefined
@@ -722,6 +718,7 @@ async function connect(connectOptions: {
 
     hud.init(renderer, bot, host)
     hud.style.display = 'block'
+    blockInteraction.init()
 
     setTimeout(function () {
       errorAbortController.abort()
