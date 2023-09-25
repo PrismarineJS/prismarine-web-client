@@ -2,7 +2,7 @@
 const { html, css, LitElement } = require('lit')
 const { commonCss, openURL } = require('./components/common')
 const { hideCurrentModal } = require('../globalState')
-const { toNumber, getScreenRefreshRate } = require('../utils')
+const { getScreenRefreshRate } = require('../utils')
 const { subscribe } = require('valtio')
 const { options } = require('../optionsStorage')
 
@@ -73,6 +73,11 @@ class AdvancedOptionsScreen extends LitElement {
         this.frameLimitMax = rate
         this.requestUpdate()
       }}></pmui-button>
+      </div>
+      <div class="wrapper">
+        <pmui-slider pmui-width="150px" pmui-label="Touch Buttons Size" pmui-value="${options.touchButtonsSize}" pmui-type="%" pmui-min="20" pmui-max="100" @input=${(e) => {
+        options.touchButtonsSize = +e.target.value
+      }}></pmui-slider>
       </div>
 
       <pmui-button pmui-width="200px" pmui-label="Done" @pmui-click=${() => hideCurrentModal()}></pmui-button>

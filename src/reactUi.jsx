@@ -4,12 +4,12 @@ import { renderToDom } from '@zardoy/react-util'
 import { LeftTouchArea, RightTouchArea, useUsingTouch, useInterfaceState } from '@dimaka/interface'
 import { css } from '@emotion/css'
 import { activeModalStack, isGameActive, miscUiState } from './globalState'
-import { isProbablyIphone } from './menus/components/common'
 // import DeathScreen from './react/DeathScreen'
 import { useSnapshot } from 'valtio'
 import { contro } from './controls'
 import { QRCodeSVG } from 'qrcode.react'
 import { createPortal } from 'react-dom'
+import { options, watchValue } from './optionsStorage'
 
 // todo
 useInterfaceState.setState({
@@ -38,6 +38,14 @@ useInterfaceState.setState({
             contro.pressedKeyOrButtonChanged({code: actionAndState[2],}, true)
         }
     }
+})
+
+watchValue(options, (o) => {
+    useInterfaceState.setState({
+        uiCustomization: {
+            touchButtonSize: o.touchButtonsSize,
+        },
+    })
 })
 
 const TouchControls = () => {

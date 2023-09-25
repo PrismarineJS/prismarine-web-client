@@ -24,6 +24,7 @@ const defaultOptions = {
   fov: 75,
   guiScale: 3,
   autoRequestCompletions: true,
+  touchButtonsSize: 40,
 
   frameLimit: false as number | false,
   alwaysBackupWorldBeforeLoading: undefined as boolean | undefined | null,
