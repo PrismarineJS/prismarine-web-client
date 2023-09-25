@@ -1,15 +1,46 @@
 //@ts-check
 const { LitElement, html, css, unsafeCSS } = require('lit')
 const widgetsGui = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/widgets.png')
-const { options, watchValue } = require('../../optionsStorage')
+const { options } = require('../../optionsStorage')
 
-const buttonClickAudio = new Audio()
-buttonClickAudio.src = 'button_click.mp3'
+let audioContext
+/** @type {Record<string, any>} */
+const sounds = {}
+
 // load as many resources on page load as possible instead on demand as user can disable internet connection after he thinks the page is loaded
-buttonClickAudio.load()
-watchValue(options, o => {
-  buttonClickAudio.volume = o.volume / 100
-})
+let loadingSounds = []
+async function loadSound (path) {
+  loadingSounds.push(path)
+  const res = await window.fetch(path)
+  const data = await res.arrayBuffer()
+
+  // sounds[path] = await audioContext.decodeAudioData(data)
+  sounds[path] = data
+  loadingSounds.splice(loadingSounds.indexOf(path), 1)
+}
+
+export async function playSound (path) {
+  if (!audioContext) {
+    audioContext = new window.AudioContext()
+    for (const [soundName, sound] of Object.entries(sounds)) {
+      sounds[soundName] = await audioContext.decodeAudioData(sound)
+    }
+  }
+
+  const volume = options.volume / 100
+
+  if (loadingSounds.includes(path)) return
+  const soundBuffer = sounds[path]
+  if (!soundBuffer) throw new Error(`Sound ${path} not loaded`)
+
+  const gainNode = audioContext.createGain()
+  const source = audioContext.createBufferSource()
+  source.buffer = soundBuffer
+  source.connect(gainNode)
+  gainNode.connect(audioContext.destination)
+  gainNode.gain.value = volume
+  source.start(0)
+}
 
 class Button extends LitElement {
   static get styles () {
@@ -134,9 +165,10 @@ class Button extends LitElement {
   }
 
   onBtnClick (e) {
-    buttonClickAudio.play()
+    playSound('button_click.mp3')
     this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e, }))
   }
 }
 
+loadSound('button_click.mp3')
 window.customElements.define('pmui-button', Button)
