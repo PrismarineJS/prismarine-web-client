@@ -8663,7 +8663,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       minecraft-data: 3.45.0
-      minecraft-protocol: github.com/zardoy/minecraft-protocol/66cb9ab8c23787de13e39ab50dc94a1807485335
+      minecraft-protocol: github.com/zardoy/minecraft-protocol/320088fcc115b4c500f8de66d0e3ae87efadcc15
       prismarine-biome: 1.3.0(minecraft-data@3.45.0)(prismarine-registry@1.7.0)
       prismarine-block: github.com/zardoy/prismarine-block/753cf1fe507f7647063c69d5c124d40f85b29cc2
       prismarine-chat: 1.9.1
@@ -8689,7 +8689,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       minecraft-data: 3.45.0
-      minecraft-protocol: github.com/zardoy/minecraft-protocol/66cb9ab8c23787de13e39ab50dc94a1807485335
+      minecraft-protocol: github.com/zardoy/minecraft-protocol/320088fcc115b4c500f8de66d0e3ae87efadcc15
       prismarine-biome: 1.3.0(minecraft-data@3.45.0)(prismarine-registry@1.7.0)
       prismarine-block: github.com/zardoy/prismarine-block/753cf1fe507f7647063c69d5c124d40f85b29cc2
       prismarine-chat: 1.9.1
@@ -12872,8 +12872,8 @@ packages:
       - react
     dev: true
 
-  github.com/zardoy/minecraft-protocol/66cb9ab8c23787de13e39ab50dc94a1807485335:
-    resolution: {tarball: https://codeload.github.com/zardoy/minecraft-protocol/tar.gz/66cb9ab8c23787de13e39ab50dc94a1807485335}
+  github.com/zardoy/minecraft-protocol/320088fcc115b4c500f8de66d0e3ae87efadcc15:
+    resolution: {tarball: https://codeload.github.com/zardoy/minecraft-protocol/tar.gz/320088fcc115b4c500f8de66d0e3ae87efadcc15}
     name: minecraft-protocol
     version: 1.44.0
     engines: {node: '>=14'}
@@ -12907,7 +12907,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       minecraft-data: 3.45.0
-      minecraft-protocol: github.com/zardoy/minecraft-protocol/66cb9ab8c23787de13e39ab50dc94a1807485335
+      minecraft-protocol: github.com/zardoy/minecraft-protocol/320088fcc115b4c500f8de66d0e3ae87efadcc15
       prismarine-biome: 1.3.0(minecraft-data@3.45.0)(prismarine-registry@1.7.0)
       prismarine-block: github.com/zardoy/prismarine-block/753cf1fe507f7647063c69d5c124d40f85b29cc2
       prismarine-chat: 1.9.1
@@ -13003,7 +13003,7 @@ packages:
       flatmap: 0.0.3
       long: 5.2.3
       minecraft-data: 3.45.0
-      minecraft-protocol: github.com/zardoy/minecraft-protocol/66cb9ab8c23787de13e39ab50dc94a1807485335
+      minecraft-protocol: github.com/zardoy/minecraft-protocol/320088fcc115b4c500f8de66d0e3ae87efadcc15
       moment: 2.29.4
       needle: 2.9.1
       node-gzip: 1.1.2
