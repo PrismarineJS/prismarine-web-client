@@ -19,8 +19,13 @@ jobs:
       - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       # will install + build to .vercel/output/static
       - run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --prod
-      - run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
-      - run: pnpx zardoy-release node
+      - name: Deploy Project to Vercel
+        uses: mathiasvr/command-output@v2.0.0
+        with:
+          run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
+        id: deploy
+      - run: |
+          pnpx zardoy-release node --footer "This release URL: ${{ steps.deploy.outputs.stdout }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cp vercel.json .vercel/output/static/vercel.json
