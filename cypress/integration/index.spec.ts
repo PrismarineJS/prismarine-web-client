@@ -55,7 +55,7 @@ it('Loads & renders singleplayer', () => {
 
 it('Joins to server', () => {
   // visit('/?version=1.16.1')
-  window.localStorage.version = '1.16.1'
+  window.localStorage.version = ''
   visit()
   // todo replace with data-test
   cy.get('#title-screen').find('[data-test-id="connect-screen-button"]', { includeShadowDom: true, }).click()

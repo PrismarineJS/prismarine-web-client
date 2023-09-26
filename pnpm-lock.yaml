@@ -82,8 +82,8 @@ importers:
         specifier: 3.45.0
         version: 3.45.0
       net-browserify:
-        specifier: github:PrismarineJS/net-browserify
-        version: github.com/PrismarineJS/net-browserify/0acebf76d5a14991e6b2586f83f707be5171579c
+        specifier: github:zardoy/prismarinejs-net-browserify
+        version: github.com/zardoy/prismarinejs-net-browserify/51262fe139a6a4856ffd4a6dc7b9145c3d6d8039
       peerjs:
         specifier: ^1.5.0
         version: 1.5.0
@@ -12164,20 +12164,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  github.com/PrismarineJS/net-browserify/0acebf76d5a14991e6b2586f83f707be5171579c:
-    resolution: {tarball: https://codeload.github.com/PrismarineJS/net-browserify/tar.gz/0acebf76d5a14991e6b2586f83f707be5171579c}
-    name: net-browserify
-    version: 0.2.4
-    dependencies:
-      body-parser: 1.20.2
-      express: 4.18.2
-      express-ws: 4.0.0(express@4.18.2)
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   github.com/PrismarineJS/node-process/380d0b4f4c86f1b65b216c311bf00431f314e88e:
     resolution: {tarball: https://codeload.github.com/PrismarineJS/node-process/tar.gz/380d0b4f4c86f1b65b216c311bf00431f314e88e}
     name: process
@@ -12319,6 +12305,20 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       vec3: 0.1.8
+
+  github.com/zardoy/prismarinejs-net-browserify/51262fe139a6a4856ffd4a6dc7b9145c3d6d8039:
+    resolution: {tarball: https://codeload.github.com/zardoy/prismarinejs-net-browserify/tar.gz/51262fe139a6a4856ffd4a6dc7b9145c3d6d8039}
+    name: net-browserify
+    version: 0.2.4
+    dependencies:
+      body-parser: 1.20.2
+      express: 4.18.2
+      express-ws: 4.0.0(express@4.18.2)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
 
   github.com/zardoy/space-squid/eec886b7a881eb40dd8efc6d48fa52e638e07693:
     resolution: {tarball: https://codeload.github.com/zardoy/space-squid/tar.gz/eec886b7a881eb40dd8efc6d48fa52e638e07693}

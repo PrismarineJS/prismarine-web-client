@@ -79,7 +79,7 @@ class LoadingErrorScreen extends LitElement {
     return html`
       <div class="dirt-bg"></div>
 
-      <div class="title">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}
+      <div class="title" data-test-id="loading-or-error-message">${this.status}${this.hasError || this.hideDots ? '' : this._loadingDots}
       <p class="potential-problem">${this.hasError ? guessProblem(this.status) : ''}</p>
       <p class="last-status">${this.lastStatus ? `Last status: ${this.lastStatus}` : this.lastStatus}</p></div>
 

@@ -450,18 +450,31 @@ async function connect(connectOptions: {
       bot.emit('inject_allowed')
       bot._client.emit('connect')
     } else {
-      bot._client.socket.on('connect', () => {
-        console.log('TCP connection established')
-        //@ts-expect-error
-        bot._client.socket._ws.addEventListener('close', () => {
-          console.log('TCP connection closed')
-          setTimeout(() => {
-            if (bot) {
-              bot.emit('end', 'TCP connection closed with unknown reason')
-            }
+      const setupConnectHandlers = () => {
+        bot._client.socket.on('connect', () => {
+          console.log('TCP connection established')
+          //@ts-expect-error
+          bot._client.socket._ws.addEventListener('close', () => {
+            console.log('TCP connection closed')
+            setTimeout(() => {
+              if (bot) {
+                bot.emit('end', 'TCP connection closed with unknown reason')
+              }
+            })
           })
         })
-      })
+      }
+      // socket setup actually can be delayed because of dns lookup
+      if (bot._client.socket) {
+        setupConnectHandlers()
+      } else {
+        const originalSetSocket = bot._client.setSocket.bind(bot._client)
+        bot._client.setSocket = (socket) => {
+          originalSetSocket(socket)
+          setupConnectHandlers()
+        }
+      }
+
     }
   } catch (err) {
     handleError(err)
