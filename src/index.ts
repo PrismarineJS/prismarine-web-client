@@ -707,7 +707,6 @@ async function connect(connectOptions: {
     }, false)
 
     setLoadingScreenStatus('Done!')
-    miscUiState.gameLoaded = true
     console.log('Done!')
 
     hud.init(renderer, bot, host)
@@ -720,10 +719,11 @@ async function connect(connectOptions: {
       // remove loading screen, wait a second to make sure a frame has properly rendered
       setLoadingScreenStatus(undefined)
       hideCurrentScreens()
-      viewer.waitForChunksToRender().then(() => {
+      void viewer.waitForChunksToRender().then(() => {
         console.log('All done and ready!')
         document.dispatchEvent(new Event('cypress-world-ready'))
       })
+      miscUiState.gameLoaded = true
     }, singeplayer ? 0 : 2500)
   })
 }

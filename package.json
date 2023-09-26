@@ -18,6 +18,7 @@
     "web",
     "client"
   ],
+  "bin": "./server.js",
   "author": "PrismarineJS",
   "license": "MIT",
   "dependencies": {
