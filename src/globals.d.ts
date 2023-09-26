@@ -1,7 +1,7 @@
 /// <reference types="wicg-file-system-access" />
 
 declare const THREE: typeof import('three')
-// todo
+// todo make optional
 declare const bot: import('mineflayer').Bot
 declare const viewer: import('prismarine-viewer/viewer/lib/viewer').Viewer | undefined
 declare const worldView: import('prismarine-viewer/viewer/lib/worldView').WorldView | undefined

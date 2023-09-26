@@ -320,6 +320,7 @@ const toggleFly = () => {
 }
 // #endregion
 addEventListener('mousedown', (e) => {
+  if (!bot) return
   // wheel click
   // todo support ctrl+wheel (+nbt)
   if (e.button === 1) {
