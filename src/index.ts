@@ -152,7 +152,6 @@ watchValue(options, (o) => {
   renderInterval = o.frameLimit && 1000 / o.frameLimit
 })
 
-let nextFrameFn = []
 let postRenderFrameFn = () => { }
 let delta = 0
 let lastTime = performance.now()
@@ -175,12 +174,6 @@ const renderFrame = (time: DOMHighResTimeStamp) => {
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
-  if (nextFrameFn.length) {
-    for (const fn of nextFrameFn) {
-      fn()
-    }
-    nextFrameFn = []
-  }
   stats?.end()
   stats2?.end()
 }
@@ -505,7 +498,6 @@ async function connect(connectOptions: {
     handleError(err)
   }
   if (!bot) return
-  // bot.on('move', () => updateCursor())
 
   let p2pConnectTimeout = p2pMultiplayer ? setTimeout(() => { throw new Error('Spawn timeout. There might be error on other side, check console.') }, 20_000) : undefined
   hud.preload(bot)
@@ -680,7 +672,6 @@ async function connect(connectOptions: {
         activateCameraMove: false,
         time: Date.now()
       }
-      console.log('capture!')
       virtualClickTimeout ??= setTimeout(() => {
         virtualClickActive = true
         document.dispatchEvent(new MouseEvent('mousedown', { button: 0 }))
