@@ -88,9 +88,9 @@ const getItemSlice = (name) => {
 
 const getImageSrc = (path) => {
   switch (path) {
-    case 'gui/container/inventory': return InventoryGui
-    case 'blocks': return globalThis.texturePackDataUrl || `textures/${version}.png`
-    case 'invsprite': return `invsprite.png`
+      case 'gui/container/inventory': return InventoryGui
+      case 'blocks': return globalThis.texturePackDataUrl || `textures/${version}.png`
+      case 'invsprite': return `invsprite.png`
   }
   return Dirt
 }

@@ -37,12 +37,12 @@ const exportWorld = async () => {
   await addFolderToZip(worldFolder, zip, '')
 
   // Generate the ZIP archive content
-  const zipContent = await zip.generateAsync({ type: "blob" })
+  const zipContent = await zip.generateAsync({ type: 'blob' })
 
   // Create a download link and trigger the download
-  const downloadLink = document.createElement("a")
+  const downloadLink = document.createElement('a')
   downloadLink.href = URL.createObjectURL(zipContent)
-  downloadLink.download = "world-exported.zip"
+  downloadLink.download = 'world-exported.zip'
   downloadLink.click()
 
   // Clean up the URL object after download

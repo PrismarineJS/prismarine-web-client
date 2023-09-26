@@ -13,7 +13,7 @@ import { installTexturePack, updateTexturePackInstalledState } from './texturePa
 browserfs.install(window)
 // todo migrate to StorageManager API for localsave as localstorage has only 5mb limit, when localstorage is fallback test limit warning on 4mb
 const deafultMountablePoints = {
-  "/world": { fs: "LocalStorage" },
+  '/world': { fs: 'LocalStorage' },
   '/userData': { fs: 'IndexedDB' },
 }
 browserfs.configure({
@@ -154,8 +154,8 @@ export const openWorldDirectory = async (dragndropHandle?: FileSystemDirectoryHa
       // todo
       fs: 'MountableFileSystem',
       options: {
-        "/world": {
-          fs: "FileSystemAccess",
+        '/world': {
+          fs: 'FileSystemAccess',
           options: {
             handle: directoryHandle
           }
@@ -215,8 +215,8 @@ const openWorldZipInner = async (file: File | ArrayBuffer, name = file['name']) 
       fs: 'MountableFileSystem',
       options: {
         ...deafultMountablePoints,
-        "/world": {
-          fs: "ZipFS",
+        '/world': {
+          fs: 'ZipFS',
           options: {
             zipData: Buffer.from(file instanceof File ? (await file.arrayBuffer()) : file),
             name
@@ -276,12 +276,12 @@ export async function generateAndDownloadWorldZip() {
   zip.folder('world')
 
   // Generate the ZIP archive content
-  const zipContent = await zip.generateAsync({ type: "blob" })
+  const zipContent = await zip.generateAsync({ type: 'blob' })
 
   // Create a download link and trigger the download
-  const downloadLink = document.createElement("a")
+  const downloadLink = document.createElement('a')
   downloadLink.href = URL.createObjectURL(zipContent)
-  downloadLink.download = "prismarine-world.zip"
+  downloadLink.download = 'prismarine-world.zip'
   downloadLink.click()
 
   // Clean up the URL object after download

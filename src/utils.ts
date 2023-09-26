@@ -48,7 +48,7 @@ export const pointerLock = {
         unadjustedMovement: options.mouseRawInput
       })
       promise?.catch((error) => {
-        if (error.name === "NotSupportedError") {
+        if (error.name === 'NotSupportedError') {
           // Some platforms may not support unadjusted movement, request again a regular pointer lock.
           document.documentElement.requestPointerLock()
         } else if (error.name === 'SecurityError') {
@@ -106,11 +106,11 @@ export async function getScreenRefreshRate(): Promise<number> {
 
 export const getGamemodeNumber = (bot) => {
   switch (bot.game.gameMode) {
-    case 'survival': return 0
-    case 'creative': return 1
-    case 'adventure': return 2
-    case 'spectator': return 3
-    default: return -1
+      case 'survival': return 0
+      case 'creative': return 1
+      case 'adventure': return 2
+      case 'spectator': return 3
+      default: return -1
   }
 }
 

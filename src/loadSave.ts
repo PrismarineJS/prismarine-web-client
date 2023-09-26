@@ -121,7 +121,7 @@ export const loadSave = async (root = '/world') => {
 
   if (!fsState.isReadonly) {
     // todo allow also to ctrl+s
-    alert("Note: the world is saved only on /save or disconnect! ENSURE YOU HAVE BACKUP!")
+    alert('Note: the world is saved only on /save or disconnect! ENSURE YOU HAVE BACKUP!')
   }
 
   fsState.saveLoaded = true
