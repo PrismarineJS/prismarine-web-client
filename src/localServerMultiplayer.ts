@@ -84,7 +84,7 @@ export const openToWanAndCopyJoinLink = async (writeText: (text) => void, doCopy
         console.error(error)
         writeText(error.message)
     })
-    return await new Promise<string>(resolve => {
+    return new Promise<string>(resolve => {
         peer.on('open', async () => {
             await copyJoinLink()
             resolve('Copied join link to clipboard')
@@ -120,7 +120,7 @@ export const connectToPeer = async (peerId: string) => {
         connection.once('error', (error) => {
             console.log(error.type, error.name)
             console.log(error)
-            return reject(error.message)
+            reject(error.message);
         })
         connection.once('open', resolve)
     }))

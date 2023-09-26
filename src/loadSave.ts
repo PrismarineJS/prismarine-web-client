@@ -1,12 +1,12 @@
 import fs from 'fs'
+import { promisify } from 'util'
 import { supportedVersions } from 'flying-squid/src/lib/version'
 import * as nbt from 'prismarine-nbt'
-import { promisify } from 'util'
-import { options } from './optionsStorage'
 import { proxy } from 'valtio'
+import { gzip } from 'node-gzip'
+import { options } from './optionsStorage'
 import { nameToMcOfflineUUID } from './utils'
 import { forceCachedDataPaths } from './browserfs'
-import { gzip } from 'node-gzip'
 
 const parseNbt = promisify(nbt.parse)
 
@@ -20,11 +20,14 @@ export const fsState = proxy({
 
 const PROPOSE_BACKUP = true
 
+// eslint-disable-next-line complexity
 export const loadSave = async (root = '/world') => {
   const disablePrompts = options.disableLoadPrompts
 
   // todo do it in singleplayer as well
+  // eslint-disable-next-line guard-for-in
   for (const key in forceCachedDataPaths) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete forceCachedDataPaths[key]
   }
 
@@ -35,10 +38,10 @@ export const loadSave = async (root = '/world') => {
     levelDatContent = await fs.promises.readFile(`${root}/level.dat`)
   } catch (err) {
     if (err.code === 'ENOENT') {
-      if (!fsState.isReadonly) {
-        warnings.push('level.dat not found, world in current folder will be created')
-      } else {
+      if (fsState.isReadonly) {
         throw new Error('level.dat not found, ensure you are loading world folder')
+      } else {
+        warnings.push('level.dat not found, world in current folder will be created')
       }
     } else {
       throw err
@@ -54,7 +57,7 @@ export const loadSave = async (root = '/world') => {
     const qs = new URLSearchParams(window.location.search)
     version = levelDat.Version?.Name ?? qs.get('mapVersion')
     if (!version) {
-      const newVersion = disablePrompts ? '1.8.8' : prompt(`In 1.8 and before world save doesn\'t contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
+      const newVersion = disablePrompts ? '1.8.8' : prompt(`In 1.8 and before world save doesn't contain version info, please enter version you want to use to load the world.\nSupported versions ${supportedVersions.join(', ')}`, '1.8.8')
       if (!newVersion) return
       version = newVersion
     }
@@ -131,9 +134,9 @@ export const loadSave = async (root = '/world') => {
           name: 'superflat'
         }
       } : {},
-      ...root !== '/world' ? {
+      ...root === '/world' ? {} : {
         'worldFolder': root
-      } : {}
+      }
     },
   }))
 }

@@ -62,11 +62,11 @@ export const watchValue: WatchValue = (proxy, callback) => {
       return Reflect.get(target, p, receiver)
     },
   }))
-  watchedProps.forEach(prop => {
+  for (const prop of watchedProps) {
     subscribeKey(proxy, prop, () => {
       callback(proxy)
     })
-  })
+  }
 }
 
 watchValue(options, o => {

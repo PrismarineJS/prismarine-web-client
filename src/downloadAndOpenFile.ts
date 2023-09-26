@@ -1,7 +1,7 @@
+import prettyBytes from 'pretty-bytes'
 import { openWorldZip } from './browserfs'
 import { getResourcePackName, installTexturePack, resourcePackState, updateTexturePackInstalledState } from './texturePack'
 import { setLoadingScreenStatus } from './utils'
-import prettyBytes from 'pretty-bytes'
 
 const getConstantFilesize = (bytes: number) => {
   return prettyBytes(bytes, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -15,14 +15,14 @@ export default async () => {
   if (texturepack) mapUrl = texturepack
   if (!mapUrl) return false
 
-  if (!texturepack) {
-    const menu = document.getElementById('play-screen')
-    menu.style = 'display: none;'
-  } else {
+  if (texturepack) {
     await updateTexturePackInstalledState()
     if (resourcePackState.resourcePackInstalled) {
-      if (!confirm(`You are going to install a new texturepack which would override a current one: ${getResourcePackName()} Continue?`)) return
+      if (!confirm(`You are going to install a new texturepack which would override a current one: ${await getResourcePackName()} Continue?`)) return
     }
+  } else {
+    const menu = document.getElementById('play-screen')
+    menu.style = 'display: none;'
   }
   const name = mapUrl.slice(mapUrl.lastIndexOf('/') + 1).slice(-25)
   const downloadThing = texturepack ? 'texturepack' : 'world'
@@ -42,6 +42,7 @@ export default async () => {
       async start(controller) {
         const reader = response.body.getReader()
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
           const { done, value } = await reader.read()
 

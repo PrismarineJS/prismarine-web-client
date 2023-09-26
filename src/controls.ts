@@ -1,12 +1,12 @@
 //@ts-check
 
 import { Vec3 } from 'vec3'
-import { isGameActive, showModal, gameAdditionalState, activeModalStack, hideCurrentModal } from './globalState'
 import { proxy, subscribe } from 'valtio'
 
 import { ControMax } from 'contro-max/build/controMax'
 import { CommandEventArgument, SchemaCommandInput } from 'contro-max/build/types'
 import { stringStartsWith } from 'contro-max/build/stringUtils'
+import { isGameActive, showModal, gameAdditionalState, activeModalStack, hideCurrentModal } from './globalState'
 import { reloadChunks } from './utils'
 
 // doesnt seem to work for now
@@ -137,6 +137,7 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
   }
   if (stringStartsWith(command, 'general')) {
     // handle general commands
+    // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (command) {
       case 'general.jump':
         bot.setControlState('jump', pressed)
@@ -189,6 +190,7 @@ contro.on('trigger', ({ command }) => {
   onTriggerOrReleased(command, true)
 
   if (stringStartsWith(command, 'general')) {
+    // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (command) {
       case 'general.inventory':
         document.exitPointerLock?.()
@@ -225,7 +227,7 @@ document.addEventListener('keydown', (e) => {
   if (hardcodedPressedKeys.has('F3')) {
     // reload chunks
     if (e.code === 'KeyA') {
-      //@ts-ignore
+      //@ts-expect-error
       const loadedChunks = Object.entries(worldView.loadedChunks).filter(([, v]) => v).map(([key]) => key.split(',').map(Number))
       for (const [x, z] of loadedChunks) {
         worldView.unloadChunk({ x, z })

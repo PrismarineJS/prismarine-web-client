@@ -45,7 +45,7 @@ const showModalInner = (modal: Modal) => {
 
 export const showModal = (elem: (HTMLElement & Record<string, any>) | { reactType: string }) => {
   const resolved = elem instanceof HTMLElement ? { elem: ref(elem) } : elem
-  const curModal = activeModalStack.slice(-1)[0]
+  const curModal = activeModalStack.at(-1)
   if (elem === curModal?.elem || !showModalInner(resolved)) return
   if (curModal) defaultModalActions.hide(curModal)
   activeModalStack.push(resolved)
@@ -55,7 +55,7 @@ export const showModal = (elem: (HTMLElement & Record<string, any>) | { reactTyp
  *
  * @returns true if previous modal was restored
  */
-export const hideModal = (modal = activeModalStack.slice(-1)[0], data: any = undefined, options: { force?: boolean; restorePrevious?: boolean } = {}) => {
+export const hideModal = (modal = activeModalStack.at(-1), data: any = undefined, options: { force?: boolean; restorePrevious?: boolean } = {}) => {
   const { force = false, restorePrevious = true } = options
   if (!modal) return
   let cancel = modal.elem?.hide?.(data)
@@ -66,7 +66,7 @@ export const hideModal = (modal = activeModalStack.slice(-1)[0], data: any = und
   if (!cancel || cancel === customDisplayManageKeyword) {
     if (cancel !== customDisplayManageKeyword) defaultModalActions.hide(modal)
     activeModalStack.pop()
-    const newModal = activeModalStack.slice(-1)[0]
+    const newModal = activeModalStack.at(-1)
     if (newModal && restorePrevious) {
       // would be great to ignore cancel I guess?
       showModalInner(newModal)
@@ -79,10 +79,10 @@ export const hideCurrentModal = (_data = undefined, restoredActions = undefined)
   if (hideModal(undefined, undefined)) {
     restoredActions?.()
     if (activeModalStack.length === 0) {
-      if (!isGameActive(false)) {
-        showModal(document.getElementById('title-screen'))
-      } else {
+      if (isGameActive(false)) {
         pointerLock.requestPointerLock()
+      } else {
+        showModal(document.getElementById('title-screen'))
       }
     }
   }
@@ -149,8 +149,8 @@ window.inspectPlayer = () => require('fs').promises.readFile('/world/playerdata/
 window.addEventListener('beforeunload', (event) => {
   // todo-low maybe exclude chat?
   if (!isGameActive(true) && activeModalStack.at(-1)?.elem.id !== 'chat') return
-  if (sessionStorage.lastReload && options.preventDevReloadWhilePlaying === false) return
-  if (options.closeConfirmation === false) return
+  if (sessionStorage.lastReload && !options.preventDevReloadWhilePlaying) return
+  if (!options.closeConfirmation) return
 
   // For major browsers doning only this is enough
   event.preventDefault()

@@ -1,16 +1,16 @@
 import { subscribe } from 'valtio'
-import { activeModalStack, hideCurrentModal, miscUiState } from './globalState'
 import { showInventory } from 'minecraft-inventory-gui/web/ext.mjs'
 import InventoryGui from 'minecraft-assets/minecraft-assets/data/1.17.1/gui/container/inventory.png'
 import Dirt from 'minecraft-assets/minecraft-assets/data/1.17.1/blocks/dirt.png'
 import { subscribeKey } from 'valtio/utils'
 import MinecraftData from 'minecraft-data'
-import invspriteJson from './invsprite.json'
 import { getVersion } from 'prismarine-viewer/viewer/lib/version'
+import invspriteJson from './invsprite.json'
+import { activeModalStack, hideCurrentModal, miscUiState } from './globalState'
 
 const loadedImages = new Map<string, HTMLImageElement>()
 export type BlockStates = Record<string, null | {
-  variants: Record<string, {
+  variants: Record<string, Array<{
     model: {
       textures: {
         up: {
@@ -21,7 +21,7 @@ export type BlockStates = Record<string, null | {
         }
       }
     }
-  }[]>
+  }>>
 }>
 
 let blockStates: BlockStates
@@ -37,7 +37,7 @@ subscribeKey(miscUiState, 'gameLoaded', async () => {
 
   // on game load
   version = getVersion(bot.version)
-  blockStates = await fetch(`blocksStates/${version}.json`).then(res => res.json())
+  blockStates = await fetch(`blocksStates/${version}.json`).then(async res => res.json())
   getImage({ path: 'blocks', } as any)
   getImage({ path: 'invsprite', } as any)
   mcData = MinecraftData(version)
@@ -53,7 +53,7 @@ const findBlockStateTexturesAtlas = (name) => {
 
 const getBlockData = (name) => {
   const blocksImg = loadedImages.get('blocks')
-  if (!blocksImg || !blocksImg.width) return
+  if (!blocksImg?.width) return
 
   const data = findBlockStateTexturesAtlas(name)
   if (!data) return
@@ -79,7 +79,7 @@ const getBlockData = (name) => {
 
 const getItemSlice = (name) => {
   const invspriteImg = loadedImages.get('invsprite')
-  if (!invspriteImg || !invspriteImg.width) return
+  if (!invspriteImg?.width) return
 
   const { x, y } = invspriteJson[name] ?? /* unknown item */ { x: 0, y: 0 }
   const sprite = [x, y, 32, 32]
@@ -131,7 +131,7 @@ const upInventory = () => {
 }
 
 subscribe(activeModalStack, () => {
-  const inventoryOpened = activeModalStack.slice(-1)[0]?.reactType === 'inventory'
+  const inventoryOpened = activeModalStack.at(-1)?.reactType === 'inventory'
   if (inventoryOpened) {
     const inv = showInventory(undefined, getImage, {}, bot)
     inv.canvas.style.zIndex = 10

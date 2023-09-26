@@ -10,7 +10,8 @@
     "test:cypress": "cypress run",
     "test:e2e": "start-test http-get://localhost:8080 test:cypress",
     "prod-start": "node server.js",
-    "postinstall": "node scripts/gen-texturepack-files.mjs"
+    "postinstall": "node scripts/gen-texturepack-files.mjs",
+    "lint": "eslint \"{src,cypress}/**/*.{ts,js,jsx,tsx}\""
   },
   "keywords": [
     "prismarine",
@@ -62,6 +63,8 @@
     "crypto-browserify": "^3.12.0",
     "cypress": "^9.5.4",
     "cypress-esbuild-preprocessor": "^1.0.2",
+    "eslint": "^8.50.0",
+    "eslint-config-zardoy": "^0.2.17",
     "events": "^3.3.0",
     "filesize": "^10.0.12",
     "http-browserify": "^1.7.0",

@@ -3,12 +3,12 @@ import { renderToDom } from '@zardoy/react-util'
 
 import { LeftTouchArea, RightTouchArea, useUsingTouch, useInterfaceState } from '@dimaka/interface'
 import { css } from '@emotion/css'
-import { activeModalStack, isGameActive, miscUiState } from './globalState'
 // import DeathScreen from './react/DeathScreen'
 import { useSnapshot } from 'valtio'
-import { contro } from './controls'
 import { QRCodeSVG } from 'qrcode.react'
 import { createPortal } from 'react-dom'
+import { contro } from './controls'
+import { activeModalStack, isGameActive, miscUiState } from './globalState'
 import { options, watchValue } from './optionsStorage'
 
 // todo
@@ -17,7 +17,7 @@ useInterfaceState.setState({
     uiCustomization: {
         touchButtonSize: 40,
     },
-    updateCoord: ([coord, state]) => {
+    updateCoord([coord, state]) {
         const coordToAction = [
             ['z', -1, 'KeyW'],
             ['z', 1, 'KeyS'],
@@ -27,14 +27,14 @@ useInterfaceState.setState({
             ['y', -1, 'ShiftLeft'], // todo jump
         ]
         // todo refactor
-        const actionAndState = state !== 0 ? coordToAction.find(([axis, value]) => axis === coord && value === state) : coordToAction.filter(([axis]) => axis === coord)
+        const actionAndState = state === 0 ? coordToAction.filter(([axis]) => axis === coord) : coordToAction.find(([axis, value]) => axis === coord && value === state)
         if (!bot) return
         if (state === 0) {
             for (const action of actionAndState) {
                 contro.pressedKeyOrButtonChanged({code: action[2],}, false)
             }
         } else {
-            //@ts-ignore
+            //@ts-expect-error
             contro.pressedKeyOrButtonChanged({code: actionAndState[2],}, true)
         }
     }

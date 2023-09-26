@@ -1,0 +1,52 @@
+{
+    "extends": "zardoy",
+    "rules": {
+        // perf
+        "import/no-deprecated": "off",
+        // ---
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "prefer-template": "off",
+        // intentional: improve readability in some cases
+        "no-else-return": "off",
+        "@typescript-eslint/padding-line-between-statements": "off",
+        "arrow-body-style": "off",
+        "unicorn/prefer-ternary": "off",
+        "unicorn/switch-case-braces": "off",
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "unicorn/explicit-length-check": "off",
+        "unicorn/prefer-dom-node-append": "off",
+        "typescript-eslint/no-confusing-void-expression": "off",
+        "unicorn/no-lonely-if": "off",
+        "no-multi-assign": "off",
+        "sonarjs/no-duplicate-string": "off",
+        "new-cap": "off",
+        "unicorn/consistent-destructuring": "off",
+        "unicorn/no-await-expression-member": "off",
+        "unicorn/prefer-add-event-listener": "off",
+        "unicorn/prefer-top-level-await": "off",
+        "default-case": "off",
+        // I guess it would better to fix
+        "node/prefer-global/buffer": "off",
+        "unicorn/prefer-optional-catch-binding": "off", // still useful for debugging
+        "no-alert": "off", // todo once replaced with ui, enable
+        "@typescript-eslint/restrict-plus-operands": "off",
+        // ---
+        "@typescript-eslint/no-throw-literal": "off", // disabling because of "rule expansion"
+        "no-empty-function": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "import/no-extraneous-dependencies": "off",
+        "@typescript-eslint/ban-types": "off",
+        "unicorn/prefer-query-selector": "off",
+        "@typescript-eslint/dot-notation": "off", // trick prop type-checking
+        "@typescript-eslint/consistent-type-imports": "off",
+        "no-negated-condition": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "unicorn/prefer-number-properties": "off",
+        "@typescript-eslint/no-confusing-void-expression": "off",
+        // needs to be fixed actually
+        "@typescript-eslint/no-floating-promises": "warn",
+        "no-async-promise-executor": "off",
+        "no-bitwise": "off"
+    }
+}

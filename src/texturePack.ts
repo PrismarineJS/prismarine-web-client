@@ -1,14 +1,14 @@
-import { setLoadingScreenStatus } from './utils'
-import blocksFileNames from '../generated/blocks.json'
-import JSZip from 'jszip'
 import { join, dirname } from 'path'
 import fs from 'fs'
-import type { BlockStates } from './inventory'
+import JSZip from 'jszip'
 import type { Viewer } from 'prismarine-viewer/viewer/lib/viewer'
-import { removeFileRecursiveAsync } from './browserfs'
 import { subscribeKey } from 'valtio/utils'
-import { showNotification } from './menus/notification'
 import { proxy, ref } from 'valtio'
+import blocksFileNames from '../generated/blocks.json'
+import { showNotification } from './menus/notification'
+import type { BlockStates } from './inventory'
+import { removeFileRecursiveAsync } from './browserfs'
+import { setLoadingScreenStatus } from './utils'
 
 export const resourcePackState = proxy({
     resourcePackInstalled: false,
@@ -130,7 +130,7 @@ const applyTexturePackData = async (version: string, { blockSize }: TextureResol
             for (const v of x) {
                 processObj(v)
             }
-            return
+
         } else {
             const actual = Object.keys(x)
             const needed = ['u', 'v', 'su', 'sv']
@@ -161,7 +161,7 @@ const getSizeFromImage = async (filePath: string) => {
     const file = await fs.promises.readFile(filePath, 'base64')
     probeImg.src = `data:image/png;base64,${file}`
     await new Promise((resolve, reject) => {
-        probeImg.onload = resolve
+        probeImg.addEventListener('load', resolve)
     })
     if (probeImg.width !== probeImg.height) throw new Error(`Probe texture ${filePath} is not square`)
     return probeImg.width
@@ -174,14 +174,14 @@ export const genTexturePackTextures = async (version: string) => {
     const blocksBasePathAlt = '/userData/resourcePacks/default/assets/minecraft/textures/blocks'
     const blocksGenereatedPath = `/userData/resourcePacks/default/${version}.png`
     const genereatedPathData = `/userData/resourcePacks/default/${version}.json`
-    if (await existsAsync(blocksBasePath) === false) {
-        if (await existsAsync(blocksBasePathAlt) === false) {
-            return
-        } else {
+    if (!(await existsAsync(blocksBasePath))) {
+        if (await existsAsync(blocksBasePathAlt)) {
             blocksBasePath = blocksBasePathAlt
+        } else {
+            return
         }
     }
-    if (await existsAsync(blocksGenereatedPath) === true) {
+    if (await existsAsync(blocksGenereatedPath)) {
         applyTexturePackData(version, JSON.parse(await fs.promises.readFile(genereatedPathData, 'utf8')), await fs.promises.readFile(blocksGenereatedPath, 'utf8'))
         return
     }
@@ -214,7 +214,7 @@ export const genTexturePackTextures = async (version: string) => {
     img.src = src
     await new Promise((resolve, reject) => {
         img.onerror = reject
-        img.onload = resolve
+        img.addEventListener('load', resolve)
     })
     for (const [i, fileName] of textureFiles.entries()) {
         const x = (i % texSize) * tileSize
@@ -226,10 +226,10 @@ export const genTexturePackTextures = async (version: string) => {
             const fileBase64 = await fs.promises.readFile(join(blocksBasePath, fileName), 'base64')
             const _imgCustom = new Image()
             await new Promise<void>(resolve => {
-                _imgCustom.onload = () => {
+                _imgCustom.addEventListener('load', () => {
                     imgCustom = _imgCustom
                     resolve()
-                }
+                })
                 _imgCustom.onerror = () => {
                     console.log('Skipping issued texture', fileName)
                     resolve()

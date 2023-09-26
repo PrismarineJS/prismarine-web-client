@@ -43,6 +43,7 @@ it('Loads & renders singleplayer', () => {
         localServerOptions: {
             generation: {
                 name: 'superflat',
+                // eslint-disable-next-line unicorn/numeric-separators-style
                 options: { seed: 250869072 }
             },
         },

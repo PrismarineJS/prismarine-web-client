@@ -37,7 +37,7 @@ const possiblyLoadPanoramaFromResourcePack = async (file) => {
   else return join('extra-textures/background', file)
 }
 
-const updateResourecePackSupportPanorama = async () => {
+const updateResourcePackSupportPanorama = async () => {
   try {
     await fs.promises.readFile(fromTexturePackPath(join(panoramaResourcePackPath, panoramaFiles[0])), 'base64')
     panoramaUsesResourePack = true
@@ -48,7 +48,7 @@ const updateResourecePackSupportPanorama = async () => {
 
 subscribeKey(resourcePackState, 'resourcePackInstalled', async () => {
   const oldState = panoramaUsesResourePack
-  const newState = resourcePackState.resourcePackInstalled && (await updateResourecePackSupportPanorama(), panoramaUsesResourePack)
+  const newState = resourcePackState.resourcePackInstalled && (await updateResourcePackSupportPanorama(), panoramaUsesResourePack)
   if (newState === oldState) return
   removePanorama()
   addPanoramaCubeMap()
@@ -56,6 +56,7 @@ subscribeKey(resourcePackState, 'resourcePackInstalled', async () => {
 
 // Menu panorama background
 export async function addPanoramaCubeMap () {
+  if (panoramaCubeMap) return
   // remove all existing object in the viewer.scene
   // viewer.scene.children = []
 
@@ -68,7 +69,7 @@ export async function addPanoramaCubeMap () {
 
   const loader = new THREE.TextureLoader()
   let panorMaterials = []
-  await updateResourecePackSupportPanorama()
+  await updateResourcePackSupportPanorama()
   for (const file of panoramaFiles) {
     panorMaterials.push(new THREE.MeshBasicMaterial({
       map: loader.load(await possiblyLoadPanoramaFromResourcePack(file)),

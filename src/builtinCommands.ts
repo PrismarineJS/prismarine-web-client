@@ -1,6 +1,6 @@
-import JSZip from 'jszip'
 import fs from 'fs'
 import { join } from 'path'
+import JSZip from 'jszip'
 import { fsState } from './loadSave'
 import { closeWan, openToWanAndCopyJoinLink } from './localServerMultiplayer'
 
@@ -32,7 +32,7 @@ async function addFolderToZip(folderPath, zip, relativePath) {
 const exportWorld = async () => {
   // todo issue into chat warning if fs is writable!
   const zip = new JSZip()
-  let worldFolder: string = localServer.options.worldFolder
+  let {worldFolder} = localServer.options
   if (!worldFolder.startsWith('/')) worldFolder = `/${worldFolder}`
   await addFolderToZip(worldFolder, zip, '')
 
@@ -64,21 +64,21 @@ const commands = [
   },
   {
     command: ['/publish', '/share'],
-    invoke: async () => {
+    async invoke() {
       const text = await openToWanAndCopyJoinLink(writeText)
       if (text) writeText(text)
     }
   },
   {
     command: ['/close'],
-    invoke: () => {
+    invoke() {
       const text = closeWan()
       if (text) writeText(text)
     }
   },
   {
     command: '/reset-world -y',
-    invoke: async () => {
+    async invoke() {
       if (fsState.inMemorySave) return
       // todo for testing purposes
       sessionStorage.oldData = localStorage
@@ -90,7 +90,7 @@ const commands = [
   },
   {
     command: ['/save'],
-    invoke: () => {
+    invoke() {
       saveWorld()
     }
   }
