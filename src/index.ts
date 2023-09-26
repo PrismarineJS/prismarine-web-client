@@ -350,14 +350,6 @@ async function connect(connectOptions: {
   if (proxy) {
     console.log(`using proxy ${proxy} ${proxyport}`)
 
-    // check proxy server availability for proper error message
-    // todo fix correctly
-    // try {
-    //   await fetch(`http://${proxy}:${proxyport}/api/vm/net`, { method: 'GET' })
-    // } catch (err) {
-    //   console.error(err)
-    //   throw new Error(`Proxy server ${proxy}:${proxyport} is not available`)
-    // }
     //@ts-expect-error
     net.setProxy({ hostname: proxy, port: proxyport })
   }
@@ -514,7 +506,6 @@ async function connect(connectOptions: {
 
   bot.once('spawn', () => {
     if (p2pConnectTimeout) clearTimeout(p2pConnectTimeout)
-    // todo display notification if not critical
     const mcData = require('minecraft-data')(bot.version)
 
     setLoadingScreenStatus('Placing blocks (starting viewer)')
