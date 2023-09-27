@@ -4,11 +4,12 @@ const express = require('express')
 const netApi = require('net-browserify')
 const compression = require('compression')
 const path = require('path')
+const cors = require('cors')
+const https = require('https')
+const fs = require('fs')
 
 // Create our app
 const app = express()
-
-app.get('/config.json', (_, res) => res.sendFile(path.join(__dirname, 'config.json')))
 
 app.use(compression())
 app.use(netApi({ allowOrigin: '*' }))
@@ -25,10 +26,17 @@ if (process.argv[3] === 'dev') {
     })
   )
 } else {
-  app.use(express.static(path.join(__dirname, './public')))
+  app.use(express.static(path.join(__dirname, './dist')))
 }
 
+const portArg = process.argv.indexOf('--port')
+const port = (require.main === module ? process.argv[2] : portArg !== -1 ? process.argv[portArg + 1] : undefined) || 8080
+
 // Start the server
-const server = app.listen(process.argv[2] === undefined ? 8080 : process.argv[2], function () {
-  console.log('Server listening on port ' + server.address().port)
-})
+const server = process.argv.includes('--prod') ?
+  undefined :
+  app.listen(port, function () {
+    console.log('Server listening on port ' + server.address().port)
+  })
+
+module.exports = { app }

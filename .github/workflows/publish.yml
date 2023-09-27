@@ -1,33 +1,36 @@
-name: npm-publish
+name: Deploy to GitHub pages
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
   push:
-    branches:
-      - master # Change this to your default branch
+    branches: [main]
 jobs:
-  npm-publish:
-    name: npm-publish
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@master
-    - name: Set up Node.js
-      uses: actions/setup-node@master
-      with:
-        node-version: 18.0.0
-    - run: npm install
-    - id: publish
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_AUTH_TOKEN }}
-    - name: Create Release
-      if: steps.publish.outputs.type != 'none'
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.publish.outputs.version }}
-        release_name: Release ${{ steps.publish.outputs.version }}
-        body: ${{ steps.publish.outputs.version }}
-        draft: false
-        prerelease: false
+      - name: Checkout repository
+        uses: actions/checkout@master
+      - name: Install pnpm
+        run: npm i -g vercel pnpm
+      # - run: pnpm install
+      # - run: pnpm build
+      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      # will install + build to .vercel/output/static
+      - run: vercel build --token=${{ secrets.VERCEL_TOKEN }} --prod
+      - name: Deploy Project to Vercel
+        uses: mathiasvr/command-output@v2.0.0
+        with:
+          run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} --prod
+        id: deploy
+      - run: |
+          pnpx zardoy-release node --footer "This release URL: ${{ steps.deploy.outputs.stdout }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: cp vercel.json .vercel/output/static/vercel.json
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .vercel/output/static
+          force_orphan: true

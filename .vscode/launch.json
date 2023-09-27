@@ -1,0 +1,61 @@
+{
+    "configurations": [
+        // UPDATED: all configs below are misconfigured and will crash vscode, open dist/index.html and use live preview debug instead
+        // recommended as much faster
+        {
+            // to launch "C:\Program Files\Google\Chrome Beta\Application\chrome.exe" --remote-debugging-port=9222
+            "type": "chrome",
+            "address": "localhost",
+            "name": "Attach Chrome",
+            "request": "attach",
+            // comment if using webpack
+            "pathMapping": {
+                "/": "${workspaceFolder}/dist"
+            },
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js",
+                // "!${workspaceFolder}/dist/**/*vendors*",
+                "!${workspaceFolder}/dist/**/*minecraftData*",
+                "!**/node_modules/**"
+            ],
+            "skipFiles": [
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
+            ],
+            "port": 9222,
+        },
+        {
+            // not recommended as in most cases it will slower as it launches from extension host so it slows down extension host, not sure why
+            "type": "chrome",
+            "name": "Launch Chrome",
+            "request": "launch",
+            "url": "http://localhost:8080/",
+            "pathMapping": {
+                "/": "${workspaceFolder}/dist"
+            },
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js",
+                // "!${workspaceFolder}/dist/**/*vendors*",
+                "!${workspaceFolder}/dist/**/*minecraftData*",
+                "!**/node_modules/**"
+            ],
+            "skipFiles": [
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
+            ],
+        },
+        {
+            // to launch "C:\Program Files\Mozilla Firefox\firefox.exe" -start-debugger-server
+            "type": "firefox",
+            "name": "Attach Firefox",
+            "request": "attach",
+            // comment if using webpack
+            "url": "http://localhost:8080/",
+            "webRoot": "${workspaceFolder}/",
+            "skipFiles": [
+                // "<node_internals>/**/*vendors*"
+                "<node_internals>/**/*minecraftData*"
+            ],
+        },
+    ]
+}
