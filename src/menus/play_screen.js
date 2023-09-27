@@ -159,7 +159,7 @@ class PlayScreen extends LitElement {
           ></pmui-editbox>
         </div>
         <div class="wrapper">
-          <p class="extra-info-proxy">Enter proxy url you want to use. <a href="https://github.com/zardoy/prismarine-web-client/issues/3">Learn more</a>.</p>
+          <p class="extra-info-proxy">Enter proxy url you want to use.</p>
         </div>
         <div class="wrapper">
           <pmui-editbox

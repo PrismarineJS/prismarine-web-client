@@ -58,8 +58,6 @@ class AdvancedOptionsScreen extends LitElement {
       options.alwaysShowMobileControls = !options.alwaysShowMobileControls
     }
       }></pmui-button>
-      <!-- todo rename button, also might be unstable -->
-        <pmui-button pmui-width="150px" pmui-label="Guide: Disable VSync" @click=${() => openURL('https://gist.github.com/zardoy/6e5ce377d2b4c1e322e660973da069cd')}></pmui-button>
       </div>
       <div class="wrapper">
         <pmui-slider .disabled=${!this.frameLimitMax} pmui-label="Frame Limit" .valueDisplay=${options.frameLimit || 'VSync'} pmui-value="${options.frameLimit || this.frameLimitMax + 1}"
