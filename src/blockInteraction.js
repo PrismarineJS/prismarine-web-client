@@ -144,8 +144,13 @@ class BlockInteraction {
       //@ts-expect-error
       const delta = cursorBlock.intersect.minus(cursorBlock.position)
 
+      // workaround so blocks can be activated with empty hand
+      const oldHeldItem = bot.heldItem
+      //@ts-expect-error
+      bot.heldItem = true
       //@ts-expect-error
       bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
+      bot.heldItem = oldHeldItem
       this.lastBlockPlaced = 0
     }
 
