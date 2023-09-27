@@ -14,7 +14,10 @@
         "allowUnreachableCode": true,
         "forceConsistentCasingInFileNames": true,
         "useUnknownInCatchVariables": false,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        // this the only options that allows smooth transition from js to ts (by not dropping types from js files)
+        // however might need to consider includeing *only needed libraries* instead of using this
+        "maxNodeModuleJsDepth": 1
         // "strictNullChecks": true
     },
     "include": [

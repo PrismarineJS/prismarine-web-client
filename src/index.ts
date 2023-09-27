@@ -78,7 +78,7 @@ import serverOptions from './defaultLocalServerOptions'
 import updateTime from './updateTime'
 
 import { subscribeKey } from 'valtio/utils'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import { genTexturePackTextures, watchTexturepackInViewer } from './texturePack'
 import { connectToPeer } from './localServerMultiplayer'

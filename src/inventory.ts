@@ -134,7 +134,7 @@ subscribe(activeModalStack, () => {
   const inventoryOpened = activeModalStack.at(-1)?.reactType === 'inventory'
   if (inventoryOpened) {
     const inv = showInventory(undefined, getImage, {}, bot)
-    inv.canvas.style.zIndex = 10
+    inv.canvas.style.zIndex = '10'
     inv.canvas.style.position = 'fixed'
     inv.canvas.style.inset = '0'
     // todo scaling
