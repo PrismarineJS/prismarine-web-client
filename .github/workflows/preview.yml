@@ -3,17 +3,10 @@ env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # todo skip already created deploys on that commit
-    if: >-
-      github.event.issue.pull_request != '' &&
-      (
-        contains(github.event.comment.body, '/deploy')
-      )
     permissions:
       pull-requests: write
     steps:
