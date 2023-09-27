@@ -496,7 +496,7 @@ class ChatBox extends LitElement {
       if (items[0].match) items = items.map(i => i.match)
     }
     if (value !== this.completeRequestValue) return
-    if (this.completeRequestValue === '/') items = [...items, ...getBuiltinCommandsList()]
+    if (this.completeRequestValue === '/' && localServer) items = [...items, ...getBuiltinCommandsList()]
     this.completionItems = items
     this.completionItemsSource = items
   }
