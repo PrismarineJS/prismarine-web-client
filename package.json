@@ -49,6 +49,7 @@
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "stats-gl": "^1.0.5",
     "stats.js": "^0.17.0",
     "valtio": "^1.11.1",
     "minecraft-assets": "^1.9.1",

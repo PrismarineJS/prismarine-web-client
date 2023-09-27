@@ -78,6 +78,9 @@ class AdvancedOptionsScreen extends LitElement {
         <pmui-slider pmui-width="150px" pmui-label="Touch Buttons Size" pmui-value="${options.touchButtonsSize}" pmui-type="%" pmui-min="20" pmui-max="100" @input=${(e) => {
         options.touchButtonsSize = +e.target.value
       }}></pmui-slider>
+        <pmui-button pmui-width="150px" pmui-label="${`Use Dedicated GPU: ${options.highPerformanceGpu ? 'ON' : 'OFF'}`}" title="Changing requires page reload. Only for those who have two GPUs e.g. on laptops" @pmui-click=${() => {
+        options.highPerformanceGpu = !options.highPerformanceGpu
+      }}></pmui-button>
       </div>
 
       <pmui-button pmui-width="200px" pmui-label="Done" @pmui-click=${() => hideCurrentModal()}></pmui-button>

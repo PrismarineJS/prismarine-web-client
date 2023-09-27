@@ -25,6 +25,7 @@ import './menus/options_screen'
 import './menus/advanced_options_screen'
 import { notification } from './menus/notification'
 import './menus/title_screen'
+import { initWithRenderer, statsEnd, statsStart } from './rightTopStats'
 
 import { options, watchValue } from './optionsStorage'
 import './reactUi.jsx'
@@ -36,7 +37,6 @@ import './watchOptions'
 import downloadAndOpenFile from './downloadAndOpenFile'
 
 import net from 'net'
-import Stats from 'stats.js'
 import mineflayer from 'mineflayer'
 import { WorldView, Viewer } from 'prismarine-viewer/viewer'
 import pathfinder from 'mineflayer-pathfinder'
@@ -100,27 +100,12 @@ if ('serviceWorker' in navigator && !isCypress() && process.env.NODE_ENV !== 'de
 
 // ACTUAL CODE
 
-// todo stats-gl
-const stats = new Stats()
-const stats2 = new Stats()
-stats2.showPanel(2)
-
-document.body.appendChild(stats.dom)
-stats.dom.style.left = ''
-stats.dom.style.right = '0px'
-stats.dom.style.width = '80px'
-stats2.dom.style.width = '80px'
-stats2.dom.style.right = '80px'
-stats2.dom.style.left = ''
-document.body.appendChild(stats2.dom)
-
-if (localStorage.hideStats || isCypress()) {
-  stats.dom.style.display = 'none'
-  stats2.dom.style.display = 'none'
-}
-
 // Create three.js context, add to page
-const renderer = new THREE.WebGLRenderer()
+const renderer = new THREE.WebGLRenderer({
+  powerPreference: options.highPerformanceGpu ? 'high-performance' : 'default',
+})
+initWithRenderer(renderer.domElement)
+window.renderer = renderer
 renderer.setPixelRatio(window.devicePixelRatio || 1) // todo this value is too high on ios, need to check, probably we should use avg, also need to make it configurable
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.domElement.id = 'viewer-canvas'
@@ -154,13 +139,11 @@ const renderFrame = (time: DOMHighResTimeStamp) => {
       return
     }
   }
-  stats?.begin()
-  stats2?.begin()
+  statsStart()
   viewer.update()
   renderer.render(viewer.scene, viewer.camera)
   postRenderFrameFn()
-  stats?.end()
-  stats2?.end()
+  statsEnd()
 }
 renderFrame(performance.now())
 
@@ -550,7 +533,6 @@ async function connect(connectOptions: {
     window.Vec3 = Vec3
     window.pathfinder = pathfinder
     window.debugMenu = debugMenu
-    window.renderer = renderer
 
     initVR(bot, renderer, viewer)
 

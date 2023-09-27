@@ -99,6 +99,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      stats-gl:
+        specifier: ^1.0.5
+        version: 1.0.5
       stats.js:
         specifier: ^0.17.0
         version: 0.17.0
@@ -10620,6 +10623,10 @@ packages:
       - eslint-import-resolver-webpack
       - supports-color
     dev: true
+
+  /stats-gl@1.0.5:
+    resolution: {integrity: sha512-XimMxvwnf1Qf5KwebhcoA34kcX+fWEkIl0QjNkCbu4IpoyDMMsOajExn7FIq5w569k45+LhmsuRlGSrsvmGdNw==}
+    dev: false
 
   /stats.js@0.17.0:
     resolution: {integrity: sha512-hNKz8phvYLPEcRkeG1rsGmV5ChMjKDAWU7/OJJdDErPBNChQXxCo3WZurGpnWc6gZhAzEPFad1aVgyOANH1sMw==}

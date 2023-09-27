@@ -25,6 +25,7 @@ const defaultOptions = {
   guiScale: 3,
   autoRequestCompletions: true,
   touchButtonsSize: 40,
+  highPerformanceGpu: false,
 
   frameLimit: false as number | false,
   alwaysBackupWorldBeforeLoading: undefined as boolean | undefined | null,
