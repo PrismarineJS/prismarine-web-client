@@ -2819,7 +2819,7 @@ packages:
   /@types/cors@2.8.13:
     resolution: {integrity: sha512-RG8AStHlUiV5ysZQKq97copd2UmVYw3/pRMLefISZ3S1hK104Cwm7iLQ3fTKx+lsUH2CE8FlLaYeEA2LSeqYUA==}
     dependencies:
-      '@types/node': 20.6.2
+      '@types/node': 20.6.4
 
   /@types/eslint-scope@3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
@@ -2892,6 +2892,7 @@ packages:
 
   /@types/node@20.5.7:
     resolution: {integrity: sha512-dP7f3LdZIysZnmvP3ANJYTSwg+wLLl8p7RqniVlV7j+oXSXAbt9h0WIBFmJy5inWZoX9wZN6eXx+YXd9Rh3RBA==}
+    requiresBuild: true
 
   /@types/node@20.6.2:
     resolution: {integrity: sha512-Y+/1vGBHV/cYk6OI1Na/LHzwnlNCAfU3ZNGrc1LdRe/LAIbdDPTTv/HU3M7yXN448aTVDq3eKRm2cg7iKLb8gw==}
@@ -5096,7 +5097,7 @@ packages:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.13
-      '@types/node': 20.6.2
+      '@types/node': 20.6.4
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
@@ -12310,7 +12311,7 @@ packages:
       compression: 1.7.4
       express: 4.18.2
       minecraft-data: 3.45.0
-      prismarine-block: github.com/zardoy/prismarine-block/100f3e3be7927b8144e19a71c8d06f6218021a02
+      prismarine-block: github.com/zardoy/prismarine-block/753cf1fe507f7647063c69d5c124d40f85b29cc2
       prismarine-chunk: 1.35.0(minecraft-data@3.45.0)
       prismarine-world: github.com/zardoy/prismarine-world/c358222204d21fe7d45379fbfcefb047f926c786
       socket.io: 4.7.2

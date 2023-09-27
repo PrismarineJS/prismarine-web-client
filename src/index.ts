@@ -112,7 +112,7 @@ renderer.domElement.id = 'viewer-canvas'
 document.body.appendChild(renderer.domElement)
 
 // Create viewer
-const viewer: import('prismarine-viewer/viewer/lib/viewer').Viewer = new Viewer(renderer, options.numWorkers)
+const viewer: import('prismarine-viewer/viewer/lib/viewer').Viewer = new Viewer(renderer)
 window.viewer = viewer
 initPanoramaOptions(viewer)
 watchTexturepackInViewer(viewer)

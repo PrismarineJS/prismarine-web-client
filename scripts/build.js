@@ -1,5 +1,4 @@
 //@ts-check
-//@ts-check
 const fsExtra = require('fs-extra')
 const defaultLocalServerOptions = require('../src/defaultLocalServerOptions')
 const glob = require('glob')
