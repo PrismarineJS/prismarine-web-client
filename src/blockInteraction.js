@@ -139,7 +139,7 @@ class BlockInteraction {
     }
 
     // Place / interact
-    if (this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastBlockPlaced >= 4) {
+    if (cursorBlock && this.buttons[2] && this.lastBlockPlaced >= 4) {
       const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
       //@ts-expect-error
       const delta = cursorBlock.intersect.minus(cursorBlock.position)
