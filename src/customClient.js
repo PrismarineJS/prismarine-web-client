@@ -1,3 +1,5 @@
+import { options } from './optionsStorage'
+
 //@ts-check
 const { EventEmitter } = require('events')
 const debug = require('debug')('minecraft-protocol')
@@ -31,7 +33,9 @@ class CustomChannelClient extends EventEmitter {
 
   setSerializer (state) {
     customCommunication.receiverSetup.call(this, (/** @type {{name, params, state?}} */parsed) => {
-      debug(`receive in ${this.isServer ? 'server' : 'client'}: ${parsed.name}`)
+      if (!options.excludeCommunicationDebugEvents.includes(parsed.name)) {
+        debug(`receive in ${this.isServer ? 'server' : 'client'}: ${parsed.name}`)
+      }
       this.emit(parsed.name, parsed.params, parsed)
       this.emit('packet_name', parsed.name, parsed.params, parsed)
     })
@@ -52,8 +56,10 @@ class CustomChannelClient extends EventEmitter {
   }
 
   write (name, params) {
-    debug(`[${this.state}] from ${this.isServer ? 'server' : 'client'}: ` + name)
-    debug(params)
+    if(!options.excludeCommunicationDebugEvents.includes(name)) {
+      debug(`[${this.state}] from ${this.isServer ? 'server' : 'client'}: ` + name)
+      debug(params)
+    }
 
     customCommunication.sendData.call(this, { name, params, state: this.state })
   }
