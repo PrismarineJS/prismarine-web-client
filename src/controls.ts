@@ -101,7 +101,7 @@ contro.on('movementUpdate', ({ vector, gamepadIndex }) => {
 
 let lastCommandTrigger = null as { command: string, time: number } | null
 
-const secondActionActivationTimeout = 600
+const secondActionActivationTimeout = 300
 const secondActionCommands = {
   'general.jump'() {
     toggleFly()
@@ -155,6 +155,9 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
       case 'general.attackDestroy':
         document.dispatchEvent(new MouseEvent(pressed ? 'mousedown' : 'mouseup', { button: 0 }))
         break
+      case 'general.interactPlace':
+        document.dispatchEvent(new MouseEvent(pressed ? 'mousedown' : 'mouseup', { button: 2 }))
+        break
     }
   }
 }
@@ -204,13 +207,6 @@ contro.on('trigger', ({ command }) => {
         break
       case 'general.command':
         document.getElementById('hud').shadowRoot.getElementById('chat').enableChat('/')
-        break
-      case 'general.interactPlace':
-        document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
-        setTimeout(() => {
-          // todo cleanup
-          document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
-        })
         break
     }
   }
