@@ -27,6 +27,22 @@ class Notification extends LitElement {
     }
   }
 
+  constructor () {
+    super()
+    this.renderHtml = false
+    let timeout
+    subscribe(notification, () => {
+      if (timeout) clearTimeout(timeout)
+      this.requestUpdate()
+      if (!notification.show) return
+      this.renderHtml = true
+      if (!notification.autoHide) return
+      timeout = setTimeout(() => {
+        notification.show = false
+      }, 3000)
+    })
+  }
+
   render () {
     if (!this.renderHtml) return
     const show = notification.show && notification.message
@@ -43,22 +59,6 @@ class Notification extends LitElement {
     if (!notification.show) {
       this.renderHtml = false
     }
-  }
-
-  constructor () {
-    super()
-    this.renderHtml = false
-    let timeout
-    subscribe(notification, () => {
-      if (timeout) clearTimeout(timeout)
-      this.requestUpdate()
-      if (!notification.show) return
-      this.renderHtml = true
-      if (!notification.autoHide) return
-      timeout = setTimeout(() => {
-        notification.show = false
-      }, 3000)
-    })
   }
 
   static get styles () {

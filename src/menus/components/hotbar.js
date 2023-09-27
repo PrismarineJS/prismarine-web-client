@@ -154,7 +154,7 @@ class Hotbar extends LitElement {
       const slotStack = slotEl.children[1]
       slotIcon.style['background-position-x'] = `-${sprite.x}px`
       slotIcon.style['background-position-y'] = `-${sprite.y}px`
-      slotStack.innerText = newItem?.count > 1 ? newItem.count : ''
+      slotStack.textContent = newItem?.count > 1 ? newItem.count : ''
     })
   }
 
@@ -167,7 +167,7 @@ class Hotbar extends LitElement {
       const slotStack = slotEl.children[1]
       slotIcon.style['background-position-x'] = `-${sprite.x}px`
       slotIcon.style['background-position-y'] = `-${sprite.y}px`
-      slotStack.innerText = item?.count > 1 ? item.count : ''
+      slotStack.textContent = item?.count > 1 ? item.count : ''
     }
   }
 

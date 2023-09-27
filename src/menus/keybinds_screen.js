@@ -163,8 +163,8 @@ class KeyBindsScreen extends LitElement {
   }
 
   onResetAllPress () {
-    for (let i = 0; i < this.keymaps.length; i++) {
-      this.keymaps[i].key = this.keymaps[i].defaultKey
+    for (const keymap of this.keymaps) {
+      keymap.key = keymap.defaultKey
     }
     this.requestUpdate()
   }
