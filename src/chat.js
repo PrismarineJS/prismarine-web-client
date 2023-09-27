@@ -1,13 +1,12 @@
 //@ts-check
-const { LitElement, html, css } = require('lit')
-const { isMobile } = require('./menus/components/common')
-const { activeModalStack, hideCurrentModal, showModal, miscUiState } = require('./globalState')
 import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
+import { LitElement, html, css } from 'lit'
 import { isCypress } from './utils'
 import { getBuiltinCommandsList, tryHandleBuiltinCommand } from './builtinCommands'
 import { notification } from './menus/notification'
 import { options } from './optionsStorage'
+import { activeModalStack, hideCurrentModal, showModal, miscUiState } from './globalState'
 
 const styles = {
   black: 'color:#000000',
@@ -35,11 +34,11 @@ const styles = {
 function colorShadow (hex, dim = 0.25) {
   const color = parseInt(hex.replace('#', ''), 16)
 
-  const r = (color >> 16 & 0xFF) * dim | 0
-  const g = (color >> 8 & 0xFF) * dim | 0
-  const b = (color & 0xFF) * dim | 0
+  const r = Math.trunc((color >> 16 & 0xFF) * dim)
+  const g = Math.trunc((color >> 8 & 0xFF) * dim)
+  const b = Math.trunc((color & 0xFF) * dim)
 
-  const f = (c) => ('00' + c.toString(16)).substr(-2)
+  const f = (c) => ('00' + c.toString(16)).slice(-2)
   return `#${f(r)}${f(g)}${f(b)}`
 }
 
@@ -259,7 +258,7 @@ class ChatBox extends LitElement {
     notification.show = false
     const chat = this.shadowRoot.getElementById('chat-messages')
     /** @type {HTMLInputElement} */
-    // @ts-ignore
+    // @ts-expect-error
     const chatInput = this.shadowRoot.getElementById('chatinput')
 
     showModal(this)
@@ -281,7 +280,7 @@ class ChatBox extends LitElement {
   }
 
   get inChat () {
-    return activeModalStack.find(m => m.elem === this) !== undefined
+    return activeModalStack.some(m => m.elem === this)
   }
 
   /**
@@ -290,7 +289,7 @@ class ChatBox extends LitElement {
   init (client) {
     const chat = this.shadowRoot.getElementById('chat-messages')
     /** @type {HTMLInputElement} */
-    // @ts-ignore
+    // @ts-expect-error
     const chatInput = this.shadowRoot.getElementById('chatinput')
     this.chatInput = chatInput
 
@@ -300,7 +299,7 @@ class ChatBox extends LitElement {
     let savedCurrentValue
     // Chat events
     document.addEventListener('keydown', e => {
-      if (activeModalStack.slice(-1)[0]?.elem !== this) return
+      if (activeModalStack.at(-1)?.elem !== this) return
       if (e.code === 'ArrowUp') {
         if (this.chatHistoryPos === 0) return
         if (this.chatHistoryPos === this.chatHistory.length) {
@@ -379,7 +378,7 @@ class ChatBox extends LitElement {
             const splitted = tText.split(/%s|%\d+\$s/g)
 
             let i = 0
-            splitted.forEach((part, j) => {
+            for (const [j, part] of splitted.entries()) {
               msglist.push({ text: part, ...styles })
 
               if (j + 1 < splitted.length) {
@@ -398,7 +397,7 @@ class ChatBox extends LitElement {
                 }
                 i++
               }
-            })
+            }
           } else {
             msglist.push({
               ...msg,
@@ -409,9 +408,9 @@ class ChatBox extends LitElement {
         }
 
         if (msg.extra) {
-          msg.extra.forEach(ex => {
+          for (const ex of msg.extra) {
             readMsg({ ...styles, ...ex })
-          })
+          }
         }
       }
 
@@ -441,9 +440,9 @@ class ChatBox extends LitElement {
     // todo remove
     window.dummyMessage = () => {
       client.emit('chat', {
-        message: "{\"color\":\"yellow\",\"translate\":\"multiplayer.player.joined\",\"with\":[{\"insertion\":\"pviewer672\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/tell pviewer672 \"},\"hoverEvent\":{\"action\":\"show_entity\",\"contents\":{\"type\":\"minecraft:player\",\"id\":\"ecd0eeb1-625e-3fea-b16e-cb449dcfa434\",\"name\":{\"text\":\"pviewer672\"}}},\"text\":\"pviewer672\"}]}",
+        message: '{"color":"yellow","translate":"multiplayer.player.joined","with":[{"insertion":"pviewer672","clickEvent":{"action":"suggest_command","value":"/tell pviewer672 "},"hoverEvent":{"action":"show_entity","contents":{"type":"minecraft:player","id":"ecd0eeb1-625e-3fea-b16e-cb449dcfa434","name":{"text":"pviewer672"}}},"text":"pviewer672"}]}',
         position: 1,
-        sender: "00000000-0000-0000-0000-000000000000",
+        sender: '00000000-0000-0000-0000-000000000000',
       })
     }
     // window.dummyMessage()
@@ -493,7 +492,7 @@ class ChatBox extends LitElement {
     this.completeRequestValue = value
     let items = await bot.tabComplete(value, true, true)
     if (typeof items[0] === 'object') {
-      // @ts-ignore
+      // @ts-expect-error
       if (items[0].match) items = items.map(i => i.match)
     }
     if (value !== this.completeRequestValue) return
@@ -518,10 +517,11 @@ class ChatBox extends LitElement {
     ].filter(Boolean)
 
     return html`
-        <span
-          class="chat-message-part"
-          style="${applyStyles.join(';')}"
-        >${text}</span>`
+      <span
+        class="chat-message-part"
+        style="${applyStyles.join(';')}"
+      >${text}</span>
+    `
   }
 
   renderMessage (/** @type {Message} */message) {
@@ -565,29 +565,31 @@ class ChatBox extends LitElement {
   render () {
 
     return html`
-    <div class="chat-wrapper chat-messages-wrapper ${miscUiState.currentTouch ? 'display-mobile' : ''}">
-      <div class="chat ${this.inChat ? 'opened' : ''}" id="chat-messages">
-        <!-- its to hide player joined at random timings, todo add chat tests as well -->
-        ${repeat(isCypress() ? [] : this.messages, (m) => m.id, (m) => this.renderMessage(m))}
+      <div class="chat-wrapper chat-messages-wrapper ${miscUiState.currentTouch ? 'display-mobile' : ''}">
+        <div class="chat ${this.inChat ? 'opened' : ''}" id="chat-messages">
+          <!-- its to hide player joined at random timings, todo add chat tests as well -->
+          ${repeat(isCypress() ? [] : this.messages, (m) => m.id, (m) => this.renderMessage(m))}
+        </div>
       </div>
-    </div>
-    <div class="chat-wrapper chat-input-wrapper ${miscUiState.currentTouch ? 'input-mobile' : ''}" style="display: ${this.inChat ? 'block' : 'none'}">
-      <div class="chat-input">
-        ${this.completionItems.length ? html`<div class="chat-completions">
-          <div class="chat-completions-pad-text">${this.completePadText}</div>
-          <div class="chat-completions-items">
-            ${repeat(this.completionItems, (i) => i, (i) => html`<div @click=${() => this.acceptComplete(i)}>${i}</div>`)}
-          </div>
-        </div>` : ''}
-        <input type="text" class="chat-mobile-hidden" id="chatinput-next-command" spellcheck="false" autocomplete="off" @focus=${() => {
-        this.auxInputFocus('ArrowUp')
-      }}></input>
-        <input type="text" class="chat-input" id="chatinput" spellcheck="false" autocomplete="off" aria-autocomplete="both"></input>
-        <input type="text" class="chat-mobile-hidden" id="chatinput-prev-command" spellcheck="false" autocomplete="off" @focus=${() => {
-        this.auxInputFocus('ArrowDown')
-      }}></input>
+      <div class="chat-wrapper chat-input-wrapper ${miscUiState.currentTouch ? 'input-mobile' : ''}" style="display: ${this.inChat ? 'block' : 'none'}">
+        <div class="chat-input">
+          ${this.completionItems.length ? html`
+            <div class="chat-completions">
+                      <div class="chat-completions-pad-text">${this.completePadText}</div>
+                      <div class="chat-completions-items">
+                        ${repeat(this.completionItems, (i) => i, (i) => html`<div @click=${() => this.acceptComplete(i)}>${i}</div>`)}
+                      </div>
+                    </div>
+          ` : ''}
+          <input type="text" class="chat-mobile-hidden" id="chatinput-next-command" spellcheck="false" autocomplete="off" @focus=${() => {
+      this.auxInputFocus('ArrowUp')
+    }}></input>
+          <input type="text" class="chat-input" id="chatinput" spellcheck="false" autocomplete="off" aria-autocomplete="both"></input>
+          <input type="text" class="chat-mobile-hidden" id="chatinput-prev-command" spellcheck="false" autocomplete="off" @focus=${() => {
+      this.auxInputFocus('ArrowDown')
+    }}></input>
+        </div>
       </div>
-    </div>
     `
   }
 }

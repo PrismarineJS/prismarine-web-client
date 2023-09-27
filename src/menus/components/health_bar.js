@@ -120,9 +120,9 @@ class HealthBar extends LitElement {
 
     const hearts = health.children
 
-    for (let i = 0; i < hearts.length; i++) {
-      hearts[i].classList.remove('full')
-      hearts[i].classList.remove('half')
+    for (const heart of hearts) {
+      heart.classList.remove('full')
+      heart.classList.remove('half')
     }
 
     if (d) this.onDamage()

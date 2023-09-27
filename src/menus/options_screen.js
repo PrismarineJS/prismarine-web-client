@@ -1,12 +1,12 @@
 const { LitElement, html, css } = require('lit')
-const { commonCss, isMobile } = require('./components/common')
+const { subscribe } = require('valtio')
+const { subscribeKey } = require('valtio/utils')
 const { showModal, hideCurrentModal, isGameActive, miscUiState } = require('../globalState')
 const { toNumber, openFilePicker, setLoadingScreenStatus } = require('../utils')
 const { options, watchValue } = require('../optionsStorage')
-const { subscribe } = require('valtio')
-const { subscribeKey } = require('valtio/utils')
 const { getResourcePackName, uninstallTexturePack, resourcePackState } = require('../texturePack')
 const { fsState } = require('../loadSave')
+const { commonCss, isMobile } = require('./components/common')
 
 class OptionsScreen extends LitElement {
   static get styles () {
@@ -69,47 +69,47 @@ class OptionsScreen extends LitElement {
       <main>
         <div class="wrapper">
           <pmui-slider pmui-label="Mouse Sensitivity X" pmui-value="${options.mouseSensX}" pmui-min="1" pmui-max="100" @input=${(e) => {
-        options.mouseSensX = +e.target.value
-      }}></pmui-slider>
+      options.mouseSensX = +e.target.value
+    }}></pmui-slider>
           <pmui-slider pmui-label="Mouse Sensitivity Y" pmui-value="${options.mouseSensY}" pmui-min="1" pmui-max="100" @input=${(e) => {
-        options.mouseSensY = +e.target.value
-      }}></pmui-slider>
+      options.mouseSensY = +e.target.value
+    }}></pmui-slider>
         </div>
         <div class="wrapper">
           <pmui-slider pmui-label="Chat Width" pmui-value="${options.chatWidth}" pmui-min="0" pmui-max="320" pmui-type="px" @input=${(e) => {
-        options.chatWidth = +e.target.value
-      }}></pmui-slider>
+      options.chatWidth = +e.target.value
+    }}></pmui-slider>
           <pmui-slider pmui-label="Chat Height" pmui-value="${options.chatHeight}" pmui-min="0" pmui-max="180" pmui-type="px" @input=${(e) => {
-        options.chatHeight = +e.target.value
-      }}></pmui-slider>
+      options.chatHeight = +e.target.value
+    }}></pmui-slider>
         </div>
         <div class="wrapper">
           <pmui-slider pmui-label="Chat Scale" pmui-value="${options.chatScale}" pmui-min="0" pmui-max="100" @input=${(e) => {
-        options.chatScale = +e.target.value
-      }}></pmui-slider>
+      options.chatScale = +e.target.value
+    }}></pmui-slider>
           <pmui-slider pmui-label="Sound Volume" pmui-value="${options.volume}" pmui-min="0" pmui-max="100" @input=${(e) => {
-        options.volume = +e.target.value
-      }}></pmui-slider>
+      options.volume = +e.target.value
+    }}></pmui-slider>
         </div>
         <div class="wrapper">
           <pmui-button .disabled=${true} pmui-width="150px" pmui-label="Key Binds" @pmui-click=${() => showModal(document.getElementById('keybinds-screen'))}></pmui-button>
           <pmui-slider pmui-label="Gui Scale" pmui-value="${options.guiScale}" pmui-min="1" pmui-max="4" pmui-type="" @change=${(e) => {
-        options.guiScale = +e.target.value
-      }}></pmui-slider>
+      options.guiScale = +e.target.value
+    }}></pmui-slider>
         </div>
         <div class="wrapper">
           <pmui-slider pmui-label="Render Distance" pmui-value="${options.renderDistance}" .disabled="${isGameActive(false) && !miscUiState.singleplayer ? 'Can be changed only from main menu for now' : undefined}" pmui-min="2" pmui-max="${miscUiState.singleplayer ? 16 : 6}" pmui-type=" chunks" @change=${(e) => {
-        options.renderDistance = +e.target.value
-      }}></pmui-slider>
+      options.renderDistance = +e.target.value
+    }}></pmui-slider>
         <pmui-slider pmui-label="Field of View" pmui-value="${options.fov}" pmui-min="30" pmui-max="110" pmui-type="" @input=${(e) => {
-        options.fov = +e.target.value
-      }}></pmui-slider>
+      options.fov = +e.target.value
+    }}></pmui-slider>
       </div>
 
         <div class="wrapper">
           <pmui-button pmui-width="150px" pmui-label=${'Advanced'} @pmui-click=${() => {
-        showModal(document.querySelector('pmui-advanced-optionsscreen'))
-      }
+      showModal(document.querySelector('pmui-advanced-optionsscreen'))
+    }
       }></pmui-button>
           <pmui-button pmui-width="150px" pmui-label=${'Mouse Raw Input: ' + (options.mouseRawInput ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
         options.mouseRawInput = !options.mouseRawInput
@@ -117,7 +117,7 @@ class OptionsScreen extends LitElement {
       }></pmui-button>
         </div>
         <div class="wrapper">
-          <pmui-button title="Auto Fullscreen allows you to use Ctrl+W and Escape without delays" .disabled="${!navigator['keyboard'] ? "Your browser doesn't support keyboard lock API" : undefined}" pmui-width="150px" pmui-label=${'Auto Fullscreen: ' + (options.autoFullScreen ? 'ON' : 'OFF')} title="Wether to disable any mouse acceleration (MC does it by default)" @pmui-click=${() => {
+          <pmui-button title="Auto Fullscreen allows you to use Ctrl+W and Escape without delays" .disabled="${navigator['keyboard'] ? undefined : 'Your browser doesn\'t support keyboard lock API'}" pmui-width="150px" pmui-label=${'Auto Fullscreen: ' + (options.autoFullScreen ? 'ON' : 'OFF')} @pmui-click=${() => {
         options.autoFullScreen = !options.autoFullScreen
       }
       }></pmui-button>

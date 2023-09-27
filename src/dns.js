@@ -10,7 +10,7 @@ module.exports.resolveSrv = function (hostname, callback) {
   Http.send()
 
   Http.onload = function () {
-    const response = Http.response
+    const { response } = Http
     if (response.Status === 3) {
       const err = new Error('querySrv ENOTFOUND')
       err.code = 'ENOTFOUND'
@@ -24,7 +24,7 @@ module.exports.resolveSrv = function (hostname, callback) {
       return
     }
     const willreturn = []
-    response.Answer.forEach(function (object) {
+    for (const object of response.Answer) {
       const data = object.data.split(' ')
       willreturn.push({
         priority: data[0],
@@ -32,7 +32,7 @@ module.exports.resolveSrv = function (hostname, callback) {
         port: data[2],
         name: data[3]
       })
-    })
+    }
     console.log(willreturn)
     callback(null, willreturn)
   }

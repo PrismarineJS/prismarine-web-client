@@ -57,14 +57,15 @@ class BossBar extends LitElement {
     this.updateBar(this.bar)
 
     return html`
-        <div class="container">
-            <div class="title">${this.title}</div>
-            <div class="bossbar" style=${styleMap(this.bossBarStyles)}>
-                <div class="fill" style=${styleMap(this.fillStyles)}></div>
-                <div class="fill" style=${styleMap(this.div1Styles)}></div>
-                <div class="fill" style=${styleMap(this.div2Styles)}></div>
-            </div>
-        </div>`
+      <div class="container">
+          <div class="title">${this.title}</div>
+          <div class="bossbar" style=${styleMap(this.bossBarStyles)}>
+              <div class="fill" style=${styleMap(this.fillStyles)}></div>
+              <div class="fill" style=${styleMap(this.div1Styles)}></div>
+              <div class="fill" style=${styleMap(this.div2Styles)}></div>
+          </div>
+      </div>
+    `
   }
 
   setTitle (bar) {
@@ -121,9 +122,11 @@ class BossBars extends LitElement {
   }
 
   render () {
-    return html`<div class="bossBars" id="bossBars">
+    return html`
+      <div class="bossBars" id="bossBars">
         ${[...this.bossBars.values()]}
-    </div>`
+      </div>
+    `
   }
 
   init () {

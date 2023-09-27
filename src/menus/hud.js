@@ -1,9 +1,9 @@
 //@ts-check
 const { LitElement, html, css, unsafeCSS } = require('lit')
-const { isMobile } = require('./components/common')
 const { showModal, miscUiState } = require('../globalState')
 const { options, watchValue } = require('../optionsStorage')
 const { getGamemodeNumber } = require('../utils')
+const { isMobile } = require('./components/common')
 
 export const guiIcons1_17_1 = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/icons.png')
 export const guiIcons1_16_4 = require('minecraft-assets/minecraft-assets/data/1.16.4/gui/icons.png')
@@ -277,7 +277,7 @@ class Hud extends LitElement {
     onHealthUpdate()
 
     const onXpUpdate = () => {
-      // @ts-ignore
+      // @ts-expect-error
       this.shadowRoot.querySelector('#xp-bar-bg').firstElementChild.style.width = `${182 * bot.experience.progress}px`
       xpLabel.innerHTML = String(bot.experience.level)
       xpLabel.style.display = bot.experience.level > 0 ? 'block' : 'none'
@@ -307,19 +307,19 @@ class Hud extends LitElement {
     return html`
       <div class="mobile-top-btns" id="mobile-top">
         <button class="debug-btn" @pointerdown=${(e) => {
-        window.dispatchEvent(new MouseEvent('mousedown', { button: 1, }))
-      }}>Select</button>
+      window.dispatchEvent(new MouseEvent('mousedown', { button: 1 }))
+    }}>Select</button>
         <button class="debug-btn" @pointerdown=${(e) => {
-        this.shadowRoot.getElementById('debug-overlay').showOverlay = !this.shadowRoot.getElementById('debug-overlay').showOverlay
-      }}>F3</button>
+      this.shadowRoot.getElementById('debug-overlay').showOverlay = !this.shadowRoot.getElementById('debug-overlay').showOverlay
+    }}>F3</button>
         <button class="chat-btn" @pointerdown=${(e) => {
-        e.stopPropagation()
-        this.shadowRoot.querySelector('#chat').enableChat()
-      }}></button>
+      e.stopPropagation()
+      this.shadowRoot.querySelector('#chat').enableChat()
+    }}></button>
         <button class="pause-btn" @pointerdown=${(e) => {
-        e.stopPropagation()
-        showModal(document.getElementById('pause-screen'))
-      }}></button>
+      e.stopPropagation()
+      showModal(document.getElementById('pause-screen'))
+    }}></button>
       </div>
 
       <pmui-debug-overlay id="debug-overlay"></pmui-debug-overlay>

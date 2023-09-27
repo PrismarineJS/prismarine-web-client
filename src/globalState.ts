@@ -13,7 +13,7 @@ type ContextMenuItem = { callback; label }
 export const activeModalStack: Modal[] = proxy([])
 
 export const replaceActiveModalStack = (name: string, newModalStack = activeModalStacks[name]) => {
-  hideModal(undefined, undefined, { restorePrevious: false, force: true, })
+  hideModal(undefined, undefined, { restorePrevious: false, force: true })
   activeModalStack.splice(0, activeModalStack.length, ...newModalStack)
   // todo restore previous
 }
@@ -90,7 +90,7 @@ export const hideCurrentModal = (_data = undefined, restoredActions = undefined)
 
 // ---
 
-export const currentContextMenu = proxy({ items: [] as ContextMenuItem[] | null, x: 0, y: 0, })
+export const currentContextMenu = proxy({ items: [] as ContextMenuItem[] | null, x: 0, y: 0 })
 
 export const showContextmenu = (items: ContextMenuItem[], { clientX, clientY }) => {
   Object.assign(currentContextMenu, {

@@ -1,9 +1,9 @@
 //@ts-check
 
 import { join } from 'path'
-import { fromTexturePackPath, resourcePackState } from './texturePack'
 import fs from 'fs'
 import { subscribeKey } from 'valtio/utils'
+import { fromTexturePackPath, resourcePackState } from './texturePack'
 import { options } from './optionsStorage'
 
 let panoramaCubeMap
@@ -68,7 +68,7 @@ export async function addPanoramaCubeMap () {
   const panorGeo = new THREE.BoxGeometry(1000, 1000, 1000)
 
   const loader = new THREE.TextureLoader()
-  let panorMaterials = []
+  const panorMaterials = []
   await updateResourcePackSupportPanorama()
   for (const file of panoramaFiles) {
     panorMaterials.push(new THREE.MeshBasicMaterial({

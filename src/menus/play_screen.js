@@ -1,9 +1,9 @@
 //@ts-check
 const { LitElement, html, css } = require('lit')
-const { commonCss } = require('./components/common')
-const { hideCurrentModal } = require('../globalState')
 const mineflayer = require('mineflayer')
 const viewerSupportedVersions = require('prismarine-viewer/public/supportedVersions.json')
+const { hideCurrentModal } = require('../globalState')
+const { commonCss } = require('./components/common')
 
 const fullySupporedVersions = viewerSupportedVersions
 const partiallySupportVersions = mineflayer.supportedVersions
@@ -84,7 +84,7 @@ class PlayScreen extends LitElement {
     super()
     this.version = ''
     // todo set them sooner add indicator
-    window.fetch('config.json').then(res => res.json()).then(c => c, (error) => {
+    window.fetch('config.json').then(async res => res.json()).then(c => c, (error) => {
       console.error('Failed to load config.json', error)
       return {}
     }).then(config => {
@@ -100,7 +100,7 @@ class PlayScreen extends LitElement {
       }
 
       this.server = getParam('server', 'ip') ?? config.defaultHost
-      this.serverport = getParam('serverport', false) ?? config.defaultHostPort ?? 25565
+      this.serverport = getParam('serverport', false) ?? config.defaultHostPort ?? 25_565
       this.proxy = getParam('proxy') ?? config.defaultProxy
       this.proxyport = getParam('proxyport', false) ?? (!config.defaultProxy && !config.defaultProxyPort ? '' : config.defaultProxyPort ?? 443)
       this.version = getParam('version') || (window.localStorage.getItem('version') ?? config.defaultVersion)
@@ -203,7 +203,7 @@ class PlayScreen extends LitElement {
     this.dispatchEvent(new window.CustomEvent('connect', {
       detail: {
         server: `${this.server}:${this.serverport}`,
-        proxy: `${this.proxy}${this.proxy !== '' ? `:${this.proxyport}` : ''}`,
+        proxy: `${this.proxy}${this.proxy === '' ? '' : `:${this.proxyport}`}`,
         username: this.username,
         password: this.password,
         botVersion: this.version

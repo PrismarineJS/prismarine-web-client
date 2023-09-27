@@ -46,9 +46,9 @@ class BreathBar extends LitElement {
 
     const breaths = breathbar.children
 
-    for (let i = 0; i < breaths.length; i++) {
-      breaths[i].classList.remove('full')
-      breaths[i].classList.remove('half')
+    for (const breath of breaths) {
+      breath.classList.remove('full')
+      breath.classList.remove('half')
     }
 
     for (let i = 0; i < Math.ceil(hValue / 2); i++) {

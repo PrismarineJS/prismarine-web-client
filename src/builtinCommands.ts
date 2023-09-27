@@ -32,7 +32,7 @@ async function addFolderToZip(folderPath, zip, relativePath) {
 const exportWorld = async () => {
   // todo issue into chat warning if fs is writable!
   const zip = new JSZip()
-  let {worldFolder} = localServer.options
+  let { worldFolder } = localServer.options
   if (!worldFolder.startsWith('/')) worldFolder = `/${worldFolder}`
   await addFolderToZip(worldFolder, zip, '')
 

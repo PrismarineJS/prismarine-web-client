@@ -139,22 +139,22 @@ const onTriggerOrReleased = (command: Command, pressed: boolean) => {
     // handle general commands
     // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (command) {
-        case 'general.jump':
-          bot.setControlState('jump', pressed)
-          break
-        case 'general.sneak':
-          gameAdditionalState.isSneaking = pressed
-          bot.setControlState('sneak', pressed)
-          break
-        case 'general.sprint':
+      case 'general.jump':
+        bot.setControlState('jump', pressed)
+        break
+      case 'general.sneak':
+        gameAdditionalState.isSneaking = pressed
+        bot.setControlState('sneak', pressed)
+        break
+      case 'general.sprint':
         // todo add setting to change behavior
-          if (pressed) {
-            setSprinting(pressed)
-          }
-          break
-        case 'general.attackDestroy':
-          document.dispatchEvent(new MouseEvent(pressed ? 'mousedown' : 'mouseup', { button: 0 }))
-          break
+        if (pressed) {
+          setSprinting(pressed)
+        }
+        break
+      case 'general.attackDestroy':
+        document.dispatchEvent(new MouseEvent(pressed ? 'mousedown' : 'mouseup', { button: 0 }))
+        break
     }
   }
 }
@@ -192,26 +192,26 @@ contro.on('trigger', ({ command }) => {
   if (stringStartsWith(command, 'general')) {
     // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
     switch (command) {
-        case 'general.inventory':
-          document.exitPointerLock?.()
-          showModal({ reactType: 'inventory' })
-          break
-        case 'general.drop':
-          if (bot.heldItem) bot.tossStack(bot.heldItem)
-          break
-        case 'general.chat':
-          document.getElementById('hud').shadowRoot.getElementById('chat').enableChat()
-          break
-        case 'general.command':
-          document.getElementById('hud').shadowRoot.getElementById('chat').enableChat('/')
-          break
-        case 'general.interactPlace':
-          document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
-          setTimeout(() => {
+      case 'general.inventory':
+        document.exitPointerLock?.()
+        showModal({ reactType: 'inventory' })
+        break
+      case 'general.drop':
+        if (bot.heldItem) bot.tossStack(bot.heldItem)
+        break
+      case 'general.chat':
+        document.getElementById('hud').shadowRoot.getElementById('chat').enableChat()
+        break
+      case 'general.command':
+        document.getElementById('hud').shadowRoot.getElementById('chat').enableChat('/')
+        break
+      case 'general.interactPlace':
+        document.dispatchEvent(new MouseEvent('mousedown', { button: 2 }))
+        setTimeout(() => {
           // todo cleanup
-            document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
-          })
-          break
+          document.dispatchEvent(new MouseEvent('mouseup', { button: 2 }))
+        })
+        break
     }
   }
 })
@@ -319,16 +319,16 @@ const toggleFly = () => {
   gameAdditionalState.isFlying = isFlying()
 }
 // #endregion
-addEventListener('mousedown', (e) => {
+addEventListener('mousedown', async (e) => {
   if (!bot) return
   // wheel click
   // todo support ctrl+wheel (+nbt)
   if (e.button === 1) {
-    const block = bot.blockAtCursor(/* 6 */5)
+    const block = bot.blockAtCursor(5)
     if (!block) return
     const Item = require('prismarine-item')(bot.version)
     const item = new Item(block.type, 1, 0)
-    bot.creative.setInventorySlot(bot.inventory.hotbarStart + bot.quickBarSlot, item)
+    await bot.creative.setInventorySlot(bot.inventory.hotbarStart + bot.quickBarSlot, item)
     bot.updateHeldItem()
   }
 })

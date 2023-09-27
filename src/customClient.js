@@ -1,18 +1,16 @@
 //@ts-check
-const EventEmitter = require('events').EventEmitter
+const { EventEmitter } = require('events')
 const debug = require('debug')('minecraft-protocol')
 const states = require('minecraft-protocol/src/states')
 
 window.serverDataChannel ??= {}
 export const customCommunication = {
   sendData (data) {
-    //@ts-ignore
     setTimeout(() => {
       window.serverDataChannel[this.isServer ? 'emitClient' : 'emitServer'](data)
     })
   },
   receiverSetup (processData) {
-    //@ts-ignore
     window.serverDataChannel[this.isServer ? 'emitServer' : 'emitClient'] = (data) => {
       processData(data)
     }
@@ -39,6 +37,7 @@ class CustomChannelClient extends EventEmitter {
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures, grouped-accessor-pairs
   set state (newProperty) {
     const oldProperty = this.protocolState
     this.protocolState = newProperty

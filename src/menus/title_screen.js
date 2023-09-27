@@ -1,14 +1,14 @@
-const { openWorldDirectory, openWorldZip } = require('../browserfs')
-const { showModal } = require('../globalState')
-const { fsState } = require('../loadSave')
-const { openURL } = require('./components/common')
-const { LitElement, html, css, unsafeCSS } = require('lit')
 const fs = require('fs')
+const { LitElement, html, css, unsafeCSS } = require('lit')
 
 const mcImage = require('minecraft-assets/minecraft-assets/data/1.17.1/gui/title/minecraft.png')
+const { fsState } = require('../loadSave')
+const { showModal } = require('../globalState')
+const { openWorldDirectory, openWorldZip } = require('../browserfs')
 const { options } = require('../optionsStorage')
 const defaultLocalServerOptions = require('../defaultLocalServerOptions')
 const { openFilePicker } = require('../utils')
+const { openURL } = require('./components/common')
 
 // const SUPPORT_WORLD_LOADING = !!window.showDirectoryPicker
 const SUPPORT_WORLD_LOADING = true
@@ -121,14 +121,6 @@ class TitleScreen extends LitElement {
     }
   }
 
-  reload () {
-    navigator.serviceWorker.getRegistration().then(registration => {
-      registration.unregister().then(() => {
-        window.location.reload()
-      })
-    })
-  }
-
   constructor () {
     super()
     this.versionStatus = ''
@@ -147,6 +139,14 @@ class TitleScreen extends LitElement {
     }
   }
 
+  reload () {
+    navigator.serviceWorker.getRegistration().then(registration => {
+      registration.unregister().then(() => {
+        window.location.reload()
+      })
+    })
+  }
+
   render () {
     return html`
       <div class="game-title">
@@ -160,25 +160,25 @@ class TitleScreen extends LitElement {
         <pmui-button pmui-width="200px" pmui-label="Connect to server" pmui-test-id="connect-screen-button" @pmui-click=${() => showModal(document.getElementById('play-screen'))}></pmui-button>
         <div style="display:flex;justify-content: space-between;">
           <pmui-button pmui-width="${SUPPORT_WORLD_LOADING ? '170px' : '200px'}" pmui-test-id="singleplayer-button" pmui-label="Singleplayer" @pmui-click=${() => {
-        this.style.display = 'none'
-        fsState.isReadonly = false
-        fsState.syncFs = true
-        fsState.inMemorySave = true
-        const notFirstTime = fs.existsSync('./world/level.dat')
-        if (notFirstTime && !options.localServerOptions.version) {
-          options.localServerOptions.version = '1.16.1' // legacy version
-        } else {
-          options.localServerOptions.version ??= defaultLocalServerOptions.version
-        }
-        this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
-      }}></pmui-button>
+      this.style.display = 'none'
+      fsState.isReadonly = false
+      fsState.syncFs = true
+      fsState.inMemorySave = true
+      const notFirstTime = fs.existsSync('./world/level.dat')
+      if (notFirstTime && !options.localServerOptions.version) {
+        options.localServerOptions.version = '1.16.1' // legacy version
+      } else {
+        options.localServerOptions.version ??= defaultLocalServerOptions.version
+      }
+      this.dispatchEvent(new window.CustomEvent('singleplayer', {}))
+    }}></pmui-button>
           ${SUPPORT_WORLD_LOADING ? html`<pmui-button pmui-test-id="select-file-folder" pmui-icon="pixelarticons:folder" pmui-width="20px" pmui-label="" @pmui-click=${({ detail: e }) => {
-        if (!!window.showDirectoryPicker && !e.shiftKey) {
-          openWorldDirectory()
-        } else {
-          openFilePicker()
-        }
-      }}></pmui-button>` : ''}
+      if (!!window.showDirectoryPicker && !e.shiftKey) {
+        openWorldDirectory()
+      } else {
+        openFilePicker()
+      }
+    }}></pmui-button>` : ''}
         </div>
         <pmui-button pmui-width="200px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <div class="menu-row">

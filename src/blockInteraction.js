@@ -25,6 +25,8 @@ function getViewDirection (pitch, yaw) {
 
 class BlockInteraction {
   static instance = null
+  /** @type {null | {blockPos,mesh}} */
+  interactionLines = null
 
   init () {
     bot.on('physicsTick', () => { if (this.lastBlockPlaced < 4) this.lastBlockPlaced++ })
@@ -103,8 +105,6 @@ class BlockInteraction {
     })
   }
 
-  /** @type {null | {blockPos,mesh}} */
-  interactionLines = null
   updateBlockInteractionLines (/** @type {Vec3 | null} */blockPos, /** @type {{position, width, height, depth}[]} */shapePositions = undefined) {
     if (this.interactionLines !== null) {
       viewer.scene.remove(this.interactionLines.mesh)
@@ -127,6 +127,7 @@ class BlockInteraction {
   }
 
   // todo this shouldnt be done in the render loop, migrate the code to dom events to avoid delays on lags
+  // eslint-disable-next-line complexity
   update () {
     const cursorBlock = bot.blockAtCursor(5)
     let cursorBlockDiggable = cursorBlock
@@ -137,13 +138,13 @@ class BlockInteraction {
       cursorChanged = !cursorBlock.position.equals(this.cursorBlock.position)
     }
 
-    // Place
-    if (cursorBlock && this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastBlockPlaced >= 4) {
+    // Place / interact
+    if (this.buttons[2] && (!this.lastButtons[2] || cursorChanged) && this.lastBlockPlaced >= 4) {
       const vecArray = [new Vec3(0, -1, 0), new Vec3(0, 1, 0), new Vec3(0, 0, -1), new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(1, 0, 0)]
-      //@ts-ignore
+      //@ts-expect-error
       const delta = cursorBlock.intersect.minus(cursorBlock.position)
-      // check instead?
-      //@ts-ignore
+
+      //@ts-expect-error
       bot._placeBlockWithOptions(cursorBlock, vecArray[cursorBlock.face], { delta, forceLook: 'ignore' }).catch(console.warn)
       this.lastBlockPlaced = 0
     }
@@ -167,9 +168,7 @@ class BlockInteraction {
     }
 
     // Show cursor
-    if (!cursorBlock) {
-      this.updateBlockInteractionLines(null)
-    } else {
+    if (cursorBlock) {
       const allShapes = [...cursorBlock.shapes, ...cursorBlock['interactionShapes'] ?? []]
       this.updateBlockInteractionLines(cursorBlock.position, allShapes.map(shape => {
         return getDataFromShape(shape)
@@ -191,6 +190,8 @@ class BlockInteraction {
         position.add(cursorBlock.position)
         this.blockBreakMesh.position.set(position.x, position.y, position.z)
       }
+    } else {
+      this.updateBlockInteractionLines(null)
     }
 
     // Show break animation

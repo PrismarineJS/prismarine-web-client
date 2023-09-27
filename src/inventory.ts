@@ -38,8 +38,8 @@ subscribeKey(miscUiState, 'gameLoaded', async () => {
   // on game load
   version = getVersion(bot.version)
   blockStates = await fetch(`blocksStates/${version}.json`).then(async res => res.json())
-  getImage({ path: 'blocks', } as any)
-  getImage({ path: 'invsprite', } as any)
+  getImage({ path: 'blocks' } as any)
+  getImage({ path: 'invsprite' } as any)
   mcData = MinecraftData(version)
 })
 
@@ -88,9 +88,9 @@ const getItemSlice = (name) => {
 
 const getImageSrc = (path) => {
   switch (path) {
-      case 'gui/container/inventory': return InventoryGui
-      case 'blocks': return globalThis.texturePackDataUrl || `textures/${version}.png`
-      case 'invsprite': return `invsprite.png`
+    case 'gui/container/inventory': return InventoryGui
+    case 'blocks': return globalThis.texturePackDataUrl || `textures/${version}.png`
+    case 'invsprite': return `invsprite.png`
   }
   return Dirt
 }

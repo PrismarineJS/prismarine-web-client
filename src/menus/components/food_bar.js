@@ -83,9 +83,9 @@ class FoodBar extends LitElement {
 
     const foods = foodbar.children
 
-    for (let i = 0; i < foods.length; i++) {
-      foods[i].classList.remove('full')
-      foods[i].classList.remove('half')
+    for (const food of foods) {
+      food.classList.remove('full')
+      food.classList.remove('half')
     }
 
     // if (d) this.onHungerUpdate()

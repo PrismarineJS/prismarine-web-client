@@ -187,20 +187,20 @@ class Slider extends LitElement {
           value="${this.value}"
           ?disabled=${!!this.disabled}
           @input=${(e) => {
-        const range = e.target
-        this.ratio = (range.value - range.min) / (range.max - range.min)
-        this.value = range.value
-      }}
+      const range = e.target
+      this.ratio = (range.value - range.min) / (range.max - range.min)
+      this.value = range.value
+    }}
       @pointerdown=${() => {
-        window.addEventListener('pointerup', (e) => {
-          this.dispatchEvent(new InputEvent('change'))
-        }, {
-          once: true,
-        })
-      }}
-      @keyup=${() => {
+      window.addEventListener('pointerup', (e) => {
         this.dispatchEvent(new InputEvent('change'))
-      }}>
+      }, {
+        once: true,
+      })
+    }}
+      @keyup=${() => {
+      this.dispatchEvent(new InputEvent('change'))
+    }}>
         <div class="disabled" title="${this.disabled}"></div>
         <div
           class="slider-thumb"

@@ -22,7 +22,7 @@ const compareRenderedFlatWorld = () => {
 }
 
 const testWorldLoad = () => {
-  cy.document().then({ timeout: 20_000, }, doc => {
+  cy.document().then({ timeout: 20_000 }, doc => {
     return new Cypress.Promise(resolve => {
       doc.addEventListener('cypress-world-ready', resolve)
     })
@@ -49,7 +49,7 @@ it('Loads & renders singleplayer', () => {
     },
     renderDistance: 2
   })
-  cy.get('#title-screen').find('[data-test-id="singleplayer-button"]', { includeShadowDom: true, }).click()
+  cy.get('#title-screen').find('[data-test-id="singleplayer-button"]', { includeShadowDom: true }).click()
   testWorldLoad()
 })
 
@@ -58,15 +58,15 @@ it('Joins to server', () => {
   window.localStorage.version = ''
   visit()
   // todo replace with data-test
-  cy.get('#title-screen').find('[data-test-id="connect-screen-button"]', { includeShadowDom: true, }).click()
-  cy.get('input#serverip', { includeShadowDom: true, }).clear().focus().type('localhost')
-  cy.get('[data-test-id="connect-to-server"]', { includeShadowDom: true, }).click()
+  cy.get('#title-screen').find('[data-test-id="connect-screen-button"]', { includeShadowDom: true }).click()
+  cy.get('input#serverip', { includeShadowDom: true }).clear().focus().type('localhost')
+  cy.get('[data-test-id="connect-to-server"]', { includeShadowDom: true }).click()
   testWorldLoad()
 })
 
 it('Loads & renders zip world', () => {
   cleanVisit()
-  cy.get('#title-screen').find('[data-test-id="select-file-folder"]', { includeShadowDom: true, }).click({ shiftKey: true })
+  cy.get('#title-screen').find('[data-test-id="select-file-folder"]', { includeShadowDom: true }).click({ shiftKey: true })
   cy.get('input[type="file"]').selectFile('cypress/superflat.zip', { force: true })
   testWorldLoad()
 })

@@ -8,7 +8,7 @@ let audioContext
 const sounds = {}
 
 // load as many resources on page load as possible instead on demand as user can disable internet connection after he thinks the page is loaded
-let loadingSounds = []
+const loadingSounds = []
 async function loadSound (path) {
   loadingSounds.push(path)
   const res = await window.fetch(path)
@@ -151,22 +151,23 @@ class Button extends LitElement {
 
   render () {
     return html`
-    <button
-      class="button"
-      ?disabled=${this.disabled}
-      @click=${this.onBtnClick}
-      style="width: ${this.width};"
-      data-test-id=${this.testId}
-    >
-    <!-- todo self host icons -->
-      ${this.icon ? html`<iconify-icon class="icon" icon="${this.icon}"></iconify-icon>` : ''}
-      ${this.label}
-    </button>`
+      <button
+        class="button"
+        ?disabled=${this.disabled}
+        @click=${this.onBtnClick}
+        style="width: ${this.width};"
+        data-test-id=${this.testId}
+      >
+      <!-- todo self host icons -->
+        ${this.icon ? html`<iconify-icon class="icon" icon="${this.icon}"></iconify-icon>` : ''}
+        ${this.label}
+      </button>
+    `
   }
 
   onBtnClick (e) {
     playSound('button_click.mp3')
-    this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e, }))
+    this.dispatchEvent(new window.CustomEvent('pmui-click', { detail: e }))
   }
 }
 

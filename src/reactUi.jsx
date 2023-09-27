@@ -31,11 +31,11 @@ useInterfaceState.setState({
     if (!bot) return
     if (state === 0) {
       for (const action of actionAndState) {
-        contro.pressedKeyOrButtonChanged({code: action[2],}, false)
+        contro.pressedKeyOrButtonChanged({ code: action[2] }, false)
       }
     } else {
       //@ts-expect-error
-      contro.pressedKeyOrButtonChanged({code: actionAndState[2],}, true)
+      contro.pressedKeyOrButtonChanged({ code: actionAndState[2] }, true)
     }
   }
 })
@@ -104,7 +104,7 @@ const DisplayQr = () => {
       miscUiState.currentDisplayQr = null
     }}
   >
-    <QRCodeSVG size={384} value={currentDisplayQr} style={{display: 'block', border: '2px solid black',}} />
+    <QRCodeSVG size={384} value={currentDisplayQr} style={{ display: 'block', border: '2px solid black' }} />
   </div>, document.body)
 
 }

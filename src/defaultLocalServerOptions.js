@@ -1,6 +1,7 @@
 module.exports = {
   'motd': 'A Minecraft Server \nRunning flying-squid',
   // host: '',
+  // eslint-disable-next-line unicorn/numeric-separators-style
   'port': 25565,
   'max-players': 10,
   'online-mode': false,
@@ -21,7 +22,7 @@ module.exports = {
     //   'worldHeight': 80
     // }
   },
-  'kickTimeout': 10000,
+  'kickTimeout': 10_000,
   'plugins': {},
   'modpe': false,
   'view-distance': 2,

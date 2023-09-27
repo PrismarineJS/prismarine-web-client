@@ -1,14 +1,14 @@
 //@ts-check
 const { LitElement, html, css } = require('lit')
-const { openURL } = require('./components/common')
+const { subscribe } = require('valtio')
+const { subscribeKey } = require('valtio/utils')
 const { hideCurrentModal, showModal, miscUiState } = require('../globalState')
 const { fsState } = require('../loadSave')
-const { subscribe } = require('valtio')
 const { saveWorld } = require('../builtinCommands')
-const { notification } = require('./notification')
 const { disconnect } = require('../utils')
-const { subscribeKey } = require('valtio/utils')
 const { closeWan, openToWanAndCopyJoinLink, getJoinLink } = require('../localServerMultiplayer')
+const { notification } = require('./notification')
+const { openURL } = require('./components/common')
 
 class PauseScreen extends LitElement {
   static get styles () {
@@ -80,13 +80,15 @@ class PauseScreen extends LitElement {
         <pmui-button pmui-width="204px" pmui-label="Options" @pmui-click=${() => showModal(document.getElementById('options-screen'))}></pmui-button>
         <!-- todo use qr icon (full pixelarticons package) -->
         <!-- todo also display copy link button when opened -->
-        ${joinButton ? html`<div class="row">
-          <pmui-button pmui-width="170px" pmui-label="${miscUiState.wanOpened ? "Close Wan" : "Copy Join Link"}" @pmui-click=${() => this.clickJoinLinkButton()}></pmui-button>
-          <pmui-button style="height: 0;" pmui-icon="pixelarticons:dice" pmui-width="20px" pmui-label="" @pmui-click=${() => this.clickJoinLinkButton(true)}></pmui-button>
-        </div>` : ''}
+        ${joinButton ? html`
+          <div class="row">
+            <pmui-button pmui-width="170px" pmui-label="${miscUiState.wanOpened ? 'Close Wan' : 'Copy Join Link'}" @pmui-click=${async () => this.clickJoinLinkButton()}></pmui-button>
+            <pmui-button style="height: 0;" pmui-icon="pixelarticons:dice" pmui-width="20px" pmui-label="" @pmui-click=${async () => this.clickJoinLinkButton(true)}></pmui-button>
+          </div>
+        ` : ''}
         <pmui-button pmui-width="204px" pmui-label="${localServer && !fsState.syncFs && !fsState.isReadonly ? 'Save & Quit' : 'Disconnect'}" @pmui-click=${async () => {
-        disconnect()
-      }}></pmui-button>
+      disconnect()
+    }}></pmui-button>
       </main>
     `
   }
@@ -102,7 +104,7 @@ class PauseScreen extends LitElement {
     if (qr) {
       const joinLink = getJoinLink()
       miscUiState.currentDisplayQr = joinLink
-      return
+
     }
   }
 

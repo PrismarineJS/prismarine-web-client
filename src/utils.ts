@@ -106,11 +106,11 @@ export async function getScreenRefreshRate(): Promise<number> {
 
 export const getGamemodeNumber = (bot) => {
   switch (bot.game.gameMode) {
-      case 'survival': return 0
-      case 'creative': return 1
-      case 'adventure': return 2
-      case 'spectator': return 3
-      default: return -1
+    case 'survival': return 0
+    case 'creative': return 1
+    case 'adventure': return 2
+    case 'spectator': return 3
+    default: return -1
   }
 }
 
@@ -137,7 +137,7 @@ export const setLoadingScreenStatus = function (status: string | undefined, isEr
 
   if (status === undefined) {
     loadingScreen.status = ''
-    hideModal({ elem: loadingScreen, }, null, { force: true })
+    hideModal({ elem: loadingScreen }, null, { force: true })
     return
   }
 

@@ -1,15 +1,27 @@
 {
     "extends": "zardoy",
+    "ignorePatterns": [
+        "!*.js"
+    ],
     "rules": {
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
         "semi": [
             "error",
             "never"
+        ],
+        "comma-dangle": [
+            "error",
+            // todo maybe "always-multiline"?
+            "only-multiline"
         ],
         "indent": [
             "error",
             2,
             {
-                "SwitchCase": 2,
+                "SwitchCase": 1,
                 "ignoredNodes": [
                     "TemplateLiteral"
                 ]
@@ -65,9 +77,13 @@
         "@typescript-eslint/no-require-imports": "off",
         "unicorn/prefer-number-properties": "off",
         "@typescript-eslint/no-confusing-void-expression": "off",
+        "unicorn/no-empty-file": "off",
+        "unicorn/prefer-event-target": "off",
         // needs to be fixed actually
         "@typescript-eslint/no-floating-promises": "warn",
         "no-async-promise-executor": "off",
-        "no-bitwise": "off"
+        "no-bitwise": "off",
+        "unicorn/filename-case": "off",
+        "max-depth": "off"
     }
 }
