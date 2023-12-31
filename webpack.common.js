@@ -40,6 +40,7 @@ const config = {
       // fs: require.resolve("fs-memory/singleton"),
       child_process: false,
       tls: false,
+      '@azure/msal-node': false,
       perf_hooks: path.resolve(__dirname, 'lib/perf_hooks_replacement.js'),
       dns: path.resolve(__dirname, 'lib/dns.js')
     }
