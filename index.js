@@ -179,13 +179,9 @@ async function connect (options) {
   const errorAbortController = new AbortController()
   window.addEventListener('unhandledrejection', (e) => {
     handleError(e.reason)
-  }, {
-    signal: errorAbortController
   })
   window.addEventListener('error', (e) => {
     handleError(e.message)
-  }, {
-    signal: errorAbortController.signal
   })
   const bot = mineflayer.createBot({
     host,
