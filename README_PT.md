@@ -4,8 +4,8 @@
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/GsEFRM8)
 [![Try it on gitpod](https://img.shields.io/badge/try-on%20gitpod-brightgreen.svg)](https://gitpod.io/#https://github.com/PrismarineJS/prismarine-web-client)
 
-| 🇺🇸 [English](README.md) | 🇷🇺 [Russian](README_RU.md)  | 🇵🇹 [Portuguese](README_PT.md) |
-| ----------------------- | -------------------------- | ---------------------------- |
+| 🇺🇸 [English](README.md) | 🇷🇺 [Russian](README_RU.md)  | 🇵🇹 [Portuguese](README_PT.md) | 🇨🇳 [简体中文](README_zh_CN.md) |
+| ----------------------- | -------------------------- | ---------------------------- | ------------------------------- |
 
 Um cliente de Minecraft a funcionar numa página web. **Demostração em https://prismarinejs.github.io/prismarine-web-client/**
 
