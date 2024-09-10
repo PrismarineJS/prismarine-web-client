@@ -26,6 +26,7 @@ const config = {
     },
     fallback: {
       jose: false,
+      "vm": require.resolve("vm-browserify"),
       zlib: require.resolve('browserify-zlib'),
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer/'),
