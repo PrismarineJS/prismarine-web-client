@@ -22,7 +22,8 @@ const config = {
       net: 'net-browserify',
       fs: false,
       jose: false,
-      '@azure/msal-node': false
+      '@azure/msal-node': false,
+      canvas: false
     },
     fallback: {
       jose: false,
