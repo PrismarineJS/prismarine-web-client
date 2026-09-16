@@ -1,12 +1,12 @@
 {
   "name": "prismarine-web-client",
   "version": "1.6.0",
-  "description": "A minecraft client running in a browser",
+  "description": "A minecraft client running in a browser.",
   "main": "index.js",
   "scripts": {
     "postinstall": "node scripts/patchPackages.js",
-    "build": "webpack --config webpack.prod.js",
-    "build-dev": "webpack --config webpack.dev.js",
+    "build": "esbuild index.js --bundle --minify --sourcemap --outfile=public/index.js --platform=browser",
+    "build-dev": "esbuild index.js --bundle --sourcemap --outfile=public/index.js --platform=browser --watch",
     "start": "node --max-old-space-size=8192 server.js 8080 dev",
     "prod-start": "node server.js",
     "build-dev-start": "npm run build-dev && npm run prod-start",
@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PrismarineJS/prismarine-web-client.git"
+    "url": "git+https://github.com"
   },
   "keywords": [
-    "prismarine",
+    "Prismarine",
     "web",
     "client"
   ],
@@ -31,9 +31,9 @@
     "prismarine-web-client": "./server.js"
   },
   "bugs": {
-    "url": "https://github.com/PrismarineJS/prismarine-web-client/issues"
+    "url": "https://github.com"
   },
-  "homepage": "https://github.com/PrismarineJS/prismarine-web-client#readme",
+  "homepage": "https://github.com",
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
@@ -51,6 +51,7 @@
     "constants-browserify": "^1.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "crypto-browserify": "^3.12.0",
+    "esbuild": "^0.21.0",
     "events": "^3.2.0",
     "html-webpack-plugin": "^5.3.1",
     "http-browserify": "^1.7.0",
